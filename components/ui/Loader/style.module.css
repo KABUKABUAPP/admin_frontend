@@ -1,0 +1,33 @@
+
+.root {
+    @apply rounded-full border-4 border-[#00000] border-t-[#FFBF00] border-r-[#FFBF00]
+}
+
+.root {
+    animation: spin .6s linear infinite;
+}
+
+.small {
+    @apply w-6 h-6
+}
+
+.medium {
+    @apply w-8 h-8 
+}
+
+.large {
+    @apply w-12 h-12 border-8
+}
+
+@-moz-keyframes spin {
+    from { -moz-transform: rotate(0deg); }
+    to { -moz-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+    from {transform:rotate(0deg);}
+    to {transform:rotate(360deg);}
+}

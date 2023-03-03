@@ -1,0 +1,65 @@
+
+.root {
+    @apply text-[#000] text-xs cursor-pointer font-medium flex items-center justify-center relative overflow-hidden gap-2
+}
+
+.outlined, .contained {
+    @apply rounded-lg
+}
+
+.outlined.small, .contained.small {
+    @apply py-1 px-2
+}
+
+.outlined.medium, .contained.medium {
+    @apply py-2.5 px-4
+}
+
+.outlined.large, .contained.large {
+    @apply py-4 px-6
+}
+
+.text.large {
+    @apply text-lg
+}
+
+.text.medium {
+    @apply text-sm
+}
+
+.text.small {
+    @apply !text-xs
+}
+
+.outlined.primary {
+    @apply border-[#FFBF00] border
+}
+
+.outlined.secondary {
+    @apply border-[#EF2C5B] border
+}
+
+.outlined.disabled {
+    @apply !border-[#cccccc]
+}
+
+.outlined.tetiary {
+    @apply border-[#F1F1F1] text-[#000] border
+}
+
+.contained.primary {
+   @apply bg-[#FFBF00]
+}
+
+.contained.secondary {
+    @apply bg-[#EF2C5B] text-[#fff]
+}
+
+.contained.disabled {
+    @apply !bg-[#cccccc] text-[#000]
+}
+
+.contained.tetiary {
+    @apply bg-[#F1F1F1] text-[#000] 
+}
+
