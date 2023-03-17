@@ -11,7 +11,7 @@ interface Props {
 
 const PendingApplicationContainer: FC<Props> = ({ title, data }) => {
   return (
-    <div className="max-w-[280px] w-full">
+    <div className="max-w-[380px] w-full max-sm:max-w-[250px]">
       <PendingApplicationHeader title={title} />
       <PendingApplicationItemContainer data={data} />
     </div>

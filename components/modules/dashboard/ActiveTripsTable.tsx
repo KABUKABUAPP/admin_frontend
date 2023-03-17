@@ -28,11 +28,23 @@ const mockData = [
     rider: "Michael Ofure",
     driver: "Sam Johnson",
   },
+  {
+    from: "Lekki",
+    to: "Maryland Mall",
+    rider: "Michael Ofure",
+    driver: "Sam Johnson",
+  },
+  {
+    from: "Lekki",
+    to: "Maryland Mall",
+    rider: "Michael Ofure",
+    driver: "Sam Johnson",
+  },
 ];
 
 const ActiveTripsTable: FC = () => {
   return (
-    <div className="w-full  max-w-2xl mx-auto">
+    <div className="w-full  max-w-3xl">
       <ActiveTripsTableHead />
       <ActiveTripsTableBody data={mockData}/>
     </div>

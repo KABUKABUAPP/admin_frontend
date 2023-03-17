@@ -13,7 +13,7 @@ interface Props {
 
 const SummaryCardContainer: FC<Props> = ({ data }) => {
   return (
-    <div className="flex flex-wrap gap-4 max-sm:justify-center">
+    <div className="flex flex-wrap gap-6 max-sm:justify-center">
       {data.map((item, idx) => {
         return <SummaryCard {...item} key={idx} />;
       })}

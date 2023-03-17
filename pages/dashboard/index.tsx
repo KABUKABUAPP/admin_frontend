@@ -10,6 +10,7 @@ import SummaryCardContainer from "@/components/modules/dashboard/SummaryCardCont
 import TripsIcon from "@/components/icons/TripsIcon";
 import SosIcon from "@/components/icons/SosIcon";
 import WithdrawalIcon from "@/components/icons/WithdrawalIcon";
+import TripsChartContainer from "@/components/modules/dashboard/TripsChartContainer";
 
 const mockPendingApplications = [
   {
@@ -77,20 +78,16 @@ const Dashboard: NextPage = () => {
       <AppLayout>
         <WelcomeMessage name="Samson" />
 
-        <div className="pt-12 flex max-md:flex-col">
-          {/* summarycard/table */}
-          <div className="w-[65%] max-md:w-full flex flex-col gap-12">
+        <div className="pt-12 flex max-md:flex-col gap-7">
+          <div className="w-[70%] max-md:w-full flex flex-col gap-12">
             <SummaryCardContainer data={mockSummaryCardData} />
-
             <ActiveTripsTable />
           </div>
 
-          {/* pending applications */}
           <div
-            className="w-[35%] 
-          flex flex-col gap-10 items-center px-4 
+            className="w-[30%] 
+          flex flex-col gap-10 max-sm:items-center
           max-md:w-full max-md:flex-row
-          max-md:pt-10
           max-sm:flex-col
           "
           >
@@ -105,8 +102,9 @@ const Dashboard: NextPage = () => {
           </div>
         </div>
 
-        {/* charts */}
-        <div></div>
+        <div className="mt-10">
+          <TripsChartContainer />
+        </div>
       </AppLayout>
     </>
   );
