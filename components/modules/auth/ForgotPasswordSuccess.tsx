@@ -30,7 +30,7 @@ const ForgotPasswordSuccess: FC = () => {
       </div>
 
       <div>
-        <Button title="Okay" className="w-full mt-12" onClick={()=>router.push('/admin/auth/login')}/>
+        <Button title="Okay" className="w-full mt-12" onClick={()=>router.push('/auth/login')}/>
       </div>
     </div>
   );

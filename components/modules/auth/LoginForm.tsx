@@ -87,7 +87,7 @@ const LoginForm: FC = () => {
             variant="text"
             size="small"
             onClick={() => {
-              router.push("/admin/auth/forgot-password");
+              router.push("/auth/forgot-password");
             }}
           />
 
