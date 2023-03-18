@@ -5,6 +5,7 @@ import AppLayout from "@/layouts/AppLayout";
 import AppHead from "@/components/common/AppHead";
 import ActiveTripsTable from "@/components/modules/dashboard/ActiveTripsTable";
 import PendingApplicationContainer from "@/components/modules/dashboard/PendingApplicationContainer";
+import Button from "@/components/ui/Button/Button";
 
 const mockPendingApplications = [
   {
@@ -29,11 +30,7 @@ const Dashboard: NextPage = () => {
     <>
       <AppHead title="Kabukabu | Dashboard" />
       <AppLayout>
-        <ActiveTripsTable />
-        <PendingApplicationContainer
-          title="Pending Drivers Applications"
-          data={mockPendingApplications}
-        />
+        <Button title="Simi" variant="contained" color="secondary" />
       </AppLayout>
     </>
   );

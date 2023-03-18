@@ -30,7 +30,7 @@ const AppLayout: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <Container>
-      <div className="flex h-screen">
+      <div className="flex h-screen overflow-hidden">
         <SideBar data={links} />
         <main className="h-screen w-[calc(100%-200px)] max-lg:w-full bg-[#F1F1F1] overflow-auto p-4 pt-10">
           {children}

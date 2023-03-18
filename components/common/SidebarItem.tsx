@@ -15,9 +15,9 @@ const SidebarItem: FC<SidebarLink> = ({ icon, title, isActive, link }) => {
       ref={ref}
       onClick={() => router.push(link)}
       className={`
-    w-full flex gap-2 items-center cursor-pointer 
+    w-full flex gap-1 items-center cursor-pointer 
     border-transparent ${isActive ? "bg-[#FFBF00]" : ""}
-    p-2 rounded-lg mb-2
+    p-2 rounded-lg mb-[6px]
     `}
     >
       {ripples}
