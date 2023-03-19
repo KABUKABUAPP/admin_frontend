@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { AUTH_BASE_URL } from "@/constants";
+import { ADMIN_BASE_URL } from "@/constants";
 import {
   LoginPayload,
   LoginResponse,
@@ -12,7 +12,7 @@ import { secondsToMilliSeconds } from "@/utils";
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${AUTH_BASE_URL}/`,
+    baseUrl: `${ADMIN_BASE_URL}/`,
     timeout: secondsToMilliSeconds(30),
   }),
   endpoints: (build) => ({

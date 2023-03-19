@@ -1,6 +1,5 @@
 
-export const AUTH_BASE_URL = process.env.NEXT_PUBLIC_AUTH_URL
-export const RIDE_BASE_URL = process.env.NEXT_PUBLIC_RIDE_URL
+export const ADMIN_BASE_URL = process.env.NEXT_PUBLIC_ADMIN_URL
 export const milliSecondToSecondConversionRate = 1000
 export const ACCESS_TOKEN = 'usr_token___kabukabu_admin'
 export const MIDDLEWARE_ROUTES = [
