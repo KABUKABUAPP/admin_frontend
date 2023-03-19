@@ -49,8 +49,9 @@ const LoginForm: FC = () => {
 
   useEffect(() => {
     if (data) {
-      const { accessTokens, ...rest } = data.data.loggedInAdmin
+      const { accessTokens, __v, ...rest } = data.data.loggedInAdmin
       dispatch(setTokenValue(accessTokens))
+      console.log(rest)
       dispatch(setUserInfo(rest))
       toast.success("Login Successful");
       router.push("/dashboard");

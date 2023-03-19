@@ -4,6 +4,8 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import { authApi } from "@/api-services/authService";
 import { tripsApi } from "@/api-services/tripsService";
 import authReducer from "./features/auth/authSlice";
+import userReducer from "./features/user/userSlice";
+
 import {
   persistReducer,
   persistStore,
@@ -14,29 +16,21 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-
-import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
 import { combineReducers } from "@reduxjs/toolkit";
-import { CookieStorage } from 'redux-persist-cookie-storage' 
-import Cookies from 'js-cookie'
-import userReducer from "./features/user/userSlice"
-
-const authPersistConfig = {
-  key: "auth",
-  storage: new CookieStorage(Cookies)
-};
+import { CookieStorage } from "redux-persist-cookie-storage";
+import Cookies from "js-cookie";
 
 const rootPersistConfig = {
   key: "root",
-  storage,
-  blacklist: ['auth']
-}
+  storage: new CookieStorage(Cookies),
+};
 
 const rootReducer = combineReducers({
-  auth: persistReducer(authPersistConfig, authReducer),
-  user: userReducer
+  user: userReducer,
+  auth: authReducer,
 });
+
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
 
 export const reduxStore = configureStore({

@@ -10,15 +10,16 @@ export function middleware(req: NextRequest, res: NextResponse) {
 
   if (storedCookie) {
     const parsedCookie = JSON.parse(storedCookie.value);
-    const verifyCookie = parsedCookie.accessToken;
+    const parsedVerifiedCookie = JSON.parse(parsedCookie.auth)
+    const verifiedCookie = parsedVerifiedCookie.accessToken
 
-    if (!(String(verifyCookie).length > 2)) {
+    if (!(String(verifiedCookie).length > 2)) {
       if (!req.nextUrl.pathname.startsWith("/auth")) {
         req.nextUrl.pathname = "/auth/login";
         return NextResponse.redirect(req.nextUrl);
       }
     } else if (
-      String(verifyCookie).length > 2 &&
+      String(verifiedCookie).length > 2 &&
       (req.nextUrl.pathname.startsWith("/auth/login") ||
         req.nextUrl.pathname === "/")
     ) {

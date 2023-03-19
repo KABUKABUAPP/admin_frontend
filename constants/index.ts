@@ -1,7 +1,7 @@
 
 export const ADMIN_BASE_URL = process.env.NEXT_PUBLIC_ADMIN_URL
 export const milliSecondToSecondConversionRate = 1000
-export const ACCESS_TOKEN = 'persist%3Aauth'
+export const ACCESS_TOKEN = 'persist%3Aroot'
 export const MIDDLEWARE_ROUTES = [
     "/",
     "/auth/login",
