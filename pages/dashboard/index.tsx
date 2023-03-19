@@ -11,6 +11,8 @@ import TripsIcon from "@/components/icons/TripsIcon";
 import SosIcon from "@/components/icons/SosIcon";
 import WithdrawalIcon from "@/components/icons/WithdrawalIcon";
 import TripsChartContainer from "@/components/modules/dashboard/TripsChartContainer";
+import { useGetAllTripsQuery } from "@/api-services/tripsService";
+import useToken from "@/hooks/useToken";
 
 const mockPendingApplications = [
   {
@@ -72,6 +74,12 @@ const mockSummaryCardData = [
 ];
 
 const Dashboard: NextPage = () => {
+  const { token } = useToken();
+  const { data } = useGetAllTripsQuery(
+    { limit: 10, page: 1, token: `${token}` },
+    { skip: !token }
+  );
+
   return (
     <>
       <AppHead title="Kabukabu | Dashboard" />
@@ -79,13 +87,13 @@ const Dashboard: NextPage = () => {
         <WelcomeMessage name="Samson" />
 
         <div className="pt-12 flex max-md:flex-col gap-7">
-          <div className="w-[70%] max-md:w-full flex flex-col gap-12">
+          <div className="w-[72%] max-md:w-full flex flex-col gap-12">
             <SummaryCardContainer data={mockSummaryCardData} />
             <ActiveTripsTable />
           </div>
 
           <div
-            className="w-[30%] 
+            className="w-[28%] 
           flex flex-col gap-10 max-sm:items-center
           max-md:w-full max-md:flex-row
           max-sm:flex-col

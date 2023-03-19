@@ -79,9 +79,10 @@ export const data = {
   labels,
   datasets: [
     {
-      label: "",
+      label: "Trips for month",
       data: [40, 66, 23, 44, 55, 21, 12, 34, 56, 76, 22, 55],
       backgroundColor: ["#FFF5D8"],
+      hoverBackgroundColor: "#FFBF00",
       barPercentage: 0.6,
       maxBarThickness: 40,
       borderRadius: 8,

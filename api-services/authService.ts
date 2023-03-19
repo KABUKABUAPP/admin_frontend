@@ -13,7 +13,7 @@ export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
     baseUrl: `${AUTH_BASE_URL}/`,
-    timeout: secondsToMilliSeconds(60),
+    timeout: secondsToMilliSeconds(30),
   }),
   endpoints: (build) => ({
     login: build.mutation<LoginResponse, LoginPayload>({

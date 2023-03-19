@@ -7,9 +7,12 @@ import CloseEyeIcon from "@/components/icons/CloseEyeIcon";
 import OpenEyeIcon from "@/components/icons/OpenEyeIcon";
 import Button from "@/components/ui/Button/Button";
 import { useLoginMutation } from "@/api-services/authService";
+import LoginValidations from "@/validationschemas/LoginSchema";
+import { ACCESS_TOKEN } from "@/constants";
 
 import { useFormik, Form, FormikProvider } from "formik";
-import LoginValidations from "@/validationschemas/LoginSchema";
+import Cookie from "js-cookie";
+import { toast } from "react-toastify";
 
 const initialValues = {
   email: "",
@@ -21,7 +24,7 @@ const LoginForm: FC = () => {
 
   const [hidePassword, setHidePassword] = useState<boolean>(true);
 
-  const [login, { data, isLoading, error }] = useLoginMutation();
+  const [login, { data, isLoading, error, isError }] = useLoginMutation();
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -35,9 +38,21 @@ const LoginForm: FC = () => {
 
   useEffect(() => {
     if (error && "status" in error) {
-      console.log(error.data);
+      if ("data" in error) {
+        const { message } = error.data as { message: string };
+        toast.error(message);
+      }
     }
   }, [error]);
+
+  useEffect(() => {
+    if (data) {
+      const { accessTokens } = data.data;
+      Cookie.set(ACCESS_TOKEN, accessTokens);
+      toast.success("Login Successful");
+      router.push("/dashboard");
+    }
+  }, [data]);
 
   return (
     <div className="w-full max-w-xs mx-auto py-6 px-2">

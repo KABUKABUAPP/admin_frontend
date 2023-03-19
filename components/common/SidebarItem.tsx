@@ -16,12 +16,16 @@ const SidebarItem: FC<SidebarLink> = ({ icon, title, isActive, link }) => {
       onClick={() => router.push(link)}
       className={`
     w-full flex gap-1 items-center cursor-pointer 
-    border-transparent ${isActive ? "bg-[#FFBF00]" : ""}
-    p-2 rounded-lg mb-[6px]
+    border-transparent ${isActive ? "bg-[#FFBF00] shadow-md" : ""}
+    p-2 py-3 rounded-lg
     `}
     >
       {ripples}
-      <div style={{ color: isActive ? "#161616" : "#9A9A9A" }}>{icon}</div>
+      <div
+        style={{ color: isActive ? "#161616" : "#9A9A9A" }}
+      >
+        {icon}
+      </div>
       <p
         className={`text-xs font-medium ${
           isActive ? "text-[#000]" : "text-[#9A9A9A]"
