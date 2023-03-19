@@ -12,7 +12,6 @@ import SosIcon from "@/components/icons/SosIcon";
 import WithdrawalIcon from "@/components/icons/WithdrawalIcon";
 import TripsChartContainer from "@/components/modules/dashboard/TripsChartContainer";
 import { useGetAllTripsQuery } from "@/api-services/tripsService";
-import useToken from "@/hooks/useToken";
 
 const mockPendingApplications = [
   {
@@ -74,10 +73,8 @@ const mockSummaryCardData = [
 ];
 
 const Dashboard: NextPage = () => {
-  const { token } = useToken();
   const { data } = useGetAllTripsQuery(
-    { limit: 10, page: 1, token: `${token}` },
-    { skip: !token }
+    { limit: 10, page: 1, },
   );
 
   return (

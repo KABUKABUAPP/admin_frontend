@@ -1,3 +1,7 @@
+export interface AuthSlice {
+  accessToken: string 
+}
+
 export interface LoginPayload {
   email: string;
   password: string;

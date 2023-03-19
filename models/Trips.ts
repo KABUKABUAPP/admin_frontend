@@ -116,5 +116,4 @@ export interface GetAllTripsResponse {
 export interface GetAllTripsQuery {
   limit: number;
   page: number;
-  token: string
 }

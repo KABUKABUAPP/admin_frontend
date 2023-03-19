@@ -25,6 +25,8 @@
     "react-dom": "18.2.0",
     "react-redux": "^8.0.5",
     "react-toastify": "^9.1.1",
+    "redux-persist": "^6.0.0",
+    "redux-persist-cookie-storage": "^1.0.0",
     "typescript": "4.9.5",
     "usehooks-ts": "^2.9.1",
     "yup": "^1.0.2"

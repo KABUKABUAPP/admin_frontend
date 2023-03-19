@@ -9,6 +9,8 @@ import LogoutPopUp from "./LogoutPopUp";
 import Modal from "./Modal";
 import LogoutConfirmationPopUp from "./LogoutConfirmationPopUp";
 import { logout } from "@/utils";
+import { useDispatch } from "react-redux";
+import { deleteToken } from "@/config/features/auth/authSlice";
 
 interface Props {
   data: SidebarLink[];
@@ -27,6 +29,7 @@ const SideBar: FC<Props> = ({ data }) => {
   const ref = useClickOutside<HTMLSpanElement>(() => setIsLogoutPopUp(false));
   const [isModal, setIsModal] = useState<boolean>(false);
   const router = useRouter();
+  const dispatch = useDispatch()
 
   return (
     <>
@@ -35,7 +38,8 @@ const SideBar: FC<Props> = ({ data }) => {
           <LogoutConfirmationPopUp
             handleCancel={() => setIsModal(false)}
             handleLogout={() => {
-              logout(() => router.push("/auth/login"));
+              dispatch(deleteToken())
+              router.push("/auth/login");
             }}
           />
         </Modal>

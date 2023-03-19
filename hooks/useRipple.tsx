@@ -49,7 +49,7 @@ const useRipple = <T extends HTMLElement>(ref: React.RefObject<T>, btnVariant: "
   //this will be added to the button component later
   return ripples?.map((style, i) => {
     return (
-      <>
+      <span key={i}>
         <style>
           {`@keyframes ripple {
                 to {
@@ -72,7 +72,7 @@ const useRipple = <T extends HTMLElement>(ref: React.RefObject<T>, btnVariant: "
             borderRadius: "50%",
           }}
         />
-      </>
+      </span>
     );
   });
 };
