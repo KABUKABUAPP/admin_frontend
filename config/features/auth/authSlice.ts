@@ -15,7 +15,7 @@ export const authSlice = createSlice({
     },
     deleteToken: (state)=>{
         state.accessToken = ''
-    }
+    },
   }
 });
 

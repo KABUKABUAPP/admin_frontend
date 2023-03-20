@@ -1,6 +1,7 @@
 import React, { FC, PropsWithChildren } from "react";
 import Image from "next/image";
 import Container from "@/components/common/Container";
+import Transition from "@/components/common/Transition";
 
 const AuthLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
@@ -20,7 +21,7 @@ const AuthLayout: FC<PropsWithChildren> = ({ children }) => {
         </section>
         <section className="flex justify-center items-center w-7/12 p-2 py-20 max-lg:w-full">
           <div className="border-[#FFBF00] border w-full min-h-full rounded-lg max-w-lg p-1">
-            {children}
+            <Transition>{children}</Transition>
           </div>
         </section>
       </main>

@@ -4,6 +4,7 @@ import SideBar from "@/components/common/SideBar";
 import sidebarNavLinks from "@/navigation/sidebarNavLinks";
 import Container from "@/components/common/Container";
 import { SidebarLink } from "@/models/SidebarLink";
+import Transition from "@/components/common/Transition";
 
 const AppLayout: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
@@ -33,7 +34,7 @@ const AppLayout: FC<PropsWithChildren> = ({ children }) => {
       <div className="flex h-screen overflow-hidden">
         <SideBar data={links} />
         <main className="h-screen w-[calc(100%-200px)] max-lg:w-full bg-[#F1F1F1] overflow-auto p-4 pt-10">
-          {children}
+          <Transition>{children}</Transition>
         </main>
       </div>
     </Container>

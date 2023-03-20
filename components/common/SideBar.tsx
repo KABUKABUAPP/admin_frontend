@@ -12,6 +12,8 @@ import { useDispatch } from "react-redux";
 import { deleteToken } from "@/config/features/auth/authSlice";
 import { deleteUserInfo } from "@/config/features/user/userSlice";
 
+import { motion } from "framer-motion";
+
 interface Props {
   data: SidebarLink[];
 }
@@ -60,12 +62,15 @@ const SideBar: FC<Props> = ({ data }) => {
             handleClick={() => setIsLogoutPopUp(true)}
           />
           {isLogoutPopUp && (
-            <span
+            <motion.span
               className="absolute -top-10 left-[100%] z-50 shadow-md"
               ref={ref}
+              initial={{ translateX: 300 }}
+              whileInView={{ translateX: 0, transition: { duration: 0.3 } }}
+              viewport={{ once: true }}
             >
               <LogoutPopUp handleClick={() => setIsModal(true)} />
-            </span>
+            </motion.span>
           )}
         </div>
       </aside>
