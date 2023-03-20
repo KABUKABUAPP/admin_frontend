@@ -11,6 +11,8 @@ import LogoutConfirmationPopUp from "./LogoutConfirmationPopUp";
 import { useDispatch } from "react-redux";
 import { deleteToken } from "@/config/features/auth/authSlice";
 import { deleteUserInfo } from "@/config/features/user/userSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/config/reduxStore";
 
 import { motion } from "framer-motion";
 
@@ -32,6 +34,7 @@ const SideBar: FC<Props> = ({ data }) => {
   const [isModal, setIsModal] = useState<boolean>(false);
   const router = useRouter();
   const dispatch = useDispatch();
+  const userInfo = useSelector((state: RootState)=>state.persistedReducer.user)
 
   return (
     <>
@@ -58,7 +61,10 @@ const SideBar: FC<Props> = ({ data }) => {
         </div>
         <div className="relative">
           <UserAvatarBox
-            {...mockUser}
+            userId={userInfo._id}
+            fullName={userInfo.full_name}
+            role={userInfo.role}
+            image={''}
             handleClick={() => setIsLogoutPopUp(true)}
           />
           {isLogoutPopUp && (
