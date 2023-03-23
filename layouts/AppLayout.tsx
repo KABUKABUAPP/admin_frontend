@@ -14,7 +14,7 @@ const AppLayout: FC<PropsWithChildren> = ({ children }) => {
     pathname: string
   ) => {
     const mutatedSidebarItems = sidebarItems.map((item) => {
-      if (pathname.includes(item.link)) {
+      if (pathname === item.link) {
         return { ...item, isActive: true };
       }
       return { ...item, isActive: false };
