@@ -44,3 +44,8 @@ export const formatFullName = (name: string | undefined) => {
 
   return { firstName, lastNameInitial };
 };
+
+export const hyphenateString = (val: string):string => {
+  const splitVal = val.split(' ')
+  return splitVal.join('-').toLocaleLowerCase()
+}
