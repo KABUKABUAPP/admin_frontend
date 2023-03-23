@@ -30,7 +30,7 @@ const ForgotPasswordForm: FC<Props> = ({ handleSubmitFormSuccess }) => {
   };
 
   return (
-    <div className="mx-auto max-w-sm p-2 pt-14">
+    <div className="mx-auto max-w-[70%] p-2 pt-14">
       <div className="relative">
         <Button
           title="Back"

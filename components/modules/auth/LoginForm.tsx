@@ -44,6 +44,7 @@ const LoginForm: FC = () => {
         const { message } = error.data as { message: string };
         toast.error(message);
       }
+      else toast.error("Oops! Something went wrong")
     }
   }, [error]);
 
@@ -54,13 +55,13 @@ const LoginForm: FC = () => {
       console.log(rest)
       dispatch(setUserInfo(rest))
       toast.success("Login Successful");
-      router.push("/dashboard");
+      router.push("/");
     }
   }, [data]);
 
 
   return (
-    <div className="w-full max-w-xs mx-auto py-6 px-2">
+    <div className="w-full max-w-[70%] mx-auto py-6 px-2">
       <FormikProvider value={formik}>
         <div>
           <div className="relative w-8 h-8 mx-auto mb-6">

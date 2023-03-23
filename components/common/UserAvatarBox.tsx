@@ -1,10 +1,8 @@
 import Image from "next/image";
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 
 import ArrowDown from "../icons/ArrowDown";
-import Button from "../ui/Button/Button";
-import useClickOutside from "@/hooks/useClickOutside";
-import { capitalizeFirstLetter, formatFullName } from "@/utils";
+import { formatFullName } from "@/utils";
 
 interface Props {
   image: string;
@@ -21,8 +19,7 @@ const UserAvatarBox: FC<Props> = ({
   handleClick,
   userId,
 }) => {
-
-  const { lastNameInitial, firstName } = formatFullName(fullName || '')
+  const { lastNameInitial, firstName } = formatFullName(fullName || "");
 
   return (
     <div
@@ -46,7 +43,9 @@ const UserAvatarBox: FC<Props> = ({
         )}
       </div>
       <div className="flex-1">
-        <p className="mb-2 font-bold">{firstName} {lastNameInitial}.</p>
+        <p className="mb-2 font-bold">
+          {firstName} {lastNameInitial}.
+        </p>
         <p className="text-xs">{role}</p>
       </div>
       <div className="flex items-center justify-center">

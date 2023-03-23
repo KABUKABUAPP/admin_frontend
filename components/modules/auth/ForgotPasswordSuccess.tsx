@@ -9,7 +9,7 @@ const ForgotPasswordSuccess: FC = () => {
   const router = useRouter()
 
   return (
-    <div className="max-w-xs mx-auto px-2">
+    <div className="max-w-[70%] mx-auto px-2">
       <div>
         <p className="text-xl font-medium text-center pt-10">Forgot Password</p>
         <p className="text-center font-medium mt-2 text-xs w-56 mx-auto py-6">

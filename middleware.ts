@@ -20,10 +20,9 @@ export function middleware(req: NextRequest, res: NextResponse) {
       }
     } else if (
       String(verifiedCookie).length > 2 &&
-      (req.nextUrl.pathname.startsWith("/auth/login") ||
-        req.nextUrl.pathname === "/")
+      (req.nextUrl.pathname.startsWith("/auth"))
     ) {
-      req.nextUrl.pathname = "/dashboard";
+      req.nextUrl.pathname = "/";
       return NextResponse.redirect(req.nextUrl);
     }
 
@@ -35,7 +34,6 @@ export const config = {
     "/",
     "/auth/login",
     "/auth/forgot-password",
-    "/dashboard",
     "/drivers",
     "/fare-prices",
     "/hubs",
