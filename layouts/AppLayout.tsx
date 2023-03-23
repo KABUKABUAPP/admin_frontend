@@ -32,7 +32,7 @@ const AppLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
       <div className="flex h-screen overflow-hidden">
         <SideBar data={links} />
-        <main className="h-screen w-[calc(100%-200px)] max-lg:w-full bg-[#F1F1F1] overflow-auto p-4 pt-10">
+        <main className="h-screen w-[calc(100%-200px)] max-lg:w-full bg-[#f8f8f8] overflow-auto p-4 pt-10">
           <Transition>{children}</Transition>
         </main>
       </div>
