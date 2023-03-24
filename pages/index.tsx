@@ -73,9 +73,6 @@ const mockSummaryCardData = [
 ];
 
 const Dashboard: NextPage = () => {
-  const { data } = useGetAllTripsQuery(
-    { limit: 10, page: 1, },
-  );
 
   return (
     <>
