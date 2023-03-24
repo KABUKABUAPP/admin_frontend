@@ -11,7 +11,8 @@ import TripsIcon from "@/components/icons/TripsIcon";
 import SosIcon from "@/components/icons/SosIcon";
 import WithdrawalIcon from "@/components/icons/WithdrawalIcon";
 import TripsChartContainer from "@/components/modules/dashboard/TripsChartContainer";
-import { useGetAllTripsQuery } from "@/api-services/tripsService";
+import { useUserContext } from "@/contexts/UserContext";
+import { capitalizeAllFirstLetters } from "@/utils";
 
 const mockPendingApplications = [
   {
@@ -74,11 +75,13 @@ const mockSummaryCardData = [
 
 const Dashboard: NextPage = () => {
 
+  const { user } = useUserContext()
+
   return (
     <>
       <AppHead title="Kabukabu | Dashboard" />
       <AppLayout>
-        <WelcomeMessage name="Samson" />
+        <WelcomeMessage name={user ? capitalizeAllFirstLetters(user.full_name) : ""} />
 
         <div className="pt-12 flex max-md:flex-col gap-7">
           <div className="w-[72%] max-md:w-full flex flex-col gap-12">

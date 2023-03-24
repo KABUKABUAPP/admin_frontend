@@ -45,6 +45,12 @@ export const formatFullName = (name: string | undefined) => {
   return { firstName, lastNameInitial };
 };
 
+export const capitalizeAllFirstLetters = (word: string): string => {
+  let splitName = word.split(' ')
+  splitName = splitName.map((name)=>capitalizeFirstLetter(name))
+  return splitName.join(" ")
+}
+
 export const hyphenateString = (val: string):string => {
   const splitVal = val.split(' ')
   return splitVal.join('-').toLocaleLowerCase()
