@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { ACCESS_TOKEN } from "./constants";
 
-export function middleware(req: NextRequest, res: NextResponse) {
+export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const storedCookie = req.cookies.get(ACCESS_TOKEN);
 
