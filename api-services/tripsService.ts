@@ -5,15 +5,16 @@ import { GetAllTripsResponse } from "@/models/Trips";
 import { GetAllTripsQuery } from "@/models/Trips";
 
 import { secondsToMilliSeconds } from "@/utils";
-import { RootState } from "../config/reduxStore"
+import Cookies from "js-cookie";
+import { ACCESS_TOKEN } from "@/constants";
 
 export const tripsApi = createApi({
   reducerPath: "tripsApi",
   baseQuery: fetchBaseQuery({
     baseUrl: `${RIDES_BASE_URL}/`,
     timeout: secondsToMilliSeconds(30),
-    prepareHeaders(headers, { getState }) {
-      const token = (getState() as RootState).persistedReducer.auth.accessToken;
+    prepareHeaders(headers) {
+      const token = Cookies.get(ACCESS_TOKEN)
 
       if (token) {
         headers.set("authorization", `Bearer ${token}`);

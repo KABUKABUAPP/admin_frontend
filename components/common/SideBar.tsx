@@ -8,13 +8,11 @@ import useClickOutside from "@/hooks/useClickOutside";
 import LogoutPopUp from "./LogoutPopUp";
 import Modal from "./Modal";
 import LogoutConfirmationPopUp from "./LogoutConfirmationPopUp";
-import { useDispatch } from "react-redux";
-import { deleteToken } from "@/config/features/auth/authSlice";
-import { deleteUserInfo } from "@/config/features/user/userSlice";
-import { useSelector } from "react-redux";
-import { RootState } from "@/config/reduxStore";
+import { useUserContext } from "@/contexts/UserContext";
 
 import { motion } from "framer-motion";
+import Cookies from "js-cookie";
+import { ACCESS_TOKEN, USER_TOKEN } from "@/constants";
 
 interface Props {
   data: SidebarLink[];
@@ -33,8 +31,7 @@ const SideBar: FC<Props> = ({ data }) => {
   const ref = useClickOutside<HTMLSpanElement>(() => setIsLogoutPopUp(false));
   const [isModal, setIsModal] = useState<boolean>(false);
   const router = useRouter();
-  const dispatch = useDispatch();
-  const userInfo = useSelector((state: RootState)=>state.persistedReducer.user)
+  const { user, setUser } = useUserContext();
 
   return (
     <>
@@ -43,8 +40,9 @@ const SideBar: FC<Props> = ({ data }) => {
           <LogoutConfirmationPopUp
             handleCancel={() => setIsModal(false)}
             handleLogout={() => {
-              dispatch(deleteToken());
-              dispatch(deleteUserInfo());
+              setUser(null)
+              Cookies.remove(USER_TOKEN)
+              Cookies.remove(ACCESS_TOKEN)
               router.push("/auth/login");
             }}
           />
@@ -60,13 +58,15 @@ const SideBar: FC<Props> = ({ data }) => {
           </div>
         </div>
         <div className="relative">
-          <UserAvatarBox
-            userId={userInfo._id}
-            fullName={userInfo.full_name}
-            role={userInfo.role}
-            image={''}
-            handleClick={() => setIsLogoutPopUp(true)}
-          />
+          {user && (
+            <UserAvatarBox
+              userId={user._id}
+              fullName={user.full_name}
+              role={user.role}
+              image={""}
+              handleClick={() => setIsLogoutPopUp(true)}
+            />
+          )}
           {isLogoutPopUp && (
             <motion.span
               className="absolute -top-10 left-[100%] z-50 shadow-md"

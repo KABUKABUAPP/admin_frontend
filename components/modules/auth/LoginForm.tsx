@@ -8,12 +8,14 @@ import OpenEyeIcon from "@/components/icons/OpenEyeIcon";
 import Button from "@/components/ui/Button/Button";
 import { useLoginMutation } from "@/api-services/authService";
 import LoginValidations from "@/validationschemas/LoginSchema";
-import { setTokenValue } from "@/config/features/auth/authSlice";
-import { setUserInfo } from "@/config/features/user/userSlice";
+import { ACCESS_TOKEN } from "@/constants";
+import { USER_TOKEN } from "@/constants";
+import { useUserContext } from "@/contexts/UserContext";
 
 import { useFormik, Form, FormikProvider } from "formik";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
+import Cookies from "js-cookie";
 
 const initialValues = {
   email: "",
@@ -22,11 +24,12 @@ const initialValues = {
 
 const LoginForm: FC = () => {
   const router = useRouter();
-  const dispatch = useDispatch()
 
   const [hidePassword, setHidePassword] = useState<boolean>(true);
 
   const [login, { data, isLoading, error, isError }] = useLoginMutation();
+
+  const { setUser } = useUserContext()
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -51,9 +54,10 @@ const LoginForm: FC = () => {
   useEffect(() => {
     if (data) {
       const { accessTokens, __v, ...rest } = data.data.loggedInAdmin
-      dispatch(setTokenValue(accessTokens))
-      console.log(rest)
-      dispatch(setUserInfo(rest))
+
+      Cookies.set(USER_TOKEN, JSON.stringify(rest))
+      Cookies.set(ACCESS_TOKEN, accessTokens)
+      setUser(rest)
       toast.success("Login Successful");
       router.push("/");
     }

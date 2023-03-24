@@ -4,29 +4,22 @@ import { ACCESS_TOKEN } from "./constants";
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const storedCookie = req.cookies.get(ACCESS_TOKEN);
+  const verifyCookie = req.cookies.get(ACCESS_TOKEN);
 
   if (pathname.startsWith("/_next")) return NextResponse.next();
 
-  if (storedCookie) {
-    const parsedCookie = JSON.parse(storedCookie.value);
-    const parsedVerifiedCookie = JSON.parse(parsedCookie.auth)
-    const verifiedCookie = parsedVerifiedCookie.accessToken
 
-    if (!(String(verifiedCookie).length > 2)) {
-      if (!req.nextUrl.pathname.startsWith("/auth")) {
-        req.nextUrl.pathname = "/auth/login";
-        return NextResponse.redirect(req.nextUrl);
-      }
-    } else if (
-      String(verifiedCookie).length > 2 &&
-      (req.nextUrl.pathname.startsWith("/auth"))
-    ) {
-      req.nextUrl.pathname = "/";
+  if (!verifyCookie) {
+    if (!req.nextUrl.pathname.startsWith("/auth")) {
+      req.nextUrl.pathname = "/auth/login";
       return NextResponse.redirect(req.nextUrl);
     }
-
+  } 
+  else if (verifyCookie && req.nextUrl.pathname.startsWith("/auth")) {
+    req.nextUrl.pathname = "/";
+    return NextResponse.redirect(req.nextUrl);
   }
+  
 }
 
 export const config = {
