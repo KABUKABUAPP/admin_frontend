@@ -1,31 +1,32 @@
-export const ADMIN_BASE_URL = process.env.NEXT_PUBLIC_ADMIN_URL;
+export const AUTH_BASE_URL = process.env.NEXT_PUBLIC_AUTH_URL;
+export const RIDES_BASE_URL = process.env.NEXT_PUBLIC_RIDE_BASE_URL;
 export const milliSecondToSecondConversionRate = 1000;
 export const ACCESS_TOKEN = "persist%3Aroot";
 export const TripsOptionsBarData = [
   {
     title: "Trip Orders",
     isActive: true,
-    keyVal: ''
+    keyVal: "",
   },
   {
     title: "Pending Trips",
     isActive: false,
-    keyVal: 'pending-trips'
+    keyVal: "pending-trips",
   },
   {
     title: "Active Trips",
     isActive: false,
-    keyVal: 'active-trips'
+    keyVal: "active-trips",
   },
   {
     title: "Completed Trips",
     isActive: false,
-    keyVal: 'completed-trips'
+    keyVal: "completed-trips",
   },
   {
     title: "Cancelled Orders",
     isActive: false,
-    keyVal: 'cancelled-orders'
+    keyVal: "cancelled-orders",
   },
 ];
 
@@ -133,7 +134,6 @@ export const completedTripsRowMockData = [
   },
 ];
 
-
 export const cancelledTripsRowMockData = [
   {
     id: "12344",
@@ -144,7 +144,7 @@ export const cancelledTripsRowMockData = [
     carModel: "Toyota Corolla 2020, Black",
     plateNumber: "ABC123XYS",
     status: "Cancelled",
-    reason: "Long waiting time"
+    reason: "Long waiting time",
   },
   {
     id: "12334",
@@ -155,7 +155,7 @@ export const cancelledTripsRowMockData = [
     carModel: "Toyota Corolla 2020, Black",
     plateNumber: "ABC123XYS",
     status: "Cancelled",
-    reason: "Long waiting time"
+    reason: "Long waiting time",
   },
   {
     id: "12644",
@@ -166,7 +166,7 @@ export const cancelledTripsRowMockData = [
     carModel: "Toyota Corolla 2020, Black",
     plateNumber: "ABC123XYS",
     status: "Cancelled",
-    reason: "Long waiting time"
+    reason: "Long waiting time",
   },
   {
     id: "12384",
@@ -177,6 +177,6 @@ export const cancelledTripsRowMockData = [
     carModel: "Toyota Corolla 2020, Black",
     plateNumber: "ABC123XYS",
     status: "Cancelled",
-    reason: "Long waiting time"
+    reason: "Long waiting time",
   },
 ];

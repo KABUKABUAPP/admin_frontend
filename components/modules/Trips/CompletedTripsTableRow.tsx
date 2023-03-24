@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import OriginDestinationCell from "./OriginDestinationCell";
-import Rating  from "react-star-ratings";
+import Rating from "react-star-ratings";
+import Link from "next/link";
 
 interface Props {
   data: {
@@ -36,7 +37,9 @@ const CompletedTripsTableRow: FC<Props> = ({
   return (
     <div className="flex p-3 gap-6 border-b border-b[#E6E6E6]" key={index}>
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{id}</p>
+        <Link href={`/trips/${id}`}>
+          <p className="text-xs font-bold">{id}</p>
+        </Link>
       </div>
 
       <div style={{ flex: 2 }}>
@@ -61,11 +64,19 @@ const CompletedTripsTableRow: FC<Props> = ({
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{price && '₦'}{price}</p>
+        <p className="text-xs font-bold">
+          {price && "₦"}
+          {price}
+        </p>
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <Rating rating={rating}  starDimension="11px" starSpacing="1px" starRatedColor="#FFBF00"/>
+        <Rating
+          rating={rating}
+          starDimension="11px"
+          starSpacing="1px"
+          starRatedColor="#FFBF00"
+        />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { ADMIN_BASE_URL } from "@/constants";
+import { RIDES_BASE_URL } from "@/constants";
 import { GetAllTripsResponse } from "@/models/Trips";
 import { GetAllTripsQuery } from "@/models/Trips";
 
@@ -10,7 +10,7 @@ import { RootState } from "../config/reduxStore"
 export const tripsApi = createApi({
   reducerPath: "tripsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${ADMIN_BASE_URL}/`,
+    baseUrl: `${RIDES_BASE_URL}/`,
     timeout: secondsToMilliSeconds(30),
     prepareHeaders(headers, { getState }) {
       const token = (getState() as RootState).persistedReducer.auth.accessToken;
@@ -24,8 +24,8 @@ export const tripsApi = createApi({
   }),
   endpoints: (build) => ({
     getAllTrips: build.query<GetAllTripsResponse, GetAllTripsQuery>({
-      query: ({ limit, page, }) => ({
-        url: `/admin/trip/get-all?limit=${limit}&page=${page}`,
+      query: ({ limit, page, status }) => ({
+        url: `/admin/trip/get-all?limit=${limit}&page=${page}&status=${status}`,
       }),
     }),
   }),
