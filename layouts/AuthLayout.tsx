@@ -19,7 +19,7 @@ const AuthLayout: FC<PropsWithChildren> = ({ children }) => {
         </p>
       </section>
       <section className="flex justify-center items-center w-7/12 p-2 py-20 max-lg:w-full">
-        <div className="border-[#FFBF00] border w-full min-h-full rounded-lg max-w-[70%] p-1">
+        <div className="border-[#FFBF00] border w-full min-h-full rounded-lg max-w-[70%] p-1 max-sm:max-w-full">
           <Transition>{children}</Transition>
         </div>
       </section>

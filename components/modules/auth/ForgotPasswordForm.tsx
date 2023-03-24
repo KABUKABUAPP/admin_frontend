@@ -30,7 +30,7 @@ const ForgotPasswordForm: FC<Props> = ({ handleSubmitFormSuccess }) => {
   };
 
   return (
-    <div className="mx-auto max-w-[70%] p-2 pt-14">
+    <div className="mx-auto max-w-[70%] p-2 pt-14 max-sm:max-w-full">
       <div className="relative">
         <Button
           title="Back"
@@ -50,7 +50,7 @@ const ForgotPasswordForm: FC<Props> = ({ handleSubmitFormSuccess }) => {
             </p>
           </div>
 
-          <div className="px-10">
+          <div className="px-10 max-sm:px-0">
             <div>
               <TextField
                 label="Email"

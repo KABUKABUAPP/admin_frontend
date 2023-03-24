@@ -14,7 +14,6 @@ import { useUserContext } from "@/contexts/UserContext";
 
 import { useFormik, Form, FormikProvider } from "formik";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 
 const initialValues = {
@@ -65,7 +64,7 @@ const LoginForm: FC = () => {
 
 
   return (
-    <div className="w-full max-w-[70%] mx-auto py-6 px-2">
+    <div className="w-full max-w-[70%] mx-auto py-6 px-2 max-sm:max-w-full">
       <FormikProvider value={formik}>
         <div>
           <div className="relative w-8 h-8 mx-auto mb-6">
