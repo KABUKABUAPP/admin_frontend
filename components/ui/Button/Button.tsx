@@ -65,7 +65,7 @@ const Button: React.FC<Props> = (props) => {
       style={{ width, ...styles }}
       disabled={disabled}
     >
-      {!disabled && ripples}
+      {/* {!disabled && ripples} */}
       {startIcon && !endIcon && startIcon}
       {loading ? <Loader /> : title}
       {endIcon && !startIcon && endIcon}

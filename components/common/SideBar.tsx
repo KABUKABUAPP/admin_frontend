@@ -18,14 +18,6 @@ interface Props {
   data: SidebarLink[];
 }
 
-const mockUser = {
-  image: "/testUser.jpg",
-  firstName: "Samson",
-  lastName: "Carry",
-  role: "Super Admin",
-  userId: "98765",
-};
-
 const SideBar: FC<Props> = ({ data }) => {
   const [isLogoutPopUp, setIsLogoutPopUp] = useState<boolean>(false);
   const ref = useClickOutside<HTMLSpanElement>(() => setIsLogoutPopUp(false));

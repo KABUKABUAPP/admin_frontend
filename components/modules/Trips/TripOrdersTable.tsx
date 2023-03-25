@@ -28,18 +28,24 @@ interface FormattedTrip {
 }
 
 const TripOrdersTable: FC = () => {
-  const { data, isLoading, error, refetch } = useGetAllTripsQuery({
-    page: 0,
-    limit: 10,
-    status: "completed",
-  });
+  const { data, isLoading, error, refetch } = useGetAllTripsQuery(
+    {
+      page: 1,
+      limit: 10,
+      status: "initiated",
+    },
+    {
+      refetchOnMountOrArgChange: true,
+      // skip: true
+    }
+  );
 
   const formatTripData = (data: TripData[]): FormattedTrip[] => {
     const formattedData = data.map((trip) => {
       return {
         id: trip._id,
-        origin: `${trip.order.start_address.street}, ${trip.order.start_address.city}, ${trip.order.start_address.state}, ${trip.order.start_address.country}`,
-        destination: `${trip.order.end_address.street}, ${trip.order.end_address.city}, ${trip.order.end_address.state}, ${trip.order.end_address.country}`,
+        origin: `${trip.start_address.city}, ${trip.start_address.state}, ${trip.start_address.country}`,
+        destination: `${trip.end_address.city}, ${trip.end_address.state}, ${trip.end_address.country}`,
         rider: trip.user.full_name,
         driver: "Driver name",
         carModel: "Toyota Corolla",
@@ -53,7 +59,7 @@ const TripOrdersTable: FC = () => {
 
   return (
     <>
-      {data && !error && !isLoading && data.data.data.length ? (
+      {/* {data && !error && !isLoading && data.data.data.length ? (
         <EnhancedTable
           TableHeadComponent={<TripsTableHeadRow headCellData={headCellData} />}
           maxWidth="100vw"
@@ -62,7 +68,7 @@ const TripOrdersTable: FC = () => {
           )}
           rowData={formatTripData(data.data.data)}
         />
-      ) : null}
+      ) : null} */}
 
       {data && !error && !isLoading && !data.data.data.length ? (
         <div>

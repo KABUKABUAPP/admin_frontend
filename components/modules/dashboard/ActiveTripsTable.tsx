@@ -44,7 +44,7 @@ const mockData = [
 
 const ActiveTripsTable: FC = () => {
   return (
-    <div className="w-full  max-w-3xl">
+    <div className="w-full  ">
       <ActiveTripsTableHead />
       <ActiveTripsTableBody data={mockData}/>
     </div>

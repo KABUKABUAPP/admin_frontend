@@ -12,22 +12,22 @@ export const TripsOptionsBarData = [
   {
     title: "Pending Trips",
     isActive: false,
-    keyVal: "pending-trips",
+    keyVal: "pending",
   },
   {
     title: "Active Trips",
     isActive: false,
-    keyVal: "active-trips",
+    keyVal: "active",
   },
   {
     title: "Completed Trips",
     isActive: false,
-    keyVal: "completed-trips",
+    keyVal: "completed",
   },
   {
     title: "Cancelled Orders",
     isActive: false,
-    keyVal: "cancelled-orders",
+    keyVal: "cancelled",
   },
 ];
 

@@ -116,5 +116,5 @@ export interface GetAllTripsResponse {
 export interface GetAllTripsQuery {
   limit: number;
   page: number;
-  status: "completed" | "pending" | "active" | "cancelled"
+  status: "disputed" | "cancelled" | "completed" | "initiated" | "started";
 }

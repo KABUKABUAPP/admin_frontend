@@ -1,13 +1,14 @@
-import { NextPage } from 'next'
-import React from 'react'
-import AppLayout from '@/layouts/AppLayout'
+import { NextPage } from "next";
+import React from "react";
+import AppLayout from "@/layouts/AppLayout";
+import TripActionBar from "@/components/modules/Trips/TripActionBar";
 
-const Trips: NextPage = () => {
+const Trip: NextPage = () => {
   return (
     <AppLayout>
-        Trip Details
+      <TripActionBar></TripActionBar>
     </AppLayout>
-  )
-}
+  );
+};
 
-export default Trips
+export default Trip;

@@ -13,12 +13,21 @@ const AppLayout: FC<PropsWithChildren> = ({ children }) => {
     sidebarItems: SidebarLink[],
     pathname: string
   ) => {
-    const mutatedSidebarItems = sidebarItems.map((item) => {
-      if (pathname === item.link) {
-        return { ...item, isActive: true };
-      }
-      return { ...item, isActive: false };
-    });
+    let mutatedSidebarItems: SidebarLink[] = [];
+
+    if (pathname === "/") {
+      mutatedSidebarItems = sidebarItems.map((item) => {
+        if (item.title === "Dashboard") return { ...item, isActive: true };
+        return item;
+      });
+    } else {
+      mutatedSidebarItems = sidebarItems.map((item) => {
+        if (pathname.includes(item.link) && item.title !== "Dashboard") {
+          return { ...item, isActive: true };
+        }
+        return { ...item, isActive: false };
+      });
+    }
 
     return mutatedSidebarItems;
   };
@@ -30,12 +39,12 @@ const AppLayout: FC<PropsWithChildren> = ({ children }) => {
   }, [router.pathname]);
 
   return (
-      <div className="flex h-screen overflow-hidden">
-        <SideBar data={links} />
-        <main className="h-screen w-[calc(100%-200px)] max-lg:w-full bg-[#f8f8f8] overflow-auto p-4 pt-10">
-          <Transition>{children}</Transition>
-        </main>
-      </div>
+    <div className="flex h-screen overflow-hidden">
+      <SideBar data={links} />
+      <main className="h-screen w-[calc(100%-200px)] max-lg:w-full bg-[#f8f8f8] overflow-auto p-4 pt-10">
+        <Transition>{children}</Transition>
+      </main>
+    </div>
   );
 };
 

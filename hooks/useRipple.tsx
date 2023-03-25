@@ -49,11 +49,11 @@ const useRipple = <T extends HTMLElement>(ref: React.RefObject<T>, btnVariant: "
   //this will be added to the button component later
   return ripples?.map((style, i) => {
     return (
-      <span key={i}>
+      <span key={i} style={{maxWidth: '70%'}}>
         <style>
           {`@keyframes ripple {
                 to {
-                  transform: scale(4);
+                  transform: scale(3);
                   opacity: 0;
                 }
             }`}
@@ -70,6 +70,7 @@ const useRipple = <T extends HTMLElement>(ref: React.RefObject<T>, btnVariant: "
             // add ripple animation from styles.css
             animation: "ripple 600ms linear",
             borderRadius: "50%",
+            maxWidth: '70%'
           }}
         />
       </span>

@@ -19,13 +19,7 @@ const Trips: NextPage = () => {
   const [tripCount, setTripCount] = useState<number>(8);
   const router = useRouter();
   const { tab } = router.query;
-  const tabOptions = [
-    undefined,
-    "pending-trips",
-    "active-trips",
-    "completed-trips",
-    "cancelled-orders",
-  ];
+  const tabOptions = [undefined, "pending", "active", "completed", "cancelled"];
   enum Tab {
     TRIP_ORDERS,
     PENDING_TRIPS,
@@ -35,27 +29,35 @@ const Trips: NextPage = () => {
   }
 
   const handleClickOption = (keyVal: string) => {
+    if (keyVal !== "")
+      router.push(`/trips?tab=${keyVal}`, undefined, { shallow: true });
+    else router.push(`/trips`, undefined, { shallow: true });
+  };
+
+  const handleActiveTab = (keyVal: string) => {
     const mutatedOptions = optionsList.map((item) => {
       return item.keyVal === keyVal
         ? { ...item, isActive: true }
         : { ...item, isActive: false };
     });
     setOptionsList(mutatedOptions);
-    if (keyVal !== "")
-      router.push(`/trips?tab=${keyVal}`, undefined, { shallow: true });
-    else router.push(`/trips`, undefined, { shallow: true });
   };
 
-  useEffect(()=>{
-    let currentTab = '' 
-    if(tab){
-      currentTab = optionsList.filter((t)=>t.keyVal===tab)[0].title
-      if(currentTab) setTripTitle(currentTab)
+  useEffect(() => {
+    let currentTab = "";
+    let currentKey = "";
+    if (tab) {
+      const option = optionsList.filter((t) => t.keyVal === tab)[0];
+      currentTab = option?.title;
+      currentKey = option?.keyVal;
+    } else {
+      currentTab = "Trip Orders";
+      currentKey = "";
     }
-    else currentTab = "Trip Orders"
 
     setTripTitle(currentTab)
-  },[tab])
+    handleActiveTab(currentKey)
+  }, [tab]);
 
   return (
     <AppLayout>

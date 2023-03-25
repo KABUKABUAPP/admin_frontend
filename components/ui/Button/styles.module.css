@@ -16,7 +16,7 @@
 }
 
 .outlined.large, .contained.large {
-    @apply py-4 px-6
+    @apply py-4 px-8
 }
 
 .text.large {
