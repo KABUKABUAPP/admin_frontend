@@ -11,7 +11,7 @@ const ViewTripLayout:FC<Props> = ({ asideComponents, mainComponents }) => {
         <aside className='w-[300px] max-lg:w-full'>
             {asideComponents}
         </aside>
-        <main className='w-[calc(100%-300px)] max-lg:w-full'>
+        <main className='w-[calc(100%-300px)] max-lg:w-full h-screen'>
             {mainComponents}
         </main>
     </div>

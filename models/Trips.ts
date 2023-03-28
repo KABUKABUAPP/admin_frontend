@@ -118,3 +118,13 @@ export interface GetAllTripsQuery {
   page: number;
   status: "disputed" | "cancelled" | "completed" | "initiated" | "started";
 }
+
+export interface TripDetail {
+  topTitle: string;
+  topValue: string | number;
+  topIcon: React.ReactNode;
+  bottomTitle: string;
+  bottomValue: string | number;
+  bottomIcon: React.ReactNode;
+  isRating?: boolean;
+}
