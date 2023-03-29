@@ -7,7 +7,7 @@ interface Props {
 
 const ViewTripLayout:FC<Props> = ({ asideComponents, mainComponents }) => {
   return (
-    <div className='flex w-full mt-6 max-lg:flex-col'>
+    <div className='flex gap-8 w-full mt-6 max-lg:flex-col max-lg:gap-4 max-lg:justify-center'>
         <aside className='w-[300px] max-lg:w-full'>
             {asideComponents}
         </aside>

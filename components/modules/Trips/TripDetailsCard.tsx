@@ -14,7 +14,13 @@ const TripDetailsCard: FC<Props> = ({ cardSubTitle, data }) => {
       <p className="font-bold text-sm mb-4">{cardSubTitle}</p>
       <div className="flex flex-col w-full gap-6">
         {data.map((item, idx) => {
-          return <TripDetailItem {...item} key={idx} isLastItem={idx === data.length-1}/>;
+          return (
+            <TripDetailItem
+              {...item}
+              key={idx}
+              isLastItem={idx === data.length - 1}
+            />
+          );
         })}
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import CarIcon from "../icons/CarIcon";
 import DestinationIcon from "../icons/DestinationIcon";
 import GoogleMapReact from "google-map-react";
@@ -18,10 +18,6 @@ const AppMap: FC<Props> = ({ location }) => {
     destination: "Los Angeles, CA",
     travelMode: "DRIVING",
   };
-
-  useEffect(() => {
-    const {} = window;
-  }, []);
 
   const key = "AIzaSyDYJFRC6Hn7pHOLdLEJgPvjUHTa-XHs8Kw";
 
