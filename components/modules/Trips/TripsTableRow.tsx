@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import OriginDestinationCell from "./OriginDestinationCell";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 interface Props {
   data: {
@@ -31,11 +30,10 @@ const TripsTableRow: FC<Props> = ({
   index,
 }) => {
   
-  const { tab } = useRouter().query
   return (
     <div className="flex p-3 gap-6 border-b border-b[#E6E6E6]" key={index}>
       <div style={{ flex: 1 }} className="flex items-center">
-        <Link href={`/trips/${id}/${tab || ''}`}>
+        <Link href={`/trips/${id}`}>
           <p className="text-xs font-bold">{id}</p>
         </Link>
       </div>

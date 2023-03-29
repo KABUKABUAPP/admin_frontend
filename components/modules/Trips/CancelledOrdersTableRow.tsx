@@ -34,7 +34,7 @@ const CancelledOrdersTableRow: FC<Props> = ({
   return (
     <div className="flex p-3 gap-6 border-b border-b[#E6E6E6]" key={index}>
       <div style={{ flex: 1 }} className="flex items-center">
-        <Link href={`/trips/${id}/cancelled`}>
+        <Link href={`/trips/${id}`}>
           <p className="text-xs font-bold">{id}</p>
         </Link>
       </div>
