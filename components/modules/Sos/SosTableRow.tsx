@@ -1,6 +1,5 @@
 import React, { FC } from "react";
-import OriginDestinationCell from "../../common/OriginDestinationCell";
-import Rating from "react-star-ratings";
+import OriginDestinationCell from "@/components/common/OriginDestinationCell";
 import Link from "next/link";
 
 interface Props {
@@ -13,13 +12,13 @@ interface Props {
     carModel: string;
     plateNumber: string;
     status: string;
-    price: string;
-    rating: number;
+    raisedBy: string;
+    reason: string;
   };
   index: number;
 }
 
-const CompletedTripsTableRow: FC<Props> = ({
+const SosTableRow: FC<Props> = ({
   data: {
     id,
     origin,
@@ -29,8 +28,8 @@ const CompletedTripsTableRow: FC<Props> = ({
     carModel,
     plateNumber,
     status,
-    price,
-    rating,
+    raisedBy,
+    reason,
   },
   index,
 }) => {
@@ -64,22 +63,14 @@ const CompletedTripsTableRow: FC<Props> = ({
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">
-          {price && "₦"}
-          {price}
-        </p>
+        <p className="text-xs font-bold">{raisedBy}</p>
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <Rating
-          rating={rating}
-          starDimension="11px"
-          starSpacing="1px"
-          starRatedColor="#FFBF00"
-        />
+        <p className="text-xs font-bold">{reason}</p>
       </div>
     </div>
   );
 };
 
-export default CompletedTripsTableRow;
+export default SosTableRow;

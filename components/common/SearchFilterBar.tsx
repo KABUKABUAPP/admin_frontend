@@ -3,7 +3,7 @@ import TextField from "@/components/ui/Input/TextField/TextField";
 import SearchIcon from "@/components/icons/SearchIcon";
 import ChevronDown from "@/components/icons/ChevronDown";
 
-const TripsSearchFilterBar: FC = () => {
+const SearchFilterBar: FC = () => {
   return (
     <div className="rounded-lg bg-[#F1F1F1] w-full min-h-10 shadow-sm my-6 py-4 px-8 flex items-center justify-between max-sm:flex-col max-sm:gap-5">
       <div className="w-[200px]">
@@ -22,4 +22,4 @@ const TripsSearchFilterBar: FC = () => {
   );
 };
 
-export default TripsSearchFilterBar;
+export default SearchFilterBar;

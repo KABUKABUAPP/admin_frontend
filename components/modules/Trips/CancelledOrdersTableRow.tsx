@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import OriginDestinationCell from "./OriginDestinationCell";
+import OriginDestinationCell from "../../common/OriginDestinationCell";
 import Link from "next/link";
 
 interface Props {

@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
 import TripsTableHeadRow from "./TripsTableHeadRow";
-import TripsTableRow from "./TripsTableRow";
 import { cancelledTripsRowMockData } from "../../../constants";
 import CancelledOrdersTableRow from "./CancelledOrdersTableRow";
 

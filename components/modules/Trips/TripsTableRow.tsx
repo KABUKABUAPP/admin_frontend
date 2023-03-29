@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import OriginDestinationCell from "./OriginDestinationCell";
+import OriginDestinationCell from "../../common/OriginDestinationCell";
 import Link from "next/link";
 
 interface Props {
@@ -29,7 +29,6 @@ const TripsTableRow: FC<Props> = ({
   },
   index,
 }) => {
-  
   return (
     <div className="flex p-3 gap-6 border-b border-b[#E6E6E6]" key={index}>
       <div style={{ flex: 1 }} className="flex items-center">

@@ -7,6 +7,7 @@ interface Props {
   maxWidth?: string;
   rowData: any[];
   rowComponent: (row: any, idx: number) => React.ReactNode;
+  headBg?: string
 }
 
 const EnhancedTable: FC<Props> = ({
@@ -14,6 +15,7 @@ const EnhancedTable: FC<Props> = ({
   maxWidth = "768px",
   rowData,
   rowComponent,
+  headBg
 }) => {
   return (
     <div
@@ -22,7 +24,7 @@ const EnhancedTable: FC<Props> = ({
       style={{ maxWidth: maxWidth }}
     >
       <div className=" bg-transparent  min-w-[800px]">
-        <EnhancedTableHead TableHeadComponent={TableHeadComponent} />
+        <EnhancedTableHead TableHeadComponent={TableHeadComponent} bgColor={headBg}/>
         <EnhancedTableBody
           rowData={rowData}
           rowComponent={(row, index) => rowComponent(row, index)}

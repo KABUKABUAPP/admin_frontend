@@ -5,7 +5,7 @@ interface Props {
     count: number
 }
 
-const TripCountHeader:FC<Props> = ({ title, count }) => {
+const CountHeader:FC<Props> = ({ title, count }) => {
   return (
     <div className='font-bold mb-3'>
         <p className='text-lg'>{title} {`[${count}]`}</p>
@@ -13,4 +13,4 @@ const TripCountHeader:FC<Props> = ({ title, count }) => {
   )
 }
 
-export default TripCountHeader
+export default CountHeader

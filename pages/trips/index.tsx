@@ -5,8 +5,8 @@ import { useRouter } from "next/router";
 import AppLayout from "@/layouts/AppLayout";
 import TripsOptionBar from "@/components/modules/Trips/TripsOptionBar";
 import { TripsOptionsBarData } from "@/constants";
-import TripsSearchFilterBar from "@/components/modules/Trips/TripsSearchFilterBar";
-import TripCountHeader from "@/components/modules/Trips/TripCountHeader";
+import SearchFilterBar from "@/components/common/SearchFilterBar";
+import CountHeader from "@/components/common/CountHeader";
 import TripOrdersTable from "@/components/modules/Trips/TripOrdersTable";
 import PendingTripsTable from "@/components/modules/Trips/PendingTripsTable";
 import ActiveTripsTable from "@/components/modules/Trips/ActiveTripsTable";
@@ -61,14 +61,14 @@ const Trips: NextPage = () => {
 
   return (
     <AppLayout>
-      <TripCountHeader title={tripTitle} count={tripCount} />
+      <CountHeader title={tripTitle} count={tripCount} />
       <TripsOptionBar
         options={optionsList}
         handleClickOption={(keyVal) => {
           handleClickOption(keyVal);
         }}
       />
-      <TripsSearchFilterBar />
+      <SearchFilterBar />
       {tab === tabOptions[Tab.TRIP_ORDERS] && <TripOrdersTable />}
       {tab === tabOptions[Tab.PENDING_TRIPS] && <PendingTripsTable />}
       {tab === tabOptions[Tab.ACTIVE_TRIPS] && <ActiveTripsTable />}
