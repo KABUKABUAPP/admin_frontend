@@ -41,7 +41,7 @@ const CarOccupantDetailsCard: FC<Props> = ({
         <div style={{ flex: 1 }}>
           <div className="relative overflow-hidden w-10 h-10 rounded-full">
             <Image
-              fill={true}
+              layout="fill"
               src={imageUri}
               style={{ objectFit: "contain" }}
               alt="user image"

@@ -9,6 +9,8 @@ import UserProvider from "@/contexts/UserContext";
 import CallProvider from "@/contexts/CallContext";
 import ModalProvider from "@/contexts/ModalContext";
 
+"use client"
+
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <UserProvider>

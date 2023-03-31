@@ -11,7 +11,7 @@ const AuthLayout: FC<PropsWithChildren> = ({ children }) => {
           src={"/auth/auth-image.png"}
           alt="Login to Kabukabu app"
           style={{ objectFit: "cover" }}
-          fill={true}
+          layout="fill"
           priority
         />
         <p className="absolute bottom-5 text-white text-2xl w-full text-center">

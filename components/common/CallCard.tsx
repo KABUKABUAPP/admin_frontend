@@ -23,7 +23,7 @@ const CallCard: FC<Props> = ({ imageUri, fullname }) => {
     >
       <div className="relative w-10 h-10 overflow-hidden rounded-full">
         <Image
-          fill
+          layout="fill"
           src={imageUri}
           style={{ objectFit: "contain" }}
           alt="user image"

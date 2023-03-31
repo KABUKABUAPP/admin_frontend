@@ -6,19 +6,19 @@ export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const verifyCookie = req.cookies.get(ACCESS_TOKEN);
 
-  if (pathname.startsWith("/_next")) return NextResponse.next();
+  // if (pathname.startsWith("/_next")) return NextResponse.next();
 
 
-  if (!verifyCookie) {
-    if (!req.nextUrl.pathname.startsWith("/auth")) {
-      req.nextUrl.pathname = "/auth/login";
-      return NextResponse.redirect(req.nextUrl);
-    }
-  } 
-  else if (verifyCookie && req.nextUrl.pathname.startsWith("/auth")) {
-    req.nextUrl.pathname = "/";
-    return NextResponse.redirect(req.nextUrl);
-  }
+  // if (!verifyCookie) {
+  //   if (!req.nextUrl.pathname.startsWith("/auth")) {
+  //     req.nextUrl.pathname = "/auth/login";
+  //     return NextResponse.redirect(req.nextUrl);
+  //   }
+  // } 
+  // else if (verifyCookie && req.nextUrl.pathname.startsWith("/auth")) {
+  //   req.nextUrl.pathname = "/";
+  //   return NextResponse.redirect(req.nextUrl);
+  // }
   
 }
 

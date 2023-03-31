@@ -31,7 +31,7 @@ const UserAvatarBox: FC<Props> = ({
           <Image
             src={image}
             alt="Kabukabu user image"
-            fill
+            layout="fill"
             style={{ objectFit: "cover", objectPosition: "50% 50%" }}
           />
         ) : (

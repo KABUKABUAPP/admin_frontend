@@ -71,7 +71,7 @@ const LoginForm: FC = () => {
             <Image
               src={"/auth/padlock.png"}
               alt="login to kabukabu"
-              fill
+              layout="fill"
               style={{ objectFit: "contain", objectPosition: "50% 50%" }}
             />
           </div>

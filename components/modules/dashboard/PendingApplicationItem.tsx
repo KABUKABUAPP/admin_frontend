@@ -9,7 +9,7 @@ const PendingApplicationItem: FC<PendingApplication> = ({ fullName, location, im
       <div className="relative w-9 h-9 rounded-lg overflow-hidden">
         <Image
           src={image}
-          fill={true}
+          layout="fill"
           style={{ objectFit: "contain", objectPosition: "50% 50%" }}
           alt="Kabukabu driver"
         />

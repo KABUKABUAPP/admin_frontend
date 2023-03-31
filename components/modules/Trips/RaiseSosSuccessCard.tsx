@@ -22,7 +22,7 @@ const RaiseSosSuccessCard: FC = () => {
       </div>
       <div className="relative mx-auto w-28 h-28">
         <Image
-          fill
+          layout="fill"
           src={"/trips/shield.png"}
           alt="sos success shield icon"
           style={{ objectFit: "contain" }}

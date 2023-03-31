@@ -23,7 +23,7 @@ const ForgotPasswordSuccess: FC = () => {
           <Image
             src={"/auth/open-envelope.svg"}
             alt="forgot password success kabukabu"
-            fill
+            layout="fill"
             style={{objectFit: 'contain'}}
           />
         </div>

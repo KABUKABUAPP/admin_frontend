@@ -73,6 +73,38 @@ const mockSummaryCardData = [
   },
 ];
 
+interface Address {
+  id?: number;
+  clientId: string;
+  transferTestId: number;
+  blockChain: string;
+  hash: string;
+  createdOn: Date;
+  createdBy: string;
+  modifiedOn?: Date;
+  modifiedBy?: number;
+}
+interface TransactionMovement {
+  id: number;
+  transactionId: number;
+  address?: string;
+  ticker?: string;
+  quantity?: number;
+  category: string;
+  defaultCategory: string;
+  classificationId?: number;
+  linkedGroup: number;
+  createdOn?: Date;
+  createdBy?: number;
+  modifiedOn?: Date;
+  modifiedBy?: number;
+}
+
+export interface StagedTransactionMovement extends TransactionMovement{
+  transferTestId: number;
+  transactionHash: string
+}
+
 const Dashboard: NextPage = () => {
 
   const { user } = useUserContext()
@@ -116,3 +148,4 @@ const Dashboard: NextPage = () => {
 };
 
 export default Dashboard;
+
