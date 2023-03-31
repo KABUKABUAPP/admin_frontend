@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import AppLayout from "@/layouts/AppLayout";
 import AccountBalanceCardContainer from "@/components/modules/Transactions/AccountBalanceCardContainer";
 import SearchFilterBar from "@/components/common/SearchFilterBar";
+import TransactionsTable from "@/components/modules/Transactions/TransactionsTable";
 
 const Transactions: NextPage = () => {
   const [accountCardData, setAccountCardData] = useState(mockData);
@@ -23,6 +24,7 @@ const Transactions: NextPage = () => {
         handleClick={(title) => handleClickAccountCard(title)}
       />
       <SearchFilterBar />
+      <TransactionsTable />
     </AppLayout>
   );
 };

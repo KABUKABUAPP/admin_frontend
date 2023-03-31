@@ -1,56 +1,47 @@
 import React, { FC } from "react";
 import OriginDestinationCell from "@/components/common/OriginDestinationCell";
-import Link from "next/link";
+import Button from "@/components/ui/Button/Button";
+import RiderDriverCell from "./RiderDriverCell";
 
 interface Props {
   data: {
-    id: string;
+    transactionId: string;
     origin: string;
     destination: string;
-    rider: string;
-    driver: string;
+    riderName: string;
+    driverName: string;
     carModel: string;
     plateNumber: string;
     status: string;
-    raisedBy: string;
-    reason: string;
+    price: number;
   };
-  index: number;
 }
 
-const SosTableRow: FC<Props> = ({
+const TransactionsTableRow: FC<Props> = ({
   data: {
-    id,
+    transactionId,
     origin,
     destination,
-    rider,
-    driver,
+    riderName,
+    driverName,
     carModel,
     plateNumber,
     status,
-    raisedBy,
-    reason,
+    price,
   },
-  index,
 }) => {
   return (
-    <div className="flex p-3 gap-6 border-b border-b[#E6E6E6]" key={index}>
+    <div className="flex p-3 gap-6 border-b border-b[#E6E6E6]">
       <div style={{ flex: 1 }} className="flex items-center cursor-pointer">
-        <Link href={`/trips/${id}`}>
-          <p className="text-xs font-bold">{id}</p>
-        </Link>
+        <p className="text-xs font-bold">{transactionId}</p>
       </div>
 
       <div style={{ flex: 2 }}>
-        <OriginDestinationCell destination={destination} origin={origin} />
+        <OriginDestinationCell origin={origin} destination={destination} />
       </div>
 
-      <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{rider}</p>
-      </div>
-
-      <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{driver}</p>
+      <div style={{ flex: 1 }}>
+        <RiderDriverCell rider={riderName} driver={driverName} />
       </div>
 
       <div style={{ flex: 1 }} className="flex flex-col gap-3 justify-center">
@@ -63,14 +54,14 @@ const SosTableRow: FC<Props> = ({
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{raisedBy}</p>
+        <p className="text-xs font-bold">N{price.toLocaleString()}</p>
       </div>
 
-      <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{reason}</p>
+      <div style={{ flex: 2 }} className="flex items-center">
+        <Button title="View Receipt" />
       </div>
     </div>
   );
 };
 
-export default SosTableRow;
+export default TransactionsTableRow;

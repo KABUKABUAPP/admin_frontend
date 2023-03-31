@@ -2,7 +2,7 @@ export const AUTH_BASE_URL = process.env.NEXT_PUBLIC_AUTH_URL;
 export const RIDES_BASE_URL = process.env.NEXT_PUBLIC_RIDE_BASE_URL;
 export const milliSecondToSecondConversionRate = 1000;
 export const ACCESS_TOKEN = "AUTH_TOKEN__ACESS-$";
-export const USER_TOKEN="USER_stoRED_$##"
+export const USER_TOKEN = "USER_stoRED_$##";
 export const TripsOptionsBarData = [
   {
     title: "Trip Orders",
@@ -279,4 +279,84 @@ export const sosTripsRowMockData = [
     raisedBy: "Rider",
     reason: "Long waiting time",
   },
-]
+];
+
+export const transactionsMockData = [
+  {
+    transactionId: "12344",
+    origin: "23 Kuviki Land, Igando",
+    destination: "Filmhouse Cinema, lekki 23 Kuviki Land, Igando",
+    riderName: "John Doe",
+    driverName: "Emeka Anyawu",
+    carModel: "Toyota Corolla 2020 Black",
+    plateNumber: "ABC12345XSR",
+    status: "Disputed at 5:30pm",
+    price: 1600,
+  },
+  {
+    transactionId: "12344",
+    origin: "23 Kuviki Land, Igando",
+    destination: "Filmhouse Cinema, lekki 23 Kuviki Land, Igando",
+    riderName: "John Doe",
+    driverName: "Emeka Anyawu",
+    carModel: "Toyota Corolla 2020 Black",
+    plateNumber: "ABC12345XSR",
+    status: "Disputed at 5:30pm",
+    price: 1600,
+  },
+  {
+    transactionId: "12344",
+    origin: "23 Kuviki Land, Igando",
+    destination: "Filmhouse Cinema, lekki 23 Kuviki Land, Igando",
+    riderName: "John Doe",
+    driverName: "Emeka Anyawu",
+    carModel: "Toyota Corolla 2020 Black",
+    plateNumber: "ABC12345XSR",
+    status: "Disputed at 5:30pm",
+    price: 1600,
+  },
+  {
+    transactionId: "12344",
+    origin: "23 Kuviki Land, Igando",
+    destination: "Filmhouse Cinema, lekki 23 Kuviki Land, Igando",
+    riderName: "John Doe",
+    driverName: "Emeka Anyawu",
+    carModel: "Toyota Corolla 2020 Black",
+    plateNumber: "ABC12345XSR",
+    status: "Disputed at 5:30pm",
+    price: 1600,
+  },
+  {
+    transactionId: "12344",
+    origin: "23 Kuviki Land, Igando",
+    destination: "Filmhouse Cinema, lekki 23 Kuviki Land, Igando",
+    riderName: "John Doe",
+    driverName: "Emeka Anyawu",
+    carModel: "Toyota Corolla 2020 Black",
+    plateNumber: "ABC12345XSR",
+    status: "Disputed at 5:30pm",
+    price: 1600,
+  },
+  {
+    transactionId: "12344",
+    origin: "23 Kuviki Land, Igando",
+    destination: "Filmhouse Cinema, lekki 23 Kuviki Land, Igando",
+    riderName: "John Doe",
+    driverName: "Emeka Anyawu",
+    carModel: "Toyota Corolla 2020 Black",
+    plateNumber: "ABC12345XSR",
+    status: "Disputed at 5:30pm",
+    price: 1600,
+  },
+  {
+    transactionId: "12344",
+    origin: "23 Kuviki Land, Igando",
+    destination: "Filmhouse Cinema, lekki 23 Kuviki Land, Igando",
+    riderName: "John Doe",
+    driverName: "Emeka Anyawu",
+    carModel: "Toyota Corolla 2020 Black",
+    plateNumber: "ABC12345XSR",
+    status: "Disputed at 5:30pm",
+    price: 1600,
+  },
+];
