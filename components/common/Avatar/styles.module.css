@@ -1,0 +1,16 @@
+
+.root {
+    @apply relative rounded-full overflow-hidden flex items-center justify-center bg-slate-300
+}
+
+.sm {
+    @apply w-10 h-10
+}
+
+.md {
+    @apply w-14 h-14
+}
+
+.lg {
+    @apply w-20 h-20
+}

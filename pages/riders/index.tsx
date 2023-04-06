@@ -1,6 +1,8 @@
 import { NextPage } from 'next'
 import React from 'react'
 
+import Avatar from '@/components/common/Avatar'
+
 import AppLayout from '@/layouts/AppLayout'
 
 const Riders:NextPage = () => {
