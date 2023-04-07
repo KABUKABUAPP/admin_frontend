@@ -67,6 +67,24 @@ export const driverTypeFilterOptionsData = [
   },
 ];
 
+export const sharpCarsOptionsData = [
+  {
+    title: "Active Cars",
+    isActive: true,
+    keyVal: ""
+  },
+  {
+    title: "Unassinged Cars",
+    isActive: false,
+    keyVal: "unassigned-cars"
+  },
+  {
+    title: "Car Deliveries",
+    isActive: false,
+    keyVal: "car-deliveries"
+  },
+]
+
 export const tripsRowMockData = [
   {
     id: "12344",
