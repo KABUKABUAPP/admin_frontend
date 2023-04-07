@@ -1,28 +1,29 @@
 import React, { FC } from "react";
+import { DriversTableBodyData } from "@/models/Drivers";
 import Avatar from "@/components/common/Avatar";
-import { RidersTableBodyData } from "@/models/Riders";
 import Link from "next/link";
 
 interface Props {
-  data: RidersTableBodyData;
+  data: DriversTableBodyData;
 }
 
-const RidersTableBodyRow: FC<Props> = ({
+const DriversTableBodyRow: FC<Props> = ({
   data: {
-    riderId,
+    driverId,
     fullName,
+    imageUrl,
     location,
+    driverType,
+    status,
     totalTrips,
     walletBalance,
-    status,
-    imageUrl,
   },
 }) => {
   return (
     <div className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6]">
       <div style={{ flex: 1 }} className="flex items-center">
-        <Link href={`/riders/${riderId}`}>
-          <p className="text-xs font-bold cursor-pointer">{riderId}</p>
+        <Link href={`/drivers/${driverId}`}>
+          <p className="text-xs font-bold cursor-pointer">{driverId}</p>
         </Link>
       </div>
       <div style={{ flex: 2 }} className="flex items-center gap-2">
@@ -38,7 +39,10 @@ const RidersTableBodyRow: FC<Props> = ({
         <p className="text-xs font-bold">{totalTrips}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">N{walletBalance.toLocaleString()}</p>
+        <p className="text-xs font-bold">N{walletBalance}</p>
+      </div>
+      <div style={{ flex: 1 }} className="flex items-center">
+        <p className="text-xs font-bold">{driverType}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">{status}</p>
@@ -47,4 +51,4 @@ const RidersTableBodyRow: FC<Props> = ({
   );
 };
 
-export default RidersTableBodyRow;
+export default DriversTableBodyRow;

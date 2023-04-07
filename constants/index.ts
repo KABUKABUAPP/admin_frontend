@@ -31,6 +31,42 @@ export const TripsOptionsBarData = [
   },
 ];
 
+export const driverOptionBarData = [
+  {
+    title: "Active Drivers",
+    isActive: true,
+    keyVal: "",
+  },
+  {
+    title: "Pending Drivers",
+    isActive: false,
+    keyVal: "pending-drivers",
+  },
+  {
+    title: "Declined Drivers",
+    isActive: false,
+    keyVal: "declined-drivers",
+  },
+];
+
+export const driverTypeFilterOptionsData = [
+  {
+    title: "All Drivers",
+    isActive: true,
+    keyVal: "all-drivers",
+  },
+  {
+    title: "Sharp Drivers",
+    isActive: false,
+    keyVal: "sharp-drivers",
+  },
+  {
+    title: "Regular Drivers",
+    isActive: false,
+    keyVal: "regular-drivers",
+  },
+];
+
 export const tripsRowMockData = [
   {
     id: "12344",

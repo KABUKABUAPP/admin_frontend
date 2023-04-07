@@ -8,7 +8,7 @@ import AppLayout from "@/layouts/AppLayout";
 
 const Riders: NextPage = () => {
   const [isFIlteringByBlockedRiders, setIsFilteringByBlockedRiders] =
-    useState(true);
+    useState(false);
 
   return (
     <AppLayout>
