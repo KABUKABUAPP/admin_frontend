@@ -9,19 +9,26 @@ import SharpCarOptionBar from "@/components/modules/sharp-cars/SharpCarOptionBar
 import { sharpCarsOptionsData } from "@/constants";
 
 const SharpCars: NextPage = () => {
+  const [options, setOptions] = useState(sharpCarsOptionsData);
 
-  const [ options, setOptions ] = useState(sharpCarsOptionsData)
-  
   const handleClickOption = (key: string) => {
-    
-  }
+    const mutatedOptions = options.map((option) => {
+      if (option.keyVal === key) return { ...option, isActive: true };
+      return { ...option, isActive: false };
+    });
+
+    setOptions(mutatedOptions)
+  };
 
   return (
     <AppLayout>
       <CountHeader title="Sharp Cars" count={5000} />
-      <SharpCarOptionBar handleClickOption={(key)=>handleClickOption(key)} options={options}/>
+      <SharpCarOptionBar
+        handleClickOption={(key) => handleClickOption(key)}
+        options={options}
+      />
       <SearchFilterBar />
-      <SharpCarsTable data={mockTableData}/>
+      <SharpCarsTable data={mockTableData} />
     </AppLayout>
   );
 };
