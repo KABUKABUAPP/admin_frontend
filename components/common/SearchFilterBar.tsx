@@ -14,7 +14,7 @@ const SearchFilterBar: FC<PropsWithChildren> = ({ children }) => {
         />
       </div>
 
-      <div>{children}</div>
+      <div className="flex-1">{children}</div>
 
       <p className="text-xs flex items-center cursor-pointer">
         Sort: <span className="mr-3 ml-1 font-bold">Newest First</span>
