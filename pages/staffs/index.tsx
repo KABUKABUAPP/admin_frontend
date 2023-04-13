@@ -3,10 +3,12 @@ import React from "react";
 
 import AppLayout from "@/layouts/AppLayout";
 import StaffTable from "@/components/modules/staff/StaffTable";
+import StaffSearchFilterBar from "@/components/modules/staff/StaffSearchFilterBar";
 
 const Staffs: NextPage = () => {
   return (
     <AppLayout>
+      <StaffSearchFilterBar />
       <StaffTable data={mockData} />
     </AppLayout>
   );
