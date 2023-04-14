@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+import { RIDES_BASE_URL } from "@/constants";
 import {
   GetTripInsightsResponse,
   GetTripChartResponse,
@@ -19,7 +20,7 @@ import { ACCESS_TOKEN } from "@/constants";
 export const dashboardApi = createApi({
   reducerPath: "dashboardApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: ``,
+    baseUrl: `${RIDES_BASE_URL}`,
     timeout: secondsToMilliSeconds(30),
     prepareHeaders(headers) {
       const token = Cookies.get(ACCESS_TOKEN);
