@@ -7,117 +7,58 @@ import ActiveTripsTable from "@/components/modules/dashboard/ActiveTripsTable";
 import PendingApplicationContainer from "@/components/modules/dashboard/PendingApplicationContainer";
 import WelcomeMessage from "@/components/modules/dashboard/WelcomeMessage";
 import SummaryCardContainer from "@/components/modules/dashboard/SummaryCardContainer";
-import TripsIcon from "@/components/icons/TripsIcon";
-import SosIcon from "@/components/icons/SosIcon";
-import WithdrawalIcon from "@/components/icons/WithdrawalIcon";
 import TripsChartContainer from "@/components/modules/dashboard/TripsChartContainer";
 import { useUserContext } from "@/contexts/UserContext";
 import { capitalizeAllFirstLetters } from "@/utils";
-
-const mockPendingApplications = [
-  {
-    fullName: "Mark Anthony",
-    location: "Lagos, Nigeria",
-    image: "/testUser.jpg",
-  },
-  {
-    fullName: "Mark Anthony",
-    location: "Lagos, Nigeria",
-    image: "/testUser.jpg",
-  },
-  {
-    fullName: "Mark Anthony",
-    location: "Lagos, Nigeria",
-    image: "/testUser.jpg",
-  },
-];
-
-const mockSummaryCardData = [
-  {
-    title: "Total trips",
-    value: "30",
-    icon: <TripsIcon />,
-    iconBg: "#FFBF00",
-  },
-  {
-    title: "Active trips",
-    value: "30",
-    icon: (
-      <span style={{ color: "#fff" }}>
-        <TripsIcon />
-      </span>
-    ),
-    iconBg: "#2C3FEF",
-  },
-  {
-    title: "SOS",
-    value: "5",
-    icon: (
-      <span style={{ color: "#ffffff" }}>
-        <SosIcon />
-      </span>
-    ),
-    iconBg: "#EF2C5B",
-  },
-  {
-    title: "Pending trips",
-    value: "30",
-    icon: <TripsIcon />,
-    iconBg: "#FFBF00",
-  },
-  {
-    title: "Total Earnings",
-    value: "N500,000",
-    icon: <WithdrawalIcon />,
-    iconBg: "#FFBF00",
-  },
-];
-
-interface Address {
-  id?: number;
-  clientId: string;
-  transferTestId: number;
-  blockChain: string;
-  hash: string;
-  createdOn: Date;
-  createdBy: string;
-  modifiedOn?: Date;
-  modifiedBy?: number;
-}
-interface TransactionMovement {
-  id: number;
-  transactionId: number;
-  address?: string;
-  ticker?: string;
-  quantity?: number;
-  category: string;
-  defaultCategory: string;
-  classificationId?: number;
-  linkedGroup: number;
-  createdOn?: Date;
-  createdBy?: number;
-  modifiedOn?: Date;
-  modifiedBy?: number;
-}
-
-export interface StagedTransactionMovement extends TransactionMovement{
-  transferTestId: number;
-  transactionHash: string
-}
+import {
+  useGetPendingDriverApplicationsQuery,
+  useGetPendingSharpApplicationsQuery,
+  useGetTripChartDataQuery,
+} from "@/api-services/dashboardService";
 
 const Dashboard: NextPage = () => {
+  const { user } = useUserContext();
+  const {
+    data: pendingDriverApplications,
+    isLoading: pendingDriverApplicationsLoading,
+    isError: pendingDriverApplicationsError,
+    refetch: reloadPendingDriverApplications,
+  } = useGetPendingDriverApplicationsQuery(
+    { page: 1, limit: 10 },
+    { refetchOnReconnect: true }
+  );
 
-  const { user } = useUserContext()
+  const {
+    data: pendingSharpApplications,
+    isLoading: pendingSharpApplicationsLoading,
+    isError: pendingSharpApplicationsError,
+    refetch: reloadPendingSharpApplications,
+  } = useGetPendingSharpApplicationsQuery(
+    { page: 1, limit: 10 },
+    { refetchOnReconnect: true }
+  );
+
+  const {
+    data: chartData,
+    isLoading: chartLoading,
+    isError: chartError,
+    refetch: reloadChart,
+  } = useGetTripChartDataQuery(
+    { range: "7_days" },
+    { refetchOnReconnect: true }
+  );
 
   return (
     <>
       <AppHead title="Kabukabu | Dashboard" />
       <AppLayout>
-        <WelcomeMessage name={user ? capitalizeAllFirstLetters(user.full_name) : ""} />
+        <WelcomeMessage
+          name={user ? capitalizeAllFirstLetters(user.full_name) : ""}
+        />
 
         <div className="pt-12 flex max-md:flex-col gap-7">
           <div className="w-[72%] max-md:w-full flex flex-col gap-12">
-            <SummaryCardContainer data={mockSummaryCardData} />
+            <SummaryCardContainer />
             <ActiveTripsTable />
           </div>
 
@@ -129,18 +70,29 @@ const Dashboard: NextPage = () => {
           "
           >
             <PendingApplicationContainer
-              data={mockPendingApplications}
+              data={pendingDriverApplications}
               title="Pending Drivers Applications"
+              loading={pendingDriverApplicationsLoading}
+              error={pendingDriverApplicationsError}
+              refetch={reloadPendingDriverApplications}
             />
             <PendingApplicationContainer
-              data={mockPendingApplications}
+              data={pendingSharpApplications}
               title="Pending SHARP Applications"
+              loading={pendingSharpApplicationsLoading}
+              error={pendingSharpApplicationsError}
+              refetch={reloadPendingSharpApplications}
             />
           </div>
         </div>
 
         <div className="mt-10">
-          <TripsChartContainer />
+          <TripsChartContainer
+            chartData={chartData}
+            loading={chartLoading}
+            error={chartError}
+            refetch={reloadChart}
+          />
         </div>
       </AppLayout>
     </>
@@ -148,4 +100,3 @@ const Dashboard: NextPage = () => {
 };
 
 export default Dashboard;
-

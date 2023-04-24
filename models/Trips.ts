@@ -3,6 +3,7 @@ export interface Trip {
   to: string;
   rider: string;
   driver: string;
+  id: string
 }
 
 export interface TripData {

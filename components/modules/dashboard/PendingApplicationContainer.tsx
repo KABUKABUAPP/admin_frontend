@@ -3,17 +3,46 @@ import React, { FC } from "react";
 
 import PendingApplicationHeader from "./PendingApplicationHeader";
 import PendingApplicationItemContainer from "./PendingApplicationItemContainer";
+import PendingApplicationItem from "./PendingApplicationItem";
+import Button from "@/components/ui/Button/Button";
 
 interface Props {
   title: string;
-  data: PendingApplication[];
+  data?: PendingApplication[];
+  loading: boolean;
+  error: boolean;
+  refetch: ()=>void
 }
 
-const PendingApplicationContainer: FC<Props> = ({ title, data }) => {
+const PendingApplicationContainer: FC<Props> = ({
+  title,
+  data,
+  loading,
+  error,
+  refetch
+}) => {
+  const viewState = data && !loading && !error;
+  const loadingtState = !data && loading && !error;
+  const errorState = error && !loading && !data;
+
   return (
     <div className="max-w-[380px] w-full max-sm:max-w-[250px]">
       <PendingApplicationHeader title={title} />
-      <PendingApplicationItemContainer data={data} />
+      {viewState && <PendingApplicationItemContainer data={data} />}
+      {loadingtState && (
+        <div>
+          <PendingApplicationItem />
+          <PendingApplicationItem />
+          <PendingApplicationItem />
+        </div>
+      )}
+      {
+        errorState && 
+        <div className="flex flex-col items-center py-2">
+          <p className="text-xs text-rose-700 mb-2">Oops! Error fetching pending applications</p>
+          <Button title="Reload" onClick={refetch}/>
+        </div>
+      }
     </div>
   );
 };

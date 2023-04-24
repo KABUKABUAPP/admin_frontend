@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface GetTripInsightsResponse {
   status: string;
   data: {
@@ -8,6 +10,13 @@ export interface GetTripInsightsResponse {
     sos: number;
   };
   message: string;
+}
+
+export interface TripInsightsMappedResponse {
+  title: string;
+  value: string | number;
+  icon: ReactNode;
+  iconBg?: string;
 }
 
 export interface GetTripChartData {
@@ -93,6 +102,12 @@ export interface GetPendingApplicationsResponse {
 export interface GetPendingApplicationsQuery {
   page: number;
   limit: number;
+}
+
+export interface PendingApplicationsMappedResponse {
+  fullName: string;
+  location: string;
+  image: string;
 }
 
 export interface GetPendingSharpApplicationsData {

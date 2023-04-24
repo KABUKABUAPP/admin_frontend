@@ -40,8 +40,8 @@ export const options: any = {
         display: false,
       },
       border: {
-        width: 0
-      }
+        width: 0,
+      },
     },
   },
   plugins: {
@@ -56,44 +56,35 @@ export const options: any = {
     },
   },
   layout: {
-    padding: 10
+    padding: 10,
   },
 };
 
-const labels = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
 
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "Trips for month",
-      data: [40, 66, 23, 44, 55, 21, 12, 34, 56, 76, 22, 55],
-      backgroundColor: ["#FFF5D8"],
-      hoverBackgroundColor: "#FFBF00",
-      barPercentage: 0.6,
-      maxBarThickness: 40,
-      borderRadius: 8,
-      borderSkipped: false,
-      color: ["red"],
-      fontSize: 30,
-    },
-  ],
-};
+interface Props {
+  chartData?: number[]
+  labels: string[]
+}
 
-const TripsChart: FC = () => {
+const TripsChart: FC<Props> = ({ chartData, labels }) => {
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "Trips for month",
+        data: chartData,
+        backgroundColor: ["#FFF5D8"],
+        hoverBackgroundColor: "#FFBF00",
+        barPercentage: 0.6,
+        maxBarThickness: 40,
+        borderRadius: 8,
+        borderSkipped: false,
+        color: ["red"],
+        fontSize: 30,
+      },
+    ],
+  };
+
   return <Bar options={options} data={data} width={"30%"} />;
 };
 
