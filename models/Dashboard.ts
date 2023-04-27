@@ -20,7 +20,8 @@ export interface TripInsightsMappedResponse {
 }
 
 export interface GetTripChartData {
-  day: string;
+  day?: string;
+  month?: string;
   trips: number;
 }
 

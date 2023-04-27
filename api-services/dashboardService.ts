@@ -80,7 +80,7 @@ export const dashboardApi = createApi({
       transformResponse: (response: GetTripChartResponse)=>{
         return response.data.map((item)=>{
           return {
-            day: item.day,
+            day: item.day ? item.day : item.month,
             trips: item.trips
           }
         })

@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React from "react";
+import React, { useState } from "react";
 
 import AppLayout from "@/layouts/AppLayout";
 import AppHead from "@/components/common/AppHead";
@@ -18,6 +18,11 @@ import {
 
 const Dashboard: NextPage = () => {
   const { user } = useUserContext();
+  const [chartFilterVal, setChartFilterVal] = useState<string>("7_days");
+  const handleFilterChart = (val: string | Number) => {
+    setChartFilterVal(val.toString());
+  };
+
   const {
     data: pendingDriverApplications,
     isLoading: pendingDriverApplicationsLoading,
@@ -27,6 +32,12 @@ const Dashboard: NextPage = () => {
     { page: 1, limit: 10 },
     { refetchOnReconnect: true }
   );
+
+  const chartFilterOptions = [
+    { value: "7_days", label: "Past Week", default: true },
+    { value: "6_months", label: "Past 6 Months" },
+    { value: "12_months", label: "Past 12 Months" },
+  ];
 
   const {
     data: pendingSharpApplications,
@@ -44,8 +55,8 @@ const Dashboard: NextPage = () => {
     isError: chartError,
     refetch: reloadChart,
   } = useGetTripChartDataQuery(
-    { range: "7_days" },
-    { refetchOnReconnect: true }
+    { range: chartFilterVal },
+    { refetchOnReconnect: true, refetchOnMountOrArgChange: true }
   );
 
   return (
@@ -92,6 +103,9 @@ const Dashboard: NextPage = () => {
             loading={chartLoading}
             error={chartError}
             refetch={reloadChart}
+            filterOptions={chartFilterOptions}
+            handleDropDown={(val) => handleFilterChart(val)}
+            dropDownOptionSelected={chartFilterVal}
           />
         </div>
       </AppLayout>

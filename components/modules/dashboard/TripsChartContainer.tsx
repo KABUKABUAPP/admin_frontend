@@ -5,15 +5,27 @@ import { getComponentStates } from "@/utils";
 import Loader from "@/components/ui/Loader/Loader";
 import Button from "@/components/ui/Button/Button";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import DropDown from "@/components/ui/DropDown";
 
 interface Props {
-  chartData?: { day: string; trips: number }[];
+  chartData?: { day?: string; trips: number; month?: string }[];
   loading: boolean;
   error: boolean;
-  refetch: ()=>void
+  refetch: () => void;
+  filterOptions?: { label: string | number; value: string | number, default?: boolean }[];
+  dropDownOptionSelected?: string;
+  handleDropDown: (val: string | number) => void;
 }
 
-const TripsChartContainer: FC<Props> = ({ chartData, loading, error, refetch }) => {
+const TripsChartContainer: FC<Props> = ({
+  chartData,
+  loading,
+  error,
+  refetch,
+  filterOptions,
+  dropDownOptionSelected,
+  handleDropDown,
+}) => {
   const { viewState, loadingState, errorState } = getComponentStates({
     data: chartData,
     loading,
@@ -30,15 +42,13 @@ const TripsChartContainer: FC<Props> = ({ chartData, loading, error, refetch }) 
     `}
       >
         <p className="font-bold text-xs">Trips Chart</p>
-        <p className="font-bold text-xs flex items-center gap-2 cursor-pointer">
-          Past 12 Months <ChevronDown />
-        </p>
+        <DropDown placeholder="Filter" options={filterOptions} value={dropDownOptionSelected} handleChange={(val)=>handleDropDown(val)}/>
       </div>
       <div className="h-[300px] bg-[#FFFFFF] p-6">
         {viewState && chartData && (
           <TripsChart
             chartData={chartData.map((item) => item.trips)}
-            labels={chartData.map((item) => item.day)}
+            labels={chartData.map((item) => item.day || '')}
           />
         )}
         {loadingState && (
@@ -48,7 +58,7 @@ const TripsChartContainer: FC<Props> = ({ chartData, loading, error, refetch }) 
         )}
         {errorState && (
           <div className="py-2 flex flex-col items-center justify-center">
-            <ErrorMessage message="Error Fetching Chart Data"/>
+            <ErrorMessage message="Error Fetching Chart Data" />
             <Button title="Reload Chart Data" />
           </div>
         )}
