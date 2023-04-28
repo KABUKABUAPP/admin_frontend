@@ -31,7 +31,7 @@ const FarePricesTableBodyRow: FC<Props> = ({
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{dateCreated}</p>
+        <p className="text-xs font-bold">{dateCreated.toDateString()}</p>
       </div>
     </div>
   );
