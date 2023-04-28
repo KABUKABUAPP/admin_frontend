@@ -1,13 +1,17 @@
 import React, { FC } from "react";
 import EnhancedTableHead from "./EnhancedTableHead";
 import EnhancedTableBody from "./EnhancedTableBody";
+import GenericHeadRowComponent from "./GenericHeadRowComponent";
+import DriversTableBodyRow from "@/components/modules/drivers/DriversTableBodyRow";
 
 interface Props {
-  TableHeadComponent: React.ReactNode;
+  TableHeadComponent?: React.ReactNode;
   maxWidth?: string;
-  rowData: any[];
-  rowComponent: (row: any, idx: number) => React.ReactNode;
-  headBg?: string
+  rowData?: any[];
+  rowComponent?: (row: any, idx: number) => React.ReactNode;
+  headBg?: string;
+  generic?: boolean;
+  headCellData?: { title: string; flex: number }[];
 }
 
 const EnhancedTable: FC<Props> = ({
@@ -15,7 +19,9 @@ const EnhancedTable: FC<Props> = ({
   maxWidth = "768px",
   rowData,
   rowComponent,
-  headBg
+  headBg,
+  generic = false,
+  headCellData,
 }) => {
   return (
     <div
@@ -24,10 +30,21 @@ const EnhancedTable: FC<Props> = ({
       style={{ maxWidth: maxWidth }}
     >
       <div className=" bg-transparent  min-w-[800px]">
-        <EnhancedTableHead TableHeadComponent={TableHeadComponent} bgColor={headBg}/>
+        <EnhancedTableHead
+          TableHeadComponent={
+            generic && headCellData ? (
+              <GenericHeadRowComponent headCellData={headCellData} />
+            ) : (
+              TableHeadComponent
+            )
+          }
+          bgColor={headBg}
+        />
         <EnhancedTableBody
-          rowData={rowData}
-          rowComponent={(row, index) => rowComponent(row, index)}
+          rowData={rowData || []}
+          rowComponent={(row, index) =>
+            rowComponent ? rowComponent(row, index) : null
+          }
         />
       </div>
     </div>
@@ -35,3 +52,4 @@ const EnhancedTable: FC<Props> = ({
 };
 
 export default EnhancedTable;
+

@@ -1,19 +1,40 @@
 import { NextPage } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import AppLayout from "@/layouts/AppLayout";
 import DriversTable from "@/components/modules/drivers/DriversTable";
-import { DriversTableBodyData } from "@/models/Drivers";
 import CountHeader from "@/components/common/CountHeader";
 import DriverOptionBar from "@/components/modules/drivers/DriverOptionBar";
 import { driverOptionBarData, driverTypeFilterOptionsData } from "@/constants";
 import SearchFilterBar from "@/components/common/SearchFilterBar";
 import DriverTypeFilterBox from "@/components/modules/drivers/DriverTypeFilterBox";
+import { useRouter } from "next/router";
+import { useGetAllDriversQuery } from "@/api-services/driversService";
 
 const Drivers: NextPage = () => {
+  const router = useRouter();
   const [driverOptions, setDriverOptions] = useState(driverOptionBarData);
   const [driverTypeOptions, setDriverTypeOptions] = useState(
     driverTypeFilterOptionsData
+  );
+  const [carOwner, setCarOwner] = useState<boolean>(false);
+
+  const {
+    data: drivers,
+    isLoading: driversLoading,
+    error: driversError,
+    refetch: reloadDrivers,
+  } = useGetAllDriversQuery(
+    {
+      carOwner: carOwner,
+      driverStatus: "active",
+      limit: 10,
+      page: 1,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+      refetchOnReconnect: true,
+    }
   );
 
   const handleActiveDriverOption = (keyVal: string) => {
@@ -25,6 +46,10 @@ const Drivers: NextPage = () => {
     setDriverOptions(() => mutatedOptions);
   };
 
+  useEffect(() => {
+    handleActiveDriverOption("active");
+  }, []);
+
   const handleDriverTypeOption = (keyVal: string) => {
     const mutatedOptions = driverTypeOptions.map((option) => {
       if (option.keyVal === keyVal) return { ...option, isActive: true };
@@ -34,13 +59,26 @@ const Drivers: NextPage = () => {
     setDriverTypeOptions(() => mutatedOptions);
   };
 
+  const carOwnerObj: { [key: string]: boolean } = {
+    "all-drivers": true,
+    "sharp-drivers": false,
+    "regular-drivers": true,
+  };
+
+  useEffect(() => {
+    const activeOption = driverTypeOptions.find(
+      (item) => item.isActive === true
+    )?.keyVal;
+    if (activeOption) setCarOwner(carOwnerObj[activeOption]);
+  }, [JSON.stringify(driverTypeOptions)]);
+
   return (
     <AppLayout>
-      <CountHeader count={5000} title="Drivers" />
+      <CountHeader count={drivers?.totalCount} title="Drivers" />
       <DriverOptionBar
         options={driverOptions}
         handleClickOption={(keyVal) => {
-          handleActiveDriverOption(keyVal);
+          router.push(`/drivers/${keyVal}`);
         }}
       />
       <SearchFilterBar>
@@ -50,63 +88,10 @@ const Drivers: NextPage = () => {
         />
       </SearchFilterBar>
       <div className="mt-5">
-        <DriversTable tableData={mockData} />
+        <DriversTable tableData={drivers?.data} />
       </div>
     </AppLayout>
   );
 };
 
 export default Drivers;
-
-const mockData: DriversTableBodyData[] = [
-  {
-    driverId: "1234",
-    fullName: "John Doe",
-    location: "Lagos, Nigeria",
-    totalTrips: 300,
-    walletBalance: 5000,
-    status: "Active",
-    driverType: "Regular Driver",
-    imageUrl: "/testUser.jpg",
-  },
-  {
-    driverId: "1234",
-    fullName: "John Doe",
-    location: "Lagos, Nigeria",
-    totalTrips: 300,
-    walletBalance: 5000,
-    status: "Active",
-    driverType: "Regular Driver",
-    imageUrl: "/testUser.jpg",
-  },
-  {
-    driverId: "1234",
-    fullName: "John Doe",
-    location: "Lagos, Nigeria",
-    totalTrips: 300,
-    walletBalance: 5000,
-    status: "Active",
-    driverType: "Regular Driver",
-    imageUrl: "/testUser.jpg",
-  },
-  {
-    driverId: "1234",
-    fullName: "John Doe",
-    location: "Lagos, Nigeria",
-    totalTrips: 300,
-    walletBalance: 5000,
-    status: "Active",
-    driverType: "Regular Driver",
-    imageUrl: "/testUser.jpg",
-  },
-  {
-    driverId: "1234",
-    fullName: "John Doe",
-    location: "Lagos, Nigeria",
-    totalTrips: 300,
-    walletBalance: 5000,
-    status: "Active",
-    driverType: "Regular Driver",
-    imageUrl: "/testUser.jpg",
-  },
-];

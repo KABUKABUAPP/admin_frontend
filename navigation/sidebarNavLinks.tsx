@@ -44,7 +44,7 @@ const sidebarNavLinks: SidebarLink[] = [
   },
   {
     title: "Drivers",
-    link: "/drivers",
+    link: "/drivers/active",
     isActive: false,
     icon: <UserSquareIcon />,
   },

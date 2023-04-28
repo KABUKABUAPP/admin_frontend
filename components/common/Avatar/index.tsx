@@ -26,7 +26,7 @@ const Avatar: FC<Props> = ({ size = "md", imageUrl, fallBack }) => {
         />
       ) : (
         <p className={`font-bold ${size === "lg" ? "text-4xl" : "text-lg"}`}>
-          {fallBack}
+          {fallBack.toUpperCase()}
         </p>
       )}
     </div>

@@ -27,7 +27,7 @@ export const TripsOptionsBarData = [
   {
     title: "Cancelled Orders",
     isActive: false,
-    keyVal: "cancelled",
+    keyVal: "declined",
   },
 ];
 
@@ -35,17 +35,17 @@ export const driverOptionBarData = [
   {
     title: "Active Drivers",
     isActive: true,
-    keyVal: "",
+    keyVal: "active",
   },
   {
     title: "Pending Drivers",
     isActive: false,
-    keyVal: "pending-drivers",
+    keyVal: "pending",
   },
   {
     title: "Declined Drivers",
     isActive: false,
-    keyVal: "declined-drivers",
+    keyVal: "declined",
   },
 ];
 

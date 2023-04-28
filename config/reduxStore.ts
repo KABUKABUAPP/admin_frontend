@@ -4,18 +4,24 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import { authApi } from "@/api-services/authService";
 import { tripsApi } from "@/api-services/tripsService";
 import { dashboardApi } from "@/api-services/dashboardService";
+import { driversApi } from "@/api-services/driversService";
+import { inspectorsApi } from "@/api-services/inspectorsService";
 
 export const reduxStore = configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
     [tripsApi.reducerPath]: tripsApi.reducer,
     [dashboardApi.reducerPath]: dashboardApi.reducer,
+    [driversApi.reducerPath]: driversApi.reducer,
+    [inspectorsApi.reducerPath]: inspectorsApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
       authApi.middleware,
       tripsApi.middleware,
       dashboardApi.middleware,
+      driversApi.middleware,
+      inspectorsApi.middleware
     ]),
 });
 

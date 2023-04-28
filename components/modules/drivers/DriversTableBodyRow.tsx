@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { DriversTableBodyData } from "@/models/Drivers";
 import Avatar from "@/components/common/Avatar";
 import Link from "next/link";
+import Skeleton from "react-loading-skeleton";
 
 interface Props {
   data: DriversTableBodyData;
@@ -23,29 +24,29 @@ const DriversTableBodyRow: FC<Props> = ({
     <div className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6]">
       <div style={{ flex: 1 }} className="flex items-center">
         <Link href={`/drivers/${driverId}`}>
-          <p className="text-xs font-bold cursor-pointer">{driverId}</p>
+          <p className="text-xs font-bold cursor-pointer">{driverId || <Skeleton />}</p>
         </Link>
       </div>
       <div style={{ flex: 2 }} className="flex items-center gap-2">
         <div>
-          <Avatar fallBack={fullName[0]} imageUrl={imageUrl} size="sm" />
+          {fullName ? <Avatar fallBack={fullName[0]} imageUrl={imageUrl} size="sm" />: <Skeleton />}
         </div>
-        <p className="text-xs font-bold">{fullName}</p>
+        <p className="text-xs font-bold">{fullName || <Skeleton />}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{location}</p>
+        <p className="text-xs font-bold">{location || <Skeleton />}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{totalTrips}</p>
+        <p className="text-xs font-bold">{totalTrips ?? <Skeleton />}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">N{walletBalance}</p>
+        <p className="text-xs font-bold">{walletBalance || <Skeleton />}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{driverType}</p>
+        <p className="text-xs font-bold">{driverType || <Skeleton />}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{status}</p>
+        <p className="text-xs font-bold">{status || <Skeleton />}</p>
       </div>
     </div>
   );

@@ -59,7 +59,7 @@ const TripsChartContainer: FC<Props> = ({
         {errorState && (
           <div className="py-2 flex flex-col items-center justify-center">
             <ErrorMessage message="Error Fetching Chart Data" />
-            <Button title="Reload Chart Data" />
+            <Button title="Reload Chart Data" onClick={refetch}/>
           </div>
         )}
       </div>

@@ -5,7 +5,7 @@ import DriversTableHeadRow from "./DriversTableHeadRow";
 import { DriversTableBodyData } from "@/models/Drivers";
 
 interface Props {
-  tableData: DriversTableBodyData[];
+  tableData?: DriversTableBodyData[];
 }
 
 const headCellData = [
