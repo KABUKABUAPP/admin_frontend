@@ -6,7 +6,7 @@ import InspectorsTableHeadRow from "./InspectorsTableHeadRow";
 import { InspectorsTableBodyData } from "@/models/Inspectors";
 
 interface Props {
-  data: InspectorsTableBodyData[];
+  data?: InspectorsTableBodyData[];
 }
 
 const headCellData = [

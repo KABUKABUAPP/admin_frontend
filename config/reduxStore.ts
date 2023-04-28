@@ -3,7 +3,7 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 
 import { authApi } from "@/api-services/authService";
 import { tripsApi } from "@/api-services/tripsService";
-import { dashboardApi } from "@/api-services/dashboardService";
+import { dashboardApi, pendingTripsApi } from "@/api-services/dashboardService";
 import { driversApi } from "@/api-services/driversService";
 import { inspectorsApi } from "@/api-services/inspectorsService";
 
@@ -13,7 +13,8 @@ export const reduxStore = configureStore({
     [tripsApi.reducerPath]: tripsApi.reducer,
     [dashboardApi.reducerPath]: dashboardApi.reducer,
     [driversApi.reducerPath]: driversApi.reducer,
-    [inspectorsApi.reducerPath]: inspectorsApi.reducer
+    [inspectorsApi.reducerPath]: inspectorsApi.reducer,
+    [pendingTripsApi.reducerPath]: pendingTripsApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -21,7 +22,8 @@ export const reduxStore = configureStore({
       tripsApi.middleware,
       dashboardApi.middleware,
       driversApi.middleware,
-      inspectorsApi.middleware
+      inspectorsApi.middleware,
+      pendingTripsApi.middleware
     ]),
 });
 

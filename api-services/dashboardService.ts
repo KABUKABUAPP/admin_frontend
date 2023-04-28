@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { RIDES_BASE_URL } from "@/constants";
+import { AUTH_BASE_URL, RIDES_BASE_URL } from "@/constants";
 import {
   GetTripInsightsResponse,
   TripInsightsMappedResponse,
@@ -77,14 +77,14 @@ export const dashboardApi = createApi({
       query: ({ range }) => ({
         url: `/admin/trip/get-trips-chart?range=${range}`,
       }),
-      transformResponse: (response: GetTripChartResponse)=>{
-        return response.data.map((item)=>{
+      transformResponse: (response: GetTripChartResponse) => {
+        return response.data.map((item) => {
           return {
             day: item.day ? item.day : item.month,
-            trips: item.trips
-          }
-        })
-      }
+            trips: item.trips,
+          };
+        });
+      },
     }),
 
     getActiveTrips: build.query<Trip[], GetActiveTripsQuery>({
@@ -94,15 +94,16 @@ export const dashboardApi = createApi({
       transformResponse: (response: GetActiveTripsResponse) => {
         if (!response.data.data.length) return [] as Trip[];
         else {
-          return response.data.data.map((trip) => {
+          const mappedResponse = response.data.data.map((trip) => {
             return {
               from: trip.start_address.city,
               to: trip.end_address.city,
               rider: trip.user.full_name,
-              driver: trip.driver.full_name,
+              driver: trip.driver ? trip.driver.full_name : "",
               id: trip._id,
             };
           });
+          return mappedResponse;
         }
       },
     }),
@@ -157,6 +158,71 @@ export const {
   useGetInsightsQuery,
   useGetTripChartDataQuery,
   useGetActiveTripsQuery,
+} = dashboardApi;
+
+export const pendingTripsApi = createApi({
+  reducerPath: "pendingTripsApi",
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${AUTH_BASE_URL}`,
+    timeout: secondsToMilliSeconds(30),
+    prepareHeaders(headers) {
+      const token = Cookies.get(ACCESS_TOKEN);
+
+      if (token) {
+        headers.set("authorization", `Bearer ${token}`);
+      }
+
+      return headers;
+    },
+  }),
+  endpoints: (build) => ({
+    getPendingDriverApplications: build.query<
+      PendingApplicationsMappedResponse[],
+      GetPendingApplicationsQuery
+    >({
+      query: ({ page, limit }) => ({
+        url: `/admin/driver/dashboard/pending-driver-applications?page=${page}&limit=${limit}`,
+      }),
+      transformResponse: (response: GetPendingApplicationsResponse) => {
+        if (!response.data.data.length)
+          return [] as PendingApplicationsMappedResponse[];
+        else {
+          return response.data.data.map((application) => {
+            return {
+              fullName: application.user.full_name,
+              location: `${application.state}, ${application.city}`,
+              image: "",
+            };
+          });
+        }
+      },
+    }),
+
+    getPendingSharpApplications: build.query<
+      PendingApplicationsMappedResponse[],
+      GetPendingSharpApplicationsQuery
+    >({
+      query: ({ page, limit }) => ({
+        url: `/admin/driver/dashboard/pending-sharp-applications?page=${page}&limit=${limit}`,
+      }),
+      transformResponse: (response: GetPendingSharpApplicationsResponse) => {
+        if (!response.data.data.length)
+          return [] as PendingApplicationsMappedResponse[];
+        else {
+          return response.data.data.map((application) => {
+            return {
+              fullName: application.user.full_name,
+              location: `${application.state}, ${application.city}`,
+              image: "",
+            };
+          });
+        }
+      },
+    }),
+  }),
+});
+
+export const {
   useGetPendingDriverApplicationsQuery,
   useGetPendingSharpApplicationsQuery,
-} = dashboardApi;
+} = pendingTripsApi;

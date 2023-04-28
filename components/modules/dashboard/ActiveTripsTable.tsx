@@ -5,7 +5,7 @@ import ActiveTripsTableBody from "./ActiveTripsTableBody";
 import { useGetActiveTripsQuery } from "@/api-services/dashboardService";
 
 const ActiveTripsTable: FC = () => {
-  const { data, isLoading, isError, refetch } = useGetActiveTripsQuery(
+  const { data, isLoading, isError, refetch, error } = useGetActiveTripsQuery(
     { page: 1, limit: 10 },
     { refetchOnReconnect: true }
   );
