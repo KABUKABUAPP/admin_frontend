@@ -29,7 +29,7 @@ const headCellData = [
 ];
 
 interface Props {
-    data: FarePricesTableData[]
+    data?: FarePricesTableData[]
 }
 
 const FarePricesTable: FC<Props> = ({ data }) => {
