@@ -6,6 +6,9 @@ import { DriversTableBodyData } from "@/models/Drivers";
 
 interface Props {
   tableData?: DriversTableBodyData[];
+  isLoading?: boolean;
+  isError?: boolean;
+  refetch?: () => void;
 }
 
 const headCellData = [
@@ -18,13 +21,16 @@ const headCellData = [
     { title: "Status", flex: 1 },
   ];
 
-const DriversTable: FC<Props> = ({ tableData }) => {
+const DriversTable: FC<Props> = ({ tableData, isLoading, isError, refetch }) => {
   return (
     <EnhancedTable
       TableHeadComponent={<DriversTableHeadRow headCellData={headCellData}/>}
       rowComponent={(rows) => <DriversTableBodyRow data={rows} />}
       rowData={tableData}
       maxWidth="100vw"
+      isLoading={isLoading}
+      isError={isError}
+      refetch={refetch}
     />
   );
 };

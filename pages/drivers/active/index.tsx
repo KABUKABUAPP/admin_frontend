@@ -22,7 +22,7 @@ const Drivers: NextPage = () => {
   const {
     data: drivers,
     isLoading: driversLoading,
-    error: driversError,
+    isError: driversError,
     refetch: reloadDrivers,
   } = useGetAllDriversQuery(
     {
@@ -88,7 +88,12 @@ const Drivers: NextPage = () => {
         />
       </SearchFilterBar>
       <div className="mt-5">
-        <DriversTable tableData={drivers?.data} />
+        <DriversTable
+          tableData={drivers?.data}
+          isError={driversError}
+          isLoading={driversLoading}
+          refetch={reloadDrivers}
+        />
       </div>
     </AppLayout>
   );

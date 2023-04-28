@@ -29,10 +29,14 @@ const headCellData = [
 ];
 
 interface Props {
-    data?: FarePricesTableData[]
+  data?: FarePricesTableData[];
+  isLoading?: boolean;
+  isError?: boolean;
+  refetch?: () => void;
 }
 
-const FarePricesTable: FC<Props> = ({ data }) => {
+const FarePricesTable: FC<Props> = ({ data, isLoading, isError, refetch }) => {
+  
   return (
     <EnhancedTable
       TableHeadComponent={
@@ -41,6 +45,9 @@ const FarePricesTable: FC<Props> = ({ data }) => {
       rowComponent={(row) => <FarePricesTableBodyRow data={row} />}
       rowData={data}
       maxWidth="100vw"
+      isLoading={isLoading}
+      isError={isError}
+      refetch={refetch}
     />
   );
 };

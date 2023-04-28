@@ -22,7 +22,7 @@ const Drivers: NextPage = () => {
   const {
     data: drivers,
     isLoading: driversLoading,
-    error: driversError,
+    isError: driversError,
     refetch: reloadDrivers,
   } = useGetAllDriversQuery(
     {
@@ -50,17 +50,18 @@ const Drivers: NextPage = () => {
     handleActiveDriverOption("declined");
   }, []);
 
-  const carOwnerObj: {[key: string]: boolean} = {
+  const carOwnerObj: { [key: string]: boolean } = {
     "all-drivers": true,
     "sharp-drivers": false,
-    "regular-drivers": true
-  }
+    "regular-drivers": true,
+  };
 
   useEffect(() => {
-    const activeOption = driverTypeOptions.find((item)=>item.isActive===true)?.keyVal
-    if(activeOption) setCarOwner(carOwnerObj[activeOption])
+    const activeOption = driverTypeOptions.find(
+      (item) => item.isActive === true
+    )?.keyVal;
+    if (activeOption) setCarOwner(carOwnerObj[activeOption]);
   }, [JSON.stringify(driverTypeOptions)]);
-
 
   const handleDriverTypeOption = (keyVal: string) => {
     const mutatedOptions = driverTypeOptions.map((option) => {
@@ -87,7 +88,12 @@ const Drivers: NextPage = () => {
         />
       </SearchFilterBar>
       <div className="mt-5">
-        <DriversTable tableData={drivers?.data} />
+        <DriversTable
+          tableData={drivers?.data}
+          isError={driversError}
+          isLoading={driversLoading}
+          refetch={reloadDrivers}
+        />
       </div>
     </AppLayout>
   );

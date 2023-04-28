@@ -7,6 +7,9 @@ import { InspectorsTableBodyData } from "@/models/Inspectors";
 
 interface Props {
   data?: InspectorsTableBodyData[];
+  isLoading?: boolean;
+  isError?: boolean;
+  refetch?: () => void;
 }
 
 const headCellData = [
@@ -36,7 +39,7 @@ const headCellData = [
   },
 ];
 
-const InspectorsTable: FC<Props> = ({ data }) => {
+const InspectorsTable: FC<Props> = ({ data, isError, isLoading, refetch }) => {
   return (
     <EnhancedTable
       TableHeadComponent={
@@ -45,6 +48,9 @@ const InspectorsTable: FC<Props> = ({ data }) => {
       rowComponent={(rows) => <InspectorsTableBodyRow data={rows} />}
       maxWidth="100vw"
       rowData={data}
+      isLoading={isLoading}
+      isError={isError}
+      refetch={refetch}
     />
   );
 };

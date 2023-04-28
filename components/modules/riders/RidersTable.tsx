@@ -6,7 +6,10 @@ import { RidersTableBodyData } from "@/models/Riders";
 
 interface Props {
   headBg: string;
-  ridersData: RidersTableBodyData[]
+  ridersData: RidersTableBodyData[],
+  isLoading?: boolean;
+  isError?: boolean;
+  refetch?: () => void;
 }
 
 const headCellData = [
@@ -18,7 +21,7 @@ const headCellData = [
   { title: "Status", flex: 1 },
 ];
 
-const RidersTable: FC<Props> = ({ headBg, ridersData }) => {
+const RidersTable: FC<Props> = ({ headBg, ridersData, isLoading, isError, refetch }) => {
   return (
     <EnhancedTable
       TableHeadComponent={<RidersTableHeadRow headCellData={headCellData} />}
@@ -26,6 +29,9 @@ const RidersTable: FC<Props> = ({ headBg, ridersData }) => {
       rowData={ridersData}
       headBg={headBg}
       maxWidth="100vw"
+      isLoading={isLoading}
+      isError={isError}
+      refetch={refetch}
     />
   );
 };

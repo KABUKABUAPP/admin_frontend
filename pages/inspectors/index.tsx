@@ -12,11 +12,11 @@ const Inspectors: NextPage = () => {
   const {
     data: inspectors,
     isLoading: inspectorsLoading,
-    error: inspectorsError,
+    isError: inspectorsError,
     refetch: reloadInspectors,
   } = useGetAllInspectorsQuery({ limit: 10, page: 1 });
 
-  console.log(inspectors)
+  console.log(inspectors);
 
   return (
     <AppLayout>
@@ -25,93 +25,14 @@ const Inspectors: NextPage = () => {
           <Button title="Add Inspector" startIcon={<AddIcon />} />
         </div>
       </SearchFilterBar>
-      <InspectorsTable data={inspectors?.data} />
+      <InspectorsTable
+        data={inspectors?.data}
+        isLoading={inspectorsLoading}
+        isError={inspectorsError}
+        refetch={reloadInspectors}
+      />
     </AppLayout>
   );
 };
 
 export default Inspectors;
-
-const mockData = [
-  {
-    inspectorId: "12344",
-    fullName: "John Doe",
-    imageUrl: "",
-    location: "Lagos, Nigeria",
-    hub: "Sabo Yaba Hub",
-    carsInHub: 0,
-    totalCarsProcessed: 110,
-  },
-  {
-    inspectorId: "12344",
-    fullName: "John Doe",
-    imageUrl: "",
-    location: "Lagos, Nigeria",
-    hub: "Sabo Yaba Hub",
-    carsInHub: 0,
-    totalCarsProcessed: 110,
-  },
-  {
-    inspectorId: "12344",
-    fullName: "John Doe",
-    imageUrl: "",
-    location: "Lagos, Nigeria",
-    hub: "Sabo Yaba Hub",
-    carsInHub: 0,
-    totalCarsProcessed: 110,
-  },
-  {
-    inspectorId: "12344",
-    fullName: "John Doe",
-    imageUrl: "",
-    location: "Lagos, Nigeria",
-    hub: "Sabo Yaba Hub",
-    carsInHub: 0,
-    totalCarsProcessed: 110,
-  },
-  {
-    inspectorId: "12344",
-    fullName: "John Doe",
-    imageUrl: "",
-    location: "Lagos, Nigeria",
-    hub: "Sabo Yaba Hub",
-    carsInHub: 0,
-    totalCarsProcessed: 110,
-  },
-  {
-    inspectorId: "12344",
-    fullName: "John Doe",
-    imageUrl: "",
-    location: "Lagos, Nigeria",
-    hub: "Sabo Yaba Hub",
-    carsInHub: 0,
-    totalCarsProcessed: 110,
-  },
-  {
-    inspectorId: "12344",
-    fullName: "John Doe",
-    imageUrl: "",
-    location: "Lagos, Nigeria",
-    hub: "Sabo Yaba Hub",
-    carsInHub: 0,
-    totalCarsProcessed: 110,
-  },
-  {
-    inspectorId: "12344",
-    fullName: "John Doe",
-    imageUrl: "",
-    location: "Lagos, Nigeria",
-    hub: "Sabo Yaba Hub",
-    carsInHub: 0,
-    totalCarsProcessed: 110,
-  },
-  {
-    inspectorId: "12344",
-    fullName: "John Doe",
-    imageUrl: "",
-    location: "Lagos, Nigeria",
-    hub: "Sabo Yaba Hub",
-    carsInHub: 0,
-    totalCarsProcessed: 110,
-  },
-];

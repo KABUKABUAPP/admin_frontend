@@ -12,7 +12,7 @@ const FarePrices: NextPage = () => {
   const {
     data: farePrices,
     isLoading: farePricesLoading,
-    error: farePricesError,
+    isError: farePricesError,
     refetch: reloadFarePrices,
   } = useGetAllFarePricesQuery("", {
     refetchOnReconnect: true,
@@ -27,10 +27,14 @@ const FarePrices: NextPage = () => {
         </div>
       </SearchFilterBar>
 
-      <FarePricesTable data={farePrices?.data} />
+      <FarePricesTable
+        data={farePrices?.data}
+        isError={farePricesError}
+        isLoading={farePricesLoading}
+        refetch={reloadFarePrices}
+      />
     </AppLayout>
   );
 };
 
 export default FarePrices;
-

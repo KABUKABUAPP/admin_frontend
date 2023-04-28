@@ -12,6 +12,9 @@ interface Props {
   headBg?: string;
   generic?: boolean;
   headCellData?: { title: string; flex: number }[];
+  isLoading?: boolean;
+  isError?: boolean;
+  refetch?: () => void;
 }
 
 const EnhancedTable: FC<Props> = ({
@@ -22,6 +25,9 @@ const EnhancedTable: FC<Props> = ({
   headBg,
   generic = false,
   headCellData,
+  isError,
+  isLoading,
+  refetch,
 }) => {
   return (
     <div
@@ -41,10 +47,13 @@ const EnhancedTable: FC<Props> = ({
           bgColor={headBg}
         />
         <EnhancedTableBody
-          rowData={rowData || []}
+          rowData={rowData}
           rowComponent={(row, index) =>
             rowComponent ? rowComponent(row, index) : null
           }
+          isError={isError}
+          isLoading={isLoading}
+          refetch={refetch}
         />
       </div>
     </div>
