@@ -31,6 +31,7 @@ const DriversTable: FC<Props> = ({ tableData, isLoading, isError, refetch }) => 
       isLoading={isLoading}
       isError={isError}
       refetch={refetch}
+      headCellData={headCellData}
     />
   );
 };

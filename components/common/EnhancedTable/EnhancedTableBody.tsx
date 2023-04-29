@@ -1,8 +1,8 @@
 import React, { FC } from "react";
-import ActiveTripsTableRow from "@/components/modules/dashboard/ActiveTripsTableRow";
 import Button from "@/components/ui/Button/Button";
 import ErrorMessage from "../ErrorMessage";
 import Skeleton from "react-loading-skeleton";
+import TableLoader from "./TableLoader";
 
 interface Props {
   rowData?: any[];
@@ -10,6 +10,7 @@ interface Props {
   isLoading?: boolean;
   isError?: boolean;
   refetch?: () => void;
+  headCellData?: { title: string; flex: number }[];
 }
 
 const EnhancedTableBody: FC<Props> = ({
@@ -18,57 +19,17 @@ const EnhancedTableBody: FC<Props> = ({
   isError = false,
   isLoading,
   refetch,
+  headCellData
 }) => {
-  const loadingState =
-    isLoading === true && isError === false && rowData === undefined;
-  const errorState = isError && rowData === undefined && isLoading === true;
-  const viewState = rowData && !isLoading === true && isError === false;
-
-  console.log("error", isError);
-  console.log("rr", !isError);
 
   return (
     <div className="w-full bg-[#FFFFFF]">
-      {viewState &&
+      {rowData &&
         rowData.map((item, idx) => {
           return rowComponent(item, idx);
         })}
-      {loadingState && (
-        <>
-          <div className="flex justify-between gap-4">
-            <div style={{ flex: 1 }}>
-              <Skeleton />
-            </div>
-            <div style={{ flex: 1 }}>
-              <Skeleton />
-            </div>
-            <div style={{ flex: 1 }}>
-              <Skeleton />
-            </div>
-          </div>
-          <div className="flex justify-between gap-4">
-            <div style={{ flex: 1 }}>
-              <Skeleton />
-            </div>
-            <div style={{ flex: 1 }}>
-              <Skeleton />
-            </div>
-            <div style={{ flex: 1 }}>
-              <Skeleton />
-            </div>
-          </div>
-          <div className="flex justify-between gap-4">
-            <div style={{ flex: 1 }}>
-              <Skeleton />
-            </div>
-            <div style={{ flex: 1 }}>
-              <Skeleton />
-            </div>
-            <div style={{ flex: 1 }}>
-              <Skeleton />
-            </div>
-          </div>
-        </>
+      {isLoading && (
+        <TableLoader headCellData={headCellData}/>
       )}
       {isError && (
         <div className="flex flex-col justify-center items-center gap-2 py-4">

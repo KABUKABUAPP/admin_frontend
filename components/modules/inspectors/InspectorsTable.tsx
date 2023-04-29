@@ -51,6 +51,7 @@ const InspectorsTable: FC<Props> = ({ data, isError, isLoading, refetch }) => {
       isLoading={isLoading}
       isError={isError}
       refetch={refetch}
+      headCellData={headCellData}
     />
   );
 };

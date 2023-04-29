@@ -54,6 +54,7 @@ const EnhancedTable: FC<Props> = ({
           isError={isError}
           isLoading={isLoading}
           refetch={refetch}
+          headCellData={headCellData}
         />
       </div>
     </div>
