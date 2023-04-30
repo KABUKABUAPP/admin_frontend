@@ -10,6 +10,7 @@ import SearchFilterBar from "@/components/common/SearchFilterBar";
 import DriverTypeFilterBox from "@/components/modules/drivers/DriverTypeFilterBox";
 import { useRouter } from "next/router";
 import { useGetAllDriversQuery } from "@/api-services/driversService";
+import Pagination from "@/components/common/Pagination";
 
 const Drivers: NextPage = () => {
   const router = useRouter();
@@ -18,6 +19,8 @@ const Drivers: NextPage = () => {
     driverTypeFilterOptionsData
   );
   const [carOwner, setCarOwner] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [ pageSize, setPageSize ] = useState(2)
 
   const {
     data: drivers,
@@ -28,8 +31,8 @@ const Drivers: NextPage = () => {
     {
       carOwner: carOwner,
       driverStatus: "active",
-      limit: 10,
-      page: 1,
+      limit: pageSize,
+      page: currentPage,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -94,6 +97,15 @@ const Drivers: NextPage = () => {
           isLoading={driversLoading}
           refetch={reloadDrivers}
         />
+        {drivers && (
+          <Pagination
+            className="pagination-bar"
+            currentPage={currentPage}
+            totalCount={drivers.totalCount}
+            pageSize={pageSize}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+        )}
       </div>
     </AppLayout>
   );
