@@ -32,7 +32,7 @@ const DropDown: FC<Props> = ({ options, value, handleChange, placeholder }) => {
         >
           {options && options.length ? options?.map((option) => {
             return (
-              <p className="py-4 border-b border-b-[#E6E6E6] font-bold text-xs" onClick={()=>{
+              <p className="py-4 border-b border-b-[#E6E6E6] last:border-none font-bold text-xs" onClick={()=>{
                 if(handleChange){
                     handleChange(option.value)
                     setSelectedLabel(option.label)
