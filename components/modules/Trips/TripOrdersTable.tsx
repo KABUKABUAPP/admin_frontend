@@ -1,5 +1,5 @@
 import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import TripsTableHeadRow from "./TripsTableHeadRow";
 import TripsTableRow from "./TripsTableRow";
 import { useGetAllTripsQuery } from "@/api-services/tripsService";
@@ -26,7 +26,11 @@ interface FormattedTrip {
   status: string;
 }
 
-const TripOrdersTable: FC = () => {
+interface Props {
+  setTripCount: React.Dispatch<React.SetStateAction<number | undefined>>
+}
+
+const TripOrdersTable: FC<Props> = ({ setTripCount }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const { data, isLoading, isError, refetch } = useGetAllTripsQuery(
@@ -40,6 +44,16 @@ const TripOrdersTable: FC = () => {
       refetchOnReconnect: true,
     }
   );
+
+  useEffect(()=>{
+    if(data){
+      setTripCount(data.data.pagination.totalCount)
+    }
+
+    return ()=>{
+      setTripCount(undefined)
+    }
+  },[data])
 
   const formatTripData = (data: TripData[]): FormattedTrip[] => {
     const formattedData = data.map((trip) => {

@@ -16,10 +16,10 @@ import CancelledTripsTable from "@/components/modules/Trips/CancelledTripsTable"
 const Trips: NextPage = () => {
   const [optionsList, setOptionsList] = useState([...TripsOptionsBarData]);
   const [tripTitle, setTripTitle] = useState<string>("");
-  const [tripCount, setTripCount] = useState<number>(8);
+  const [tripCount, setTripCount] = useState<number | undefined>(undefined);
   const router = useRouter();
   const { tab } = router.query;
-  const tabOptions = [undefined, "pending", "active", "completed", "cancelled"];
+  const tabOptions = [undefined, "pending", "active", "completed", "declined"];
   enum Tab {
     TRIP_ORDERS,
     PENDING_TRIPS,
@@ -69,11 +69,11 @@ const Trips: NextPage = () => {
         }}
       />
       <SearchFilterBar />
-      {tab === tabOptions[Tab.TRIP_ORDERS] && <TripOrdersTable />}
-      {tab === tabOptions[Tab.PENDING_TRIPS] && <PendingTripsTable />}
-      {tab === tabOptions[Tab.ACTIVE_TRIPS] && <ActiveTripsTable />}
-      {tab === tabOptions[Tab.COMPLETED_TRIPS] && <CompletedTripsTable />}
-      {tab === tabOptions[Tab.CANCELLED_ORDERS] && <CancelledTripsTable />}
+      {tab === tabOptions[Tab.TRIP_ORDERS] && <TripOrdersTable setTripCount={setTripCount}/>}
+      {tab === tabOptions[Tab.PENDING_TRIPS] && <PendingTripsTable setTripCount={setTripCount}/>}
+      {tab === tabOptions[Tab.ACTIVE_TRIPS] && <ActiveTripsTable setTripCount={setTripCount}/>}
+      {tab === tabOptions[Tab.COMPLETED_TRIPS] && <CompletedTripsTable setTripCount={setTripCount}/>}
+      {tab === tabOptions[Tab.CANCELLED_ORDERS] && <CancelledTripsTable setTripCount={setTripCount}/>}
     </AppLayout>
   );
 };

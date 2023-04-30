@@ -1,8 +1,10 @@
 import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import TripsTableHeadRow from "./TripsTableHeadRow";
 import TripsTableRow from "./TripsTableRow";
-import { tripsRowMockData } from "../../../constants";
+import { useGetAllTripsQuery } from "@/api-services/tripsService";
+import { TripData } from "@/models/Trips";
+import Pagination from "@/components/common/Pagination";
 
 const headCellData = [
   { title: "ID", flex: 1 },
@@ -13,14 +15,93 @@ const headCellData = [
   { title: "Status", flex: 1 },
 ];
 
-const PendingTripsTable: FC = () => {
+interface FormattedTrip {
+  id: string;
+  origin: string;
+  destination: string;
+  rider: string;
+  driver: string;
+  carModel: string;
+  plateNumber: string;
+  status: string;
+}
+
+interface Props {
+  setTripCount: React.Dispatch<React.SetStateAction<number | undefined>>
+}
+
+const PendingTripsTable: FC<Props> = ({ setTripCount }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const { data, isLoading, isError, refetch } = useGetAllTripsQuery(
+    {
+      page: currentPage,
+      limit: pageSize,
+      status: "initiated",
+    },
+    {
+      refetchOnMountOrArgChange: true,
+      refetchOnReconnect: true,
+    }
+  );
+
+  useEffect(()=>{
+    if(data){
+      setTripCount(data.data.pagination.totalCount)
+    }
+
+    return ()=>{
+      setTripCount(undefined)
+    }
+  },[data])
+
+  const formatTripData = (data: TripData[]): FormattedTrip[] => {
+    const formattedData = data.map((trip) => {
+      return {
+        id: trip._id,
+        origin: `${trip.start_address.city || ""}, ${
+          trip.start_address.state || ""
+        }, ${trip.start_address.country || ""}`,
+        destination: `${trip.end_address.city || ""}, ${
+          trip.end_address.state || ""
+        }, ${trip.end_address.country || ""}`,
+        rider: trip.user?.full_name || "",
+        driver: "Driver name",
+        carModel: "Toyota Corolla",
+        plateNumber: "AX40-ZBY",
+        status: trip.status,
+      };
+    });
+
+    return formattedData;
+  };
+
   return (
-    <EnhancedTable
-      TableHeadComponent={<TripsTableHeadRow headCellData={headCellData}/>}
-      maxWidth="100vw"
-      rowComponent={(row, index) => <TripsTableRow data={row} index={index} />}
-      rowData={tripsRowMockData}
-    />
+    <>
+      {
+        <EnhancedTable
+          TableHeadComponent={<TripsTableHeadRow headCellData={headCellData} />}
+          maxWidth="100vw"
+          rowComponent={(row, index) => (
+            <TripsTableRow data={row} index={index} />
+          )}
+          rowData={data ? formatTripData(data?.data.data) : undefined}
+          isError={isError}
+          isLoading={isLoading}
+          headCellData={headCellData}
+          refetch={refetch}
+        />
+      }
+      {data && (
+        <Pagination
+          className="pagination-bar"
+          currentPage={currentPage}
+          totalCount={data.data.pagination.totalCount}
+          pageSize={pageSize}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
+      )}
+    </>
   );
 };
 
