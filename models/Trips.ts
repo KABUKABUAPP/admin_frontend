@@ -3,12 +3,28 @@ export interface Trip {
   to: string;
   rider: string;
   driver: string;
-  id: string
+  id: string;
 }
 
 export interface ActiveTripsMappedResponse {
   totalCount: number;
-  data: Trip[]
+  data: Trip[];
+}
+
+export interface FormattedTripOrder {
+  id: string;
+  origin: string;
+  destination: string;
+  rider: string;
+  driver: string;
+  carModel: string;
+  plateNumber: string;
+  status: string;
+}
+
+export interface MappedTripOrderResponse {
+  data: FormattedTripOrder[];
+  totalCount: number;
 }
 
 export interface TripData {

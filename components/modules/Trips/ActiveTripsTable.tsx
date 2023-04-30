@@ -20,6 +20,7 @@ const ActiveTripsTable: FC = () => {
       maxWidth="100vw"
       rowComponent={(row, index) => <TripsTableRow data={row} index={index} />}
       rowData={tripsRowMockData}
+      headCellData={headCellData}
     />
   );
 };

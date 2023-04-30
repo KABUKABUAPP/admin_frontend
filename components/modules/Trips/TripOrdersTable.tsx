@@ -1,11 +1,10 @@
 import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import TripsTableHeadRow from "./TripsTableHeadRow";
 import TripsTableRow from "./TripsTableRow";
 import { useGetAllTripsQuery } from "@/api-services/tripsService";
 import { TripData } from "@/models/Trips";
-import Loader from "@/components/ui/Loader/Loader";
-import Button from "@/components/ui/Button/Button";
+import Pagination from "@/components/common/Pagination";
 
 const headCellData = [
   { title: "ID", flex: 1 },
@@ -28,15 +27,17 @@ interface FormattedTrip {
 }
 
 const TripOrdersTable: FC = () => {
-  const { data, isLoading, error, refetch } = useGetAllTripsQuery(
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const { data, isLoading, isError, refetch } = useGetAllTripsQuery(
     {
-      page: 1,
-      limit: 10,
+      page: currentPage,
+      limit: pageSize,
       status: "initiated",
     },
     {
       refetchOnMountOrArgChange: true,
-      // skip: true
+      refetchOnReconnect: true,
     }
   );
 
@@ -44,9 +45,13 @@ const TripOrdersTable: FC = () => {
     const formattedData = data.map((trip) => {
       return {
         id: trip._id,
-        origin: `${trip.start_address.city}, ${trip.start_address.state}, ${trip.start_address.country}`,
-        destination: `${trip.end_address.city}, ${trip.end_address.state}, ${trip.end_address.country}`,
-        rider: trip.user.full_name,
+        origin: `${trip.start_address.city || ""}, ${
+          trip.start_address.state || ""
+        }, ${trip.start_address.country || ""}`,
+        destination: `${trip.end_address.city || ""}, ${
+          trip.end_address.state || ""
+        }, ${trip.end_address.country || ""}`,
+        rider: trip.user?.full_name || "",
         driver: "Driver name",
         carModel: "Toyota Corolla",
         plateNumber: "AX40-ZBY",
@@ -59,35 +64,28 @@ const TripOrdersTable: FC = () => {
 
   return (
     <>
-      {/* {data && !error && !isLoading && data.data.data.length ? (
+      {
         <EnhancedTable
           TableHeadComponent={<TripsTableHeadRow headCellData={headCellData} />}
           maxWidth="100vw"
           rowComponent={(row, index) => (
             <TripsTableRow data={row} index={index} />
           )}
-          rowData={formatTripData(data.data.data)}
+          rowData={data ? formatTripData(data?.data.data) : undefined}
+          isError={isError}
+          isLoading={isLoading}
+          headCellData={headCellData}
+          refetch={refetch}
         />
-      ) : null} */}
-
-      {data && !error && !isLoading && !data.data.data.length ? (
-        <div>
-          <p className="text-center pt-5">No Trips Data</p>
-        </div>
-      ) : null}
-
-      {!data && isLoading ? (
-        <div className="flex flex-col gap-4 items-center justify-center pt-5">
-          <Loader size="medium" />
-          <p>Fetching Trips...</p>
-        </div>
-      ) : null}
-
-      {!data && error && !isLoading && (
-        <div className="flex flex-col gap-4 items-center justify-center pt-5">
-          <Button title="Reload Trips" onClick={() => refetch()} />
-          <p>Oops! Error fetching trips</p>
-        </div>
+      }
+      {data && (
+        <Pagination
+          className="pagination-bar"
+          currentPage={currentPage}
+          totalCount={data.data.pagination.totalCount}
+          pageSize={pageSize}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
       )}
     </>
   );
