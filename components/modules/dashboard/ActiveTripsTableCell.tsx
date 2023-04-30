@@ -8,9 +8,9 @@ interface Props {
 
 const ActiveTripsTableCell: FC<Props> = ({ title, body }) => {
   return (
-    <div className="flex-1 overflow-hidden h-10">
+    <div className="flex-1 overflow-y-auto scrollbar-none h-14">
       <p className="text-xs text-[#9A9A9A] mb-3 h-2">{title || <Skeleton />}</p>
-      <div className="overflow-y-auto scrollbar-none">
+      <div className="overflow-y-auto">
         <p className="text-xs font-bold w-full break-words h-8">
           {body || <Skeleton />}
         </p>
