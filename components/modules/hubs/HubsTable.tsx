@@ -33,18 +33,23 @@ const headCellData = [
 ];
 
 interface Props {
-    data: HubsTableBodyData[]
+  data?: HubsTableBodyData[];
+  isLoading?: boolean;
+  isError?: boolean;
+  refetch?: () => void;
 }
 
-const HubsTable: FC<Props> = ({ data }) => {
+const HubsTable: FC<Props> = ({ data, isLoading, isError, refetch }) => {
   return (
     <EnhancedTable
-      TableHeadComponent={
-        <HubsTableHeadRow headCellData={headCellData} />
-      }
+      TableHeadComponent={<HubsTableHeadRow headCellData={headCellData} />}
       rowComponent={(row) => <HubsTableBodyRow data={row} />}
       rowData={data}
       maxWidth="100vw"
+      headCellData={headCellData}
+      isLoading={isLoading}
+      isError={isError}
+      refetch={refetch}
     />
   );
 };

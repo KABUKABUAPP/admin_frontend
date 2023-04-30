@@ -1,13 +1,23 @@
 import { NextPage } from "next";
-import React from "react";
+import React, { useState } from "react";
 
 import AppLayout from "@/layouts/AppLayout";
 import SearchFilterBar from "@/components/common/SearchFilterBar";
 import Button from "@/components/ui/Button/Button";
 import AddIcon from "@/components/icons/AddIcon";
 import HubsTable from "@/components/modules/hubs/HubsTable";
+import { useGetAllHubsQuery } from "@/api-services/hubService";
+import Pagination from "@/components/common/Pagination";
 
 const Hubs: NextPage = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(2);
+
+  const { data, isLoading, isError, refetch } = useGetAllHubsQuery(
+    { limit: pageSize, page: currentPage },
+    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
+
   return (
     <AppLayout>
       <SearchFilterBar>
@@ -16,7 +26,21 @@ const Hubs: NextPage = () => {
         </div>
       </SearchFilterBar>
 
-      <HubsTable data={mockData} />
+      <HubsTable
+        data={data?.data}
+        isLoading={isLoading}
+        isError={isError}
+        refetch={refetch}
+      />
+      {data && (
+        <Pagination
+          className="pagination-bar"
+          currentPage={currentPage}
+          totalCount={data.totalCount}
+          pageSize={pageSize}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
+      )}
     </AppLayout>
   );
 };
@@ -30,7 +54,7 @@ const mockData = [
     stateCountry: "Lagos, Nigeria",
     inspector: "John Doe",
     totalCarsProcessed: 4,
-    dateCreated: "Jan 1, 2023 at 4:30pm"
+    dateCreated: "Jan 1, 2023 at 4:30pm",
   },
   {
     hubId: "1234",
@@ -38,7 +62,7 @@ const mockData = [
     stateCountry: "Lagos, Nigeria",
     inspector: "John Doe",
     totalCarsProcessed: 4,
-    dateCreated: "Jan 1, 2023 at 4:30pm"
+    dateCreated: "Jan 1, 2023 at 4:30pm",
   },
   {
     hubId: "1234",
@@ -46,7 +70,7 @@ const mockData = [
     stateCountry: "Lagos, Nigeria",
     inspector: "John Doe",
     totalCarsProcessed: 4,
-    dateCreated: "Jan 1, 2023 at 4:30pm"
+    dateCreated: "Jan 1, 2023 at 4:30pm",
   },
   {
     hubId: "1234",
@@ -54,7 +78,7 @@ const mockData = [
     stateCountry: "Lagos, Nigeria",
     inspector: "John Doe",
     totalCarsProcessed: 4,
-    dateCreated: "Jan 1, 2023 at 4:30pm"
+    dateCreated: "Jan 1, 2023 at 4:30pm",
   },
   {
     hubId: "1234",
@@ -62,7 +86,7 @@ const mockData = [
     stateCountry: "Lagos, Nigeria",
     inspector: "John Doe",
     totalCarsProcessed: 4,
-    dateCreated: "Jan 1, 2023 at 4:30pm"
+    dateCreated: "Jan 1, 2023 at 4:30pm",
   },
   {
     hubId: "1234",
@@ -70,7 +94,7 @@ const mockData = [
     stateCountry: "Lagos, Nigeria",
     inspector: "John Doe",
     totalCarsProcessed: 4,
-    dateCreated: "Jan 1, 2023 at 4:30pm"
+    dateCreated: "Jan 1, 2023 at 4:30pm",
   },
   {
     hubId: "1234",
@@ -78,6 +102,6 @@ const mockData = [
     stateCountry: "Lagos, Nigeria",
     inspector: "John Doe",
     totalCarsProcessed: 4,
-    dateCreated: "Jan 1, 2023 at 4:30pm"
+    dateCreated: "Jan 1, 2023 at 4:30pm",
   },
-]
+];
