@@ -44,90 +44,92 @@ const ViewTrip: NextPage = () => {
   };
 
   return (
-    <AppLayout>
-      <TripActionBar>
-        {isFeed ? (
-          <Button
-            title="Close Feed"
-            color="tetiary"
-            size="large"
-            onClick={() => setIsFeed(false)}
-          />
-        ) : (
-          <Button
-            title="View Feed"
-            color="tetiary"
-            size="large"
-            onClick={() => setIsFeed(true)}
-          />
-        )}
-        <Button
-          title="Call Rider"
-          size="large"
-          onClick={() => handleCall(true)}
-        />
-        <Button
-          title="Call Driver"
-          size="large"
-          onClick={() => handleCall(false)}
-        />
-        <Button
-          title="Raise SOS"
-          color="secondary"
-          size="large"
-          onClick={handleRaiseSos}
-        />
-      </TripActionBar>
-      <ViewTripLayout
-        mainComponents={
-          <>
-            {isFeed && (
-              <ViewFeed
-                handleCloseFeed={() => {
-                  setIsFeed(false);
-                }}
-              />
-            )}
-            <div className="w-full h-full max-h-[550px] max-md:pl-0">
-              <AppMap zoom={11} location={location} />
-            </div>
-          </>
-        }
-        asideComponents={
-          <>
-            <TripDetailsCard
-              cardSubTitle="Driving to destination"
-              data={tripDetailsData}
+    <AppLayout padding="0">
+      <div className="lg:h-screen lg:overflow-hidden p-4">
+        <TripActionBar>
+          {isFeed ? (
+            <Button
+              title="Close Feed"
+              color="tetiary"
+              size="large"
+              onClick={() => setIsFeed(false)}
             />
-            <div className="mt-5">
-              <CarOccupantDetailsCard
-                isRider={true}
-                name="John Doe"
-                location="Lagos, Nigeria"
-                tripCount={14}
-                rating={3.8}
-                viewProfileLink=""
-                buttonTitle="View Rider's Profile"
-                imageUri="/testUser.jpg"
+          ) : (
+            <Button
+              title="View Feed"
+              color="tetiary"
+              size="large"
+              onClick={() => setIsFeed(true)}
+            />
+          )}
+          <Button
+            title="Call Rider"
+            size="large"
+            onClick={() => handleCall(true)}
+          />
+          <Button
+            title="Call Driver"
+            size="large"
+            onClick={() => handleCall(false)}
+          />
+          <Button
+            title="Raise SOS"
+            color="secondary"
+            size="large"
+            onClick={handleRaiseSos}
+          />
+        </TripActionBar>
+        <ViewTripLayout
+          mainComponents={
+            <>
+              {isFeed && (
+                <ViewFeed
+                  handleCloseFeed={() => {
+                    setIsFeed(false);
+                  }}
+                />
+              )}
+              <div className="w-full h-full max-h-[550px] max-md:pl-0">
+                <AppMap zoom={11} location={location} />
+              </div>
+            </>
+          }
+          asideComponents={
+            <>
+              <TripDetailsCard
+                cardSubTitle="Driving to destination"
+                data={tripDetailsData}
               />
-            </div>
-            <div className="mt-5">
-              <CarOccupantDetailsCard
-                isRider={false}
-                name="John Doe"
-                location="Lagos, Nigeria"
-                tripCount={14}
-                rating={3.8}
-                viewProfileLink=""
-                carModel="Toyota Corolla 2020, Black"
-                carPlateNumber="ABC123DEF"
-                buttonTitle="View Rider's Profile"
-                imageUri="/testUser.jpg"
-              />
-            </div>
-          </>
-        }
-      />
+              <div className="mt-5">
+                <CarOccupantDetailsCard
+                  isRider={true}
+                  name="John Doe"
+                  location="Lagos, Nigeria"
+                  tripCount={14}
+                  rating={3.8}
+                  viewProfileLink=""
+                  buttonTitle="View Rider's Profile"
+                  imageUri="/testUser.jpg"
+                />
+              </div>
+              <div className="mt-5">
+                <CarOccupantDetailsCard
+                  isRider={false}
+                  name="John Doe"
+                  location="Lagos, Nigeria"
+                  tripCount={14}
+                  rating={3.8}
+                  viewProfileLink=""
+                  carModel="Toyota Corolla 2020, Black"
+                  carPlateNumber="ABC123DEF"
+                  buttonTitle="View Rider's Profile"
+                  imageUri="/testUser.jpg"
+                />
+              </div>
+            </>
+          }
+        />
+      </div>
     </AppLayout>
   );
 };

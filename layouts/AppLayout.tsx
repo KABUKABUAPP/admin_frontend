@@ -6,7 +6,14 @@ import Container from "@/components/common/Container";
 import { SidebarLink } from "@/models/SidebarLink";
 import Transition from "@/components/common/Transition";
 
-const AppLayout: FC<PropsWithChildren> = ({ children }) => {
+interface Props {
+  padding?: string;
+}
+
+const AppLayout: FC<PropsWithChildren<Props>> = ({
+  children,
+  padding = "2.5rem 1rem 1rem 1rem",
+}) => {
   const router = useRouter();
 
   const getActiveSideNavLink = (
@@ -41,7 +48,10 @@ const AppLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <div className="flex h-screen overflow-hidden">
       <SideBar data={links} />
-      <main className="h-screen w-[calc(100%-200px)] max-lg:w-full bg-[#f8f8f8] overflow-auto p-4 pt-10">
+      <main
+        className="h-screen w-[calc(100%-200px)] max-lg:w-full bg-[#f8f8f8] overflow-auto"
+        style={{ padding: padding }}
+      >
         <Transition>{children}</Transition>
       </main>
     </div>

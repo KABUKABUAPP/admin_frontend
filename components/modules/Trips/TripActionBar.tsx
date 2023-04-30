@@ -7,7 +7,7 @@ const TripActionBar: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
 
   return (
-    <div className="bg-[#FFFFFF] flex items-center py-4 px-6 rounded-lg w-full max-sm:flex-col">
+    <div className="bg-[#FFFFFF] flex items-center max-sm:py-4 px-6 rounded-lg w-full max-sm:flex-col sm:h-[100px]">
       <div style={{ flex: 1 }}>
         <Button
           title="Back"
