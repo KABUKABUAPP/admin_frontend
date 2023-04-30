@@ -18,6 +18,7 @@ const FarePrices: NextPage = () => {
     refetchOnReconnect: true,
     refetchOnMountOrArgChange: true,
   });
+  
 
   return (
     <AppLayout>

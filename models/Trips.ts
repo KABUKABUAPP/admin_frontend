@@ -6,6 +6,11 @@ export interface Trip {
   id: string
 }
 
+export interface ActiveTripsMappedResponse {
+  totalCount: number;
+  data: Trip[]
+}
+
 export interface TripData {
   start_address: {
     country: string;

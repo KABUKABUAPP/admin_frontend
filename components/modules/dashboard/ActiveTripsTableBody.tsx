@@ -4,6 +4,8 @@ import ActiveTripsTableRow from "./ActiveTripsTableRow";
 import Button from "@/components/ui/Button/Button";
 import ActiveTripsTableCell from "./ActiveTripsTableCell";
 
+import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
+
 interface Props {
   data: Trip[] | undefined;
   loading: boolean;

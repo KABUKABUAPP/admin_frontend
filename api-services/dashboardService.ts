@@ -19,7 +19,7 @@ import {
 import { secondsToMilliSeconds } from "@/utils";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "@/constants";
-import { Trip } from "@/models/Trips";
+import { ActiveTripsMappedResponse, Trip } from "@/models/Trips";
 
 export const dashboardApi = createApi({
   reducerPath: "dashboardApi",
@@ -87,12 +87,15 @@ export const dashboardApi = createApi({
       },
     }),
 
-    getActiveTrips: build.query<Trip[], GetActiveTripsQuery>({
+    getActiveTrips: build.query<
+      ActiveTripsMappedResponse,
+      GetActiveTripsQuery
+    >({
       query: ({ page, limit }) => ({
         url: `/admin/trip/dashboard/get-active-trips?page=${page}&limit=${limit}`,
       }),
       transformResponse: (response: GetActiveTripsResponse) => {
-        if (!response.data.data.length) return [] as Trip[];
+        if (!response.data.data.length) return {} as ActiveTripsMappedResponse;
         else {
           const mappedResponse = response.data.data.map((trip) => {
             return {
@@ -103,7 +106,10 @@ export const dashboardApi = createApi({
               id: trip._id,
             };
           });
-          return mappedResponse;
+          return {
+            data: mappedResponse,
+            totalCount: response.data.pagination.totalCount,
+          };
         }
       },
     }),

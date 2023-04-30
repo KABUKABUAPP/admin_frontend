@@ -2,8 +2,24 @@ import React, { FC, PropsWithChildren } from "react";
 import TextField from "@/components/ui/Input/TextField/TextField";
 import SearchIcon from "@/components/icons/SearchIcon";
 import ChevronDown from "@/components/icons/ChevronDown";
+import DropDown from "../ui/DropDown";
 
-const SearchFilterBar: FC<PropsWithChildren> = ({ children }) => {
+interface Props {
+  filterOptions?: {
+    label: string | number;
+    value: string | number;
+    default?: boolean;
+  }[];
+  dropDownOptionSelected?: string;
+  handleDropDown?: (val: string | number) => void;
+}
+
+const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
+  children,
+  filterOptions,
+  dropDownOptionSelected,
+  handleDropDown,
+}) => {
   return (
     <div className="rounded-lg bg-[#F1F1F1] w-full min-h-10 shadow-sm my-6 py-4 px-8 flex items-center justify-between max-sm:flex-col max-sm:gap-5">
       <div className="w-[200px]">
@@ -16,9 +32,16 @@ const SearchFilterBar: FC<PropsWithChildren> = ({ children }) => {
 
       <div className="flex-1">{children}</div>
 
-      <p className="text-xs flex items-center cursor-pointer">
-        Sort: <span className="mr-3 ml-1 font-bold">Newest First</span>
-        <ChevronDown />
+      <p className="text-xs flex gap-3 items-center cursor-pointer">
+       <span>Sort:</span>
+        <DropDown
+          placeholder="Filter"
+          options={filterOptions}
+          value={dropDownOptionSelected}
+          handleChange={(val) => {
+            if (handleDropDown) handleDropDown(val);
+          }}
+        />
       </p>
     </div>
   );

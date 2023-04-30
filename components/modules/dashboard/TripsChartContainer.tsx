@@ -12,7 +12,11 @@ interface Props {
   loading: boolean;
   error: boolean;
   refetch: () => void;
-  filterOptions?: { label: string | number; value: string | number, default?: boolean }[];
+  filterOptions?: {
+    label: string | number;
+    value: string | number;
+    default?: boolean;
+  }[];
   dropDownOptionSelected?: string;
   handleDropDown: (val: string | number) => void;
 }
@@ -42,13 +46,18 @@ const TripsChartContainer: FC<Props> = ({
     `}
       >
         <p className="font-bold text-xs">Trips Chart</p>
-        <DropDown placeholder="Filter" options={filterOptions} value={dropDownOptionSelected} handleChange={(val)=>handleDropDown(val)}/>
+        <DropDown
+          placeholder="Filter"
+          options={filterOptions}
+          value={dropDownOptionSelected}
+          handleChange={(val) => handleDropDown(val)}
+        />
       </div>
       <div className="h-[300px] bg-[#FFFFFF] p-6">
         {viewState && chartData && (
           <TripsChart
             chartData={chartData.map((item) => item.trips)}
-            labels={chartData.map((item) => item.day || '')}
+            labels={chartData.map((item) => item.day || "")}
           />
         )}
         {loadingState && (
@@ -59,7 +68,7 @@ const TripsChartContainer: FC<Props> = ({
         {errorState && (
           <div className="py-2 flex flex-col items-center justify-center">
             <ErrorMessage message="Error Fetching Chart Data" />
-            <Button title="Reload Chart Data" onClick={refetch}/>
+            <Button title="Reload Chart Data" onClick={refetch} />
           </div>
         )}
       </div>
