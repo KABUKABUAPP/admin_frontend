@@ -6,24 +6,31 @@ import SharpCarsTableHeadRow from "./SharpCarsTableHeadRow";
 import { SharpCarsTableBodyData } from "@/models/SharpCars";
 
 interface Props {
-    data: SharpCarsTableBodyData[]
+  data?: SharpCarsTableBodyData[];
+  isLoading?: boolean;
+  isError?: boolean;
+  refetch?: () => void;
 }
 
 const headCellData = [
-    { title: "Car ID", flex: 1 },
-    { title: "Car Brand & Model", flex: 1 },
-    { title: "Driver", flex: 1 },
-    { title: "License Number", flex: 1 },
-    { title: "Date & Time Added", flex: 1 },
-  ];
+  { title: "Car ID", flex: 1 },
+  { title: "Car Brand & Model", flex: 1 },
+  { title: "Driver", flex: 1 },
+  { title: "License Number", flex: 1 },
+  { title: "Date & Time Added", flex: 1 },
+];
 
-const SharpCarsTable: FC<Props> = ({ data }) => {
+const SharpCarsTable: FC<Props> = ({ data, isLoading, isError, refetch }) => {
   return (
     <EnhancedTable
-      TableHeadComponent={<SharpCarsTableHeadRow headCellData={headCellData}/>}
+      TableHeadComponent={<SharpCarsTableHeadRow headCellData={headCellData} />}
       rowComponent={(rows) => <SharpCarsTableBodyRow data={rows} />}
       rowData={data}
       maxWidth="100vw"
+      isLoading={isLoading}
+      isError={isError}
+      refetch={refetch}
+      headCellData={headCellData}
     />
   );
 };

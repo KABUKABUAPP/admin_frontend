@@ -7,8 +7,17 @@ import SearchFilterBar from "@/components/common/SearchFilterBar";
 import SharpCarsTable from "@/components/modules/sharp-cars/SharpCarsTable";
 import SharpCarOptionBar from "@/components/modules/sharp-cars/SharpCarOptionBar";
 import { sharpCarsOptionsData } from "@/constants";
+import { useGetAllSharpCarsQuery } from "@/api-services/sharpCarsService";
+import Pagination from "@/components/common/Pagination";
 
 const SharpCars: NextPage = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(2);
+  const { data, isLoading, isError, refetch } = useGetAllSharpCarsQuery(
+    { limit: pageSize, page: currentPage },
+    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
+
   const [options, setOptions] = useState(sharpCarsOptionsData);
 
   const handleClickOption = (key: string) => {
@@ -17,7 +26,7 @@ const SharpCars: NextPage = () => {
       return { ...option, isActive: false };
     });
 
-    setOptions(mutatedOptions)
+    setOptions(mutatedOptions);
   };
 
   return (
@@ -28,7 +37,21 @@ const SharpCars: NextPage = () => {
         options={options}
       />
       <SearchFilterBar />
-      <SharpCarsTable data={mockTableData} />
+      <SharpCarsTable
+        data={data?.data}
+        isLoading={isLoading}
+        isError={isError}
+        refetch={refetch}
+      />
+      {data && (
+        <Pagination
+          className="pagination-bar"
+          currentPage={currentPage}
+          totalCount={data.totalCount}
+          pageSize={pageSize}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
+      )}
     </AppLayout>
   );
 };
