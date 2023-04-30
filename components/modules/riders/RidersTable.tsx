@@ -6,7 +6,7 @@ import { RidersTableBodyData } from "@/models/Riders";
 
 interface Props {
   headBg: string;
-  ridersData: RidersTableBodyData[],
+  ridersData?: RidersTableBodyData[],
   isLoading?: boolean;
   isError?: boolean;
   refetch?: () => void;
@@ -32,6 +32,7 @@ const RidersTable: FC<Props> = ({ headBg, ridersData, isLoading, isError, refetc
       isLoading={isLoading}
       isError={isError}
       refetch={refetch}
+      headCellData={headCellData}
     />
   );
 };
