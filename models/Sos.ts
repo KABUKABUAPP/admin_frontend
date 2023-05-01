@@ -65,6 +65,15 @@ export interface GetAllSOSResponse {
   message: string;
 }
 
+type DateOptions = "this_week"
+
+export interface GetAllSosQuery {
+    limit: number;
+    date: DateOptions;
+    page: number;
+    dateRange?: string;
+}
+
 export interface MappedSosResponse {
     data: SosTableData[];
     totalCount: number;

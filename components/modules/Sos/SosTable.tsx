@@ -3,6 +3,7 @@ import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
 import { sosTripsRowMockData } from "../../../constants";
 import SosTableHeadRow from "./SosTableHeadRow";
 import SosTableRow from "./SosTableRow";
+import { SosTableData } from "@/models/Sos";
 
 const headCellData = [
   { title: "ID", flex: 1 },
@@ -15,14 +16,25 @@ const headCellData = [
   { title: "Reason", flex: 1 },
 ];
 
-const SosTable: FC = () => {
+interface Props {
+  data?: SosTableData[];
+  isLoading?: boolean;
+  isError?: boolean;
+  refetch?: () => void;
+}
+
+const SosTable: FC<Props> = ({ data, isLoading, isError, refetch }) => {
   return (
     <EnhancedTable
       headBg="#FEE2E9"
       TableHeadComponent={<SosTableHeadRow headCellData={headCellData} />}
       maxWidth="100vw"
       rowComponent={(row, index) => <SosTableRow data={row} index={index} />}
-      rowData={sosTripsRowMockData}
+      rowData={data}
+      isError={isError}
+      isLoading={isLoading}
+      refetch={refetch}
+      headCellData={headCellData}
     />
   );
 };

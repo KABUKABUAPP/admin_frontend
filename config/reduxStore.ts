@@ -10,6 +10,7 @@ import { farePricesApi } from "@/api-services/farePricesService";
 import { ridersApi } from "@/api-services/ridersService";
 import { hubsApi } from "@/api-services/hubService";
 import { sharpCarsApi } from "@/api-services/sharpCarsService";
+import { sosApi } from "@/api-services/sosService";
 
 export const reduxStore = configureStore({
   reducer: {
@@ -22,7 +23,8 @@ export const reduxStore = configureStore({
     [farePricesApi.reducerPath]: farePricesApi.reducer,
     [ridersApi.reducerPath]: ridersApi.reducer,
     [hubsApi.reducerPath]: hubsApi.reducer,
-    [sharpCarsApi.reducerPath]: sharpCarsApi.reducer
+    [sharpCarsApi.reducerPath]: sharpCarsApi.reducer,
+    [sosApi.reducerPath]: sosApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -35,7 +37,8 @@ export const reduxStore = configureStore({
       farePricesApi.middleware,
       ridersApi.middleware,
       hubsApi.middleware,
-      sharpCarsApi.middleware
+      sharpCarsApi.middleware,
+      sosApi.middleware
     ]),
 });
 
