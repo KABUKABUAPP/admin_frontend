@@ -1,7 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { RIDES_BASE_URL } from "@/constants";
-import { GetAllTripsResponse } from "@/models/Trips";
+import {
+  GetAllTripsResponse,
+  ViewTripQuery,
+  ViewTripResponse,
+  MappedViewTripResponse,
+} from "@/models/Trips";
 import { GetAllTripsQuery } from "@/models/Trips";
 
 import { secondsToMilliSeconds } from "@/utils";
@@ -11,10 +16,10 @@ import { ACCESS_TOKEN } from "@/constants";
 export const tripsApi = createApi({
   reducerPath: "tripsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${RIDES_BASE_URL}/`,
+    baseUrl: `${RIDES_BASE_URL}`,
     timeout: secondsToMilliSeconds(30),
     prepareHeaders(headers) {
-      const token = Cookies.get(ACCESS_TOKEN)
+      const token = Cookies.get(ACCESS_TOKEN);
 
       if (token) {
         headers.set("authorization", `Bearer ${token}`);
@@ -29,7 +34,37 @@ export const tripsApi = createApi({
         url: `/admin/trip/get-all?limit=${limit}&page=${page}&status=${status}`,
       }),
     }),
+    viewTrip: build.query<MappedViewTripResponse, ViewTripQuery>({
+      query: ({ id }) => ({
+        url: `/admin/trip/view/${id}`,
+      }),
+      transformResponse: (response: ViewTripResponse) => {
+        if (!response) return {} as MappedViewTripResponse;
+        return {
+          carModel: `${response.data.car.brand_name} ${response.data.car.brand_name}`,
+          destination: `${response.data.destination.city}, ${response.data.destination.state}, ${response.data.destination.country}`,
+          driverFullname: `${response.data.driver_details.full_name}`,
+          driverId: `${response.data.driver_details._id}`,
+          driverLocation: `${response.data.driver_details.driver.city}, ${response.data.driver_details.driver.state}, ${response.data.driver_details.driver.country}`,
+          driverRating: response.data.driver_rating,
+          driverTripCount: response.data.driver_details.total_trips,
+          estimatedPrice: response.data.estimated_price,
+          origin: `${response.data.origin.city}, ${response.data.origin.state}, ${response.data.origin.country}`,
+          paymentType: response.data.payment_type,
+          plateNumber: response.data.car.plate_number,
+          riderFullName: response.data.rider_details.full_name,
+          riderId: response.data.rider_details._id,
+          riderLocation: ``,
+          riderRating: response.data.rider_details.average_rating.value,
+          riderTripCount: response.data.rider_details.total_trips,
+          tripEnded: response.data.trip_completion_time,
+          tripStarted: ``,
+          driverImage: '',
+          riderImage: response.data.rider_details.profile_image
+        } as MappedViewTripResponse;
+      },
+    }),
   }),
 });
 
-export const { useGetAllTripsQuery } = tripsApi;
+export const { useGetAllTripsQuery, useViewTripQuery } = tripsApi;

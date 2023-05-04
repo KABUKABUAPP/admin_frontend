@@ -18,11 +18,21 @@ import ConfirmCallCard from "@/components/modules/Trips/ConfirmCallCard";
 import { useModalContext } from "@/contexts/ModalContext";
 import RaiseSosCard from "@/components/modules/Trips/RaiseSosCard";
 import ViewFeed from "@/components/modules/Trips/ViewFeed";
+import { useViewTripQuery } from "@/api-services/tripsService";
+import { useRouter } from "next/router";
 
 const ViewTrip: NextPage = () => {
   const { setIsCalling } = useCallContext();
   const { setModalContent } = useModalContext();
   const [isFeed, setIsFeed] = useState(false);
+  const router = useRouter();
+
+  const { id } = router.query;
+
+  const { data, isLoading, isError, refetch } = useViewTripQuery(
+    { id: "645370d10b7381dbbb771f7a" },
+    { skip: id === undefined }
+  );
 
   const handleCall = (isRider: boolean) => {
     setModalContent(
@@ -103,27 +113,31 @@ const ViewTrip: NextPage = () => {
               <div className="mt-5">
                 <CarOccupantDetailsCard
                   isRider={true}
-                  name="John Doe"
-                  location="Lagos, Nigeria"
-                  tripCount={14}
-                  rating={3.8}
-                  viewProfileLink=""
+                  name={data?.riderFullName}
+                  location={data?.riderLocation}
+                  tripCount={data?.riderTripCount}
+                  rating={data?.riderRating}
+                  viewProfileLink={data?.riderId && `/riders/${data?.riderId}`}
                   buttonTitle="View Rider's Profile"
-                  imageUri="/testUser.jpg"
+                  imageUri={data?.riderImage}
+                  isLoading={isLoading}
                 />
               </div>
               <div className="mt-5">
                 <CarOccupantDetailsCard
                   isRider={false}
-                  name="John Doe"
-                  location="Lagos, Nigeria"
-                  tripCount={14}
-                  rating={3.8}
-                  viewProfileLink=""
-                  carModel="Toyota Corolla 2020, Black"
-                  carPlateNumber="ABC123DEF"
-                  buttonTitle="View Rider's Profile"
-                  imageUri="/testUser.jpg"
+                  name={data?.driverFullname}
+                  location={data?.driverLocation}
+                  tripCount={data?.driverTripCount}
+                  rating={data?.driverRating}
+                  viewProfileLink={
+                    data?.driverId && `/drivers/${data?.driverId}`
+                  }
+                  carModel={data?.carModel}
+                  carPlateNumber={data?.plateNumber}
+                  buttonTitle="View Driver's Profile"
+                  imageUri={data?.driverImage}
+                  isLoading={isLoading}
                 />
               </div>
             </>

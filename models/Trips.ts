@@ -150,3 +150,85 @@ export interface TripDetail {
   bottomIcon: React.ReactNode;
   isRating?: boolean;
 }
+
+export interface ViewTripResponse {
+  status: string;
+  data: {
+    origin: {
+      country: string;
+      state: string;
+      city: string;
+    };
+    destination: {
+      country: string;
+      state: string;
+      city: string;
+    };
+    estimated_price: number;
+    payment_type: string;
+    trip_completion_time: string;
+    rider_rating: number;
+    driver_rating: number;
+    rider_details: {
+      average_rating: {
+        value: number;
+        count: number;
+      };
+      total_trips: number;
+      _id: string;
+      full_name: string;
+      profile_image: string;
+    };
+    driver_details: {
+      average_rating: {
+        value: number;
+        count: number;
+      };
+      total_trips: number;
+      _id: string;
+      full_name: string;
+      driver: {
+        _id: string;
+        city: string;
+        state: string;
+        country: string;
+      };
+    };
+    car: {
+      _id: string;
+      brand_name: string;
+      model: string;
+      year: string;
+      color: string;
+      plate_number: string;
+    };
+  };
+  message: string;
+}
+
+export interface ViewTripQuery {
+  id: string
+}
+
+export interface MappedViewTripResponse {
+  origin: string;
+  destination: string;
+  estimatedPrice: number;
+  paymentType: string;
+  tripStarted: string;
+  tripEnded: string;
+  riderFullName: string;
+  riderLocation: string;
+  riderTripCount: number;
+  riderRating: number;
+  riderId: string;
+  driverFullname: string;
+  driverLocation: string;
+  driverTripCount: number;
+  driverRating: number;
+  carModel: string;
+  plateNumber: string;
+  driverId: string;
+  riderImage: string;
+  driverImage: string;
+}
