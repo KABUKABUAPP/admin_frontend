@@ -9,8 +9,18 @@ import TrashIcon from "@/components/icons/TrashIcon";
 import ViewFarePriceLayout from "@/components/modules/fare-prices/ViewFarePriceLayout";
 import FareDetailsCard from "@/components/modules/fare-prices/FareDetailsCard";
 import FarePriceCard from "@/components/modules/fare-prices/FarePriceCard";
+import { useModalContext } from "@/contexts/ModalContext";
+import StartSurgeCard from "@/components/modules/fare-prices/StartSurgeCard";
 
 const FarePrice: NextPage = () => {
+  const { setModalContent } = useModalContext();
+
+  const handleStartSurge = () => {
+    setModalContent(
+      <StartSurgeCard handleClose={() => setModalContent(null)} />
+    );
+  };
+
   return (
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
@@ -20,6 +30,7 @@ const FarePrice: NextPage = () => {
             size="large"
             color="tetiary"
             startIcon={<SurgeIcon />}
+            onClick={handleStartSurge}
           />
           <Button
             title="Delete Profile"
@@ -40,7 +51,13 @@ const FarePrice: NextPage = () => {
             />
           }
           mainComponents={
-            <FarePriceCard title="Driver Fee" cardData={[{title: 'Monthly Payment', body: 'N20000/Month'}]}/>
+            <FarePriceCard
+              title="Driver Fee"
+              cardData={[
+                { title: "Monthly Payment", body: "N20000/Month" },
+                { title: "Sharp Payment", body: "N20000/Month" },
+              ]}
+            />
           }
         />
       </div>
