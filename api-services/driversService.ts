@@ -1,20 +1,19 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { AUTH_BASE_URL } from "@/constants";
+import { RIDES_BASE_URL } from "@/constants";
 import { secondsToMilliSeconds } from "@/utils";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "@/constants";
 import {
   GetAllDriversResponse,
   GetAllDriversQuery,
-  DriversTableBodyData,
   DriversMappedResponse,
 } from "@/models/Drivers";
 
 export const driversApi = createApi({
   reducerPath: "driversApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${AUTH_BASE_URL}/`,
+    baseUrl: `${RIDES_BASE_URL}/`,
     timeout: secondsToMilliSeconds(30),
     prepareHeaders(headers) {
       const token = Cookies.get(ACCESS_TOKEN);

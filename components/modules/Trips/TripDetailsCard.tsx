@@ -4,7 +4,7 @@ import { TripDetail } from "@/models/Trips";
 
 interface Props {
   cardSubTitle: string;
-  data: TripDetail[];
+  data?: TripDetail[];
 }
 
 const TripDetailsCard: FC<Props> = ({ cardSubTitle, data }) => {
@@ -13,7 +13,7 @@ const TripDetailsCard: FC<Props> = ({ cardSubTitle, data }) => {
       <p className="font-bold text-sm mb-4">Trip details</p>
       <p className="font-bold text-sm mb-4">{cardSubTitle}</p>
       <div className="flex flex-col w-full gap-6">
-        {data.map((item, idx) => {
+        {data?.map((item, idx) => {
           return (
             <TripDetailItem
               {...item}

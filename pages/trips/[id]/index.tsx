@@ -53,6 +53,42 @@ const ViewTrip: NextPage = () => {
     setModalContent(<RaiseSosCard data={raiseSosData} />);
   };
 
+  const getTripDetails = ({
+    origin,
+    destination,
+    estimtedPrice,
+    paymentType,
+    tripStarted,
+    tripToEnd,
+  }: Record<string, string>) => {
+    return [
+      {
+        topTitle: "Origin",
+        topValue: origin,
+        topIcon: <OriginIcon />,
+        bottomTitle: "Destination",
+        bottomValue: destination,
+        bottomIcon: <DestinationIcon />,
+      },
+      {
+        topTitle: "Estimated Price",
+        topValue: estimtedPrice,
+        topIcon: <CashIcon />,
+        bottomTitle: "Payment Type",
+        bottomValue: paymentType,
+        bottomIcon: <WalletIcon />,
+      },
+      {
+        topTitle: "Trip started",
+        topValue: tripStarted,
+        topIcon: <ClockIcon />,
+        bottomTitle: "Trip to end",
+        bottomValue: new Date(tripToEnd).toLocaleDateString(),
+        bottomIcon: <ClockIcon />,
+      },
+    ];
+  };
+
   return (
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
@@ -108,7 +144,17 @@ const ViewTrip: NextPage = () => {
             <>
               <TripDetailsCard
                 cardSubTitle="Driving to destination"
-                data={tripDetailsData}
+                data={
+                  data &&
+                  getTripDetails({
+                    origin: data.origin,
+                    destination: data.destination,
+                    estimatedPrice: String(data.estimatedPrice),
+                    paymentType: data.paymentType,
+                    tripStarted: data.tripStarted,
+                    tripToEnd: data.tripEnded
+                  })
+                }
               />
               <div className="mt-5">
                 <CarOccupantDetailsCard
