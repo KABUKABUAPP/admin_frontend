@@ -3,7 +3,7 @@ import Button from "@/components/ui/Button/Button";
 import ChevronLeft from "@/components/icons/ChevronLeft";
 import { useRouter } from "next/router";
 
-const TripActionBar: FC<PropsWithChildren> = ({ children }) => {
+const ActionBar: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
 
   return (
@@ -27,4 +27,4 @@ const TripActionBar: FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
-export default TripActionBar;
+export default ActionBar;

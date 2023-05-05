@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import AppLayout from "@/layouts/AppLayout";
 import { NextPage } from "next";
-import TripActionBar from "@/components/modules/Trips/TripActionBar";
+import ActionBar from "@/components/common/ActionBar";
 import Button from "@/components/ui/Button/Button";
 import ViewTripLayout from "@/components/modules/Trips/ViewTripLayout";
 import AppMap from "@/components/common/AppMap";
@@ -92,7 +92,7 @@ const ViewTrip: NextPage = () => {
   return (
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
-        <TripActionBar>
+        <ActionBar>
           {isFeed ? (
             <Button
               title="Close Feed"
@@ -124,7 +124,7 @@ const ViewTrip: NextPage = () => {
             size="large"
             onClick={handleRaiseSos}
           />
-        </TripActionBar>
+        </ActionBar>
         <ViewTripLayout
           mainComponents={
             <>
@@ -225,29 +225,3 @@ const raiseSosData = [
   },
 ];
 
-const tripDetailsData: TripDetail[] = [
-  {
-    topTitle: "Origin",
-    topValue: "23, Kuvuki Land Igando",
-    topIcon: <OriginIcon />,
-    bottomTitle: "Destination",
-    bottomValue: "23, Kuvuki Land Igando",
-    bottomIcon: <DestinationIcon />,
-  },
-  {
-    topTitle: "Estimated Price",
-    topValue: "N1,600",
-    topIcon: <CashIcon />,
-    bottomTitle: "Payment Type",
-    bottomValue: "Cash",
-    bottomIcon: <WalletIcon />,
-  },
-  {
-    topTitle: "Trip started",
-    topValue: "Jan 1 2023 at 2:30pm",
-    topIcon: <ClockIcon />,
-    bottomTitle: "Trip to end",
-    bottomValue: "Jan 1, 2023 at 5:50pm (est. 20mins)",
-    bottomIcon: <ClockIcon />,
-  },
-];
