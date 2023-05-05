@@ -12,7 +12,7 @@ interface Props {
 
 const FarePriceCard: FC<Props> = ({ title, handleEdit, cardData }) => {
   return (
-    <div className="bg-[#FFFFFF] p-4 w-full rounded-lg shadow-md xl:max-w-[550px]">
+    <div className="bg-[#FFFFFF] p-4 w-full rounded-lg shadow-md xl:max-w-[550px] mb-4">
       <div className="flex items-center justify-between">
         <p className="text-lg font-bold">{title}</p>
         <IconButton

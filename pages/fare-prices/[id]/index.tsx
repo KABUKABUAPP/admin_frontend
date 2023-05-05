@@ -51,13 +51,29 @@ const FarePrice: NextPage = () => {
             />
           }
           mainComponents={
-            <FarePriceCard
-              title="Driver Fee"
-              cardData={[
-                { title: "Monthly Payment", body: "N20000/Month" },
-                { title: "Sharp Payment", body: "N20000/Month" },
-              ]}
-            />
+            <>
+              <FarePriceCard
+                title="Driver Fee"
+                cardData={[
+                  { title: "Monthly Payment", body: "N20000/Month" },
+                  { title: "Sharp Payment", body: "N20000/Month" },
+                ]}
+              />
+              <FarePriceCard
+                title="Fares[Normal]"
+                cardData={[
+                  { title: "Monthly Payment", body: "N20000/Month" },
+                  { title: "Sharp Payment", body: "N20000/Month" },
+                ]}
+              />
+              <FarePriceCard
+                title="Fares[Surge]"
+                cardData={[
+                  { title: "Monthly Payment", body: "N20000/Month" },
+                  { title: "Sharp Payment", body: "N20000/Month" },
+                ]}
+              />
+            </>
           }
         />
       </div>
