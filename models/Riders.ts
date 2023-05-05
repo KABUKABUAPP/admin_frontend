@@ -16,13 +16,15 @@ export interface Rider {
 }
 
 export interface GetAllRidersResponse {
-  riders: Rider[];
-  paginatedRecords: {
-    pageSize: number;
-    totalCount: number;
-    pageCount: number;
-    currentPage: number;
-    hasNext: boolean;
+  data: {
+    drivers: Rider[]
+    pagination: {
+      pageSize: number;
+      totalCount: number;
+      pageCount: number;
+      currentPage: number;
+      hasNext: boolean;
+    };
   };
   message: string;
 }

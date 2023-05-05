@@ -34,7 +34,8 @@ export const ridersApi = createApi({
       transformResponse: (response: GetAllRidersResponse) => {
         if (!response) return {} as MappedRidersData;
         else {
-          const mappedReponse: RidersTableBodyData[] = response.riders.map(
+          console.log(response)
+          const mappedReponse: RidersTableBodyData[] = response.data.drivers.map(
             (rider) => {
               return {
                 fullName: rider.full_name,
@@ -50,7 +51,7 @@ export const ridersApi = createApi({
 
           return {
             data: mappedReponse,
-            totalCount: response.paginatedRecords.totalCount,
+            totalCount: response.data.pagination.totalCount,
           };
         }
       },
