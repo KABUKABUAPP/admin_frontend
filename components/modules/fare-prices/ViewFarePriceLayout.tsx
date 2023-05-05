@@ -14,7 +14,7 @@ const ViewFarePriceLayout: FC<Props> = ({
       <aside className="w-[450px] max-lg:w-full lg:h-[calc(100vh-100px)] lg:overflow-y-scroll pt-10 pb-10 scrollbar-none">
         {asideComponents}
       </aside>
-      <main className="border border-red min-w-[450px] w-[calc(100%-600px)] max-lg:w-full lg:h-[calc(100vh-100px)] lg:overflow-y-scroll max-lg:h-screen p-4 pt-10 scrollbar-none">
+      <main className="w-[450px] max-lg:w-full lg:h-[calc(100vh-100px)] lg:overflow-y-scroll max-lg:h-screen pb-4 pt-10 scrollbar-none">
         {mainComponents}
       </main>
     </div>

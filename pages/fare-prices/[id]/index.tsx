@@ -8,6 +8,7 @@ import SurgeIcon from "@/components/icons/SurgeIcon";
 import TrashIcon from "@/components/icons/TrashIcon";
 import ViewFarePriceLayout from "@/components/modules/fare-prices/ViewFarePriceLayout";
 import FareDetailsCard from "@/components/modules/fare-prices/FareDetailsCard";
+import FarePriceCard from "@/components/modules/fare-prices/FarePriceCard";
 
 const FarePrice: NextPage = () => {
   return (
@@ -37,6 +38,9 @@ const FarePrice: NextPage = () => {
               totalTripsInState="3,000"
               createdOn="Jan 1 2022 at 5:30pm"
             />
+          }
+          mainComponents={
+            <FarePriceCard title="Driver Fee" cardData={[{title: 'Monthly Payment', body: 'N20000/Month'}]}/>
           }
         />
       </div>
