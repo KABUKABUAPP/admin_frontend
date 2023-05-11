@@ -7,6 +7,7 @@ import Button from "@/components/ui/Button/Button";
 import AddIcon from "@/components/icons/AddIcon";
 import FarePricesTable from "@/components/modules/fare-prices/FarePricesTable";
 import { useGetAllFarePricesQuery } from "@/api-services/farePricesService";
+import { useRouter } from "next/router";
 
 const FarePrices: NextPage = () => {
   const {
@@ -18,13 +19,20 @@ const FarePrices: NextPage = () => {
     refetchOnReconnect: true,
     refetchOnMountOrArgChange: true,
   });
-  
+
+  const router = useRouter();
 
   return (
     <AppLayout>
       <SearchFilterBar>
         <div className="flex justify-end mr-3">
-          <Button title="Add New Fare Profile" startIcon={<AddIcon />} />
+          <Button
+            title="Add New Fare Profile"
+            startIcon={<AddIcon />}
+            onClick={() => {
+              router.push("/fare-prices/new-fare-price");
+            }}
+          />
         </div>
       </SearchFilterBar>
 
