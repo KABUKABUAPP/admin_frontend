@@ -7,13 +7,16 @@ interface Props {
   size?: "sm" | "md" | "lg";
   imageUrl?: string;
   fallBack: string;
+  shape?: 'round' | 'square' 
 }
 
-const Avatar: FC<Props> = ({ size = "md", imageUrl, fallBack }) => {
+const Avatar: FC<Props> = ({ size = "md", imageUrl, fallBack, shape='round' }) => {
   const rootClassName = c(s.root, {
     [s.sm]: size === "sm",
     [s.md]: size === "md",
     [s.lg]: size === "lg",
+    [s.round]: shape === 'round',
+    [s.square]: shape === 'square'
   });
 
   return (

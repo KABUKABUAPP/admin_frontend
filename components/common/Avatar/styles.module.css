@@ -1,6 +1,14 @@
 
 .root {
-    @apply relative rounded-full overflow-hidden flex items-center justify-center bg-slate-300
+    @apply relative  overflow-hidden flex items-center justify-center bg-slate-300
+}
+
+.round {
+    @apply rounded-full
+}
+
+.square {
+    @apply rounded-lg
 }
 
 .sm {
