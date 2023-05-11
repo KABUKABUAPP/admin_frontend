@@ -5,6 +5,7 @@ import ActionBar from "@/components/common/ActionBar";
 import ViewSharpCarLayout from "@/components/modules/sharp-cars/ViewSharpCarLayout";
 import CarImagesCard from "@/components/modules/sharp-cars/CarImagesCard";
 import CarDetailsCard from "@/components/modules/sharp-cars/CarDetailsCard";
+import CarDocumentsCard from "@/components/modules/sharp-cars/CarDocumentsCard";
 
 const AddNew: FC = () => {
   return (
@@ -28,7 +29,7 @@ const AddNew: FC = () => {
               <CarDetailsCard />
             </>
           }
-          secondRow={<></>}
+          secondRow={<CarDocumentsCard />}
         />
       </div>
     </AppLayout>
