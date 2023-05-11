@@ -7,12 +7,12 @@ import Button from "@/components/ui/Button/Button";
 import PhoneIcon from "@/components/icons/PhoneIcon";
 import BlockIcon from "@/components/icons/BlockIcon";
 import ViewDriverLayout from "@/components/modules/drivers/ViewDriverLayout";
-import DriverInfoCard from "@/components/modules/drivers/DriverInfoCard";
+import DriverInfoCard from "@/components/common/UserInfoCard";
 import CarDetailsCard from "@/components/modules/drivers/CarDetailsCard";
 import FinancialsCard from "@/components/modules/drivers/FinancialsCard";
 import GuarantorDetailsCard from "@/components/modules/drivers/GuarantorDetailsCard";
 import CarDocuments from "@/components/modules/drivers/CarDocuments";
-import TripHistoryCard from "@/components/modules/drivers/TripHistoryCard";
+import TripHistoryCard from "@/components/common/TripHistoryCard";
 
 const Driver: NextPage = () => {
   return (
@@ -31,7 +31,7 @@ const Driver: NextPage = () => {
         <ViewDriverLayout
           secondRow={
             <>
-              <TripHistoryCard tripHistoryData={mockTripHistory}/>
+              <TripHistoryCard tripHistoryData={mockTripHistory} />
             </>
           }
           firstRow={
