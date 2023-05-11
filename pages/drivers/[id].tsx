@@ -8,10 +8,10 @@ import PhoneIcon from "@/components/icons/PhoneIcon";
 import BlockIcon from "@/components/icons/BlockIcon";
 import ViewDriverLayout from "@/components/modules/drivers/ViewDriverLayout";
 import DriverInfoCard from "@/components/common/UserInfoCard";
-import CarDetailsCard from "@/components/modules/drivers/CarDetailsCard";
-import FinancialsCard from "@/components/modules/drivers/FinancialsCard";
-import GuarantorDetailsCard from "@/components/modules/drivers/GuarantorDetailsCard";
-import CarDocuments from "@/components/modules/drivers/CarDocuments";
+import CarDetailsCard from "@/components/common/CarDetailsCard";
+import FinancialsCard from "@/components/common/FinancialsCard";
+import GuarantorDetailsCard from "@/components/common/GuarantorDetailsCard";
+import CarDocuments from "@/components/common/CarDocuments";
 import TripHistoryCard from "@/components/common/TripHistoryCard";
 
 const Driver: NextPage = () => {
