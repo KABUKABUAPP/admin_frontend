@@ -2,6 +2,7 @@ import React, { FC } from "react";
 
 import { StaffsTableData } from "@/models/Staffs";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 interface Props {
   data: StaffsTableData;
@@ -10,8 +11,12 @@ interface Props {
 const StaffTableBodyRow: FC<Props> = ({
   data: { staffId, fullName, role, location, status },
 }) => {
+  const router = useRouter();
   return (
-    <div className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6]">
+    <div
+      onClick={() => router.push(`/staffs/${staffId}`)}
+      className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6]"
+    >
       <div style={{ flex: 1 }} className="flex items-center">
         <Link href={`/staffs/${staffId}`}>
           <p className="text-xs font-bold cursor-pointer">{staffId}</p>

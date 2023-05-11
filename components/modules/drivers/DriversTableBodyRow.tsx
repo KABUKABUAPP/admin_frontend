@@ -3,6 +3,7 @@ import { DriversTableBodyData } from "@/models/Drivers";
 import Avatar from "@/components/common/Avatar";
 import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
+import { useRouter } from "next/router";
 
 interface Props {
   data: DriversTableBodyData;
@@ -20,16 +21,27 @@ const DriversTableBodyRow: FC<Props> = ({
     walletBalance,
   },
 }) => {
+  const router = useRouter();
+
   return (
-    <div className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6]">
+    <div
+      className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
+      onClick={() => router.push(`/drivers/${driverId}`)}
+    >
       <div style={{ flex: 1 }} className="flex items-center">
         <Link href={`/drivers/${driverId}`}>
-          <p className="text-xs font-bold cursor-pointer">{driverId || <Skeleton />}</p>
+          <p className="text-xs font-bold cursor-pointer">
+            {driverId || <Skeleton />}
+          </p>
         </Link>
       </div>
       <div style={{ flex: 2 }} className="flex items-center gap-2">
         <div>
-          {fullName ? <Avatar fallBack={fullName[0]} imageUrl={imageUrl} size="sm" />: <Skeleton />}
+          {fullName ? (
+            <Avatar fallBack={fullName[0]} imageUrl={imageUrl} size="sm" />
+          ) : (
+            <Skeleton />
+          )}
         </div>
         <p className="text-xs font-bold">{fullName || <Skeleton />}</p>
       </div>

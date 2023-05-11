@@ -3,6 +3,7 @@ import React, { FC } from "react";
 import { InspectorsTableBodyData } from "@/models/Inspectors";
 import Link from "next/link";
 import Avatar from "@/components/common/Avatar";
+import { useRouter } from "next/router";
 
 interface Props {
   data: InspectorsTableBodyData;
@@ -19,8 +20,12 @@ const InspectorsTableBodyRow: FC<Props> = ({
     totalCarsProcessed,
   },
 }) => {
+  const router = useRouter();
   return (
-    <div className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6]">
+    <div
+      onClick={() => router.push(`/inspectors/${inspectorId}`)}
+      className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
+    >
       <div style={{ flex: 1 }} className="flex items-center">
         <Link href={`/inspectors/${inspectorId}`}>
           <p className="text-xs font-bold cursor-pointer">{inspectorId}</p>

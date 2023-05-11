@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import Avatar from "@/components/common/Avatar";
 import { RidersTableBodyData } from "@/models/Riders";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 interface Props {
   data: RidersTableBodyData;
@@ -18,8 +19,13 @@ const RidersTableBodyRow: FC<Props> = ({
     imageUrl,
   },
 }) => {
+  const router = useRouter();
+
   return (
-    <div className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6]">
+    <div
+      onClick={() => router.push(`/riders/${riderId}`)}
+      className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
+    >
       <div style={{ flex: 1 }} className="flex items-center">
         <Link href={`/riders/${riderId}`}>
           <p className="text-xs font-bold cursor-pointer">{riderId}</p>

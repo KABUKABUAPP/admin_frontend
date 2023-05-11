@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import OriginDestinationCell from "@/components/common/OriginDestinationCell";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 interface Props {
   data: {
@@ -33,8 +34,13 @@ const SosTableRow: FC<Props> = ({
   },
   index,
 }) => {
+  const router = useRouter();
   return (
-    <div className="flex p-3 gap-6 border-b border-b[#E6E6E6]" key={index}>
+    <div
+      onClick={() => router.push(`/trips/${id}`)}
+      className="flex p-3 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
+      key={index}
+    >
       <div style={{ flex: 1 }} className="flex items-center cursor-pointer">
         <Link href={`/trips/${id}`}>
           <p className="text-xs font-bold">{id}</p>

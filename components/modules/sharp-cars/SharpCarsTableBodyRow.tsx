@@ -1,6 +1,7 @@
 import { SharpCarsTableBodyData } from "@/models/SharpCars";
 import Link from "next/link";
 import React, { FC } from "react";
+import { useRouter } from "next/router";
 
 interface Props {
   data: SharpCarsTableBodyData;
@@ -9,8 +10,12 @@ interface Props {
 const SharpCarsTableBodyRow: FC<Props> = ({
   data: { carBrandModel, carId, dateTimeAdded, driver, licenseNumber },
 }) => {
+  const router = useRouter();
   return (
-    <div className="flex p-3 py-8 gap-6 border-b border-b[#E6E6E6]">
+    <div
+      onClick={() => router.push(`/sharp-cars/${carId}`)}
+      className="flex p-3 py-8 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
+    >
       <div style={{ flex: 1 }} className="flex items-center">
         <Link href={`/sharp-cars/${carId}`}>
           <p className="text-xs font-bold cursor-pointer">{carId}</p>
