@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { useRouter } from "next/router";
 
 import SharpCarOptionItem from "./SharpCarOptionItem";
 import Button from "@/components/ui/Button/Button";
@@ -10,6 +11,9 @@ interface Props {
 }
 
 const SharpCarOptionBar: FC<Props> = ({ handleClickOption, options }) => {
+  
+  const router = useRouter()
+
   return (
     <div className="bg-[#FFFFFF] w-full px-2 py-6 flex max-sm:flex-col rounded-lg justify-between items-center gap-3">
       <div className="flex max-sm:flex-col">
@@ -25,7 +29,7 @@ const SharpCarOptionBar: FC<Props> = ({ handleClickOption, options }) => {
       </div>
 
       <div>
-        <Button title="Add New Car" startIcon={<AddIcon />}/>
+        <Button title="Add New Car" startIcon={<AddIcon />} onClick={()=>router.push('/sharp-cars/add-new')}/>
       </div>
     </div>
   );
