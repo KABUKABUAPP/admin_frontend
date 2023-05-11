@@ -9,6 +9,10 @@ import BlockIcon from "@/components/icons/BlockIcon";
 import ViewDriverLayout from "@/components/modules/drivers/ViewDriverLayout";
 import DriverInfoCard from "@/components/modules/drivers/DriverInfoCard";
 import CarDetailsCard from "@/components/modules/drivers/CarDetailsCard";
+import FinancialsCard from "@/components/modules/drivers/FinancialsCard";
+import GuarantorDetailsCard from "@/components/modules/drivers/GuarantorDetailsCard";
+import CarDocuments from "@/components/modules/drivers/CarDocuments";
+import TripHistoryCard from "@/components/modules/drivers/TripHistoryCard";
 
 const Driver: NextPage = () => {
   return (
@@ -25,6 +29,11 @@ const Driver: NextPage = () => {
         </ActionBar>
 
         <ViewDriverLayout
+          secondRow={
+            <>
+              <TripHistoryCard tripHistoryData={mockTripHistory}/>
+            </>
+          }
           firstRow={
             <>
               <DriverInfoCard
@@ -50,6 +59,31 @@ const Driver: NextPage = () => {
                 carColor="Black"
                 plateNumber="ABC 123 XCD"
               />
+
+              <FinancialsCard
+                walletBalance={"20,000"}
+                total={"130,000"}
+                subscriptionDue={"20,000"}
+              />
+
+              <GuarantorDetailsCard
+                address="6, Ebinpejo Lane, Idumota, Lagos, Nigeria"
+                fullname="Amaka Nweke"
+                image=""
+                phone="+234 903 4564"
+                relationship="Mother"
+              />
+
+              <CarDocuments
+                totalDocs={5}
+                documents={[
+                  {
+                    docId: "12334",
+                    docImage: "/testUser.jpg",
+                    title: "Drivers License",
+                  },
+                ]}
+              />
             </>
           }
         />
@@ -59,3 +93,36 @@ const Driver: NextPage = () => {
 };
 
 export default Driver;
+
+const mockTripHistory = [
+  {
+    originTop: "Kuvuki Land",
+    originBottom: "",
+    destinationTop: "Filmhouse Cinemas IMAX Lekki",
+    destinationBottom: "22, Ozumba Mbadiwe Street, Lekki, Lagos",
+    paymentMethod: "Wallet Payment",
+    date: "20 January, 2023 at 3:30pm",
+    amount: 1300,
+    id: "#12345",
+  },
+  {
+    originTop: "Kuvuki Land",
+    originBottom: "",
+    destinationTop: "Filmhouse Cinemas IMAX Lekki",
+    destinationBottom: "22, Ozumba Mbadiwe Street, Lekki, Lagos",
+    paymentMethod: "Wallet Payment",
+    date: "20 January, 2023 at 3:30pm",
+    amount: 1300,
+    id: "#12345",
+  },
+  {
+    originTop: "Kuvuki Land",
+    originBottom: "",
+    destinationTop: "Filmhouse Cinemas IMAX Lekki",
+    destinationBottom: "22, Ozumba Mbadiwe Street, Lekki, Lagos",
+    paymentMethod: "Wallet Payment",
+    date: "20 January, 2023 at 3:30pm",
+    amount: 1300,
+    id: "#12345",
+  },
+];
