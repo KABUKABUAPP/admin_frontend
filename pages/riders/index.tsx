@@ -12,7 +12,7 @@ const Riders: NextPage = () => {
   const [isFIlteringByBlockedRiders, setIsFilteringByBlockedRiders] =
     useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(2);
+  const [pageSize, setPageSize] = useState(5);
 
   const { data, isLoading, isError, refetch } = useGetAllRidesQuery(
     { limit: pageSize, page: currentPage },

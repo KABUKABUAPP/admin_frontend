@@ -5,26 +5,48 @@ import AppLayout from "@/layouts/AppLayout";
 import AccountBalanceCardContainer from "@/components/modules/Transactions/AccountBalanceCardContainer";
 import SearchFilterBar from "@/components/common/SearchFilterBar";
 import TransactionsTable from "@/components/modules/Transactions/TransactionsTable";
+import { useGetAllTransactionsQuery } from "@/api-services/transactionsService";
+import Pagination from "@/components/common/Pagination";
 
 const Transactions: NextPage = () => {
   const [accountCardData, setAccountCardData] = useState(mockData);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
+    { limit: pageSize, page: currentPage },
+    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
   const handleClickAccountCard = (title: string) => {
     const mutated = accountCardData.map((item) => {
       if (item.title === title) return { ...item, isActive: true };
       return { ...item, isActive: false };
     });
-    
-    setAccountCardData(mutated)
+
+    setAccountCardData(mutated);
   };
 
   return (
     <AppLayout>
       <AccountBalanceCardContainer
         data={accountCardData}
-        handleClick={(title) => handleClickAccountCard(title)}
+        handleClick={(title) => {}}
       />
       <SearchFilterBar />
-      <TransactionsTable />
+      <TransactionsTable
+        isError={isError}
+        isLoading={isLoading}
+        refetch={refetch}
+        tableData={data}
+      />
+      {data && (
+        <Pagination
+          className="pagination-bar"
+          currentPage={currentPage}
+          totalCount={data.totalCount}
+          pageSize={pageSize}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
+      )}
     </AppLayout>
   );
 };

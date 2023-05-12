@@ -24,7 +24,7 @@ interface Props {
 
 const CompletedTripsTable:FC<Props> = ({ setTripCount }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(3);
+  const [pageSize, setPageSize] = useState(5);
   const { data, isLoading, isError, refetch } = useGetAllTripsQuery(
     {
       page: currentPage,

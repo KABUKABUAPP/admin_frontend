@@ -31,7 +31,7 @@ interface Props {
 }
 
 const TripOrdersTable: FC<Props> = ({ setTripCount }) => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(5);
   const [pageSize, setPageSize] = useState(5);
   const { data, isLoading, isError, refetch } = useGetAllTripsQuery(
     {

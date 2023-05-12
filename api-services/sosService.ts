@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { AUTH_BASE_URL, RIDES_BASE_URL } from "@/constants";
+import {  RIDES_BASE_URL } from "@/constants";
 import { secondsToMilliSeconds } from "@/utils";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "@/constants";
