@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import AppLayout from "@/layouts/AppLayout";
 import ActionBar from "@/components/common/ActionBar";
 import ViewSharpCarLayout from "@/components/modules/sharp-cars/ViewSharpCarLayout";
-import CarImagesCard from "@/components/modules/sharp-cars/CarImagesCard";
+import CarImagesCard from "@/components/common/DeleteableImagesCard";
 import CarDetailsCard from "@/components/modules/sharp-cars/CarDetailsCard";
 import CarDocumentsCard from "@/components/modules/sharp-cars/CarDocumentsCard";
 

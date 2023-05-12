@@ -2,16 +2,17 @@ import React, { FC } from "react";
 
 import Card from "@/components/common/Card";
 import Button from "@/components/ui/Button/Button";
-import CarImage from "./CarImage";
+import CarImage from "../modules/sharp-cars/CarImage";
 
 interface Props {
   images?: { image: string; imageId: string }[];
+  title?: string
 }
 
-const CarImagesCard: FC<Props> = ({ images }) => {
+const DeleteableImagesCard: FC<Props> = ({ images, title }) => {
   return (
     <Card>
-      <p className="text-lg font-semibold pb-2">Car Images</p>
+      <p className="text-lg font-semibold pb-2">{title || `Car Images`}</p>
       <Button
         title="Click to upload"
         variant="text"
@@ -29,4 +30,4 @@ const CarImagesCard: FC<Props> = ({ images }) => {
   );
 };
 
-export default CarImagesCard;
+export default DeleteableImagesCard;

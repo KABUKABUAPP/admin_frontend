@@ -30,7 +30,7 @@ const ViewTrip: NextPage = () => {
   const { id } = router.query;
 
   const { data, isLoading, isError, refetch } = useViewTripQuery(
-    { id: "645370d10b7381dbbb771f7a" },
+    { id: id ? String(id) : '' },
     { skip: id === undefined }
   );
 

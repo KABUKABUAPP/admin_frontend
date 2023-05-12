@@ -8,6 +8,7 @@ import Button from "@/components/ui/Button/Button";
 import AddIcon from "@/components/icons/AddIcon";
 import { useGetAllInspectorsQuery } from "@/api-services/inspectorsService";
 import Pagination from "@/components/common/Pagination";
+import { useRouter } from "next/router";
 
 const Inspectors: NextPage = () => {
   const [carOwner, setCarOwner] = useState<boolean>(false);
@@ -19,12 +20,15 @@ const Inspectors: NextPage = () => {
     isError: inspectorsError,
     refetch: reloadInspectors,
   } = useGetAllInspectorsQuery({ limit: pageSize, page: currentPage });
+  const router = useRouter()
 
   return (
     <AppLayout>
       <SearchFilterBar>
         <div className="flex justify-end mr-3">
-          <Button title="Add Inspector" startIcon={<AddIcon />} />
+          <Button title="Add Inspector" startIcon={<AddIcon />} onClick={()=>{
+            router.push('inspectors/add-inspector')
+          }}/>
         </div>
       </SearchFilterBar>
       <InspectorsTable

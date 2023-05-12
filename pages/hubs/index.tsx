@@ -8,6 +8,7 @@ import AddIcon from "@/components/icons/AddIcon";
 import HubsTable from "@/components/modules/hubs/HubsTable";
 import { useGetAllHubsQuery } from "@/api-services/hubService";
 import Pagination from "@/components/common/Pagination";
+import { useRouter } from "next/router";
 
 const Hubs: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,11 +19,15 @@ const Hubs: NextPage = () => {
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
+  const router = useRouter()
+
   return (
     <AppLayout>
       <SearchFilterBar>
         <div className="flex justify-end mr-3">
-          <Button title="Add New Hub" startIcon={<AddIcon />} />
+          <Button title="Add New Hub" startIcon={<AddIcon />} onClick={()=>{
+            router.push('/hubs/add-hub')
+          }}/>
         </div>
       </SearchFilterBar>
 
