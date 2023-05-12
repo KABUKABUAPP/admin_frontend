@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import React from "react";
-import AppLayout from "@/layouts/AppLayout";
 
+import AppLayout from "@/layouts/AppLayout";
 import ActionBar from "@/components/common/ActionBar";
 import Button from "@/components/ui/Button/Button";
 import SurgeIcon from "@/components/icons/SurgeIcon";

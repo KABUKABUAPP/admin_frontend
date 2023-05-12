@@ -15,6 +15,7 @@ interface Props {
   rating?: number;
   image?: string;
   isLoading?: boolean;
+  totalCarsProcessed?: number
 }
 
 const UserInfoCard: FC<Props> = ({
@@ -26,6 +27,7 @@ const UserInfoCard: FC<Props> = ({
   rating,
   image,
   isLoading,
+  totalCarsProcessed
 }) => {
   return (
     <Card>
@@ -63,6 +65,7 @@ const UserInfoCard: FC<Props> = ({
               )}
             </p>
           )}
+          {totalCarsProcessed && <p className="text-lg font-semibold">{totalCarsProcessed} Car(s) processed</p>}
         </div>
       </div>
     </Card>
