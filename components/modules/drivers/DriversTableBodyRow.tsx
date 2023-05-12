@@ -28,7 +28,7 @@ const DriversTableBodyRow: FC<Props> = ({
       className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
       onClick={() => router.push(`/drivers/${driverId}`)}
     >
-      <div style={{ flex: 1 }} className="flex items-center">
+      <div style={{ flex: 2 }} className="flex items-center">
         <Link href={`/drivers/${driverId}`}>
           <p className="text-xs font-bold cursor-pointer">
             {driverId || <Skeleton />}

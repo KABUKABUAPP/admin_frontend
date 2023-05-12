@@ -195,7 +195,7 @@ export const pendingTripsApi = createApi({
         else {
           return response.data.data.map((application) => {
             return {
-              fullName: application.user.full_name,
+              fullName: application.user?.full_name || '',
               location: `${application.state}, ${application.city}`,
               image: "",
             };
@@ -217,7 +217,7 @@ export const pendingTripsApi = createApi({
         else {
           return response.data.data.map((application) => {
             return {
-              fullName: application.user.full_name,
+              fullName: application.user?.full_name,
               location: `${application.state}, ${application.city}`,
               image: "",
             };

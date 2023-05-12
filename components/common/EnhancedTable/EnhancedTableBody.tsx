@@ -19,24 +19,27 @@ const EnhancedTableBody: FC<Props> = ({
   isError = false,
   isLoading,
   refetch,
-  headCellData
+  headCellData,
 }) => {
-
   return (
     <div className="w-full bg-[#FFFFFF]">
       {rowData &&
         rowData.map((item, idx) => {
           return rowComponent(item, idx);
         })}
-      {isLoading && (
-        <TableLoader headCellData={headCellData}/>
+      {rowData && rowData.length < 1 && (
+        <p className="text-center py-4">No Records Found</p>
       )}
+      {isLoading && <TableLoader headCellData={headCellData} />}
       {isError && (
         <div className="flex flex-col justify-center items-center gap-2 py-4">
           <ErrorMessage message="Error Fetching Data" />
-          <Button title="Reload" onClick={()=>{
-            if(refetch) refetch()
-          }} />
+          <Button
+            title="Reload"
+            onClick={() => {
+              if (refetch) refetch();
+            }}
+          />
         </div>
       )}
     </div>

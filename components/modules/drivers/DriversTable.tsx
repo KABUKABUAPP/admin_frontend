@@ -12,7 +12,7 @@ interface Props {
 }
 
 const headCellData = [
-    { title: "Driver ID", flex: 1 },
+    { title: "Driver ID", flex: 2 },
     { title: "Full Name", flex: 2 },
     { title: "Location", flex: 1 },
     { title: "Total Trips", flex: 1 },

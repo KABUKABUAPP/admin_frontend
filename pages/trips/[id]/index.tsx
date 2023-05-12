@@ -56,7 +56,7 @@ const ViewTrip: NextPage = () => {
   const getTripDetails = ({
     origin,
     destination,
-    estimtedPrice,
+    estimatedPrice,
     paymentType,
     tripStarted,
     tripToEnd,
@@ -72,7 +72,7 @@ const ViewTrip: NextPage = () => {
       },
       {
         topTitle: "Estimated Price",
-        topValue: estimtedPrice,
+        topValue: estimatedPrice,
         topIcon: <CashIcon />,
         bottomTitle: "Payment Type",
         bottomValue: paymentType,
@@ -149,7 +149,7 @@ const ViewTrip: NextPage = () => {
                   getTripDetails({
                     origin: data.origin,
                     destination: data.destination,
-                    estimatedPrice: String(data.estimatedPrice),
+                    estimatedPrice: data.estimatedPrice.toString(),
                     paymentType: data.paymentType,
                     tripStarted: data.tripStarted,
                     tripToEnd: data.tripEnded

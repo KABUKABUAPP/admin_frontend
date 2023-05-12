@@ -38,13 +38,13 @@ export const driversApi = createApi({
           const totalCount = response.data.pagination.totalCount
           const mappedReponse = response.data.drivers.map((driver) => {
             return {
-              driverId: driver._id,
-              fullName: driver.user.full_name,
+              driverId: driver?._id,
+              fullName: driver.user?.full_name,
               location: `${driver.country}, ${driver.state}`,
               imageUrl: '',
-              driverType: driver.car_owner ? 'Regular Driver' : 'Sharp Car Driver',
-              totalTrips: driver.total_trips,
-              walletBalance: driver.wallet_balance,
+              driverType: driver?.car_owner ? 'Regular Driver' : 'Sharp Car Driver',
+              totalTrips: driver?.total_trips,
+              walletBalance: driver?.wallet_balance,
               status: '',
             };
           });
