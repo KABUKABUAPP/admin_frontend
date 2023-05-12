@@ -11,9 +11,20 @@ import FareDetailsCard from "@/components/modules/fare-prices/FareDetailsCard";
 import FarePriceCard from "@/components/modules/fare-prices/FarePriceCard";
 import { useModalContext } from "@/contexts/ModalContext";
 import StartSurgeCard from "@/components/modules/fare-prices/StartSurgeCard";
+import { useRouter } from "next/router";
+import { useViewFarePriceQuery } from "@/api-services/farePricesService";
+import Loader from "@/components/ui/Loader/Loader";
 
 const FarePrice: NextPage = () => {
   const { setModalContent } = useModalContext();
+  const router = useRouter();
+
+  const { id } = router.query;
+
+  const { data, isLoading, isError, refetch } = useViewFarePriceQuery(
+    { id: id as string },
+    { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
 
   const handleStartSurge = () => {
     setModalContent(
@@ -39,43 +50,66 @@ const FarePrice: NextPage = () => {
             startIcon={<TrashIcon />}
           />
         </ActionBar>
+        {isLoading && !data && !isError && (
+          <div className="pt-6 flex justify-center w-full">
+            <Loader size="medium"/>
+          </div>
+        )}
+        {!data && isError && !isLoading &&
+          <div className="flex flex-col items-center gap-3 pt-6">
+            <p className="text-rose-600">Oops! Something went wrong</p>
+            <div><Button title="Reload" onClick={refetch}/></div>
+          </div>
+        }
+        {data && !isLoading && !isError && (
+          <ViewFarePriceLayout
+            asideComponents={
+              <FareDetailsCard
+                fareId={`#${data.data._id}`}
+                fareLocation={`${data.data.state}, ${data.data.country}`}
+                totalFares={`4`}
+                totalTripsInState={`₦3000`}
+                createdOn={new Date(data.data.created_at).toLocaleDateString()}
+              />
+            }
+            mainComponents={
+              <>
+                <FarePriceCard
+                  title="Driver Fee"
+                  cardData={[
+                    {
+                      title: "Monthly Payment",
+                      body: `₦${data.data.driver_fee.monthly_payment}/Month`,
+                    },
+                    {
+                      title: "Sharp Payment",
+                      body: `₦${data.data.driver_fee.sharp_payment}/Month`,
+                    },
+                  ]}
+                />
+                <FarePriceCard
+                  title="Fares[Normal]"
+                  cardData={[
+                    { title: "Base Fare", body: `₦${data.data.base_fare}` },
+                    {
+                      title: "Distance",
+                      body: `₦${data.data.distance_per_km}/km`,
+                    },
+                    { title: "Time", body: `₦${data.data.time_per_min}/min` },
+                    { title: "LASG Levy", body: `${data.data.state_levy}%` },
+                    { title: "Booking Fee", body: `₦${data.data.booking_fee}` },
+                    {
+                      title: "Surge Multiplier",
+                      body: `${data.data.surge_multiplier}`,
+                    },
+                  ]}
+                />
+              </>
+            }
+          />
+        )}
 
-        <ViewFarePriceLayout
-          asideComponents={
-            <FareDetailsCard
-              fareId="#1234"
-              fareLocation="Lagos, Nigeria"
-              totalFares="4"
-              totalTripsInState="3,000"
-              createdOn="Jan 1 2022 at 5:30pm"
-            />
-          }
-          mainComponents={
-            <>
-              <FarePriceCard
-                title="Driver Fee"
-                cardData={[
-                  { title: "Monthly Payment", body: "N20000/Month" },
-                  { title: "Sharp Payment", body: "N20000/Month" },
-                ]}
-              />
-              <FarePriceCard
-                title="Fares[Normal]"
-                cardData={[
-                  { title: "Monthly Payment", body: "N20000/Month" },
-                  { title: "Sharp Payment", body: "N20000/Month" },
-                ]}
-              />
-              <FarePriceCard
-                title="Fares[Surge]"
-                cardData={[
-                  { title: "Monthly Payment", body: "N20000/Month" },
-                  { title: "Sharp Payment", body: "N20000/Month" },
-                ]}
-              />
-            </>
-          }
-        />
+       
       </div>
     </AppLayout>
   );

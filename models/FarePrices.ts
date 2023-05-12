@@ -33,3 +33,39 @@ export interface GetAllFarePricesResponse {
 export interface FarePricesMappedData {
   data: FarePricesTableData[];
 }
+
+export interface ViewFarePriceResponse {
+  status: string;
+  code: number;
+  data: {
+    driver_fee: {
+      monthly_payment: number;
+      sharp_payment: number;
+    };
+    payment_types_available: {
+      cash: boolean;
+      wallet: boolean;
+      card: boolean;
+    };
+    _id: string;
+    state: string;
+    country: string;
+    base_fare: number;
+    distance_per_km: number;
+    time_per_min: number;
+    state_levy: number;
+    booking_fee: number;
+    waiting_time_per_min: number;
+    surge_multiplier: number;
+    surge_status: boolean;
+    currency: string;
+    created_at: string;
+    updated_at: string;
+    __v: number;
+  };
+  message: string;
+}
+
+export interface ViewFareQuery {
+  id: string;
+}

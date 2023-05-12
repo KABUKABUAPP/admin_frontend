@@ -8,6 +8,8 @@ import {
   FarePricesMappedData,
   FarePricesTableData,
   GetAllFarePricesResponse,
+  ViewFarePriceResponse,
+  ViewFareQuery
 } from "@/models/FarePrices";
 
 export const farePricesApi = createApi({
@@ -49,7 +51,13 @@ export const farePricesApi = createApi({
         }
       },
     }),
+
+    viewFarePrice: build.query<ViewFarePriceResponse, ViewFareQuery>({
+      query: ({ id })=>({
+        url: `admin/price/view/${id}`
+      })
+    })
   }),
 });
 
-export const { useGetAllFarePricesQuery } = farePricesApi
+export const { useGetAllFarePricesQuery, useViewFarePriceQuery } = farePricesApi
