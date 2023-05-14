@@ -12,23 +12,6 @@ import RatingIcon from "@/components/icons/RatingIcon";
 import CloseIcon from "@/components/icons/CloseIcon";
 
 interface Props {
-  origin?: string;
-  topDestination?: string;
-  bottomDestination?: string;
-  dateTime?: string;
-  paymentMethod?: string;
-  totalAmount?: number;
-  baseFare?: number;
-  distance?: number;
-  time?: number;
-  levy?: number;
-  bookingFee?: number;
-  carModel?: string;
-  carColor?: string;
-  plateNumber?: string;
-  fullname?: string;
-  rating?: number;
-  totalTrips?: number;
   handleClose: () => void;
 }
 
