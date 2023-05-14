@@ -13,8 +13,19 @@ import FinancialsCard from "@/components/common/FinancialsCard";
 import GuarantorDetailsCard from "@/components/common/GuarantorDetailsCard";
 import CarDocuments from "@/components/common/CarDocuments";
 import TripHistoryCard from "@/components/common/TripHistoryCard";
+import { useRouter } from "next/router";
+import { useViewDriverQuery } from "@/api-services/driversService";
 
 const Driver: NextPage = () => {
+  const router = useRouter();
+
+  const { id } = router.query;
+
+  const {} = useViewDriverQuery(
+    { id: String(id) },
+    { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
+
   return (
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">

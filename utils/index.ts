@@ -75,3 +75,17 @@ export const getComponentStates = ({
     errorState,
   };
 };
+
+export const formatChartLabels = ({
+  query,
+  data,
+}: {
+  query?: string;
+  data: string[];
+}) => {
+  return data.map((item) => {
+    const splitString = item.split(" ");
+    if (query === "7_days") return splitString[0];
+    return splitString[1]
+  });
+};

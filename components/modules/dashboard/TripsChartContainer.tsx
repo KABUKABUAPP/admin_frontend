@@ -6,6 +6,7 @@ import Loader from "@/components/ui/Loader/Loader";
 import Button from "@/components/ui/Button/Button";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import DropDown from "@/components/ui/DropDown";
+import { formatChartLabels } from "@/utils";
 
 interface Props {
   chartData?: { day?: string; trips: number; month?: string }[];
@@ -57,7 +58,10 @@ const TripsChartContainer: FC<Props> = ({
         {viewState && chartData && (
           <TripsChart
             chartData={chartData.map((item) => item.trips)}
-            labels={chartData.map((item) => item.day || "")}
+            labels={formatChartLabels({
+              query: dropDownOptionSelected,
+              data: chartData.map((item) => item.day || ""),
+            })}
           />
         )}
         {loadingState && (

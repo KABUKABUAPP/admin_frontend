@@ -8,6 +8,8 @@ import {
   GetAllDriversResponse,
   GetAllDriversQuery,
   DriversMappedResponse,
+  ViewDriverResponse,
+  ViewDriverQuery,
 } from "@/models/Drivers";
 
 export const driversApi = createApi({
@@ -25,35 +27,42 @@ export const driversApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['drivers'],
+  tagTypes: ["drivers"],
   endpoints: (build) => ({
     getAllDrivers: build.query<DriversMappedResponse, GetAllDriversQuery>({
       query: ({ limit, page, carOwner, driverStatus }) => ({
         url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}`,
       }),
-      providesTags: ['drivers'],
+      providesTags: ["drivers"],
       transformResponse: (response: GetAllDriversResponse) => {
         if (!response) return {} as DriversMappedResponse;
         else {
-          const totalCount = response.data.pagination.totalCount
+          const totalCount = response.data.pagination.totalCount;
           const mappedReponse = response.data.drivers.map((driver) => {
             return {
               driverId: driver?._id,
               fullName: driver.user?.full_name,
               location: `${driver.country}, ${driver.state}`,
-              imageUrl: '',
-              driverType: driver?.car_owner ? 'Regular Driver' : 'Sharp Car Driver',
+              imageUrl: "",
+              driverType: driver?.car_owner
+                ? "Regular Driver"
+                : "Sharp Car Driver",
               totalTrips: driver?.total_trips,
               walletBalance: driver?.wallet_balance,
-              status: '',
+              status: "",
             };
           });
 
-          return {data: mappedReponse, totalCount: totalCount};
+          return { data: mappedReponse, totalCount: totalCount };
         }
       },
+    }),
+    viewDriver: build.query<ViewDriverResponse, ViewDriverQuery>({
+      query: ({ id }) => ({
+        url: `admin/driver/view/${id}`,
+      }),
     }),
   }),
 });
 
-export const { useGetAllDriversQuery } = driversApi
+export const { useGetAllDriversQuery, useViewDriverQuery } = driversApi;
