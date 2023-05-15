@@ -207,7 +207,7 @@ export interface ViewTripResponse {
 }
 
 export interface ViewTripQuery {
-  id: string
+  id: string;
 }
 
 export interface MappedViewTripResponse {
@@ -232,3 +232,4 @@ export interface MappedViewTripResponse {
   riderImage: string;
   driverImage: string;
 }
+

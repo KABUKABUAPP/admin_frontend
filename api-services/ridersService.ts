@@ -9,6 +9,9 @@ import {
   GetAllRidersResponse,
   MappedRidersData,
   RidersTableBodyData,
+  MappedViewRider,
+  ViewRiderQuery,
+  ViewRiderResponse,
 } from "@/models/Riders";
 
 export const ridersApi = createApi({
@@ -34,9 +37,8 @@ export const ridersApi = createApi({
       transformResponse: (response: GetAllRidersResponse) => {
         if (!response) return {} as MappedRidersData;
         else {
-          console.log(response)
-          const mappedReponse: RidersTableBodyData[] = response.data.drivers.map(
-            (rider) => {
+          const mappedReponse: RidersTableBodyData[] =
+            response.data.drivers.map((rider) => {
               return {
                 fullName: rider.full_name,
                 imageUrl: "",
@@ -46,8 +48,7 @@ export const ridersApi = createApi({
                 totalTrips: 0,
                 walletBalance: rider.wallet_balance,
               };
-            }
-          );
+            });
 
           return {
             data: mappedReponse,
@@ -56,7 +57,32 @@ export const ridersApi = createApi({
         }
       },
     }),
+    viewRider: build.query<MappedViewRider, ViewRiderQuery>({
+      query: ({ id, status }) => ({
+        url: `admin/rider/view/${id}?status=${status}`,
+      }),
+      transformResponse: (response: ViewRiderResponse) => {
+        if (!response) return <MappedViewRider>{};
+        return {
+          driver: {
+            fullname: response.data?.full_name,
+            address: ``,
+            tripCount: response.data?.total_trips,
+            rating: 0,
+          },
+          financials: {
+            total: response.data?.total_spent?.toString(),
+            walletBalance: response.data?.wallet_balance?.toString(),
+          },
+          nextOfKin: {
+            fullname: response.data?.next_of_kin.full_name,
+            relationship: response.data?.next_of_kin.relationship,
+            phone: response.data?.next_of_kin.phone_number?.toString(),
+          },
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetAllRidesQuery } = ridersApi;
+export const { useGetAllRidesQuery, useViewRiderQuery } = ridersApi;

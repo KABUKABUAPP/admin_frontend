@@ -17,7 +17,7 @@ export interface Rider {
 
 export interface GetAllRidersResponse {
   data: {
-    drivers: Rider[]
+    drivers: Rider[];
     pagination: {
       pageSize: number;
       totalCount: number;
@@ -35,6 +35,54 @@ export interface GetAllRidersQuery {
 }
 
 export interface MappedRidersData {
-  data:RidersTableBodyData[];
-  totalCount: number
+  data: RidersTableBodyData[];
+  totalCount: number;
+}
+
+export interface ViewRiderResponse {
+  status: string;
+  code: number;
+  data: {
+    _id: string;
+    next_of_kin: {
+      full_name: string;
+      relationship: string;
+      phone_number: string;
+    };
+    average_rating: {
+      value: number;
+      count: number;
+    };
+    full_name: string;
+    phone_number: string;
+    email: string;
+    total_trips: number;
+    profile_image: string;
+    total_spent: number;
+    wallet_balance: number;
+  };
+  message: string;
+}
+
+export interface ViewRiderQuery {
+  id: string;
+  status?: string 
+}
+
+export interface MappedViewRider {
+  driver: {
+    fullname: string;
+    address: string;
+    tripCount: number;
+    rating: number
+  };
+  financials: {
+    total: string;
+    walletBalance: string;
+  }
+  nextOfKin: {
+    fullname: string;
+    relationship: string;
+    phone: string
+  }
 }

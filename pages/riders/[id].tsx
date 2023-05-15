@@ -11,8 +11,19 @@ import UserInfoCard from "@/components/common/UserInfoCard";
 import FinancialsCard from "@/components/modules/riders/FinancialsCard";
 import NextOfKinCard from "@/components/modules/riders/NextOfKinCard";
 import TripHistoryCard from "@/components/common/TripHistoryCard";
+import { useViewRiderQuery } from "@/api-services/ridersService";
+import { useRouter } from "next/router";
 
 const Rider: NextPage = () => {
+  const router = useRouter();
+
+  const { id } = router.query;
+
+  const { data, isLoading, isError } = useViewRiderQuery(
+    { id: String(id), status: "" },
+    { skip: !id, refetchOnReconnect: true, refetchOnMountOrArgChange: true }
+  );
+
   return (
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
@@ -29,23 +40,12 @@ const Rider: NextPage = () => {
         <ViewRiderLayout
           firstRow={
             <>
-              <UserInfoCard
-                fullname="John Doe"
-                address="Lagos, Nigeria"
-                tripCount={14}
-                rating={3.6}
-              />
-              <FinancialsCard total={"130,000"} walletBalance={"20,000"} />
-              <NextOfKinCard
-                fullname="Amaka Nweke"
-                relationship="Mother"
-                phone="+234 903 4564"
-              />
+              <UserInfoCard {...data?.driver} />
+              <FinancialsCard {...data?.financials} />
+              <NextOfKinCard {...data?.nextOfKin} />
             </>
           }
-
-          secondRow={
-            <TripHistoryCard tripHistoryData={mockTripHistory} />}
+          secondRow={<TripHistoryCard tripHistoryData={mockTripHistory} />}
         />
       </div>
     </AppLayout>

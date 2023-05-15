@@ -27,6 +27,7 @@ const Drivers: NextPage = () => {
     isLoading: driversLoading,
     isError: driversError,
     refetch: reloadDrivers,
+    error
   } = useGetAllDriversQuery(
     {
       carOwner: carOwner,
@@ -39,6 +40,10 @@ const Drivers: NextPage = () => {
       refetchOnReconnect: true,
     }
   );
+
+  useEffect(()=>{
+    if(error) console.log('active error', error)
+  },[error])
 
   const handleActiveDriverOption = (keyVal: string) => {
     const mutatedOptions = driverOptions.map((option) => {

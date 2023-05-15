@@ -8,7 +8,7 @@ interface Props {
   total?: string | number;
 }
 
-const FinancialsCard: FC<Props> = ({walletBalance, total}) => {
+const FinancialsCard: FC<Props> = ({ walletBalance, total }) => {
   return (
     <Card>
       <div className="flex flex-col gap-4">
@@ -22,15 +22,23 @@ const FinancialsCard: FC<Props> = ({walletBalance, total}) => {
         </div>
 
         <div className="flex py-4">
-          <div className="pr-3 border-r border-r-[#D4D4D4]">
-            <p className="text-2xl font-semibold">N{walletBalance}</p>
-            <p className="text-lg text-[#9A9A9A]">Wallet Balance</p>
-          </div>
+          {walletBalance && (
+            <div className="pr-3 border-r border-r-[#D4D4D4]">
+              <p className="text-2xl font-semibold">
+                N{Number(walletBalance)?.toLocaleString()}
+              </p>
+              <p className="text-lg text-[#9A9A9A]">Wallet Balance</p>
+            </div>
+          )}
 
-          <div className="pl-3">
-            <p className="text-2xl font-semibold">N{total}</p>
-            <p className="text-lg text-[#9A9A9A]">Total amount spent</p>
-          </div>
+          {total && (
+            <div className="pl-3">
+              <p className="text-2xl font-semibold">
+                N{Number(total)?.toLocaleString()}
+              </p>
+              <p className="text-lg text-[#9A9A9A]">Total amount spent</p>
+            </div>
+          )}
         </div>
       </div>
     </Card>
