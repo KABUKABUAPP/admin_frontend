@@ -15,7 +15,7 @@ const StaffTableBodyRow: FC<Props> = ({
   return (
     <div
       onClick={() => router.push(`/staffs/${staffId}`)}
-      className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6]"
+      className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
     >
       <div style={{ flex: 1 }} className="flex items-center">
         <Link href={`/staffs/${staffId}`}>

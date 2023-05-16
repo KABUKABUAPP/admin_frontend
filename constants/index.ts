@@ -1,5 +1,6 @@
 export const AUTH_BASE_URL = process.env.NEXT_PUBLIC_AUTH_URL;
 export const RIDES_BASE_URL = process.env.NEXT_PUBLIC_RIDE_BASE_URL;
+export const HUBS_BASE_URL = process.env.NEXT_PUBLIC_HUBS_BASE_URL
 export const milliSecondToSecondConversionRate = 1000;
 export const ACCESS_TOKEN = "AUTH_TOKEN__ACESS-$";
 export const USER_TOKEN = "USER_stoRED_$##";

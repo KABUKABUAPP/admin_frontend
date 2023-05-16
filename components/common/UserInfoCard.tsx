@@ -16,6 +16,7 @@ interface Props {
   image?: string;
   isLoading?: boolean;
   totalCarsProcessed?: number
+  role?: string;
 }
 
 const UserInfoCard: FC<Props> = ({
@@ -27,7 +28,8 @@ const UserInfoCard: FC<Props> = ({
   rating,
   image,
   isLoading,
-  totalCarsProcessed
+  totalCarsProcessed,
+  role
 }) => {
   return (
     <Card>
@@ -46,9 +48,10 @@ const UserInfoCard: FC<Props> = ({
         </div>
         <div className="flex flex-col gap-2">
           {fullname && <p className="text-3xl font-semibold">{fullname}</p>}
+          {role && <p className="text-lg font-semibold">{role}</p>}
           {address && <p className="text-lg font-semibold">{address}</p>}
-          {email && <p className="text-sm font-semibold">{email}</p>}
-          {phone && <p className="text-sm font-semibold">{phone}</p>}
+          {email && <p className="text-base font-semibold">{email}</p>}
+          {phone && <p className="text-base font-semibold">{phone}</p>}
           {tripCount && (
             <p className="text-sm font-semibold">
               {(tripCount && `${tripCount} trips`) || (

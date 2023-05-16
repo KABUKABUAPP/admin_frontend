@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { AUTH_BASE_URL } from "@/constants";
+import { HUBS_BASE_URL } from "@/constants";
 import { secondsToMilliSeconds } from "@/utils";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "@/constants";
@@ -14,7 +14,7 @@ import {
 export const inspectorsApi = createApi({
   reducerPath: "inspectorsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${AUTH_BASE_URL}/`,
+    baseUrl: `${HUBS_BASE_URL}/`,
     timeout: secondsToMilliSeconds(30),
     prepareHeaders(headers) {
       const token = Cookies.get(ACCESS_TOKEN);
