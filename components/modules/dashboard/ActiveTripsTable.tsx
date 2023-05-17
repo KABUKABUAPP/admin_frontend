@@ -15,10 +15,10 @@ const ActiveTripsTable: FC = () => {
   );
 
   return (
-    <div className="w-full  ">
+    <div className="w-full ">
       <ActiveTripsTableHead />
       <ActiveTripsTableBody
-        data={data?.data}
+        data={data && !data.data ? [] : undefined}
         loading={isLoading}
         error={isError}
         refetch={refetch}
