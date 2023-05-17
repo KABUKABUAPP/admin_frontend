@@ -14,12 +14,14 @@ const Hubs: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(2);
 
-  const { data, isLoading, isError, refetch } = useGetAllHubsQuery(
+  const { data, isLoading, isError, refetch, error } = useGetAllHubsQuery(
     { limit: pageSize, page: currentPage },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
   const router = useRouter()
+
+  console.log(error)
 
   return (
     <AppLayout>

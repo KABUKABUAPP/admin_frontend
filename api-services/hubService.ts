@@ -38,10 +38,10 @@ export const hubsApi = createApi({
             (hub) => {
               return {
                 hubId: hub._id,
-                hubName: hub.name,
-                dateCreated: hub.created_at.toDateString(),
-                inspector: `${hub.inspector.last_name} ${hub.inspector.first_name}`,
-                stateCountry: `${hub.state}, ${hub.country}`,
+                hubName: hub?.name,
+                dateCreated: new Date(hub.created_at).toDateString(),
+                inspector: `${hub.inspector?.last_name} ${hub.inspector?.first_name}`,
+                stateCountry: `${hub?.state}, ${hub?.country}`,
                 totalCarsProcessed: 0,
               };
             }

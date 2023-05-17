@@ -24,7 +24,7 @@ const AppMap: FC<Props> = ({ location }) => {
   return (
     <div className="w-full h-full rounded-lg overflow-hidden" id="map">
       <GoogleMapReact
-        bootstrapURLKeys={{ key: "" }}
+        bootstrapURLKeys={{ key }}
         defaultCenter={location}
         defaultZoom={11}
         onGoogleApiLoaded={({ map, maps }) => {

@@ -169,7 +169,7 @@ export const {
 export const pendingTripsApi = createApi({
   reducerPath: "pendingTripsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${AUTH_BASE_URL}`,
+    baseUrl: `${RIDES_BASE_URL}`,
     timeout: secondsToMilliSeconds(30),
     prepareHeaders(headers) {
       const token = Cookies.get(ACCESS_TOKEN);
