@@ -10,8 +10,26 @@ import LockIcon from "@/components/icons/LockIcon";
 import UserInfoCard from "@/components/common/UserInfoCard";
 import SummaryCard from "@/components/modules/staff/SummaryCard";
 import ActivityLogCard from "@/components/modules/staff/ActivityLogCard";
+import { useModalContext } from "@/contexts/ModalContext";
+import ResetPasswordCard from "@/components/modules/staff/ResetPasswordCard";
+import ResetPasswordNotification from "@/components/modules/staff/ResetPasswordNotification";
+import DisabledStaffCard from "@/components/modules/staff/DisabledStaffCard";
 
 const Staff: NextPage = () => {
+  const { setModalContent } = useModalContext();
+
+  const handleResetPassword = () => {
+    setModalContent(
+      <ResetPasswordCard handleClose={() => setModalContent(null)} />
+    );
+  };
+
+  const handleDisableStaff = () => {
+    setModalContent(
+      <DisabledStaffCard handleClose={() => setModalContent(null)} />
+    );
+  };
+
   return (
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
@@ -20,12 +38,14 @@ const Staff: NextPage = () => {
             title="Reset Password"
             size="large"
             startIcon={<LockIcon />}
+            onClick={handleResetPassword}
           />
           <Button
             title="Disable Staff"
             color="secondary"
             size="large"
             startIcon={<BlockIcon />}
+            onClick={handleDisableStaff}
           />
         </ActionBar>
 
