@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AppLayout from "@/layouts/AppLayout";
 import { NextPage } from "next";
 import ActionBar from "@/components/common/ActionBar";
@@ -21,12 +21,27 @@ import ViewFeed from "@/components/modules/Trips/ViewFeed";
 import { useViewTripQuery } from "@/api-services/tripsService";
 import { useRouter } from "next/router";
 
+import { io } from "socket.io-client";
+const socket = io("ws://rideservice-dev.up.railway.app")
+
 const ViewTrip: NextPage = () => {
   const { setIsCalling } = useCallContext();
   const { setModalContent } = useModalContext();
   const [isFeed, setIsFeed] = useState(false);
   const router = useRouter();
 
+  useEffect(()=>{
+    socket.connect()
+
+    socket.on('live_trip', (data)=>{
+      console.log(data)
+    })
+
+    return ()=>{
+      socket.disconnect()
+    }
+  },[])
+  
   const { id } = router.query;
 
   const { data, isLoading, isError, refetch } = useViewTripQuery(

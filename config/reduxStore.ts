@@ -26,7 +26,7 @@ export const reduxStore = configureStore({
     [hubsApi.reducerPath]: hubsApi.reducer,
     [sharpCarsApi.reducerPath]: sharpCarsApi.reducer,
     [sosApi.reducerPath]: sosApi.reducer,
-    [transactionsApi.reducerPath]: transactionsApi.reducer
+    [transactionsApi.reducerPath]: transactionsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -41,7 +41,7 @@ export const reduxStore = configureStore({
       hubsApi.middleware,
       sharpCarsApi.middleware,
       sosApi.middleware,
-      transactionsApi.middleware
+      transactionsApi.middleware,
     ]),
 });
 
