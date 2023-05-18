@@ -9,6 +9,10 @@ import {
   GetAllHubsResponse,
   HubsTableBodyData,
   MappedHubData,
+  MappedViewHub,
+  ViewHubQuery,
+  ViewHubResponse,
+  Car,
 } from "@/models/Hubs";
 
 export const hubsApi = createApi({
@@ -54,7 +58,41 @@ export const hubsApi = createApi({
         }
       },
     }),
+    viewHub: build.query<MappedViewHub, ViewHubQuery>({
+      query: ({ hubId }) => ({
+        url: `admin/hub/get-one/${hubId}`,
+      }),
+      transformResponse: (response: ViewHubResponse) => {
+        if (!response) return <MappedViewHub>{};
+        else {
+          const mapped: MappedViewHub = {
+            inspectionCars: [] as Car[],
+            hubCars: response.data.hub_images.map((item) => {
+              return {
+                carColor: "",
+                carId: "",
+                carImage: item,
+                plateNumber: "",
+                carModel: ""
+              };
+            }),
+            inspectionCenterId: response.data._id,
+            inspectionCenterImages: [],
+            inspectorFullname: response.data.inspector?.last_name || '' + ' ' + response.data.inspector?.first_name || '',
+            inspectionCenterDateAdded:new Date(response.data.created_at).toDateString(),
+            inspectionCenterTitle: response.data.name,
+            approved: 0,
+            declined: 0,
+            processed: 0,
+            inspectorAddress: response.data.inspector?.house_address,
+            inspectorPhone: response.data.inspector?.phone_number,
+            inspectionCenterLocation: `${response.data.state}, ${response.data.city}, ${response.data.country}`,
+          };
+          return mapped;
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetAllHubsQuery } = hubsApi;
+export const { useGetAllHubsQuery, useViewHubQuery } = hubsApi;

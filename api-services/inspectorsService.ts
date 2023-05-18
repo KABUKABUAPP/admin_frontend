@@ -9,6 +9,9 @@ import {
   GetAllInspectorsResponse,
   InspectorsMappedData,
   InspectorsTableBodyData,
+  MappedViewInspector,
+  ViewInspectorQuery,
+  ViewInspectorResponse,
 } from "@/models/Inspectors";
 
 export const inspectorsApi = createApi({
@@ -41,7 +44,7 @@ export const inspectorsApi = createApi({
                 carsInHub: 0,
                 fullName: `${inspector.last_name} ${inspector.first_name}`,
                 hub: ``,
-                imageUrl: '',
+                imageUrl: "",
                 inspectorId: inspector._id,
                 location: `${inspector.city}, ${inspector.state}, ${inspector.country}`,
                 totalCarsProcessed: 0,
@@ -52,7 +55,30 @@ export const inspectorsApi = createApi({
         }
       },
     }),
+    viewInspector: build.query<MappedViewInspector, ViewInspectorQuery>({
+      query: ({ inspectorId }) => ({
+        url: `admin/inspector/get-one/${inspectorId}`,
+      }),
+      transformResponse: (response: ViewInspectorResponse) => {
+        if (!response) return <MappedViewInspector>{};
+        else {
+          const { data } = response
+          const mapped: MappedViewInspector = {
+            fullname: `${data?.last_name} ${data?.first_name}`,
+            address: `${data?.house_address}`,
+            email: data?.email,
+            phone: data?.phone_number,
+            totalCarsProcessed: 0,
+            approved: 0,
+            declined: 0,
+            carsInHub: 0,
+          };
+
+          return mapped;
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetAllInspectorsQuery } = inspectorsApi
+export const { useGetAllInspectorsQuery, useViewInspectorQuery } = inspectorsApi;

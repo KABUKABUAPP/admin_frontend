@@ -8,8 +8,19 @@ import ViewInspectorLayout from "@/components/modules/inspectors/ViewInspectorLa
 import UserInfoCard from "@/components/common/UserInfoCard";
 import SummaryCard from "@/components/modules/inspectors/SummaryCard";
 import CarsInHubCard from "@/components/modules/inspectors/CarsInHubCard";
+import { useViewInspectorQuery } from "@/api-services/inspectorsService";
+import { useRouter } from "next/router";
+import Loader from "@/components/ui/Loader/Loader";
+import ErrorMessage from "@/components/common/ErrorMessage";
 
 const Inspector: FC = () => {
+  const { id } = useRouter().query;
+
+  const { data, isError, isLoading, refetch } = useViewInspectorQuery(
+    { inspectorId: String(id) },
+    { skip: !id, refetchOnReconnect: true, refetchOnMountOrArgChange: true }
+  );
+
   return (
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
@@ -17,36 +28,55 @@ const Inspector: FC = () => {
           <Button title="Call Inspector" startIcon={<PhoneIcon />} />
         </ActionBar>
 
-        <ViewInspectorLayout
-          asideComponents={
-            <div className="flex flex-col gap-4">
-              <UserInfoCard
-                fullname="John Doe"
-                address="30, Ebinpejo Lane, Idumota, Lagos, Nigeria"
-                email="jdoe@gmail.com"
-                phone="+234 909 888 7655"
-                totalCarsProcessed={110}
-              />
-              <SummaryCard approved={110} declined={0} carsInHub={0} />
+        {data && !isLoading && !isError && (
+          <ViewInspectorLayout
+            asideComponents={
+              <div className="flex flex-col gap-4">
+                <UserInfoCard
+                  fullname={data.fullname}
+                  address={data.address}
+                  email={data.email}
+                  phone={data.phone}
+                  totalCarsProcessed={data.totalCarsProcessed}
+                />
+                <SummaryCard
+                  approved={data.approved}
+                  declined={data.declined}
+                  carsInHub={data.carsInHub}
+                />
 
-              <div className="flex justify-between max-sm:flex-col gap-3">
-                <Button
-                  title="View Approved Cars"
-                  variant="contained"
-                  color="tetiary"
-                  className="w-full !text-sm"
-                />
-                <Button
-                  title="View Declined Cars"
-                  variant="contained"
-                  color="tetiary"
-                  className="w-full !text-sm"
-                />
+                <div className="flex justify-between max-sm:flex-col gap-3">
+                  <Button
+                    title="View Approved Cars"
+                    variant="contained"
+                    color="tetiary"
+                    className="w-full !text-sm"
+                  />
+                  <Button
+                    title="View Declined Cars"
+                    variant="contained"
+                    color="tetiary"
+                    className="w-full !text-sm"
+                  />
+                </div>
               </div>
-            </div>
-          }
-          mainComponents={<CarsInHubCard carsCount={0} />}
-        />
+            }
+            mainComponents={<CarsInHubCard carsCount={data.carsInHub} />}
+          />
+        )}
+
+        {isLoading && !data && !isError && (
+          <div className="pt-4 flex items-center justify-center">
+            <Loader size="medium" />
+          </div>
+        )}
+
+        {!isLoading && !data && isError && (
+          <div className="pt-4 flex flex-col gap-2 items-center justify-center">
+            <ErrorMessage message="Error Fetching Data" />
+            <Button title="Reload" onClick={refetch} />
+          </div>
+        )}
       </div>
     </AppLayout>
   );

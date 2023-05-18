@@ -3,7 +3,6 @@ import React, { FC } from "react";
 import Card from "@/components/common/Card";
 import Skeleton from "react-loading-skeleton";
 import Avatar from "@/components/common/Avatar";
-import Image from "next/image";
 import RatingIcon from "@/components/icons/RatingIcon";
 
 interface Props {
@@ -68,7 +67,7 @@ const UserInfoCard: FC<Props> = ({
               )}
             </p>
           )}
-          {totalCarsProcessed && <p className="text-lg font-semibold">{totalCarsProcessed} Car(s) processed</p>}
+          {<p className="text-lg font-semibold">{totalCarsProcessed} Car(s) processed</p>}
         </div>
       </div>
     </Card>

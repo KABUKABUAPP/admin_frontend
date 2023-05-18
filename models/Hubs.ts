@@ -89,3 +89,31 @@ export interface ViewHubResponse {
   };
   message: string;
 }
+
+export interface MappedViewHub {
+  inspectionCars: Car[]
+  hubCars: Car[];
+  inspectionCenterId: string;
+  inspectionCenterImages: string[]
+  inspectorFullname: string;
+  inspectionCenterDateAdded: string;
+  inspectionCenterLocation: string;
+  inspectionCenterTitle: string;
+  approved: number;
+  declined: number;
+  processed: number;
+  inspectorAddress: string;
+  inspectorPhone: string;
+}
+
+export interface ViewHubQuery {
+  hubId: string
+}
+
+export interface Car {
+  carColor: string;
+  carId: string;
+  carImage: string;
+  carModel: string;
+  plateNumber: string;
+}
