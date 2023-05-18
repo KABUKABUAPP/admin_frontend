@@ -13,16 +13,19 @@ const Riders: NextPage = () => {
     useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
+  const [ searchRider, setSearchRider ] = useState<string>('')
 
   const { data, isLoading, isError, refetch } = useGetAllRidesQuery(
-    { limit: pageSize, page: currentPage },
+    { limit: pageSize, page: currentPage, search: searchRider },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
   return (
     <AppLayout>
       <CountHeader title="Riders" count={data?.totalCount} />
-      <SearchFilterBar />
+      <SearchFilterBar searchValue={searchRider} handleSearch={(value)=>{
+        setSearchRider(value)
+      }}/>
       <RidersTable
         headBg={isFIlteringByBlockedRiders ? "#FEE2E9" : ""}
         ridersData={data?.data}

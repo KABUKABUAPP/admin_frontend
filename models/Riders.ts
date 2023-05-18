@@ -32,6 +32,7 @@ export interface GetAllRidersResponse {
 export interface GetAllRidersQuery {
   limit: number;
   page: number;
+  search: string
 }
 
 export interface MappedRidersData {

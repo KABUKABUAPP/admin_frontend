@@ -12,6 +12,8 @@ interface Props {
   }[];
   dropDownOptionSelected?: string;
   handleDropDown?: (val: string | number) => void;
+  searchValue: string;
+  handleSearch: (val: string)=>void
 }
 
 const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
@@ -19,6 +21,8 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
   filterOptions,
   dropDownOptionSelected,
   handleDropDown,
+  searchValue,
+  handleSearch
 }) => {
   return (
     <div className="rounded-lg bg-[#F1F1F1] w-full min-h-10 shadow-sm my-6 py-4 px-8 flex items-center justify-between max-sm:flex-col max-sm:gap-5">
@@ -27,6 +31,8 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
           startIcon={<SearchIcon />}
           className="!bg-[#E6E6E6]"
           placeholder="Search here"
+          value={searchValue}
+          onChange={(e)=>handleSearch(e.target.value)}
         />
       </div>
 
