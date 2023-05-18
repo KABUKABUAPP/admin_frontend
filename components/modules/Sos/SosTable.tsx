@@ -6,7 +6,7 @@ import SosTableRow from "./SosTableRow";
 import { SosTableData } from "@/models/Sos";
 
 const headCellData = [
-  { title: "ID", flex: 1 },
+  { title: "ID", flex: 2 },
   { title: "Origin/Destination", flex: 2 },
   { title: "Rider", flex: 1 },
   { title: "Driver", flex: 1 },

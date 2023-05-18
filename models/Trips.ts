@@ -95,6 +95,17 @@ export interface TripData {
       city: string;
       street: string;
     };
+    price_details: {
+      booking_fee: number
+      base_fare: number;
+      distace: number;
+      time: number;
+      wait_time: number;
+      driver_earned: number;
+      kabu_split: number;
+      state_levy: number;
+      total_charge: number;
+    };
     _id: string;
     start_point: [number, number];
     end_point: [number, number];
@@ -232,4 +243,3 @@ export interface MappedViewTripResponse {
   riderImage: string;
   driverImage: string;
 }
-
