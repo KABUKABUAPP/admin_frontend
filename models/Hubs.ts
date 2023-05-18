@@ -56,5 +56,36 @@ export interface MappedHubData {
 
 export interface GetAllHubsQuery {
   limit: number;
-  page: number
+  page: number;
+}
+
+export interface ViewHubResponse {
+  status: string;
+  data: {
+    _id: string;
+    name: string;
+    address: string;
+    city: string;
+    state: string;
+    country: string;
+    hub_images: string[];
+    inspector: {
+      _id: string;
+      first_name: string;
+      last_name: string;
+      phone_number: string;
+      email: string;
+      house_address: string;
+      city: string;
+      state: string;
+      country: string;
+      created_at: string;
+      updated_at: string;
+      __v: number;
+    };
+    created_at: string;
+    updated_at: string;
+    __v: 0;
+  };
+  message: string;
 }
