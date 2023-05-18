@@ -47,6 +47,7 @@ export interface GetAllDriversQuery {
   page: number;
   driverStatus: string;
   carOwner: boolean;
+  search: string;
 }
 
 export interface Document {

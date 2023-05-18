@@ -20,7 +20,8 @@ const Drivers: NextPage = () => {
   );
   const [carOwner, setCarOwner] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [ pageSize, setPageSize ] = useState(5)
+  const [pageSize, setPageSize] = useState(5);
+  const [searchDriver, setSearchDriver] = useState<string>("");
 
   const {
     data: drivers,
@@ -33,6 +34,7 @@ const Drivers: NextPage = () => {
       driverStatus: "declined",
       limit: pageSize,
       page: currentPage,
+      search: searchDriver,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -84,7 +86,12 @@ const Drivers: NextPage = () => {
           router.push(`/drivers/${keyVal}`);
         }}
       />
-      <SearchFilterBar>
+      <SearchFilterBar
+        searchValue={searchDriver}
+        handleSearch={(value) => {
+          setSearchDriver(value);
+        }}
+      >
         <DriverTypeFilterBox
           options={driverTypeOptions}
           handleClickOption={(keyVal) => handleDriverTypeOption(keyVal)}

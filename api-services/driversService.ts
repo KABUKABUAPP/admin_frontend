@@ -30,8 +30,8 @@ export const driversApi = createApi({
   tagTypes: ["drivers"],
   endpoints: (build) => ({
     getAllDrivers: build.query<DriversMappedResponse, GetAllDriversQuery>({
-      query: ({ limit, page, carOwner, driverStatus }) => ({
-        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}`,
+      query: ({ limit, page, carOwner, driverStatus, search }) => ({
+        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}&search=${search}`,
       }),
       providesTags: ["drivers"],
       transformResponse: (response: GetAllDriversResponse) => {

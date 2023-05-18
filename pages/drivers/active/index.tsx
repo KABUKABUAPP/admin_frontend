@@ -20,20 +20,22 @@ const Drivers: NextPage = () => {
   );
   const [carOwner, setCarOwner] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [ pageSize, setPageSize ] = useState(5)
+  const [pageSize, setPageSize] = useState(5);
+  const [searchDriver, setSearchDriver] = useState<string>("");
 
   const {
     data: drivers,
     isLoading: driversLoading,
     isError: driversError,
     refetch: reloadDrivers,
-    error
+    error,
   } = useGetAllDriversQuery(
     {
       carOwner: carOwner,
       driverStatus: "active",
       limit: pageSize,
       page: currentPage,
+      search: searchDriver
     },
     {
       refetchOnMountOrArgChange: true,
@@ -41,9 +43,9 @@ const Drivers: NextPage = () => {
     }
   );
 
-  useEffect(()=>{
-    if(error) console.log('active error', error)
-  },[error])
+  useEffect(() => {
+    if (error) console.log("active error", error);
+  }, [error]);
 
   const handleActiveDriverOption = (keyVal: string) => {
     const mutatedOptions = driverOptions.map((option) => {
@@ -89,7 +91,12 @@ const Drivers: NextPage = () => {
           router.push(`/drivers/${keyVal}`);
         }}
       />
-      <SearchFilterBar>
+      <SearchFilterBar
+        searchValue={searchDriver}
+        handleSearch={(value) => {
+          setSearchDriver(value);
+        }}
+      >
         <DriverTypeFilterBox
           options={driverTypeOptions}
           handleClickOption={(keyVal) => handleDriverTypeOption(keyVal)}
