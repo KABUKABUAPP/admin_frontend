@@ -7,6 +7,7 @@ export interface DriversTableBodyData {
   totalTrips?: number;
   walletBalance?: string;
   status?: string;
+  userId?: string
 }
 
 export interface DriversMappedResponse {
@@ -124,6 +125,46 @@ export interface ViewDriverResponse {
   message: string;
 }
 
+export interface MappedDocument {
+  title?: string | undefined;
+  docImage?: string | undefined;
+  docId?: string | undefined;
+}
+
 export interface ViewDriverQuery {
-  id: string
+  id: string;
+}
+
+export interface MappedViewDriver {
+  driverInfo: {
+    image: string;
+    fullName: string;
+    address: string;
+    email: string;
+    phone: string;
+    tripCount: number;
+    rating: number;
+  };
+  carDetails: {
+    carImages: string[];
+    carModel: string;
+    carColor: string;
+    plateNumber: string;
+  };
+  financials: {
+    walletBalance: string;
+    total: string;
+    subscriptionDue: string;
+  };
+  guarantor: {
+    address: string;
+    fullname: string;
+    image?: string;
+    phone: string;
+    relationship: string;
+  };
+  carDocs: {
+    totalDocs: number;
+    documents: MappedDocument[];
+  };
 }

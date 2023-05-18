@@ -15,13 +15,15 @@ import CarDocuments from "@/components/common/CarDocuments";
 import TripHistoryCard from "@/components/common/TripHistoryCard";
 import { useRouter } from "next/router";
 import { useViewDriverQuery } from "@/api-services/driversService";
+import Loader from "@/components/ui/Loader/Loader";
+import ErrorMessage from "@/components/common/ErrorMessage";
 
 const Driver: NextPage = () => {
   const router = useRouter();
 
   const { id } = router.query;
 
-  const {} = useViewDriverQuery(
+  const { data, isLoading, isError, refetch } = useViewDriverQuery(
     { id: String(id) },
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
@@ -39,65 +41,40 @@ const Driver: NextPage = () => {
           />
         </ActionBar>
 
-        <ViewDriverLayout
-          secondRow={
-            <>
-              <TripHistoryCard tripHistoryData={mockTripHistory} />
-            </>
-          }
-          firstRow={
-            <>
-              <DriverInfoCard
-                image="/testUser.jpg"
-                fullname="John Doe"
-                address="30, Ebinpejo Lane, Idumota, Lagos, Nigeria"
-                email="jdoe@gmail.com"
-                phone="+234 909 888 7655"
-                tripCount={14}
-                rating={3.6}
-              />
+        {data && !isLoading && !isError && (
+          <ViewDriverLayout
+            secondRow={
+              <>
+                <TripHistoryCard tripHistoryData={mockTripHistory} />
+              </>
+            }
+            firstRow={
+              <>
+                <DriverInfoCard {...data.driverInfo} />
 
-              <CarDetailsCard
-                carImages={[
-                  "/testUser.jpg",
-                  "/testUser.jpg",
-                  "/testUser.jpg",
-                  "/testUser.jpg",
-                  "/testUser.jpg",
-                  "/testUser.jpg",
-                ]}
-                carModel="Toyota Corolla 2020"
-                carColor="Black"
-                plateNumber="ABC 123 XCD"
-              />
+                <CarDetailsCard {...data.carDetails} />
 
-              <FinancialsCard
-                walletBalance={"20,000"}
-                total={"130,000"}
-                subscriptionDue={"20,000"}
-              />
+                <FinancialsCard {...data.financials} />
 
-              <GuarantorDetailsCard
-                address="6, Ebinpejo Lane, Idumota, Lagos, Nigeria"
-                fullname="Amaka Nweke"
-                image=""
-                phone="+234 903 4564"
-                relationship="Mother"
-              />
+                <GuarantorDetailsCard {...data.guarantor} />
 
-              <CarDocuments
-                totalDocs={5}
-                documents={[
-                  {
-                    docId: "12334",
-                    docImage: "/testUser.jpg",
-                    title: "Drivers License",
-                  },
-                ]}
-              />
-            </>
-          }
-        />
+                <CarDocuments {...data.carDocs} />
+              </>
+            }
+          />
+        )}
+        {isLoading && !data && !isError && (
+          <div className="pt-4 flex items-center justify-center">
+            <Loader size="medium" />
+          </div>
+        )}
+
+        {!isLoading && !data && isError && (
+          <div className="pt-4 flex flex-col gap-2 items-center justify-center">
+            <ErrorMessage message="Error Fetching Data" />
+            <Button title="Reload" onClick={refetch} />
+          </div>
+        )}
       </div>
     </AppLayout>
   );

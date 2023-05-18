@@ -19,6 +19,7 @@ const DriversTableBodyRow: FC<Props> = ({
     status,
     totalTrips,
     walletBalance,
+    userId
   },
 }) => {
   const router = useRouter();
@@ -26,7 +27,7 @@ const DriversTableBodyRow: FC<Props> = ({
   return (
     <div
       className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
-      onClick={() => router.push(`/drivers/${driverId}`)}
+      onClick={() => router.push(`/drivers/${userId}`)}
     >
       <div style={{ flex: 2 }} className="flex items-center">
         <Link href={`/drivers/${driverId}`}>

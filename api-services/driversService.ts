@@ -10,6 +10,7 @@ import {
   DriversMappedResponse,
   ViewDriverResponse,
   ViewDriverQuery,
+  MappedViewDriver,
 } from "@/models/Drivers";
 
 export const driversApi = createApi({
@@ -50,6 +51,7 @@ export const driversApi = createApi({
               totalTrips: driver?.total_trips,
               walletBalance: driver?.wallet_balance,
               status: "",
+              userId: driver.user._id
             };
           });
 
@@ -57,10 +59,57 @@ export const driversApi = createApi({
         }
       },
     }),
-    viewDriver: build.query<ViewDriverResponse, ViewDriverQuery>({
+    viewDriver: build.query<MappedViewDriver, ViewDriverQuery>({
       query: ({ id }) => ({
         url: `admin/driver/view/${id}`,
       }),
+      transformResponse: (response: ViewDriverResponse) => {
+        if (!response) return <MappedViewDriver>{};
+        else {
+          const { data } = response;
+          const mapped: MappedViewDriver = {
+            driverInfo: {
+              image: "",
+              fullName: data.driver?.user?.full_name,
+              address: data?.driver?.house_address,
+              email: data?.driver?.user.email,
+              phone: data.driver?.user?.phone_number,
+              tripCount: data?.driver?.user?.total_trips,
+              rating: 0,
+            },
+            carDetails: {
+              carImages: [],
+              carModel: data.car_details?.model,
+              carColor: data.car_details?.color,
+              plateNumber: data.car_details?.plate_number,
+            },
+            financials: {
+              walletBalance: data?.wallet_balance?.toLocaleString(),
+              total: data?.total_earned?.toLocaleString(),
+              subscriptionDue: "",
+            },
+            guarantor: {
+              address: data.driver?.user?.guarantor?.address,
+              fullname: data.driver?.user?.guarantor?.name,
+              image: data.driver?.user?.guarantor?.image,
+              phone: data.driver?.user?.guarantor?.phone_number,
+              relationship: data.driver?.user?.guarantor?.relationship,
+            },
+            carDocs: {
+              totalDocs: data.car_documents.length,
+              documents: data.car_documents?.map((doc) => {
+                return {
+                  title: doc.title,
+                  docImage: "",
+                  docId: doc._id,
+                };
+              }),
+            },
+          };
+
+          return mapped;
+        }
+      },
     }),
   }),
 });
