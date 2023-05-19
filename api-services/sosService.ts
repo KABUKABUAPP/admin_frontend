@@ -38,16 +38,16 @@ export const sosApi = createApi({
           const mappedReponse: SosTableData[] = response.data.data.map(
             (sos) => {
               return {
-                carModel: sos.trip.car.model,
-                destination: `${sos.trip.end_address.city}, ${sos.trip.end_address.state}, ${sos.trip.end_address.country}`,
-                driver: sos.trip.driver.full_name,
-                id: sos._id,
-                origin: `${sos.trip.start_address.city}, ${sos.trip.start_address.state}, ${sos.trip.start_address.country}`,
-                plateNumber: sos.trip.car.plate_number,
+                carModel: sos.trip?.car?.model,
+                destination: `${sos?.trip?.end_address.city}, ${sos.trip?.end_address?.state}, ${sos.trip?.end_address?.country}`,
+                driver: sos.trip?.driver?.full_name,
+                id: sos?._id,
+                origin: `${sos.trip?.start_address.city}, ${sos.trip?.start_address.state}, ${sos.trip?.start_address.country}`,
+                plateNumber: sos?.trip?.car?.plate_number,
                 raisedBy: "",
-                reason: sos.reason,
-                rider: sos.trip.user.full_name,
-                status: sos.status,
+                reason: sos?.reason,
+                rider: sos?.trip.user?.full_name,
+                status: sos?.status,
               };
             }
           );
