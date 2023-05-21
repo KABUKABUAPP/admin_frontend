@@ -14,11 +14,12 @@ const ActiveTripsTable: FC = () => {
     { refetchOnReconnect: true }
   );
 
+
   return (
     <div className="w-full ">
       <ActiveTripsTableHead />
       <ActiveTripsTableBody
-        data={data && !data.data ? [] : undefined}
+        data={data?.data}
         loading={isLoading}
         error={isError}
         refetch={refetch}

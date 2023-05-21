@@ -18,6 +18,8 @@ const ActiveTripsTableBody: FC<Props> = ({ data, loading, error, refetch }) => {
   const loadingState = loading && !data && !error;
   const errorState = !loading && !data && error;
 
+  console.log("data", data)
+
   return (
     <div
       className="w-full overflow-x-auto p-2  bg-[#FDFDFD] 
