@@ -7,12 +7,12 @@ import { transactionsMockData } from "@/constants";
 import { TransactionsModel } from "@/models/Transactions";
 
 const headCellData = [
-  { title: "Transaction ID", flex: 2 },
-  { title: "Origin/Destination", flex: 2 },
-  { title: "Rider/Driver", flex: 1 },
-  { title: "Car", flex: 1 },
-  { title: "Status", flex: 1 },
+  { title: "Transaction ID", flex: 1 },
+  { title: "User", flex: 2 },
+  { title: "Type", flex: 1 },
+  { title: "Narration", flex: 1 },
   { title: "Price", flex: 1 },
+  { title: "Date", flex: 1 },
 ];
 
 interface Props {

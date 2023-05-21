@@ -8,7 +8,7 @@ import {
 import { secondsToMilliSeconds } from "@/utils";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "@/constants";
-import { TransactionsDataModel, TransactionsModel, GetAllTransactionsQuery } from "@/models/Transactions";
+import { TransactionsDataModel, TransactionsModel, GetAllTransactionsQuery, GetAllTransactions } from "@/models/Transactions";
 
 export const transactionsApi = createApi({
   reducerPath: "transactionsApi",
@@ -28,26 +28,23 @@ export const transactionsApi = createApi({
   endpoints: (build) => ({
     getAllTransactions: build.query<TransactionsModel, GetAllTransactionsQuery>({
       query: ({ limit, page,}) => ({
-        url: `/admin/trip/get-all?limit=${limit}&page=${page}&status=completed`,
+        url: `/admin/transaction/all?limit=${limit}&page=${page}&status=completed`,
       }),
-      transformResponse: (response: GetAllTripsResponse)=>{
+      transformResponse: (response: GetAllTransactions)=>{
         if(!response) return response as TransactionsModel
         else {
-            const mappedData = response.data.data.map((tx)=>{
+            const mappedData = response.data.data.rows.map((tx)=>{
                 return {
-                    carModel: '',
-                    destination: `${tx?.end_address?.state || ''}, ${tx?.end_address?.city}, ${tx?.end_address?.country}`,
-                    driverName: `${tx?.driver?.user || ''}`,
-                    origin: `${tx?.start_address?.state}, ${tx?.start_address?.city}, ${tx?.start_address?.country}`,
-                    plateNumber: ``,
-                    price: tx?.price,
-                    riderName:`${tx?.user?.full_name || ''}`,
-                    status: tx?.status,
-                    transactionId: tx?._id
+                  date: tx?.createdAt,
+                  narration: tx?.narration,
+                  price: `${tx?.currency}${tx?.amount}`,
+                  transactionId: String(tx.id),
+                  type: tx?.type,
+                  user: tx?.user_id
                 } as TransactionsDataModel
             })
 
-            return { totalCount: response.data.pagination.totalCount, data: mappedData}
+            return { totalCount: response.totalPages, data: mappedData}
         }
       }
     }),

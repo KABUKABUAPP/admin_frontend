@@ -14,37 +14,29 @@ const TransactionsTableRow: FC<Props> = ({ data }) => {
   const { setModalContent } = useModalContext();
 
   return (
-    <div className="flex p-3 gap-6 border-b border-b[#E6E6E6]">
-      <div style={{ flex: 2 }} className="flex items-center cursor-pointer">
+    <div className="flex p-3 py-6 items-center gap-6 border-b border-b[#E6E6E6]">
+      <div style={{ flex: 1 }} className="flex items-center cursor-pointer">
         <p className="text-xs font-bold">{data?.transactionId}</p>
       </div>
 
       <div style={{ flex: 2 }}>
-        {data?.destination && (
-          <OriginDestinationCell
-            origin={data.origin}
-            destination={data?.destination}
-          />
-        )}
+        <p className="text-xs font-bold">{data?.user}</p>
       </div>
 
       <div style={{ flex: 1 }}>
-        {data?.riderName && data.driverName && (
-          <RiderDriverCell rider={data?.riderName} driver={data?.driverName} />
-        )}
+        <p className="text-xs font-bold">{data?.type}</p>
       </div>
 
       <div style={{ flex: 1 }} className="flex flex-col gap-3 justify-center">
-        <p className="text-xs font-bold">{data?.carModel}</p>
-        <p className="text-xs font-bold">{data?.plateNumber}</p>
+        <p className="text-xs font-bold">{data?.narration}</p>
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{data?.status}</p>
+        <p className="text-xs font-bold">{data?.price.toLocaleLowerCase()}</p>
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">₦{data?.price.toLocaleString()}</p>
+        <p className="text-xs font-bold">{data?.date && new Date(data.date).toDateString()}</p>
       </div>
 
       <div style={{ flex: 2 }} className="flex items-center">

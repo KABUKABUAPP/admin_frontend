@@ -1,13 +1,10 @@
 export interface TransactionsDataModel {
   transactionId: string;
-  origin: string;
-  destination: string;
-  riderName: string;
-  driverName: string;
-  carModel: string;
-  plateNumber: string;
-  status: string;
-  price: number;
+  user: string;
+  type: string;
+  narration: string;
+  price: string;
+  date: string;
 }
 
 export interface TransactionsModel {
@@ -16,6 +13,36 @@ export interface TransactionsModel {
 }
 
 export interface GetAllTransactionsQuery {
-    limit: number;
-    page: number;
+  limit: number;
+  page: number;
+}
+
+export interface GetAllTransactions {
+  status: string;
+  code: number;
+  data: {
+    data: {
+      count: number;
+      rows: TransactionDto[];
+    };
+  };
+  total: number;
+  currentPage: number;
+  hasNext: number;
+  hasPrevious: boolean;
+  perPage: number;
+  totalPages: number;
+}
+
+export interface TransactionDto {
+  id: number;
+  amount: number;
+  type: string;
+  user_id: string;
+  createdAt: string;
+  client_reference: string;
+  status: string;
+  currency: string;
+  narration: string;
+  full_name: string;
 }
