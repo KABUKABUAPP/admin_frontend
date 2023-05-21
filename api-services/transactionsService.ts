@@ -28,7 +28,7 @@ export const transactionsApi = createApi({
   endpoints: (build) => ({
     getAllTransactions: build.query<TransactionsModel, GetAllTransactionsQuery>({
       query: ({ limit, page,}) => ({
-        url: `/admin/transaction/all?limit=${limit}&page=${page}&status=completed`,
+        url: `/admin/transaction/all?limit=${limit}&page=${page}`,
       }),
       transformResponse: (response: GetAllTransactions)=>{
         if(!response) return response as TransactionsModel
@@ -44,7 +44,7 @@ export const transactionsApi = createApi({
                 } as TransactionsDataModel
             })
 
-            return { totalCount: response.totalPages, data: mappedData}
+            return { totalCount: response.data.total, data: mappedData}
         }
       }
     }),

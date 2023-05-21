@@ -1,7 +1,5 @@
 import React, { FC } from "react";
-import OriginDestinationCell from "@/components/common/OriginDestinationCell";
 import Button from "@/components/ui/Button/Button";
-import RiderDriverCell from "./RiderDriverCell";
 import { TransactionsDataModel } from "@/models/Transactions";
 import Receipt from "./Receipt";
 import { useModalContext } from "@/contexts/ModalContext";

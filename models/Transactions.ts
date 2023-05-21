@@ -25,13 +25,13 @@ export interface GetAllTransactions {
       count: number;
       rows: TransactionDto[];
     };
+    total: number;
+    currentPage: number;
+    hasNext: number;
+    hasPrevious: boolean;
+    perPage: number;
+    totalPages: number;
   };
-  total: number;
-  currentPage: number;
-  hasNext: number;
-  hasPrevious: boolean;
-  perPage: number;
-  totalPages: number;
 }
 
 export interface TransactionDto {

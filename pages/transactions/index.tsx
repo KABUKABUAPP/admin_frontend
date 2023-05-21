@@ -11,7 +11,7 @@ import Pagination from "@/components/common/Pagination";
 const Transactions: NextPage = () => {
   const [accountCardData, setAccountCardData] = useState(mockData);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(5);
   const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
     { limit: pageSize, page: currentPage },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
