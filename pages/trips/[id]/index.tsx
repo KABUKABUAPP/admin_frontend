@@ -22,7 +22,7 @@ import { useViewTripQuery } from "@/api-services/tripsService";
 import { useRouter } from "next/router";
 
 import { io } from "socket.io-client";
-const socket = io("ws://rideservice-dev.up.railway.app")
+const socket = io("ws://rideservice-dev.up.railway.app").connect()
 
 const ViewTrip: NextPage = () => {
   const { setIsCalling } = useCallContext();
@@ -31,7 +31,6 @@ const ViewTrip: NextPage = () => {
   const router = useRouter();
 
   useEffect(()=>{
-    socket.connect()
 
     socket.on('live_trip', (data)=>{
       console.log(data)
@@ -40,7 +39,7 @@ const ViewTrip: NextPage = () => {
     return ()=>{
       socket.disconnect()
     }
-  },[])
+  },[socket.connected])
   
   const { id } = router.query;
 

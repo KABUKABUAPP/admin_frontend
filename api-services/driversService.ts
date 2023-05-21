@@ -78,7 +78,7 @@ export const driversApi = createApi({
               rating: 0,
             },
             carDetails: {
-              carImages: [],
+              carImages: data?.car_details.images,
               carModel: data.car_details?.model,
               carColor: data.car_details?.color,
               plateNumber: data.car_details?.plate_number,
@@ -100,7 +100,7 @@ export const driversApi = createApi({
               documents: data.car_documents?.map((doc) => {
                 return {
                   title: doc.title,
-                  docImage: "",
+                  docImage: doc.url,
                   docId: doc._id,
                 };
               }),
