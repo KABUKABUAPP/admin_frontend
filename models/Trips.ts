@@ -96,7 +96,7 @@ export interface TripData {
       street: string;
     };
     price_details: {
-      booking_fee: number
+      booking_fee: number;
       base_fare: number;
       distace: number;
       time: number;
@@ -176,6 +176,7 @@ export interface ViewTripResponse {
       city: string;
     };
     estimated_price: number;
+    order_id: string;
     payment_type: string;
     trip_completion_time: string;
     rider_rating: number;
@@ -242,4 +243,5 @@ export interface MappedViewTripResponse {
   driverId: string;
   riderImage: string;
   driverImage: string;
+  orderId: string;
 }

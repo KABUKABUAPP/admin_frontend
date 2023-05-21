@@ -60,7 +60,8 @@ export const tripsApi = createApi({
           tripEnded: response.data.trip_completion_time,
           tripStarted: ``,
           driverImage: '',
-          riderImage: response.data.rider_details.profile_image
+          riderImage: response.data.rider_details.profile_image,
+          orderId: response.data.order_id
         } as MappedViewTripResponse;
       },
     }),

@@ -22,31 +22,37 @@ import { useViewTripQuery } from "@/api-services/tripsService";
 import { useRouter } from "next/router";
 
 import { io } from "socket.io-client";
-const socket = io("ws://rideservice-dev.up.railway.app").connect()
+const socket = io("ws://rideservice-dev.up.railway.app").connect();
 
 const ViewTrip: NextPage = () => {
   const { setIsCalling } = useCallContext();
   const { setModalContent } = useModalContext();
   const [isFeed, setIsFeed] = useState(false);
   const router = useRouter();
-
-  useEffect(()=>{
-
-    socket.on('live_trip', (data)=>{
-      console.log(data)
-    })
-
-    return ()=>{
-      socket.disconnect()
-    }
-  },[socket.connected])
-  
   const { id } = router.query;
-
   const { data, isLoading, isError, refetch } = useViewTripQuery(
-    { id: id ? String(id) : '' },
+    { id: id ? String(id) : "" },
     { skip: id === undefined }
   );
+
+  useEffect(() => {
+    if (socket.connected) {
+      socket.on("live_trip", (data) => {
+        console.log("getting data");
+        console.log(data);
+      });
+    }
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [socket.connected]);
+
+  useEffect(() => {
+    if (data) {
+      socket.emit("join_room", [data.orderId]);
+    }
+  }, [data]);
 
   const handleCall = (isRider: boolean) => {
     setModalContent(
@@ -166,7 +172,7 @@ const ViewTrip: NextPage = () => {
                     estimatedPrice: data.estimatedPrice.toString(),
                     paymentType: data.paymentType,
                     tripStarted: data.tripStarted,
-                    tripToEnd: data.tripEnded
+                    tripToEnd: data.tripEnded,
                   })
                 }
               />
@@ -238,4 +244,3 @@ const raiseSosData = [
     isChecked: true,
   },
 ];
-
