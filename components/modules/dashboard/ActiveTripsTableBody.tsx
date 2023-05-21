@@ -7,7 +7,7 @@ import ActiveTripsTableCell from "./ActiveTripsTableCell";
 import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
 
 interface Props {
-  data: Trip[] | undefined;
+  data: Trip[] | undefined | null;
   loading: boolean;
   error: boolean;
   refetch: () => void;
