@@ -12,8 +12,9 @@ const Transactions: NextPage = () => {
   const [accountCardData, setAccountCardData] = useState(mockData);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
+  const [search, setSearch] = useState<string>("");
   const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
-    { limit: pageSize, page: currentPage },
+    { limit: pageSize, page: currentPage, search: search },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
   const handleClickAccountCard = (title: string) => {
@@ -25,13 +26,32 @@ const Transactions: NextPage = () => {
     setAccountCardData(mutated);
   };
 
+  const dropDownOptions = [
+    { label: "Newest First", value: "", default: true },
+    { label: "Oldest First", value: "", default: false },
+  ];
+
+  const [selectedDropDown, setSelectedDropDown] = useState<string>(
+    dropDownOptions.find((opt) => opt.default === true)?.value || ""
+  );
+
+  
+
   return (
     <AppLayout>
       <AccountBalanceCardContainer
         data={accountCardData}
         handleClick={(title) => {}}
       />
-      <SearchFilterBar />
+      <SearchFilterBar
+        filterOptions={dropDownOptions}
+        dropDownOptionSelected={selectedDropDown}
+        handleDropDown={(val) => {
+          setSelectedDropDown(String(val));
+        }}
+        searchValue={search}
+        handleSearch={(val) => setSearch(val)}
+      />
       <TransactionsTable
         isError={isError}
         isLoading={isLoading}

@@ -15,6 +15,7 @@ export interface TransactionsModel {
 export interface GetAllTransactionsQuery {
   limit: number;
   page: number;
+  search: string
 }
 
 export interface GetAllTransactions {
