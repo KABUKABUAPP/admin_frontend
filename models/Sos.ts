@@ -72,6 +72,7 @@ export interface GetAllSosQuery {
     date: DateOptions;
     page: number;
     dateRange?: string;
+    search: string
 }
 
 export interface MappedSosResponse {

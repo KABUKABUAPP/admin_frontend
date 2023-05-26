@@ -23,7 +23,7 @@ const Trips: NextPage = () => {
 
   const filterOptions = [
     { label: "Newest First", value: "", default: true },
-    { label: "Oldest First", value: "", default: true },
+    { label: "Oldest First", value: "", default: false },
   ];
   const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
     filterOptions.find((opt) => opt.default === true)?.value || ""
@@ -86,6 +86,7 @@ const Trips: NextPage = () => {
         filterOptions={filterOptions}
         handleDropDown={(val) => handleFilterOptionChanged(String(val))}
         handleSearch={(val) => setTableSearch(val)}
+        dropDownOptionSelected={selectedFilterOption}
       />
 
       {tab === tabOptions[Tab.TRIP_ORDERS] && (

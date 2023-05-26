@@ -39,7 +39,7 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
 
       <div className="flex-1">{children}</div>
 
-      <p className="text-xs flex gap-3 items-center cursor-pointer">
+      <div className="text-xs flex gap-3 items-center cursor-pointer">
         <span>Sort:</span>
         <DropDown
           placeholder="Filter"
@@ -49,7 +49,7 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
             if (handleDropDown) handleDropDown(val);
           }}
         />
-      </p>
+      </div>
     </div>
   );
 };
