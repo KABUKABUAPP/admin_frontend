@@ -150,6 +150,7 @@ export interface GetAllTripsQuery {
   limit: number;
   page: number;
   status: "disputed" | "cancelled" | "completed" | "initiated" | "started";
+  search: string
 }
 
 export interface TripDetail {

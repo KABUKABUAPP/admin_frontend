@@ -30,8 +30,8 @@ export const tripsApi = createApi({
   }),
   endpoints: (build) => ({
     getAllTrips: build.query<GetAllTripsResponse, GetAllTripsQuery>({
-      query: ({ limit, page, status }) => ({
-        url: `/admin/trip/get-all?limit=${limit}&page=${page}&status=${status}`,
+      query: ({ limit, page, status, search }) => ({
+        url: `/admin/trip/get-all?limit=${limit}&page=${page}&status=${status}&search=${search}`,
       }),
     }),
     viewTrip: build.query<MappedViewTripResponse, ViewTripQuery>({
@@ -59,9 +59,9 @@ export const tripsApi = createApi({
           riderTripCount: response.data.rider_details.total_trips,
           tripEnded: response.data.trip_completion_time,
           tripStarted: ``,
-          driverImage: '',
+          driverImage: "",
           riderImage: response.data.rider_details.profile_image,
-          orderId: response.data.order_id
+          orderId: response.data.order_id,
         } as MappedViewTripResponse;
       },
     }),

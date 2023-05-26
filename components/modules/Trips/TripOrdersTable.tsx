@@ -28,9 +28,10 @@ interface FormattedTrip {
 
 interface Props {
   setTripCount: React.Dispatch<React.SetStateAction<number | undefined>>
+  tableSearch: string;
 }
 
-const TripOrdersTable: FC<Props> = ({ setTripCount }) => {
+const TripOrdersTable: FC<Props> = ({ setTripCount, tableSearch }) => {
   const [currentPage, setCurrentPage] = useState(5);
   const [pageSize, setPageSize] = useState(5);
   const { data, isLoading, isError, refetch } = useGetAllTripsQuery(
@@ -38,6 +39,7 @@ const TripOrdersTable: FC<Props> = ({ setTripCount }) => {
       page: currentPage,
       limit: pageSize,
       status: "initiated",
+      search: tableSearch
     },
     {
       refetchOnMountOrArgChange: true,

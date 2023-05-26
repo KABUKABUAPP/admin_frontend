@@ -20,6 +20,16 @@ const Trips: NextPage = () => {
   const router = useRouter();
   const { tab } = router.query;
   const tabOptions = [undefined, "pending", "active", "completed", "declined"];
+
+  const filterOptions = [
+    { label: "Newest First", value: "", default: true },
+    { label: "Oldest First", value: "", default: true },
+  ];
+  const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
+    filterOptions.find((opt) => opt.default === true)?.value || ""
+  );
+  const [tableSearch, setTableSearch] = useState<string>("");
+
   enum Tab {
     TRIP_ORDERS,
     PENDING_TRIPS,
@@ -55,9 +65,13 @@ const Trips: NextPage = () => {
       currentKey = "";
     }
 
-    setTripTitle(currentTab)
-    handleActiveTab(currentKey)
+    setTripTitle(currentTab);
+    handleActiveTab(currentKey);
   }, [tab]);
+
+  const handleFilterOptionChanged = (val: string) => {
+    setSelectedFilterOption(val);
+  };
 
   return (
     <AppLayout>
@@ -68,12 +82,42 @@ const Trips: NextPage = () => {
           handleClickOption(keyVal);
         }}
       />
-      <SearchFilterBar />
-      {tab === tabOptions[Tab.TRIP_ORDERS] && <TripOrdersTable setTripCount={setTripCount}/>}
-      {tab === tabOptions[Tab.PENDING_TRIPS] && <PendingTripsTable setTripCount={setTripCount}/>}
-      {tab === tabOptions[Tab.ACTIVE_TRIPS] && <ActiveTripsTable setTripCount={setTripCount}/>}
-      {tab === tabOptions[Tab.COMPLETED_TRIPS] && <CompletedTripsTable setTripCount={setTripCount}/>}
-      {tab === tabOptions[Tab.CANCELLED_ORDERS] && <CancelledTripsTable setTripCount={setTripCount}/>}
+      <SearchFilterBar
+        filterOptions={filterOptions}
+        handleDropDown={(val) => handleFilterOptionChanged(String(val))}
+        handleSearch={(val) => setTableSearch(val)}
+      />
+
+      {tab === tabOptions[Tab.TRIP_ORDERS] && (
+        <TripOrdersTable
+          setTripCount={setTripCount}
+          tableSearch={tableSearch}
+        />
+      )}
+      {tab === tabOptions[Tab.PENDING_TRIPS] && (
+        <PendingTripsTable
+          setTripCount={setTripCount}
+          tableSearch={tableSearch}
+        />
+      )}
+      {tab === tabOptions[Tab.ACTIVE_TRIPS] && (
+        <ActiveTripsTable
+          setTripCount={setTripCount}
+          tableSearch={tableSearch}
+        />
+      )}
+      {tab === tabOptions[Tab.COMPLETED_TRIPS] && (
+        <CompletedTripsTable
+          setTripCount={setTripCount}
+          tableSearch={tableSearch}
+        />
+      )}
+      {tab === tabOptions[Tab.CANCELLED_ORDERS] && (
+        <CancelledTripsTable
+          setTripCount={setTripCount}
+          tableSearch={tableSearch}
+        />
+      )}
     </AppLayout>
   );
 };
