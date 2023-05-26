@@ -13,22 +13,47 @@ import { useRouter } from "next/router";
 const Inspectors: NextPage = () => {
   const [carOwner, setCarOwner] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [ pageSize, setPageSize ] = useState(2)
+  const [pageSize, setPageSize] = useState(2);
+  const [search, setSearch] = useState<string>("");
   const {
     data: inspectors,
     isLoading: inspectorsLoading,
     isError: inspectorsError,
     refetch: reloadInspectors,
-  } = useGetAllInspectorsQuery({ limit: pageSize, page: currentPage });
-  const router = useRouter()
+  } = useGetAllInspectorsQuery(
+    { limit: pageSize, page: currentPage, search: search },
+    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
+  const router = useRouter();
+
+  const filterOptions = [
+    { label: "Newest First", value: "", default: true },
+    { label: "Oldest First", value: "", default: false },
+    { label: "A-Z", value: "", default: false },
+    { label: "Z-A", value: "", default: false },
+  ];
+
+  const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
+    filterOptions.find((opt) => opt.default === true)?.value || ""
+  );
 
   return (
     <AppLayout>
-      <SearchFilterBar>
+      <SearchFilterBar
+        searchValue={search}
+        handleSearch={(val) => setSearch(val)}
+        filterOptions={filterOptions}
+        dropDownOptionSelected={selectedFilterOption}
+        handleDropDown={(val) => setSelectedFilterOption(String(val))}
+      >
         <div className="flex justify-end mr-3">
-          <Button title="Add Inspector" startIcon={<AddIcon />} onClick={()=>{
-            router.push('inspectors/add-inspector')
-          }}/>
+          <Button
+            title="Add Inspector"
+            startIcon={<AddIcon />}
+            onClick={() => {
+              router.push("inspectors/add-inspector");
+            }}
+          />
         </div>
       </SearchFilterBar>
       <InspectorsTable

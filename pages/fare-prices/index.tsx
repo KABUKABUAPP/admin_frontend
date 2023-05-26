@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React from "react";
+import React, { useState } from "react";
 
 import AppLayout from "@/layouts/AppLayout";
 import SearchFilterBar from "@/components/common/SearchFilterBar";
@@ -10,21 +10,43 @@ import { useGetAllFarePricesQuery } from "@/api-services/farePricesService";
 import { useRouter } from "next/router";
 
 const FarePrices: NextPage = () => {
+  const [search, setSearch] = useState<string>("");
+
   const {
     data: farePrices,
     isLoading: farePricesLoading,
     isError: farePricesError,
     refetch: reloadFarePrices,
-  } = useGetAllFarePricesQuery("", {
-    refetchOnReconnect: true,
-    refetchOnMountOrArgChange: true,
-  });
+  } = useGetAllFarePricesQuery(
+    { search },
+    {
+      refetchOnReconnect: true,
+      refetchOnMountOrArgChange: true,
+    }
+  );
 
   const router = useRouter();
 
+  const filterOptions = [
+    { label: "Newest First", value: "", default: true },
+    { label: "Oldest First", value: "", default: false },
+    { label: "A-Z", value: "", default: false },
+    { label: "Z-A", value: "", default: false },
+  ];
+
+  const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
+    filterOptions.find((opt) => opt.default === true)?.value || ""
+  );
+
   return (
     <AppLayout>
-      <SearchFilterBar>
+      <SearchFilterBar
+        searchValue={search}
+        handleSearch={(val) => setSearch(val)}
+        filterOptions={filterOptions}
+        dropDownOptionSelected={selectedFilterOption}
+        handleDropDown={(val) => setSelectedFilterOption(String(val))}
+      >
         <div className="flex justify-end mr-3">
           <Button
             title="Add New Fare Profile"

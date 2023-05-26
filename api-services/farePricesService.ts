@@ -7,6 +7,7 @@ import { ACCESS_TOKEN } from "@/constants";
 import {
   FarePricesMappedData,
   FarePricesTableData,
+  GetAllFarePricesQuery,
   GetAllFarePricesResponse,
   ViewFarePriceResponse,
   ViewFareQuery
@@ -28,9 +29,9 @@ export const farePricesApi = createApi({
     },
   }),
   endpoints: (build) => ({
-    getAllFarePrices: build.query<FarePricesMappedData, "">({
-      query: () => ({
-        url: `admin/price/all`,
+    getAllFarePrices: build.query<FarePricesMappedData, GetAllFarePricesQuery>({
+      query: ({search}) => ({
+        url: `admin/price/all?search=${search}`,
       }),
       transformResponse: (response: GetAllFarePricesResponse) => {
         if (!response) return {} as FarePricesMappedData;

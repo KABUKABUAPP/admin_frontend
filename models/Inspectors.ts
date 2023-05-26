@@ -46,6 +46,7 @@ export interface InspectorsMappedData {
 export interface GetAllInspectorsQuery {
   limit: number;
   page: number;
+  search: string
 }
 
 export interface ViewInspectorResponse {

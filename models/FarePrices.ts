@@ -34,6 +34,10 @@ export interface FarePricesMappedData {
   data: FarePricesTableData[];
 }
 
+export interface GetAllFarePricesQuery {
+  search: string
+}
+
 export interface ViewFarePriceResponse {
   status: string;
   code: number;

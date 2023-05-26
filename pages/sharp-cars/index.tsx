@@ -29,6 +29,15 @@ const SharpCars: NextPage = () => {
     setOptions(mutatedOptions);
   };
 
+  const filterOptions = [
+    { label: "Newest First", value: "", default: true },
+    { label: "Oldest First", value: "", default: false },
+  ];
+
+  const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
+    filterOptions.find((opt) => opt.default === true)?.value || ""
+  );
+
   return (
     <AppLayout>
       <CountHeader title="Sharp Cars" count={5000} />
@@ -36,7 +45,11 @@ const SharpCars: NextPage = () => {
         handleClickOption={(key) => handleClickOption(key)}
         options={options}
       />
-      <SearchFilterBar />
+      <SearchFilterBar
+        filterOptions={filterOptions}
+        dropDownOptionSelected={selectedFilterOption}
+        handleDropDown={(val) => setSelectedFilterOption(String(val))}
+      />
       <SharpCarsTable
         data={data?.data}
         isLoading={isLoading}
@@ -57,4 +70,3 @@ const SharpCars: NextPage = () => {
 };
 
 export default SharpCars;
-

@@ -35,7 +35,7 @@ const Drivers: NextPage = () => {
       driverStatus: "active",
       limit: pageSize,
       page: currentPage,
-      search: searchDriver
+      search: searchDriver,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -82,6 +82,17 @@ const Drivers: NextPage = () => {
     if (activeOption) setCarOwner(carOwnerObj[activeOption]);
   }, [JSON.stringify(driverTypeOptions)]);
 
+  const filterOptions = [
+    { label: "Newest First", value: "", default: true },
+    { label: "Oldest First", value: "", default: false },
+    { label: "A-Z", value: "", default: false },
+    { label: "Z-A", value: "", default: false },
+  ];
+
+  const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
+    filterOptions.find((opt) => opt.default === true)?.value || ""
+  );
+
   return (
     <AppLayout>
       <CountHeader count={drivers?.totalCount} title="Drivers" />
@@ -96,6 +107,9 @@ const Drivers: NextPage = () => {
         handleSearch={(value) => {
           setSearchDriver(value);
         }}
+        filterOptions={filterOptions}
+        dropDownOptionSelected={selectedFilterOption}
+        handleDropDown={(val) => setSelectedFilterOption(String(val))}
       >
         <DriverTypeFilterBox
           options={driverTypeOptions}
