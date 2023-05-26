@@ -7,27 +7,63 @@ import { useGetAllRidesQuery } from "@/api-services/ridersService";
 
 import AppLayout from "@/layouts/AppLayout";
 import Pagination from "@/components/common/Pagination";
+import DropDown from "@/components/ui/DropDown";
 
 const Riders: NextPage = () => {
   const [isFIlteringByBlockedRiders, setIsFilteringByBlockedRiders] =
     useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-  const [ searchRider, setSearchRider ] = useState<string>('')
+  const [searchRider, setSearchRider] = useState<string>("");
 
   const { data, isLoading, isError, refetch } = useGetAllRidesQuery(
     { limit: pageSize, page: currentPage, search: searchRider },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
+  const timeFilterOptions = [
+    { label: "Newest First", value: "", default: true },
+    { label: "Oldest First", value: "", default: false },
+  ];
+  const statusFilterOptions = [
+    { label: "Active", value: "active", default: true },
+    { label: "Blocked", value: "blocked", default: false },
+  ];
+
+  const [selectedTimeFilter, setSelectedTimeFilter] = useState<string>(
+    timeFilterOptions.find((opt) => opt.default === true)?.value || ""
+  );
+
+  const [statusFilter, setStatusFilter] = useState<string>(
+    statusFilterOptions.find((opt) => opt.default === true)?.value || ""
+  );
+
   return (
     <AppLayout>
       <CountHeader title="Riders" count={data?.totalCount} />
-      <SearchFilterBar searchValue={searchRider} handleSearch={(value)=>{
-        setSearchRider(value)
-      }}/>
+      <SearchFilterBar
+        searchValue={searchRider}
+        handleSearch={(value) => {
+          setSearchRider(value);
+        }}
+        filterOptions={timeFilterOptions}
+        handleDropDown={(val)=>setSelectedTimeFilter(String(val))}
+        dropDownOptionSelected={selectedTimeFilter}
+      >
+        <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
+          <span>Show:</span>
+          <DropDown
+            placeholder="Filter"
+            options={statusFilterOptions}
+            value={statusFilter}
+            handleChange={(val) => {
+              setStatusFilter(String(val));
+            }}
+          />
+        </div>
+      </SearchFilterBar>
       <RidersTable
-        headBg={isFIlteringByBlockedRiders ? "#FEE2E9" : ""}
+        headBg={statusFilter === 'blocked' ? "#FEE2E9" : ""}
         ridersData={data?.data}
         isLoading={isLoading}
         isError={isError}
@@ -47,4 +83,3 @@ const Riders: NextPage = () => {
 };
 
 export default Riders;
-
