@@ -19,17 +19,34 @@ const Hubs: NextPage = () => {
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
-  const router = useRouter()
+  const router = useRouter();
 
-  console.log(error)
+  const filterOptions = [
+    { label: "Newest First", value: "", default: true },
+    { label: "Oldest First", value: "", default: false },
+    { label: "A-Z", value: "", default: false },
+    { label: "Z-A", value: "", default: false },
+  ];
+
+  const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
+    filterOptions.find((opt) => opt.default === true)?.value || ""
+  );
 
   return (
     <AppLayout>
-      <SearchFilterBar>
+      <SearchFilterBar
+        filterOptions={filterOptions}
+        dropDownOptionSelected={selectedFilterOption}
+        handleDropDown={(val) => setSelectedFilterOption(String(val))}
+      >
         <div className="flex justify-end mr-3">
-          <Button title="Add New Hub" startIcon={<AddIcon />} onClick={()=>{
-            router.push('/hubs/add-hub')
-          }}/>
+          <Button
+            title="Add New Hub"
+            startIcon={<AddIcon />}
+            onClick={() => {
+              router.push("/hubs/add-hub");
+            }}
+          />
         </div>
       </SearchFilterBar>
 
@@ -53,4 +70,3 @@ const Hubs: NextPage = () => {
 };
 
 export default Hubs;
-
