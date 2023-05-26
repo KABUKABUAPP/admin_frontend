@@ -46,7 +46,7 @@ const SOS: NextPage = () => {
         handleDropDown={(val) => setSelectedSortFilter(String(val))}
         dropDownOptionSelected={selectedSortFilter}
       >
-        <div className="text-xs flex gap-3 items-center cursor-pointer">
+        <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
           <span>Show:</span>
           <DropDown
             placeholder="Filter"
