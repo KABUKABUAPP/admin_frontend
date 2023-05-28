@@ -1,4 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
 import FormCard from "./FormCard";
 import TextField from "@/components/ui/Input/TextField/TextField";
 import Button from "@/components/ui/Button/Button";
@@ -7,6 +9,7 @@ import { nigerianStates } from "@/constants";
 import { useFormik, Form, FormikProvider } from "formik";
 import NewFareProfileValidations from "@/validationschemas/NewFareProfileSchema";
 import { toast } from "react-toastify";
+import { useCreateFarePriceMutation } from "@/api-services/farePricesService";
 
 const initialValues = {
   state: "",
@@ -31,35 +34,45 @@ const NewFareProfileForm: FC = () => {
   const [selectedState, setSelectedState] = useState<string>("");
   const [selectedCountry, setSelectedCountry] = useState<string>("");
 
+  const router = useRouter()
+
   const handleSelectState = (state: string) => {
     setSelectedState(state);
   };
+
+  const [submit, { isSuccess, isError, error, isLoading }] =
+    useCreateFarePriceMutation();
 
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: NewFareProfileValidations,
     onSubmit: (values) => {
       if (!selectedState) {
-        formik.setFieldError('state', 'Required');
-      }
-      else if(!selectedCountry){
-        formik.setFieldError("country", "Required")
-      }
-      else {
-        formik.values.country = selectedCountry
-        formik.values.state = selectedState
+        formik.setFieldError("state", "Required");
+      } else if (!selectedCountry) {
+        formik.setFieldError("country", "Required");
+      } else {
+        formik.values.country = selectedCountry;
+        formik.values.state = selectedState;
 
-        console.log(values)
+        submit(values);
       }
     },
   });
 
-  useEffect(()=>{
-    
-    if(selectedCountry && formik.errors.country) formik.setFieldError("country", undefined)
-    if(selectedState && formik.errors.state) formik.setFieldError("state", undefined)
+  useEffect(() => {
+    if (selectedCountry && formik.errors.country)
+      formik.setFieldError("country", undefined);
+    if (selectedState && formik.errors.state)
+      formik.setFieldError("state", undefined);
+  }, [selectedCountry, selectedState]);
 
-  },[selectedCountry, selectedState])
+  useEffect(()=>{
+    if(isSuccess){
+      toast.success('Fare Price Successfully Created')
+      router.push('/fare-prices')
+    }
+  },[isSuccess])
 
   return (
     <div>
@@ -71,12 +84,10 @@ const NewFareProfileForm: FC = () => {
                 <div>
                   <SelectField
                     label="Country"
-                    options={[
-                      { label: "Nigeria", value: "Nigeria"},
-                    ]}
+                    options={[{ label: "Nigeria", value: "Nigeria" }]}
                     placeholder="Select Country"
                     value={selectedCountry}
-                    handleChange={(v)=>setSelectedCountry(String(v))}
+                    handleChange={(v) => setSelectedCountry(String(v))}
                     error={formik.errors.country}
                   />
                 </div>
@@ -208,7 +219,13 @@ const NewFareProfileForm: FC = () => {
             </FormCard>
           </div>
           <div className="flex justify-end py-8">
-            <Button title="Create Profile" className="!px-10" type="submit" />
+            <Button
+              title="Create Profile"
+              className="!px-10"
+              type="submit"
+              loading={isLoading}
+              disabled={isLoading}
+            />
           </div>
         </Form>
       </FormikProvider>

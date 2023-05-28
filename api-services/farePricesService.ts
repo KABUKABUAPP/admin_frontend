@@ -5,6 +5,8 @@ import { secondsToMilliSeconds } from "@/utils";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "@/constants";
 import {
+  CreateFarePricePayload,
+  CreateFarePriceResponse,
   FarePricesMappedData,
   FarePricesTableData,
   GetAllFarePricesQuery,
@@ -57,8 +59,15 @@ export const farePricesApi = createApi({
       query: ({ id })=>({
         url: `admin/price/view/${id}`
       })
+    }),
+    createFarePrice: build.mutation<CreateFarePriceResponse, CreateFarePricePayload>({
+      query: (body)=>({
+        url: 'admin/price/create',
+        method: 'POST',
+        body
+      })
     })
   }),
 });
 
-export const { useGetAllFarePricesQuery, useViewFarePriceQuery } = farePricesApi
+export const { useGetAllFarePricesQuery, useViewFarePriceQuery, useCreateFarePriceMutation } = farePricesApi
