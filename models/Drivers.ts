@@ -7,7 +7,7 @@ export interface DriversTableBodyData {
   totalTrips?: number;
   walletBalance?: string;
   status?: string;
-  userId?: string
+  userId?: string;
 }
 
 export interface DriversMappedResponse {
@@ -167,4 +167,15 @@ export interface MappedViewDriver {
     totalDocs: number;
     documents: MappedDocument[];
   };
+}
+
+export interface ApproveDeclineDriverQuery {
+  driverId: string;
+  reason: string;
+  status: "delince" | "approve";
+}
+
+export interface ApproveDeclineDriverResponse {
+  status: string;
+  message: string;
 }

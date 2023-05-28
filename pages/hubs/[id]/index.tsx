@@ -14,11 +14,13 @@ import InspectorCard from "@/components/modules/hubs/InspectorCard";
 import { useViewHubQuery } from "@/api-services/hubService";
 import Loader from "@/components/ui/Loader/Loader";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import DeleteHubCard from "@/components/modules/hubs/DeleteHubCard";
+import { useModalContext } from "@/contexts/ModalContext";
 
 const Hub: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
-
+  const { setModalContent } = useModalContext();
   const { data, isLoading, isError, refetch } = useViewHubQuery(
     { hubId: String(id) },
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
@@ -33,6 +35,11 @@ const Hub: NextPage = () => {
             size="large"
             color="secondary"
             startIcon={<TrashIcon />}
+            onClick={() =>
+              setModalContent(
+                <DeleteHubCard handleClose={() => setModalContent(null)} />
+              )
+            }
           />
         </ActionBar>
 

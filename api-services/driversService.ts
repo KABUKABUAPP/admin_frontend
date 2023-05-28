@@ -11,6 +11,8 @@ import {
   ViewDriverResponse,
   ViewDriverQuery,
   MappedViewDriver,
+  ApproveDeclineDriverResponse,
+  ApproveDeclineDriverQuery,
 } from "@/models/Drivers";
 
 export const driversApi = createApi({
@@ -51,7 +53,7 @@ export const driversApi = createApi({
               totalTrips: driver?.total_trips,
               walletBalance: driver?.wallet_balance,
               status: "",
-              userId: driver.user._id
+              userId: driver.user._id,
             };
           });
 
@@ -111,7 +113,16 @@ export const driversApi = createApi({
         }
       },
     }),
+    approveDeclineDriver: build.mutation<
+      ApproveDeclineDriverResponse,
+      ApproveDeclineDriverQuery
+    >({
+      query: ({ driverId, reason, status }) => ({
+        url: `admin/driver/approve-decline/${driverId}?reason=${reason}&status=${status}`,
+        method: "PUT",
+      }),
+    }),
   }),
 });
 
-export const { useGetAllDriversQuery, useViewDriverQuery } = driversApi;
+export const { useGetAllDriversQuery, useViewDriverQuery, useApproveDeclineDriverMutation } = driversApi;
