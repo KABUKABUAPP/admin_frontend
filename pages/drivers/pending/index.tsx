@@ -117,6 +117,7 @@ const Drivers: NextPage = () => {
           isError={driversError}
           isLoading={driversLoading}
           refetch={reloadDrivers}
+          subPath="pending"
         />
         {drivers && (
           <Pagination

@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 
 interface Props {
   data: DriversTableBodyData;
+  subPath: string;
 }
 
 const DriversTableBodyRow: FC<Props> = ({
@@ -21,13 +22,14 @@ const DriversTableBodyRow: FC<Props> = ({
     walletBalance,
     userId
   },
+  subPath
 }) => {
   const router = useRouter();
 
   return (
     <div
       className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
-      onClick={() => router.push(`/drivers/${userId}`)}
+      onClick={() => router.push(`/drivers/${subPath}/${userId}`)}
     >
       <div style={{ flex: 2 }} className="flex items-center">
         <Link href={`/drivers/${driverId}`}>
