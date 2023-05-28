@@ -10,6 +10,7 @@ interface Props {
   isError?: boolean;
   refetch?: () => void;
   subPath: string;
+  headBg?: string;
 }
 
 const headCellData = [
@@ -22,9 +23,10 @@ const headCellData = [
     { title: "Status", flex: 1 },
   ];
 
-const DriversTable: FC<Props> = ({ tableData, isLoading, isError, refetch, subPath }) => {
+const DriversTable: FC<Props> = ({ tableData, isLoading, isError, refetch, subPath, headBg }) => {
   return (
     <EnhancedTable
+      headBg={headBg}
       TableHeadComponent={<DriversTableHeadRow headCellData={headCellData}/>}
       rowComponent={(rows) => <DriversTableBodyRow data={rows} subPath={subPath}/>}
       rowData={tableData}

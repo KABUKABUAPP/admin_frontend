@@ -118,6 +118,7 @@ const Drivers: NextPage = () => {
           isLoading={driversLoading}
           refetch={reloadDrivers}
           subPath="declined"
+          headBg="#FEE2E9"
         />
         {drivers && (
           <Pagination
