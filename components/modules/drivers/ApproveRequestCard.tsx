@@ -5,9 +5,11 @@ import { motion } from "framer-motion";
 
 interface Props {
   handleClose: () => void;
+  handleApprove: ()=>void;
+  isLoading: boolean
 }
 
-const ApproveRequestCard: FC<Props> = ({ handleClose }) => {
+const ApproveRequestCard: FC<Props> = ({ handleClose, handleApprove, isLoading }) => {
   const ref = useClickOutside<HTMLDivElement>(() => handleClose());
 
   return (
@@ -39,7 +41,9 @@ const ApproveRequestCard: FC<Props> = ({ handleClose }) => {
         <Button
           title="Approve Request"
           size="large"
-          className="w-[43%] !bg-[#1FD11B] !text-[#FFFFFF]"
+          className={`w-[43%] ${isLoading ? '!bg-[#cccccc]' : '!bg-[#1FD11B]'} !text-[#FFFFFF]`}
+          onClick={handleApprove}
+          loading={isLoading}
         />
       </div>
     </motion.div>

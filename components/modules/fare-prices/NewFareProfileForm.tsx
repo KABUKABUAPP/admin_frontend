@@ -1,16 +1,43 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import FormCard from "./FormCard";
 import TextField from "@/components/ui/Input/TextField/TextField";
 import Button from "@/components/ui/Button/Button";
+import SelectField from "@/components/ui/Input/SelectField";
+import { nigerianStates } from "@/constants";
 
 const NewFareProfileForm: FC = () => {
+  
+  const [ selectedState, setSelectedState ] = useState<string>('')
+
+  const handleSelectState = (state: string) => {
+    setSelectedState(state)
+  }
+
   return (
     <div>
       <div className="flex max-md:flex-col gap-6">
         <FormCard maxWidth="400px" height="250px">
           <div className="flex flex-col gap-6">
-            <TextField label="Country" placeholder="Nigeria" />
-            <TextField label="State" placeholder="Oyo" />
+            <div>
+              <SelectField
+                label="Country"
+                options={[
+                  { label: "Nigeria", value: "Nigeria", default: true },
+                ]}
+              />
+            </div>
+
+            <div>
+              <SelectField
+                label="State"
+                options={[...nigerianStates].map((i) => ({
+                  label: i,
+                  value: i,
+                }))}
+                handleChange={(v)=>handleSelectState(String(v))}
+                value={selectedState}
+              />
+            </div>
           </div>
         </FormCard>
 
@@ -48,7 +75,7 @@ const NewFareProfileForm: FC = () => {
         </FormCard>
       </div>
       <div className="flex justify-end py-8">
-        <Button title="Create Profile" className="!px-10"/>
+        <Button title="Create Profile" className="!px-10" />
       </div>
     </div>
   );

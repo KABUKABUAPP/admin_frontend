@@ -78,6 +78,7 @@ export const driversApi = createApi({
               phone: data.driver?.user?.phone_number,
               tripCount: data?.driver?.user?.total_trips,
               rating: 0,
+              id: data?.driver?._id
             },
             carDetails: {
               carImages: data?.car_details.images,

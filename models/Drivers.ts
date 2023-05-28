@@ -144,6 +144,7 @@ export interface MappedViewDriver {
     phone: string;
     tripCount: number;
     rating: number;
+    id: string;
   };
   carDetails: {
     carImages: string[];
@@ -171,8 +172,8 @@ export interface MappedViewDriver {
 
 export interface ApproveDeclineDriverQuery {
   driverId: string;
-  reason: string;
-  status: "delince" | "approve";
+  reason?: string;
+  status: "decline" | "approve";
 }
 
 export interface ApproveDeclineDriverResponse {

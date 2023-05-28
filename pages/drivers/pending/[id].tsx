@@ -1,6 +1,6 @@
 import AppLayout from "@/layouts/AppLayout";
 import { NextPage } from "next";
-import React from "react";
+import React, { useEffect } from "react";
 
 import ActionBar from "@/components/common/ActionBar";
 import Button from "@/components/ui/Button/Button";
@@ -21,9 +21,11 @@ import ApproveRequestCard from "@/components/modules/drivers/ApproveRequestCard"
 import DeclineRequestCard from "@/components/modules/drivers/DeclineRequestCard";
 import { useModalContext } from "@/contexts/ModalContext";
 import ApproveSuccessCard from "@/components/modules/drivers/ApproveSuccessCard";
+import { useApproveDeclineDriverMutation } from "@/api-services/driversService";
 
 const Driver: NextPage = () => {
   const router = useRouter();
+  const { setModalContent } = useModalContext();
 
   const { id } = router.query;
 
@@ -32,7 +34,23 @@ const Driver: NextPage = () => {
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
-  const { setModalContent } = useModalContext();
+  console.log(data);
+
+  const [
+    handleApproveDecline,
+    {
+      data: approveDeclineData,
+      isSuccess: approveDeclineSuccess,
+      error: approveDeclineError,
+      isLoading: approveDeclineLoading,
+    },
+  ] = useApproveDeclineDriverMutation();
+
+  useEffect(() => {
+    if (approveDeclineSuccess) {
+      router.push("/drivers/pending");
+    }
+  }, [approveDeclineSuccess]);
 
   return (
     <AppLayout padding="0">
@@ -45,7 +63,17 @@ const Driver: NextPage = () => {
             size="large"
             onClick={() =>
               setModalContent(
-                <ApproveRequestCard handleClose={() => setModalContent(null)} />
+                <ApproveRequestCard
+                  handleClose={() => setModalContent(null)}
+                  handleApprove={() => {
+                    if (data)
+                      handleApproveDecline({
+                        driverId: data?.driverInfo.id,
+                        status: "approve",
+                      });
+                  }}
+                  isLoading={approveDeclineLoading}
+                />
               )
             }
           />
@@ -54,8 +82,19 @@ const Driver: NextPage = () => {
             startIcon={<TimesIcon />}
             size="large"
             color="secondary"
-            onClick={()=>{
-                setModalContent(<DeclineRequestCard handleClose={() => setModalContent(null)}/>)
+            onClick={() => {
+              setModalContent(
+                <DeclineRequestCard handleClose={() => setModalContent(null)} handleDecline={()=>{
+                  if (data)
+                      handleApproveDecline({
+                        driverId: data?.driverInfo.id,
+                        reason: "unverifiable documents",
+                        status: "decline",
+                      });
+                }}
+                isLoading={approveDeclineLoading}
+                />
+              );
             }}
           />
         </ActionBar>

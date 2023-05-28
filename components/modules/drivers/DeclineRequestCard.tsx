@@ -3,12 +3,19 @@ import useClickOutside from "@/hooks/useClickOutside";
 import React, { FC } from "react";
 import { motion } from "framer-motion";
 import TextField from "@/components/ui/Input/TextField/TextField";
+import SelectField from "@/components/ui/Input/SelectField";
 
 interface Props {
   handleClose: () => void;
+  handleDecline: () => void;
+  isLoading: boolean;
 }
 
-const DeclineRequestCard: FC<Props> = ({ handleClose }) => {
+const DeclineRequestCard: FC<Props> = ({
+  handleClose,
+  handleDecline,
+  isLoading,
+}) => {
   const ref = useClickOutside<HTMLDivElement>(() => handleClose());
 
   return (
@@ -31,11 +38,9 @@ const DeclineRequestCard: FC<Props> = ({ handleClose }) => {
       </div>
 
       <div className="w-full">
-        <p className="font-bold text-base mb-1">
-          Reason
-        </p>
+        <p className="font-bold text-base mb-1">Reason</p>
         <div>
-            <TextField placeholder="Select Reason"/>
+          <SelectField placeholder="Select Reason" />
         </div>
       </div>
 
@@ -52,6 +57,8 @@ const DeclineRequestCard: FC<Props> = ({ handleClose }) => {
           color="tetiary"
           size="large"
           className="w-[43%] !text-[#EF2C5B]"
+          onClick={handleDecline}
+          loading={isLoading}
         />
       </div>
     </motion.div>
