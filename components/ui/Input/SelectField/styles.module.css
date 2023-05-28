@@ -4,5 +4,5 @@
 }
 
 .error {
-    @apply border border-[#dc3545]
+    @apply !border !border-[#dc3545]
 }

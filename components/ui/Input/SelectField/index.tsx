@@ -49,7 +49,11 @@ const SelectField: FC<Props> = ({
           className={rootClassName}
           onClick={() => setIsDropDown(!isDropDown)}
         >
-          <p className="">{selectedLabel || placeholder}</p>
+          <p className="">
+            {selectedLabel || (
+              <span className="text-[#9A9A9A] text-xs">{placeholder}</span>
+            )}
+          </p>
           <ChevronDown />
         </div>
         {isDropDown && (
