@@ -46,7 +46,7 @@ export interface InspectorsMappedData {
 export interface GetAllInspectorsQuery {
   limit: number;
   page: number;
-  search: string
+  search: string;
 }
 
 export interface ViewInspectorResponse {
@@ -80,5 +80,38 @@ export interface MappedViewInspector {
 }
 
 export interface ViewInspectorQuery {
-  inspectorId: string
+  inspectorId: string;
+}
+
+export interface AddNewInspectorPayload {
+  first_name: string;
+  last_name: string;
+  house_address: string;
+  city: string;
+  state: string;
+  phone_number: string;
+  email: string;
+}
+
+export interface AddNewInspectorResponse {
+  status: string;
+  data: {
+    first_name: string;
+    last_name: string;
+    phone_number: string;
+    email: string;
+    house_address: string;
+    city: string;
+    state: string;
+    country: string;
+    regCompleted: boolean;
+    cars_processed: number;
+    cars_approved: number;
+    cars_declined: number;
+    _id: string;
+    created_at: string;
+    updated_at: string;
+    __v: 0;
+  };
+  message: string;
 }

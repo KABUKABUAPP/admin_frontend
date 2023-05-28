@@ -5,6 +5,8 @@ import { secondsToMilliSeconds } from "@/utils";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "@/constants";
 import {
+  AddNewInspectorPayload,
+  AddNewInspectorResponse,
   GetAllInspectorsQuery,
   GetAllInspectorsResponse,
   InspectorsMappedData,
@@ -78,7 +80,14 @@ export const inspectorsApi = createApi({
         }
       },
     }),
+    addNewInspector: build.mutation<AddNewInspectorResponse, AddNewInspectorPayload>({
+      query: (body)=>({
+        url: 'admin/inspector/add-new',
+        method: 'POST',
+        body
+      })
+    })
   }),
 });
 
-export const { useGetAllInspectorsQuery, useViewInspectorQuery } = inspectorsApi;
+export const { useGetAllInspectorsQuery, useViewInspectorQuery, useAddNewInspectorMutation } = inspectorsApi;

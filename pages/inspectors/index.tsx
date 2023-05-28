@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 const Inspectors: NextPage = () => {
   const [carOwner, setCarOwner] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(2);
+  const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState<string>("");
   const {
     data: inspectors,
