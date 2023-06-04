@@ -6,6 +6,9 @@ import {
   ViewTripQuery,
   ViewTripResponse,
   MappedViewTripResponse,
+  DriverTripHistoryModel,
+  GetDriverTripHistoryQuery,
+  GetDriverTripHistoryResponse,
 } from "@/models/Trips";
 import { GetAllTripsQuery } from "@/models/Trips";
 
@@ -65,7 +68,33 @@ export const tripsApi = createApi({
         } as MappedViewTripResponse;
       },
     }),
+    getDriverTripHistory: build.query<
+      DriverTripHistoryModel[],
+      GetDriverTripHistoryQuery
+    >({
+      query: ({ driverId, limit, page }) => ({
+        url: `admin/trip/for-a-driver/${driverId}?limit=${limit}&page=${page}`,
+        method: "GET",
+      }),
+      transformResponse: (response: GetDriverTripHistoryResponse) => {
+        if (!response) return <DriverTripHistoryModel[]>[];
+        else {
+          return response.data.data.map((item) => {
+            return {
+              amount: item?.price,
+              date: item?.createdAt,
+              destinationTop: item?.end_address.city,
+              destinationBottom: `${item?.end_address.state}, ${item?.end_address.country}`,
+              id: item._id,
+              originTop: `${item?.start_address.city}`,
+              originBottom: `${item?.start_address.country}, ${item?.start_address.state}`,
+              paymentMethod: item?.payment_type,
+            } as DriverTripHistoryModel;
+          });
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetAllTripsQuery, useViewTripQuery } = tripsApi;
+export const { useGetAllTripsQuery, useViewTripQuery, useGetDriverTripHistoryQuery } = tripsApi;

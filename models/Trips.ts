@@ -150,7 +150,7 @@ export interface GetAllTripsQuery {
   limit: number;
   page: number;
   status: "disputed" | "cancelled" | "completed" | "initiated" | "started";
-  search: string
+  search: string;
 }
 
 export interface TripDetail {
@@ -245,4 +245,54 @@ export interface MappedViewTripResponse {
   riderImage: string;
   driverImage: string;
   orderId: string;
+}
+
+export interface GetDriverTripHistoryQuery {
+  driverId: string;
+  limit: number;
+  page: number;
+}
+
+export interface TripHistoryDTO {
+  start_address: {
+    country: string;
+    state: string;
+    city: string;
+  };
+  end_address: {
+    country: string;
+    state: string;
+    city: string;
+  };
+  _id: string;
+  price: number;
+  payment_type: string;
+  status: string;
+  createdAt: string;
+  id: string;
+}
+
+export interface GetDriverTripHistoryResponse {
+  status: string;
+  data: {
+    data: TripHistoryDTO[];
+    pagination: {
+      pageSize: number;
+      totalCount: number;
+      pageCount: number;
+      currentPage: number;
+      hasNext: boolean;
+    };
+  };
+}
+
+export interface DriverTripHistoryModel {
+  originTop?: string;
+  originBottom?: string;
+  destinationTop?: string;
+  destinationBottom?: string;
+  paymentMethod?: string;
+  date?: string;
+  amount?: string | number;
+  id?: string;
 }

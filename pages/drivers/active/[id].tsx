@@ -1,6 +1,6 @@
 import AppLayout from "@/layouts/AppLayout";
 import { NextPage } from "next";
-import React from "react";
+import React, { useState } from "react";
 
 import ActionBar from "@/components/common/ActionBar";
 import Button from "@/components/ui/Button/Button";
@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { useViewDriverQuery } from "@/api-services/driversService";
 import Loader from "@/components/ui/Loader/Loader";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import { useGetDriverTripHistoryQuery } from "@/api-services/tripsService";
 
 const Driver: NextPage = () => {
   const router = useRouter();
@@ -25,6 +26,19 @@ const Driver: NextPage = () => {
 
   const { data, isLoading, isError, refetch } = useViewDriverQuery(
     { id: String(id) },
+    { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+
+  const {
+    data: tripHistory,
+    isLoading: tripHistoryLoading,
+    isError: tripHistoryError,
+    refetch: refetchTripHistory,
+  } = useGetDriverTripHistoryQuery(
+    { driverId: String(id), limit: pageSize, page: currentPage },
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
@@ -45,7 +59,9 @@ const Driver: NextPage = () => {
           <ViewDriverLayout
             secondRow={
               <>
-                <TripHistoryCard tripHistoryData={mockTripHistory} />
+                {tripHistory && !tripHistoryLoading && !tripHistoryError && (
+                  <TripHistoryCard tripHistoryData={tripHistory} />
+                )}
               </>
             }
             firstRow={
