@@ -45,7 +45,7 @@ const Rider: NextPage = () => {
               <NextOfKinCard {...data?.nextOfKin} />
             </>
           }
-          secondRow={<TripHistoryCard tripHistoryData={mockTripHistory} />}
+          // secondRow={<TripHistoryCard tripHistoryData={mockTripHistory} />}
         />
       </div>
     </AppLayout>
