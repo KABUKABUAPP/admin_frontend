@@ -1,91 +1,70 @@
-import React, { FC, useEffect, useState } from "react";
-import useClickOutside from "@/hooks/useClickOutside";
-import ChevronDown from "@/components/icons/ChevronDown";
-import cn from "classnames";
-import s from "./styles.module.css";
-import ErrorMessage from "@/components/common/ErrorMessage";
+import React, { ReactNode } from "react";
 
-interface Props {
-  options?: {
-    label: string | number;
-    value: string | number;
-    default?: boolean;
-  }[];
-  value?: string | number;
-  handleChange?: (value: string | number) => void;
-  placeholder?: string;
+import s from "./styles.module.css";
+
+import cn from "classnames";
+
+interface Props extends React.InputHTMLAttributes<HTMLSelectElement> {
+  className?: string;
   label?: string;
   error?: string | undefined;
+  startIcon?: ReactNode;
+  endIcon?: ReactNode;
+  options?: { label: string; value: string | number }[];
+  required?: boolean;
 }
 
-const SelectField: FC<Props> = ({
-  options,
-  value,
-  handleChange,
-  placeholder,
-  label,
-  error,
-}) => {
-  const [isDropDown, setIsDropDown] = useState(false);
-  const ref = useClickOutside<HTMLDivElement>(() => setIsDropDown(false));
-  const [selectedLabel, setSelectedLabel] = useState<string | number>("");
+const SelectField: React.FC<Props> = (props) => {
+  const {
+    label,
+    error,
+    className,
+    startIcon,
+    endIcon,
+    options,
+    required,
+    ...rest
+  } = props;
 
-  useEffect(() => {
-    const defaultOption = options?.find((i) => i.default)?.label;
-    if (defaultOption) setSelectedLabel(defaultOption);
-  }, []);
-
-  const rootClassName = cn(s.root, {
-    [s.error]: error?.length,
-  });
+  const rootClassName = cn(
+    s.root,
+    {
+      [s.error]: error?.length,
+      [s.startIconPadding]: startIcon && !endIcon,
+      [s.endIconPadding]: endIcon && !startIcon,
+    },
+    className
+  );
 
   return (
-    <>
+    <div className="w-full">
       {label && (
-        <label className="mb-1 block text-sm font-medium">{label}</label>
+        <label className="mb-1 block text-sm font-medium">
+          {label} {required && <span className="text-rose-600">*</span>}
+        </label>
       )}
-      <div className="relative cursor-pointer">
-        <div
-          className={rootClassName}
-          onClick={() => setIsDropDown(!isDropDown)}
-        >
-          <p className="">
-            {selectedLabel || (
-              <span className="text-[#9A9A9A] text-xs">{placeholder}</span>
-            )}
-          </p>
-          <ChevronDown />
-        </div>
-        {isDropDown && (
-          <div
-            ref={ref}
-            className="bg-[#FFFFFF] rounded-lg p-3 absolute top-9 right-[0] w-full min-w-[250px] shadow-lg z-10 max-h-[250px] overflow-y-auto scrollbar-none"
-          >
-            {options && options.length ? (
-              options?.map((option) => {
-                return (
-                  <p
-                    className="py-4 border-b border-b-[#E6E6E6] last:border-none font-bold text-xs"
-                    onClick={() => {
-                      if (handleChange) {
-                        handleChange(option.value);
-                        setSelectedLabel(option.label);
-                      }
-                      setIsDropDown(false);
-                    }}
-                  >
-                    {option.label}
-                  </p>
-                );
-              })
-            ) : (
-              <p className="text-center">No records found</p>
-            )}
-          </div>
+      <div className="w-full relative">
+        <select {...rest} className={rootClassName}>
+          <option value={""} disabled hidden selected>
+            Select
+          </option>
+          {options?.map((opt, idx) => {
+            return <option value={opt.value} key={idx}>{opt.label}</option>;
+          })}
+        </select>
+        {startIcon && !endIcon && (
+          <span className="absolute top-2/4 -translate-y-1/2 left-2 cursor-pointer">
+            {startIcon}
+          </span>
+        )}
+        {endIcon && !startIcon && (
+          <span className="absolute top-2/4 -translate-y-1/2 right-2 cursor-pointer">
+            {endIcon}
+          </span>
         )}
       </div>
-      {error && <ErrorMessage message={error} />}
-    </>
+      {error && <small className="text-[#dc3545] text-xs">{error}</small>}
+    </div>
   );
 };
 

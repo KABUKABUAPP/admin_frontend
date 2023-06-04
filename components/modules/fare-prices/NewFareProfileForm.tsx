@@ -10,6 +10,7 @@ import { useFormik, Form, FormikProvider } from "formik";
 import NewFareProfileValidations from "@/validationschemas/NewFareProfileSchema";
 import { toast } from "react-toastify";
 import { useCreateFarePriceMutation } from "@/api-services/farePricesService";
+import { verifyIsDigit } from "@/utils";
 
 const initialValues = {
   state: "",
@@ -34,7 +35,7 @@ const NewFareProfileForm: FC = () => {
   const [selectedState, setSelectedState] = useState<string>("");
   const [selectedCountry, setSelectedCountry] = useState<string>("");
 
-  const router = useRouter()
+  const router = useRouter();
 
   const handleSelectState = (state: string) => {
     setSelectedState(state);
@@ -47,32 +48,22 @@ const NewFareProfileForm: FC = () => {
     initialValues: initialValues,
     validationSchema: NewFareProfileValidations,
     onSubmit: (values) => {
-      if (!selectedState) {
-        formik.setFieldError("state", "Required");
-      } else if (!selectedCountry) {
-        formik.setFieldError("country", "Required");
-      } else {
-        formik.values.country = selectedCountry;
-        formik.values.state = selectedState;
-
-        submit(values);
-      }
+      submit(values);
     },
   });
 
   useEffect(() => {
-    if (selectedCountry && formik.errors.country)
-      formik.setFieldError("country", undefined);
-    if (selectedState && formik.errors.state)
-      formik.setFieldError("state", undefined);
-  }, [selectedCountry, selectedState]);
-
-  useEffect(()=>{
-    if(isSuccess){
-      toast.success('Fare Price Successfully Created')
-      router.push('/fare-prices')
+    if (isSuccess) {
+      toast.success("Fare Price Successfully Created");
+      router.push("/fare-prices");
     }
-  },[isSuccess])
+  }, [isSuccess]);
+
+  const handleNumberInputs = (value: string, fieldName: string) => {
+    if (verifyIsDigit(value)) {
+      formik.setFieldValue(fieldName, value);
+    }
+  };
 
   return (
     <div>
@@ -86,9 +77,10 @@ const NewFareProfileForm: FC = () => {
                     label="Country"
                     options={[{ label: "Nigeria", value: "Nigeria" }]}
                     placeholder="Select Country"
-                    value={selectedCountry}
-                    handleChange={(v) => setSelectedCountry(String(v))}
-                    error={formik.errors.country}
+                    {...formik.getFieldProps("country")}
+                    error={
+                      formik.touched.country ? formik.errors.country : undefined
+                    }
                   />
                 </div>
 
@@ -100,10 +92,9 @@ const NewFareProfileForm: FC = () => {
                       label: i,
                       value: i,
                     }))}
-                    handleChange={(v) => handleSelectState(String(v))}
-                    value={selectedState}
+                    {...formik.getFieldProps("state")}
                     error={
-                      formik.errors.state ? formik.errors.state : undefined
+                      formik.touched.state ? formik.errors.state : undefined
                     }
                   />
                 </div>
@@ -117,6 +108,12 @@ const NewFareProfileForm: FC = () => {
                   label="Monthly payment [per month]"
                   placeholder="₦20,000"
                   {...formik.getFieldProps("driver_fee_monthly_payment")}
+                  onChange={(e) =>
+                    handleNumberInputs(
+                      e.target.value,
+                      "driver_fee_monthly_payment"
+                    )
+                  }
                   error={
                     formik.touched.driver_fee_monthly_payment
                       ? formik.errors.driver_fee_monthly_payment
@@ -127,6 +124,12 @@ const NewFareProfileForm: FC = () => {
                   label="Sharp payment [per month]"
                   placeholder="₦20,000"
                   {...formik.getFieldProps("driver_fee_sharp_payment")}
+                  onChange={(e) =>
+                    handleNumberInputs(
+                      e.target.value,
+                      "driver_fee_sharp_payment"
+                    )
+                  }
                   error={
                     formik.touched.driver_fee_sharp_payment
                       ? formik.errors.driver_fee_sharp_payment
@@ -146,6 +149,9 @@ const NewFareProfileForm: FC = () => {
                     label="Base Fare"
                     placeholder="₦500"
                     {...formik.getFieldProps("base_fare")}
+                    onChange={(e) =>
+                      handleNumberInputs(e.target.value, "base_fare")
+                    }
                     error={
                       formik.touched.base_fare
                         ? formik.errors.base_fare
@@ -156,6 +162,9 @@ const NewFareProfileForm: FC = () => {
                     label="Time [Per min]"
                     placeholder="₦500"
                     {...formik.getFieldProps("time_per_min")}
+                    onChange={(e) =>
+                      handleNumberInputs(e.target.value, "time_per_min")
+                    }
                     error={
                       formik.touched.time_per_min
                         ? formik.errors.time_per_min
@@ -166,6 +175,9 @@ const NewFareProfileForm: FC = () => {
                     label="Booking Fare"
                     placeholder="₦500"
                     {...formik.getFieldProps("booking_fee")}
+                    onChange={(e) =>
+                      handleNumberInputs(e.target.value, "booking_fee")
+                    }
                     error={
                       formik.touched.booking_fee
                         ? formik.errors.booking_fee
@@ -176,6 +188,9 @@ const NewFareProfileForm: FC = () => {
                     label="Surge Multiplier"
                     placeholder="1"
                     {...formik.getFieldProps("surge_multiplier")}
+                    onChange={(e) =>
+                      handleNumberInputs(e.target.value, "surge_multiplier")
+                    }
                     error={
                       formik.touched.surge_multiplier
                         ? formik.errors.surge_multiplier
@@ -188,6 +203,9 @@ const NewFareProfileForm: FC = () => {
                     label="Distance [per km]"
                     placeholder="₦500"
                     {...formik.getFieldProps("distance_per_km")}
+                    onChange={(e) =>
+                      handleNumberInputs(e.target.value, "distance_per_km")
+                    }
                     error={
                       formik.touched.distance_per_km
                         ? formik.errors.distance_per_km
@@ -198,6 +216,9 @@ const NewFareProfileForm: FC = () => {
                     label="LASG legy [%]"
                     placeholder="3"
                     {...formik.getFieldProps("state_levy")}
+                    onChange={(e) =>
+                      handleNumberInputs(e.target.value, "state_levy")
+                    }
                     error={
                       formik.touched.state_levy
                         ? formik.errors.state_levy
@@ -208,6 +229,9 @@ const NewFareProfileForm: FC = () => {
                     label="Waiting time [per min]"
                     placeholder="₦100"
                     {...formik.getFieldProps("waiting_time_per_min")}
+                    onChange={(e) =>
+                      handleNumberInputs(e.target.value, "waiting_time_per_min")
+                    }
                     error={
                       formik.touched.waiting_time_per_min
                         ? formik.errors.waiting_time_per_min

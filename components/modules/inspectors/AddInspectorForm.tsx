@@ -10,6 +10,7 @@ import { nigerianStates } from "@/constants";
 import NewInspectorValidations from "@/validationschemas/AddInspectorSchema";
 import SelectField from "@/components/ui/Input/SelectField";
 import { useAddNewInspectorMutation } from "@/api-services/inspectorsService";
+import { verifyIsDigit } from "@/utils";
 
 const initialValues = {
   first_name: "",
@@ -22,8 +23,6 @@ const initialValues = {
 };
 
 const AddInspectorForm: FC = () => {
-  const [selectedState, setSelectedState] = useState<string>("");
-  const [selectedCity, setSelectedCity] = useState<string>("");
   const [addInspector, { isLoading, isError, isSuccess }] =
     useAddNewInspectorMutation();
 
@@ -33,25 +32,9 @@ const AddInspectorForm: FC = () => {
     initialValues: initialValues,
     validationSchema: NewInspectorValidations,
     onSubmit: (values) => {
-      if (!selectedState) {
-        formik.setFieldError("state", "Required");
-      }
-      if (!selectedCity) formik.setFieldError("city", "Required");
-      else {
-        formik.values.city = selectedCity;
-        formik.values.state = selectedState;
-
-        addInspector(values);
-      }
+      addInspector(values);
     },
   });
-
-  useEffect(() => {
-    if (selectedState && formik.errors.state)
-      formik.setFieldError("state", undefined);
-    if (selectedCity && formik.errors.city)
-      formik.setFieldError("city", undefined);
-  }, [selectedState, selectedCity]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -94,6 +77,11 @@ const AddInspectorForm: FC = () => {
                 label="Phone Number"
                 placeholder="phone here"
                 {...formik.getFieldProps("phone_number")}
+                onChange={(e) => {
+                  if (verifyIsDigit(e.target.value)) {
+                    formik.setFieldValue("phone_number", e.target.value);
+                  }
+                }}
                 error={
                   formik.touched.phone_number
                     ? formik.errors.phone_number
@@ -112,15 +100,11 @@ const AddInspectorForm: FC = () => {
               />
               <div className="flex justify-between gap-3 max-sm:flex-col">
                 <div className="w-full">
-                  <SelectField
+                  <TextField
                     label="City"
                     placeholder="Lagos Island"
-                    value={selectedCity}
-                    options={[...nigerianStates].map((i) => ({
-                      label: i,
-                      value: i,
-                    }))}
-                    handleChange={(v) => setSelectedCity(String(v))}
+                    {...formik.getFieldProps("city")}
+                    error={formik.touched.city ? formik.errors.city : undefined}
                   />
                 </div>
 
@@ -132,9 +116,10 @@ const AddInspectorForm: FC = () => {
                       label: i,
                       value: i,
                     }))}
-                    value={selectedState}
-                    handleChange={(v) => setSelectedState(String(v))}
-                    error={formik.errors.state}
+                    {...formik.getFieldProps("state")}
+                    error={
+                      formik.touched.state ? formik.errors.state : undefined
+                    }
                   />
                 </div>
               </div>

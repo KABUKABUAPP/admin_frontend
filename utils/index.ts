@@ -9,6 +9,17 @@ export function assertIsNode(e: EventTarget | null): asserts e is Node {
   }
 }
 
+export const verifyIsDigit = (value: string | number): boolean => {
+  const re = /^[0-9\b]+$/;
+
+  // if value is not blank, then test the regex
+
+  if (value === "" || re.test(String(value))) {
+    return true;
+  }
+  return false;
+};
+
 export const secondsToMilliSeconds = (seconds: number): number => {
   return seconds * milliSecondToSecondConversionRate;
 };
@@ -86,6 +97,6 @@ export const formatChartLabels = ({
   return data.map((item) => {
     const splitString = item.split(" ");
     if (query === "7_days") return splitString[0];
-    return splitString[1]
+    return splitString[1];
   });
 };
