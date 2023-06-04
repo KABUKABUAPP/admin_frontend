@@ -45,7 +45,7 @@ const Driver: NextPage = () => {
           <ViewDriverLayout
             secondRow={
               <>
-                <TripHistoryCard tripHistoryData={mockTripHistory} />
+                {/* <TripHistoryCard tripHistoryData={mockTripHistory} /> */}
               </>
             }
             firstRow={

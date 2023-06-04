@@ -9,6 +9,7 @@ import {
   DriverTripHistoryModel,
   GetDriverTripHistoryQuery,
   GetDriverTripHistoryResponse,
+  DriverTripHistory,
 } from "@/models/Trips";
 import { GetAllTripsQuery } from "@/models/Trips";
 
@@ -69,7 +70,7 @@ export const tripsApi = createApi({
       },
     }),
     getDriverTripHistory: build.query<
-      DriverTripHistoryModel[],
+      DriverTripHistory,
       GetDriverTripHistoryQuery
     >({
       query: ({ driverId, limit, page }) => ({
@@ -77,9 +78,9 @@ export const tripsApi = createApi({
         method: "GET",
       }),
       transformResponse: (response: GetDriverTripHistoryResponse) => {
-        if (!response) return <DriverTripHistoryModel[]>[];
+        if (!response) return <DriverTripHistory>{};
         else {
-          return response.data.data.map((item) => {
+          const history = response.data.data.map((item) => {
             return {
               amount: item?.price,
               date: item?.createdAt,
@@ -91,10 +92,19 @@ export const tripsApi = createApi({
               paymentMethod: item?.payment_type,
             } as DriverTripHistoryModel;
           });
+
+          return {
+            totalCount: response.data.pagination.totalCount,
+            data: history,
+          };
         }
       },
     }),
   }),
 });
 
-export const { useGetAllTripsQuery, useViewTripQuery, useGetDriverTripHistoryQuery } = tripsApi;
+export const {
+  useGetAllTripsQuery,
+  useViewTripQuery,
+  useGetDriverTripHistoryQuery,
+} = tripsApi;

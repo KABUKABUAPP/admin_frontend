@@ -296,3 +296,8 @@ export interface DriverTripHistoryModel {
   amount?: string | number;
   id?: string;
 }
+
+export interface DriverTripHistory {
+  data: DriverTripHistoryModel[],
+  totalCount: number
+}

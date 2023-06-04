@@ -60,7 +60,18 @@ const Driver: NextPage = () => {
             secondRow={
               <>
                 {tripHistory && !tripHistoryLoading && !tripHistoryError && (
-                  <TripHistoryCard tripHistoryData={tripHistory} />
+                  <TripHistoryCard tripHistoryData={tripHistory.data} count={tripHistory.totalCount}/>
+                )}
+                {!tripHistoryLoading && !tripHistory && tripHistoryError && (
+                  <div className="pt-4 flex flex-col gap-2 items-center justify-center">
+                    <ErrorMessage message="Error Fetching Trip History" />
+                    <Button title="Reload" onClick={refetchTripHistory} />
+                  </div>
+                )}
+                {tripHistoryLoading && !tripHistory && !tripHistoryError && (
+                  <div className="pt-4 flex items-center justify-center">
+                    <Loader size="medium" />
+                  </div>
                 )}
               </>
             }

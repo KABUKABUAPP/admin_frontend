@@ -15,13 +15,14 @@ interface Props {
     amount?: string | number;
     id?: string;
   }[];
+  count: number;
 }
 
-const TripHistoryCard: FC<Props> = ({ tripHistoryData }) => {
+const TripHistoryCard: FC<Props> = ({ tripHistoryData, count }) => {
   return (
     <Card>
       <div className="flex justify-between mb-6">
-        <p className="font-semibold text-lg">Trip History[50]</p>
+        <p className="font-semibold text-lg">Trip History[{count}]</p>
         <div className="flex gap-2 items-center">
           <p className="text-sm">Sort:</p>
           <DropDown placeholder="Newest First" />
