@@ -60,7 +60,14 @@ const Driver: NextPage = () => {
             secondRow={
               <>
                 {tripHistory && !tripHistoryLoading && !tripHistoryError && (
-                  <TripHistoryCard tripHistoryData={tripHistory.data} count={tripHistory.totalCount}/>
+                  <TripHistoryCard
+                    tripHistoryData={tripHistory.data}
+                    totalCount={tripHistory.totalCount}
+                    currentCount={tripHistory.data.length}
+                    handleViewMore={()=>{
+                      setPageSize((ps)=>ps+5)
+                    }}
+                  />
                 )}
                 {!tripHistoryLoading && !tripHistory && tripHistoryError && (
                   <div className="pt-4 flex flex-col gap-2 items-center justify-center">

@@ -23,6 +23,7 @@ const Rider: NextPage = () => {
     { id: String(id), status: "" },
     { skip: !id, refetchOnReconnect: true, refetchOnMountOrArgChange: true }
   );
+  
 
   return (
     <AppLayout padding="0">

@@ -31,7 +31,7 @@ const SharpCar: NextPage = () => {
         <ViewSharpCarLayout
           secondRow={
             <>
-              <TripHistoryCard tripHistoryData={mockTripHistory} />
+              {/* <TripHistoryCard tripHistoryData={mockTripHistory} /> */}
             </>
           }
           firstRow={
