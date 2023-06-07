@@ -129,6 +129,7 @@ export interface MappedDocument {
   title?: string | undefined;
   docImage?: string | undefined;
   docId?: string | undefined;
+  status?: string | undefined
 }
 
 export interface ViewDriverQuery {
@@ -179,4 +180,9 @@ export interface ApproveDeclineDriverQuery {
 export interface ApproveDeclineDriverResponse {
   status: string;
   message: string;
+}
+
+export interface InspectDocumentQuery {
+  docId: string;
+  status: 'DECLINED' | 'APPROVED'
 }

@@ -26,7 +26,7 @@ const FarePrice: NextPage = () => {
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
-  const handleStartSurge = () => {
+  const handleSurge = () => {
     setModalContent(
       <StartSurgeCard handleClose={() => setModalContent(null)} />
     );
@@ -36,13 +36,17 @@ const FarePrice: NextPage = () => {
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
         <ActionBar>
-          <Button
-            title="Start Surge"
-            size="large"
-            color="tetiary"
-            startIcon={<SurgeIcon />}
-            onClick={handleStartSurge}
-          />
+          {data && (
+            <Button
+              title={
+                data.data.surge_status === true ? "End Surge" : "Start Surge"
+              }
+              size="large"
+              color="tetiary"
+              startIcon={<SurgeIcon />}
+              onClick={handleSurge}
+            />
+          )}
           <Button
             title="Delete Profile"
             size="large"
@@ -52,15 +56,17 @@ const FarePrice: NextPage = () => {
         </ActionBar>
         {isLoading && !data && !isError && (
           <div className="pt-6 flex justify-center w-full">
-            <Loader size="medium"/>
+            <Loader size="medium" />
           </div>
         )}
-        {!data && isError && !isLoading &&
+        {!data && isError && !isLoading && (
           <div className="flex flex-col items-center gap-3 pt-6">
             <p className="text-rose-600">Oops! Something went wrong</p>
-            <div><Button title="Reload" onClick={refetch}/></div>
+            <div>
+              <Button title="Reload" onClick={refetch} />
+            </div>
           </div>
-        }
+        )}
         {data && !isLoading && !isError && (
           <ViewFarePriceLayout
             asideComponents={
@@ -108,8 +114,6 @@ const FarePrice: NextPage = () => {
             }
           />
         )}
-
-       
       </div>
     </AppLayout>
   );

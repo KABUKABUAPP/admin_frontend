@@ -13,6 +13,7 @@ import {
   MappedViewDriver,
   ApproveDeclineDriverResponse,
   ApproveDeclineDriverQuery,
+  InspectDocumentQuery,
 } from "@/models/Drivers";
 
 export const driversApi = createApi({
@@ -30,7 +31,7 @@ export const driversApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["drivers"],
+  tagTypes: ["drivers", "driver"],
   endpoints: (build) => ({
     getAllDrivers: build.query<DriversMappedResponse, GetAllDriversQuery>({
       query: ({ limit, page, carOwner, driverStatus, search }) => ({
@@ -65,6 +66,7 @@ export const driversApi = createApi({
       query: ({ id }) => ({
         url: `admin/driver/view/${id}`,
       }),
+      providesTags: ["driver"],
       transformResponse: (response: ViewDriverResponse) => {
         if (!response) return <MappedViewDriver>{};
         else {
@@ -105,6 +107,7 @@ export const driversApi = createApi({
                   title: doc.title,
                   docImage: doc.url,
                   docId: doc._id,
+                  status: doc.status
                 };
               }),
             },
@@ -123,7 +126,14 @@ export const driversApi = createApi({
         method: "PUT",
       }),
     }),
+    inspectDocument: build.mutation<any, InspectDocumentQuery>({
+      query: ({docId, status})=>({
+        url: `admin/driver/inspect-document/${docId}?status=${status}`,
+        method: 'PUT'
+      }),
+      invalidatesTags: ["driver"]
+    })
   }),
 });
 
-export const { useGetAllDriversQuery, useViewDriverQuery, useApproveDeclineDriverMutation } = driversApi;
+export const { useGetAllDriversQuery, useViewDriverQuery, useApproveDeclineDriverMutation, useInspectDocumentMutation } = driversApi;

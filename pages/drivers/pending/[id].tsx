@@ -1,6 +1,6 @@
 import AppLayout from "@/layouts/AppLayout";
 import { NextPage } from "next";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import ActionBar from "@/components/common/ActionBar";
 import Button from "@/components/ui/Button/Button";
@@ -22,6 +22,8 @@ import DeclineRequestCard from "@/components/modules/drivers/DeclineRequestCard"
 import { useModalContext } from "@/contexts/ModalContext";
 import ApproveSuccessCard from "@/components/modules/drivers/ApproveSuccessCard";
 import { useApproveDeclineDriverMutation } from "@/api-services/driversService";
+import ActionDocumentCard from "@/components/modules/drivers/ActionDocumentCard";
+import ActionDocumentCardContainer from "@/components/modules/drivers/ActionDocumentCardContainer";
 
 const Driver: NextPage = () => {
   const router = useRouter();
@@ -33,8 +35,6 @@ const Driver: NextPage = () => {
     { id: String(id) },
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
-
-  console.log(data);
 
   const [
     handleApproveDecline,
@@ -52,51 +52,79 @@ const Driver: NextPage = () => {
     }
   }, [approveDeclineSuccess]);
 
+  const [isApproveButton, setIsApproveButton] = useState(false);
+  const [isDeclineButton, setIsDeclineButton] = useState(false);
+
+  useEffect(() => {
+    if (data) {
+      const allowApprove = data.carDocs.documents.every(
+        (d) => d.status === "APPROVE"
+      );
+      const allowDecline = data.carDocs.documents.some(
+        (d) => d.status === "DECLINED"
+      );
+
+      if (allowApprove) setIsApproveButton(true);
+      else {
+        setIsApproveButton(false);
+      }
+
+      if (allowDecline) setIsDeclineButton(true);
+      else setIsDeclineButton(false);
+    }
+  }, [JSON.stringify(data)]);
+
   return (
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
         <ActionBar>
-          <Button
-            title="Approve Request"
-            className="!bg-[#1FD11B] !text-[#FFFFFF]"
-            startIcon={<CheckIcon />}
-            size="large"
-            onClick={() =>
-              setModalContent(
-                <ApproveRequestCard
-                  handleClose={() => setModalContent(null)}
-                  handleApprove={() => {
-                    if (data)
-                      handleApproveDecline({
-                        driverId: data?.driverInfo.id,
-                        status: "approve",
-                      });
-                  }}
-                  isLoading={approveDeclineLoading}
-                />
-              )
-            }
-          />
-          <Button
-            title="Decline Request"
-            startIcon={<TimesIcon />}
-            size="large"
-            color="secondary"
-            onClick={() => {
-              setModalContent(
-                <DeclineRequestCard handleClose={() => setModalContent(null)} handleDecline={()=>{
-                  if (data)
-                      handleApproveDecline({
-                        driverId: data?.driverInfo.id,
-                        reason: "unverifiable documents",
-                        status: "decline",
-                      });
-                }}
-                isLoading={approveDeclineLoading}
-                />
-              );
-            }}
-          />
+          {isApproveButton && (
+            <Button
+              title="Approve Request"
+              className="!bg-[#1FD11B] !text-[#FFFFFF]"
+              startIcon={<CheckIcon />}
+              size="large"
+              onClick={() =>
+                setModalContent(
+                  <ApproveRequestCard
+                    handleClose={() => setModalContent(null)}
+                    handleApprove={() => {
+                      if (data)
+                        handleApproveDecline({
+                          driverId: data?.driverInfo.id,
+                          status: "approve",
+                        });
+                    }}
+                    isLoading={approveDeclineLoading}
+                  />
+                )
+              }
+            />
+          )}
+          {isDeclineButton && (
+            <Button
+              title="Decline Request"
+              startIcon={<TimesIcon />}
+              size="large"
+              color="secondary"
+              onClick={() => {
+                setModalContent(
+                  <DeclineRequestCard
+                    handleClose={() => setModalContent(null)}
+                    handleDecline={() => {
+                      if (data)
+                        handleApproveDecline({
+                          driverId: data?.driverInfo.id,
+                          reason: "unverifiable documents",
+                          status: "decline",
+                        });
+                    }}
+                    isLoading={approveDeclineLoading}
+                  />
+                );
+              }}
+            />
+          )}
         </ActionBar>
 
         {data && !isLoading && !isError && (
@@ -113,6 +141,9 @@ const Driver: NextPage = () => {
 
                 <CarDocuments {...data.carDocs} />
               </>
+            }
+            secondRow={
+              <ActionDocumentCardContainer data={data.carDocs.documents} />
             }
           />
         )}
