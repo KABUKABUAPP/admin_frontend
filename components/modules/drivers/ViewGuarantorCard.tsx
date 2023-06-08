@@ -6,6 +6,8 @@ import { useModalContext } from "@/contexts/ModalContext";
 import Button from "@/components/ui/Button/Button";
 import UploadDetailsCard from "./UploadDetailsCard";
 import CloseIcon from "@/components/icons/CloseIcon";
+import DeclineGuarantorReasonCard from "./DeclineGuarantorReasonCard";
+import ApproveGuarantorRequestCard from "./ApproveGuarantorRequestCard";
 
 const ViewGuarantorCard: FC = () => {
   const { setModalContent } = useModalContext();
@@ -13,9 +15,14 @@ const ViewGuarantorCard: FC = () => {
   return (
     <Card maxWidth="800px">
       <div className="p-8 relative">
-        <span className="absolute top-9 right-8 cursor-pointer" onClick={()=>{
-            setModalContent(null)
-        }}><CloseIcon /></span>
+        <span
+          className="absolute top-9 right-8 cursor-pointer"
+          onClick={() => {
+            setModalContent(null);
+          }}
+        >
+          <CloseIcon />
+        </span>
         <p className="text-base font-semibold text-center mb-4">
           View Guarantor
         </p>
@@ -38,6 +45,9 @@ const ViewGuarantorCard: FC = () => {
             size="large"
             color="secondary"
             className="!w-full"
+            onClick={() => {
+              setModalContent(<DeclineGuarantorReasonCard />);
+            }}
           />
         </div>
         <div style={{ flex: 1 }}>
@@ -45,6 +55,9 @@ const ViewGuarantorCard: FC = () => {
             title="Approve Guarantor"
             size="large"
             className="!bg-[#1FD11B] !text-[#FFFFFF] !w-full"
+            onClick={() => {
+              setModalContent(<ApproveGuarantorRequestCard />);
+            }}
           />
         </div>
       </div>
