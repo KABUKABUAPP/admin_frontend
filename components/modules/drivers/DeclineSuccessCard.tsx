@@ -4,10 +4,12 @@ import Image from "next/image";
 import useClickOutside from "@/hooks/useClickOutside";
 import { useModalContext } from "@/contexts/ModalContext";
 import { motion } from "framer-motion";
+import { useRouter } from "next/router";
 
 const DeclineSuccessCard: FC = () => {
   const { setModalContent } = useModalContext();
   const ref = useClickOutside<HTMLDivElement>(() => setModalContent(null));
+  const router = useRouter();
 
   return (
     <motion.div
@@ -34,7 +36,14 @@ const DeclineSuccessCard: FC = () => {
         </p>
       </div>
       <div>
-        <Button title="Continue" className="w-full" onClick={() => setModalContent(null)}/>
+        <Button
+          title="Continue"
+          className="w-full"
+          onClick={() => {
+            setModalContent(null);
+            router.push("/drivers/pending");
+          }}
+        />
       </div>
     </motion.div>
   );

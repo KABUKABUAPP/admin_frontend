@@ -24,6 +24,7 @@ import ApproveSuccessCard from "@/components/modules/drivers/ApproveSuccessCard"
 import { useApproveDeclineDriverMutation } from "@/api-services/driversService";
 import ActionDocumentCard from "@/components/modules/drivers/ActionDocumentCard";
 import ActionDocumentCardContainer from "@/components/modules/drivers/ActionDocumentCardContainer";
+import DeclineSuccessCard from "@/components/modules/drivers/DeclineSuccessCard";
 
 const Driver: NextPage = () => {
   const router = useRouter();
@@ -37,20 +38,37 @@ const Driver: NextPage = () => {
   );
 
   const [
-    handleApproveDecline,
+    approveRequest,
     {
-      data: approveDeclineData,
-      isSuccess: approveDeclineSuccess,
-      error: approveDeclineError,
-      isLoading: approveDeclineLoading,
+      data: approvedData,
+      isSuccess: approvedSuccess,
+      error: approvedError,
+      isLoading: approvedLoading,
     },
   ] = useApproveDeclineDriverMutation();
 
+  const [
+    declineRequest,
+    {
+      data: declinedData,
+      isSuccess: declinedSuccess,
+      isLoading: declinedLoading,
+    },
+  ] = useApproveDeclineDriverMutation();
+
+  console.log("main", declinedLoading);
+
   useEffect(() => {
-    if (approveDeclineSuccess) {
-      router.push("/drivers/pending");
+    if (approvedSuccess) {
+      setModalContent(<ApproveSuccessCard />);
     }
-  }, [approveDeclineSuccess]);
+  }, [approvedSuccess]);
+
+  useEffect(() => {
+    if (declinedSuccess) {
+      setModalContent(<DeclineSuccessCard />);
+    }
+  }, [declinedSuccess]);
 
   const [isApproveButton, setIsApproveButton] = useState(false);
   const [isDeclineButton, setIsDeclineButton] = useState(false);
@@ -90,12 +108,12 @@ const Driver: NextPage = () => {
                     handleClose={() => setModalContent(null)}
                     handleApprove={() => {
                       if (data)
-                        handleApproveDecline({
+                        approveRequest({
                           driverId: data?.driverInfo.id,
                           status: "approve",
                         });
                     }}
-                    isLoading={approveDeclineLoading}
+                    isLoading={approvedLoading}
                   />
                 )
               }
@@ -110,16 +128,16 @@ const Driver: NextPage = () => {
               onClick={() => {
                 setModalContent(
                   <DeclineRequestCard
+                    isLoading={declinedLoading}
                     handleClose={() => setModalContent(null)}
-                    handleDecline={() => {
+                    handleDecline={(reason) => {
                       if (data)
-                        handleApproveDecline({
+                        declineRequest({
                           driverId: data?.driverInfo.id,
-                          reason: "unverifiable documents",
+                          reason: reason,
                           status: "decline",
                         });
                     }}
-                    isLoading={approveDeclineLoading}
                   />
                 );
               }}
@@ -132,10 +150,6 @@ const Driver: NextPage = () => {
             firstRow={
               <>
                 <DriverInfoCard {...data.driverInfo} />
-
-                {/* <CarDetailsCard {...data.carDetails} /> */}
-                {/* 
-                <FinancialsCard {...data.financials} /> */}
 
                 <GuarantorDetailsCard {...data.guarantor} />
 
@@ -165,36 +179,3 @@ const Driver: NextPage = () => {
 };
 
 export default Driver;
-
-const mockTripHistory = [
-  {
-    originTop: "Kuvuki Land",
-    originBottom: "",
-    destinationTop: "Filmhouse Cinemas IMAX Lekki",
-    destinationBottom: "22, Ozumba Mbadiwe Street, Lekki, Lagos",
-    paymentMethod: "Wallet Payment",
-    date: "20 January, 2023 at 3:30pm",
-    amount: 1300,
-    id: "#12345",
-  },
-  {
-    originTop: "Kuvuki Land",
-    originBottom: "",
-    destinationTop: "Filmhouse Cinemas IMAX Lekki",
-    destinationBottom: "22, Ozumba Mbadiwe Street, Lekki, Lagos",
-    paymentMethod: "Wallet Payment",
-    date: "20 January, 2023 at 3:30pm",
-    amount: 1300,
-    id: "#12345",
-  },
-  {
-    originTop: "Kuvuki Land",
-    originBottom: "",
-    destinationTop: "Filmhouse Cinemas IMAX Lekki",
-    destinationBottom: "22, Ozumba Mbadiwe Street, Lekki, Lagos",
-    paymentMethod: "Wallet Payment",
-    date: "20 January, 2023 at 3:30pm",
-    amount: 1300,
-    id: "#12345",
-  },
-];

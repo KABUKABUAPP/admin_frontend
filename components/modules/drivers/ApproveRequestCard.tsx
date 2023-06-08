@@ -44,6 +44,7 @@ const ApproveRequestCard: FC<Props> = ({ handleClose, handleApprove, isLoading }
           className={`w-[43%] ${isLoading ? '!bg-[#cccccc]' : '!bg-[#1FD11B]'} !text-[#FFFFFF]`}
           onClick={handleApprove}
           loading={isLoading}
+          disabled={isLoading}
         />
       </div>
     </motion.div>

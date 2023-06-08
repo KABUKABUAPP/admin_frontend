@@ -122,8 +122,9 @@ export const driversApi = createApi({
       ApproveDeclineDriverQuery
     >({
       query: ({ driverId, reason, status }) => ({
-        url: `admin/driver/approve-decline/${driverId}?reason=${reason}&status=${status}`,
+        url: `admin/driver/approve-decline/${driverId}`,
         method: "PUT",
+        body: { reason, status}
       }),
     }),
     inspectDocument: build.mutation<any, InspectDocumentQuery>({
