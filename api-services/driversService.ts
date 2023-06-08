@@ -16,6 +16,8 @@ import {
   InspectDocumentQuery,
   ViewGuarantorQuery,
   VerifyGuarantorPayloadModel,
+  MappedViewGuarantorResponse,
+  ViewGuarantorResponse,
 } from "@/models/Drivers";
 
 export const driversApi = createApi({
@@ -138,11 +140,25 @@ export const driversApi = createApi({
       }),
       invalidatesTags: ["driver"],
     }),
-    viewGuarantor: build.query<any, ViewGuarantorQuery>({
-      query: ({ id }) => ({
-        url: `admin/driver/verify-a-guarantor/${id}`,
-      }),
-    }),
+    viewGuarantor: build.query<MappedViewGuarantorResponse, ViewGuarantorQuery>(
+      {
+        query: ({ id }) => ({
+          url: `admin/driver/view-a-guarantor/${id}`,
+        }),
+        transformResponse: (response: ViewGuarantorResponse) => {
+          if (!response) return <MappedViewGuarantorResponse>{};
+          else {
+            return {
+              address: `${response.data?.guarantor?.city} ${response.data?.guarantor?.state}`,
+              fullname: `${response.data?.guarantor?.name}`,
+              phone: `${response.data?.guarantor?.phone_number}`,
+              relationship: `${response.data?.guarantor?.relationship}`,
+              image: response.data?.guarantor?.image
+            } as MappedViewGuarantorResponse;
+          }
+        },
+      }
+    ),
     verifyGuarantor: build.mutation<any, VerifyGuarantorPayloadModel>({
       query: ({ id, ...rest }) => ({
         url: `admin/driver/verify-a-guarantor/${id}`,

@@ -9,7 +9,26 @@ import CloseIcon from "@/components/icons/CloseIcon";
 import DeclineGuarantorReasonCard from "./DeclineGuarantorReasonCard";
 import ApproveGuarantorRequestCard from "./ApproveGuarantorRequestCard";
 
-const ViewGuarantorCard: FC = () => {
+interface Props {
+  driverUpload: {
+    title: string;
+    fullname: string;
+    relationship: string;
+    address: string;
+    phone: string;
+    image: string
+  };
+  guarantorUpload: {
+    title: string;
+    fullname: string;
+    relationship: string;
+    address: string;
+    phone: string;
+    image: string
+  };
+}
+
+const ViewGuarantorCard: FC<Props> = ({ driverUpload, guarantorUpload }) => {
   const { setModalContent } = useModalContext();
 
   return (
@@ -32,10 +51,10 @@ const ViewGuarantorCard: FC = () => {
       </div>
       <div className="my-10 flex gap-6 justify-between max-sm:flex-col">
         <div className="w-full">
-          <UploadDetailsCard />
+          <UploadDetailsCard {...driverUpload} />
         </div>
         <div className="w-full">
-          <UploadDetailsCard />
+          <UploadDetailsCard {...guarantorUpload} />
         </div>
       </div>
       <div className="flex justify-between gap-6 max-sm:flex-col">

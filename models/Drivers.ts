@@ -242,3 +242,11 @@ export interface VerifyGuarantorPayloadModel {
   status: "decline" | "approve";
   reason: string;
 }
+
+export interface MappedViewGuarantorResponse {
+  address: string;
+  fullname: string;
+  relationship: string;
+  phone: string;
+  image: string
+}

@@ -10,6 +10,9 @@ import CheckIcon from "../icons/CheckIcon";
 import TimesIcon from "../icons/TimesIcon";
 import { useModalContext } from "@/contexts/ModalContext";
 import ViewGuarantorCard from "../modules/drivers/ViewGuarantorCard";
+import { useViewGuarantorQuery } from "@/api-services/driversService";
+import Loader from "../ui/Loader/Loader";
+import { toast } from "react-toastify";
 
 interface Props {
   image?: string;
@@ -35,13 +38,38 @@ const GuarantorDetailsCard: FC<Props> = ({
   bg = "#FFFFFF",
 }) => {
   const router = useRouter();
-  const { setModalContent } = useModalContext()
+  const { id } = router.query;
+  const { setModalContent } = useModalContext();
   const [showGuarantorStatus, setShowGuarantorStatus] =
     useState<boolean>(false);
+  const [isNotFetchGuarantorUpload, setIsNotFetchGuarantorUpload] =
+    useState(true);
+  const {
+    data,
+    isLoading: guarantorLoading,
+    isError,
+    refetch
+  } = useViewGuarantorQuery(
+    { id: String(id) },
+    {
+      skip: isNotFetchGuarantorUpload || !id,
+      refetchOnMountOrArgChange: true,
+      refetchOnReconnect: true,
+    }
+  );
+
+  useEffect(()=>{
+    if(isError){
+      toast.error("Error Fetching guarantors Info")
+    }
+  },[isError])
 
   useEffect(() => {
     if (router.pathname && router.pathname.includes("pending")) {
       setShowGuarantorStatus(true);
+      if (responseStatus === "pending") {
+        setIsNotFetchGuarantorUpload(false);
+      }
     }
   }, [router.pathname]);
 
@@ -85,9 +113,36 @@ const GuarantorDetailsCard: FC<Props> = ({
               <InfoIcon />
               <p className="text-base font-semibold">Guarantor has responded</p>
             </div>
-            <Button title="Click to view" variant="text" onClick={()=>{
-              setModalContent(<ViewGuarantorCard />)
-            }}/>
+            {data && !isError && !guarantorLoading && (
+              <Button
+                title={"Click to view"}
+                variant="text"
+                onClick={() => {
+                  setModalContent(
+                    <ViewGuarantorCard
+                      driverUpload={{
+                        title: "Driver's",
+                        address: `${address}`,
+                        fullname: `${fullname}`,
+                        relationship: `${relationship}`,
+                        phone: `${phone}`,
+                        image: `${image}`
+                      }}
+                      guarantorUpload={{ ...data, title: "Guarantor's" }}
+                    />
+                  );
+                }}
+              />
+            )}
+            {guarantorLoading && !isError && !data && <Loader size="small" />}
+            {!data && !guarantorLoading && isError && (
+              <Button
+                variant="text"
+                title="Reload Guarantor's info"
+                size="small"
+                onClick={refetch}
+              />
+            )}
           </>
         )
       ) : null}
