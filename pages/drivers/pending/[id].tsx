@@ -6,11 +6,8 @@ import ActionBar from "@/components/common/ActionBar";
 import Button from "@/components/ui/Button/Button";
 import ViewDriverLayout from "@/components/modules/drivers/ViewDriverLayout";
 import DriverInfoCard from "@/components/common/UserInfoCard";
-import CarDetailsCard from "@/components/common/CarDetailsCard";
-import FinancialsCard from "@/components/common/FinancialsCard";
 import GuarantorDetailsCard from "@/components/common/GuarantorDetailsCard";
 import CarDocuments from "@/components/common/CarDocuments";
-import TripHistoryCard from "@/components/common/TripHistoryCard";
 import { useRouter } from "next/router";
 import { useViewDriverQuery } from "@/api-services/driversService";
 import Loader from "@/components/ui/Loader/Loader";
@@ -20,11 +17,7 @@ import TimesIcon from "@/components/icons/TimesIcon";
 import ApproveRequestCard from "@/components/modules/drivers/ApproveRequestCard";
 import DeclineRequestCard from "@/components/modules/drivers/DeclineRequestCard";
 import { useModalContext } from "@/contexts/ModalContext";
-import ApproveSuccessCard from "@/components/modules/drivers/ApproveSuccessCard";
-import { useApproveDeclineDriverMutation } from "@/api-services/driversService";
-import ActionDocumentCard from "@/components/modules/drivers/ActionDocumentCard";
 import ActionDocumentCardContainer from "@/components/modules/drivers/ActionDocumentCardContainer";
-import DeclineSuccessCard from "@/components/modules/drivers/DeclineSuccessCard";
 
 const Driver: NextPage = () => {
   const router = useRouter();
