@@ -1,8 +1,13 @@
-import React, { FC } from "react";
+import React, { FC, useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 import Card from "@/components/common/Card";
 import Avatar from "@/components/common/Avatar";
 import Skeleton from "react-loading-skeleton";
+import Button from "../ui/Button/Button";
+import InfoIcon from "../icons/InfoIcon";
+import CheckIcon from "../icons/CheckIcon";
+import TimesIcon from "../icons/TimesIcon";
 
 interface Props {
   image?: string;
@@ -12,6 +17,8 @@ interface Props {
   phone?: string;
   isLoading?: boolean;
   bg?: string;
+  responded?: boolean;
+  responseStatus?: "pending" | "approved" | "declined";
 }
 
 const GuarantorDetailsCard: FC<Props> = ({
@@ -21,10 +28,28 @@ const GuarantorDetailsCard: FC<Props> = ({
   relationship,
   address,
   phone,
-  bg="#FFFFFF"
+  responded,
+  responseStatus,
+  bg = "#FFFFFF",
 }) => {
+  const router = useRouter();
+  const [showGuarantorStatus, setShowGuarantorStatus] =
+    useState<boolean>(false);
+
+  useEffect(() => {
+    if (router.pathname && router.pathname.includes("pending")) {
+      setShowGuarantorStatus(true);
+    }
+  }, [router.pathname]);
+
+  const statusBg: Record<string, string> = {
+    pending: "#FFFFFF",
+    declined: "#FEE2E9",
+    approved: "#E3FFE2",
+  };
+
   return (
-    <Card bg={bg}>
+    <Card bg={!showGuarantorStatus ? bg : statusBg[`${responseStatus}`]}>
       <p className="text-lg font-semibold">Guarantor Details</p>
       <div className="flex gap-2 mt-2">
         <div>
@@ -46,6 +71,34 @@ const GuarantorDetailsCard: FC<Props> = ({
           <p className="text-sm text-[#9A9A9A]">{phone}</p>
         </div>
       </div>
+      {responseStatus === "pending" && showGuarantorStatus ? (
+        responded === false ? (
+          <p className="text-base font-semibold mt-3">
+            Guarantor has not responded
+          </p>
+        ) : (
+          <>
+            <div className="flex items-center gap-3 mt-3 mb-1">
+              <InfoIcon />
+              <p className="text-base font-semibold">Guarantor has responded</p>
+            </div>
+            <Button title="Click to view" variant="text" />
+          </>
+        )
+      ) : null}
+      {responseStatus === "approved" && showGuarantorStatus ? (
+        <div className="flex items-center gap-3 mt-3">
+          <CheckIcon fill="#1FD11B" />
+          <p className="text-[#1FD11B] font-semibold">Approved</p>
+        </div>
+      ) : null}
+
+      {responseStatus === "declined" && showGuarantorStatus ? (
+        <div className="flex items-center gap-3 mt-3">
+          <TimesIcon fill="#EF2C5B" />
+          <p className="text-[#EF2C5B] font-semibold">Declined</p>
+        </div>
+      ) : null}
     </Card>
   );
 };

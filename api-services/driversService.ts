@@ -14,6 +14,8 @@ import {
   ApproveDeclineDriverResponse,
   ApproveDeclineDriverQuery,
   InspectDocumentQuery,
+  ViewGuarantorQuery,
+  VerifyGuarantorPayloadModel,
 } from "@/models/Drivers";
 
 export const driversApi = createApi({
@@ -80,7 +82,7 @@ export const driversApi = createApi({
               phone: data.driver?.user?.phone_number,
               tripCount: data?.driver?.user?.total_trips,
               rating: 0,
-              id: data?.driver?._id
+              id: data?.driver?._id,
             },
             carDetails: {
               carImages: data?.car_details.images,
@@ -99,6 +101,8 @@ export const driversApi = createApi({
               image: data.driver?.user?.guarantor?.image,
               phone: data.driver?.user?.guarantor?.phone_number,
               relationship: data.driver?.user?.guarantor?.relationship,
+              responded: data.driver?.user?.guarantor_response,
+              responseStatus: data.driver?.user?.guarantor_status,
             },
             carDocs: {
               totalDocs: data.car_documents.length,
@@ -107,7 +111,7 @@ export const driversApi = createApi({
                   title: doc.title,
                   docImage: doc.url,
                   docId: doc._id,
-                  status: doc.status
+                  status: doc.status,
                 };
               }),
             },
@@ -124,17 +128,36 @@ export const driversApi = createApi({
       query: ({ driverId, reason, status }) => ({
         url: `admin/driver/approve-decline/${driverId}`,
         method: "PUT",
-        body: { reason, status}
+        body: { reason, status },
       }),
     }),
     inspectDocument: build.mutation<any, InspectDocumentQuery>({
-      query: ({docId, status})=>({
+      query: ({ docId, status }) => ({
         url: `admin/driver/inspect-document/${docId}?status=${status}`,
-        method: 'PUT'
+        method: "PUT",
       }),
-      invalidatesTags: ["driver"]
-    })
+      invalidatesTags: ["driver"],
+    }),
+    viewGuarantor: build.query<any, ViewGuarantorQuery>({
+      query: ({ id }) => ({
+        url: `admin/driver/verify-a-guarantor/${id}`,
+      }),
+    }),
+    verifyGuarantor: build.mutation<any, VerifyGuarantorPayloadModel>({
+      query: ({ id, ...rest }) => ({
+        url: `admin/driver/verify-a-guarantor/${id}`,
+        method: "PUT",
+        body: {...rest}
+      }),
+    }),
   }),
 });
 
-export const { useGetAllDriversQuery, useViewDriverQuery, useApproveDeclineDriverMutation, useInspectDocumentMutation } = driversApi;
+export const {
+  useGetAllDriversQuery,
+  useViewDriverQuery,
+  useApproveDeclineDriverMutation,
+  useInspectDocumentMutation,
+  useViewGuarantorQuery,
+  useVerifyGuarantorMutation
+} = driversApi;

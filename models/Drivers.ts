@@ -80,6 +80,8 @@ export interface ViewDriverResponse {
           phone_number: string;
           image: string;
         };
+        guarantor_response: boolean;
+        guarantor_status: "pending" | "approved" | "declined";
         _id: string;
         full_name: string;
         phone_number: string;
@@ -129,7 +131,7 @@ export interface MappedDocument {
   title?: string | undefined;
   docImage?: string | undefined;
   docId?: string | undefined;
-  status?: string | undefined
+  status?: string | undefined;
 }
 
 export interface ViewDriverQuery {
@@ -164,6 +166,8 @@ export interface MappedViewDriver {
     image?: string;
     phone: string;
     relationship: string;
+    responded: boolean;
+    responseStatus: "pending" | "approved" | "declined";
   };
   carDocs: {
     totalDocs: number;
@@ -184,5 +188,57 @@ export interface ApproveDeclineDriverResponse {
 
 export interface InspectDocumentQuery {
   docId: string;
-  status: 'DECLINED' | 'APPROVED'
+  status: "DECLINED" | "APPROVED";
+}
+
+export interface ViewGuarantorResponse {
+  status: string;
+  code: number;
+  data: {
+    guarantor: {
+      name: string;
+      relationship: string;
+      address: string;
+      city: string;
+      state: string;
+      phone_number: string;
+      email: string;
+      image: string;
+    };
+    average_rating: {
+      value: number;
+      count: number;
+    };
+    _id: string;
+    full_name: string;
+    phone_number: string;
+    type: string;
+    isBlocked: boolean;
+    reason_to_block: string;
+    is_onboarding_complete: boolean;
+    onboarding_step: number;
+    online_status: string;
+    guarantor_status: string;
+    guarantor_response: boolean;
+    coordinate: any[];
+    total_trips: number;
+    favourite_locations: any[];
+    created_at: string;
+    updated_at: string;
+    __v: number;
+    email: string;
+    driver: string;
+    accessTokens: string;
+  };
+  message: string;
+}
+
+export interface ViewGuarantorQuery {
+  id: string;
+}
+
+export interface VerifyGuarantorPayloadModel {
+  id: string;
+  status: "decline" | "approve";
+  reason: string;
 }
