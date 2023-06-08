@@ -37,46 +37,13 @@ const Driver: NextPage = () => {
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
-  const [
-    approveRequest,
-    {
-      data: approvedData,
-      isSuccess: approvedSuccess,
-      error: approvedError,
-      isLoading: approvedLoading,
-    },
-  ] = useApproveDeclineDriverMutation();
-
-  const [
-    declineRequest,
-    {
-      data: declinedData,
-      isSuccess: declinedSuccess,
-      isLoading: declinedLoading,
-    },
-  ] = useApproveDeclineDriverMutation();
-
-  console.log("main", declinedLoading);
-
-  useEffect(() => {
-    if (approvedSuccess) {
-      setModalContent(<ApproveSuccessCard />);
-    }
-  }, [approvedSuccess]);
-
-  useEffect(() => {
-    if (declinedSuccess) {
-      setModalContent(<DeclineSuccessCard />);
-    }
-  }, [declinedSuccess]);
-
   const [isApproveButton, setIsApproveButton] = useState(false);
   const [isDeclineButton, setIsDeclineButton] = useState(false);
 
   useEffect(() => {
     if (data) {
       const allowApprove = data.carDocs.documents.every(
-        (d) => d.status === "APPROVE"
+        (d) => d.status === "APPROVED"
       );
       const allowDecline = data.carDocs.documents.some(
         (d) => d.status === "DECLINED"
@@ -103,19 +70,7 @@ const Driver: NextPage = () => {
               startIcon={<CheckIcon />}
               size="large"
               onClick={() =>
-                setModalContent(
-                  <ApproveRequestCard
-                    handleClose={() => setModalContent(null)}
-                    handleApprove={() => {
-                      if (data)
-                        approveRequest({
-                          driverId: data?.driverInfo.id,
-                          status: "approve",
-                        });
-                    }}
-                    isLoading={approvedLoading}
-                  />
-                )
+                setModalContent(<ApproveRequestCard id={String(id)} />)
               }
             />
           )}
@@ -126,20 +81,7 @@ const Driver: NextPage = () => {
               size="large"
               color="secondary"
               onClick={() => {
-                setModalContent(
-                  <DeclineRequestCard
-                    isLoading={declinedLoading}
-                    handleClose={() => setModalContent(null)}
-                    handleDecline={(reason) => {
-                      if (data)
-                        declineRequest({
-                          driverId: data?.driverInfo.id,
-                          reason: reason,
-                          status: "decline",
-                        });
-                    }}
-                  />
-                );
+                setModalContent(<DeclineRequestCard id={String(id)} />);
               }}
             />
           )}

@@ -1,41 +1,63 @@
 import Button from "@/components/ui/Button/Button";
 import useClickOutside from "@/hooks/useClickOutside";
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { motion } from "framer-motion";
 import TextField from "@/components/ui/Input/TextField/TextField";
-import SelectField from "@/components/ui/Input/SelectField";
 import { useFormik, Form, FormikProvider } from "formik";
 import { declineDriverRequestSchema } from "@/validationschemas/declineDriverRequestSchema";
+import { useApproveDeclineDriverMutation } from "@/api-services/driversService";
+import { useModalContext } from "@/contexts/ModalContext";
+import DeclineSuccessCard from "./DeclineSuccessCard";
+import { toast } from "react-toastify";
 
 const initialValues = {
   reason: "",
 };
 
 interface Props {
-  handleClose: () => void;
-  handleDecline: (reason: string) => void;
-  isLoading: boolean;
+  id: string;
 }
 
-const DeclineRequestCard: FC<Props> = ({
-  handleClose,
-  handleDecline,
-  isLoading,
-}) => {
-  const ref = useClickOutside<HTMLDivElement>(() => handleClose());
+const DeclineRequestCard: FC<Props> = ({ id }) => {
+  const [
+    declineRequest,
+    {
+      data: declinedData,
+      isSuccess: declinedSuccess,
+      isLoading: declinedLoading,
+      error
+    },
+  ] = useApproveDeclineDriverMutation();
+  const { setModalContent } = useModalContext()
+  const ref = useClickOutside<HTMLDivElement>(() => setModalContent(null));
 
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: declineDriverRequestSchema,
     onSubmit: (values) => {
-      handleDecline(values.reason)
+      declineRequest({
+        driverId: id,
+        status: "decline",
+        reason: values.reason,
+      });
     },
   });
 
-  console.log("sub", isLoading)
+  useEffect(() => {
+    if (declinedSuccess) {
+      setModalContent(<DeclineSuccessCard />);
+    }
+  }, [declinedSuccess]);
+
+  useEffect(()=>{
+    if(error && "data" in error){
+      const { message }: any = error.data
+      toast.error(message)
+    }
+  },[error])
 
   return (
-    <FormikProvider value={formik} >
+    <FormikProvider value={formik}>
       <Form className="w-full">
         <motion.div
           initial={{ scale: 0.5 }}
@@ -72,15 +94,15 @@ const DeclineRequestCard: FC<Props> = ({
               size="large"
               color="primary"
               className="w-[43%]"
-              onClick={handleClose}
+              onClick={()=>setModalContent(null)}
             />
             <Button
               title="Decline Request"
               color="tetiary"
               size="large"
               className="w-[43%] !text-[#EF2C5B]"
-              loading={isLoading}
-              disabled={isLoading}
+              loading={declinedLoading}
+              disabled={declinedLoading}
               type="submit"
             />
           </div>

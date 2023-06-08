@@ -1,16 +1,42 @@
 import Button from "@/components/ui/Button/Button";
 import useClickOutside from "@/hooks/useClickOutside";
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useApproveDeclineDriverMutation } from "@/api-services/driversService";
+import ApproveSuccessCard from "./ApproveSuccessCard";
+import { useModalContext } from "@/contexts/ModalContext";
+import { toast } from "react-toastify";
 
 interface Props {
-  handleClose: () => void;
-  handleApprove: ()=>void;
-  isLoading: boolean
+  id: string;
 }
 
-const ApproveRequestCard: FC<Props> = ({ handleClose, handleApprove, isLoading }) => {
-  const ref = useClickOutside<HTMLDivElement>(() => handleClose());
+const ApproveRequestCard: FC<Props> = ({ id }) => {
+  const { setModalContent } = useModalContext();
+  const ref = useClickOutside<HTMLDivElement>(() => setModalContent(null));
+
+  const [
+    approveRequest,
+    {
+      data: approvedData,
+      isSuccess: approvedSuccess,
+      error,
+      isLoading: approvedLoading,
+    },
+  ] = useApproveDeclineDriverMutation();
+
+  useEffect(() => {
+    if (approvedSuccess) {
+      setModalContent(<ApproveSuccessCard />);
+    }
+  }, [approvedSuccess]);
+
+  useEffect(()=>{
+    if(error && "data" in error){
+      const { message }: any = error.data
+      toast.error(message)
+    }
+  },[error])
 
   return (
     <motion.div
@@ -36,15 +62,22 @@ const ApproveRequestCard: FC<Props> = ({ handleClose, handleApprove, isLoading }
           size="large"
           color="primary"
           className="w-[43%]"
-          onClick={handleClose}
+          onClick={() => setModalContent(null)}
         />
         <Button
           title="Approve Request"
           size="large"
-          className={`w-[43%] ${isLoading ? '!bg-[#cccccc]' : '!bg-[#1FD11B]'} !text-[#FFFFFF]`}
-          onClick={handleApprove}
-          loading={isLoading}
-          disabled={isLoading}
+          className={`w-[43%] ${
+            approvedLoading ? "!bg-[#cccccc]" : "!bg-[#1FD11B]"
+          } !text-[#FFFFFF]`}
+          onClick={() => {
+            approveRequest({
+              driverId: String(id),
+              status: "approve",
+            });
+          }}
+          loading={approvedLoading}
+          disabled={approvedLoading}
         />
       </div>
     </motion.div>

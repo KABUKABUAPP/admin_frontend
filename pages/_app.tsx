@@ -8,21 +8,21 @@ import "react-toastify/dist/ReactToastify.css";
 import UserProvider from "@/contexts/UserContext";
 import CallProvider from "@/contexts/CallContext";
 import ModalProvider from "@/contexts/ModalContext";
-import 'react-loading-skeleton/dist/skeleton.css'
+import "react-loading-skeleton/dist/skeleton.css";
 
-"use client"
+("use client");
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <UserProvider>
-      <ModalProvider>
-        <CallProvider>
-          <Provider store={reduxStore}>
+      <Provider store={reduxStore}>
+        <ModalProvider>
+          <CallProvider>
             <Component {...pageProps} />
             <ToastContainer />
-          </Provider>
-        </CallProvider>
-      </ModalProvider>
+          </CallProvider>
+        </ModalProvider>
+      </Provider>
     </UserProvider>
   );
 }
