@@ -147,7 +147,7 @@ export const driversApi = createApi({
       query: ({ id, ...rest }) => ({
         url: `admin/driver/verify-a-guarantor/${id}`,
         method: "PUT",
-        body: {...rest}
+        body: { ...rest },
       }),
     }),
   }),
@@ -159,5 +159,5 @@ export const {
   useApproveDeclineDriverMutation,
   useInspectDocumentMutation,
   useViewGuarantorQuery,
-  useVerifyGuarantorMutation
+  useVerifyGuarantorMutation,
 } = driversApi;

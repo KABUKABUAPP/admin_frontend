@@ -8,6 +8,8 @@ import Button from "../ui/Button/Button";
 import InfoIcon from "../icons/InfoIcon";
 import CheckIcon from "../icons/CheckIcon";
 import TimesIcon from "../icons/TimesIcon";
+import { useModalContext } from "@/contexts/ModalContext";
+import ViewGuarantorCard from "../modules/drivers/ViewGuarantorCard";
 
 interface Props {
   image?: string;
@@ -33,6 +35,7 @@ const GuarantorDetailsCard: FC<Props> = ({
   bg = "#FFFFFF",
 }) => {
   const router = useRouter();
+  const { setModalContent } = useModalContext()
   const [showGuarantorStatus, setShowGuarantorStatus] =
     useState<boolean>(false);
 
@@ -82,7 +85,9 @@ const GuarantorDetailsCard: FC<Props> = ({
               <InfoIcon />
               <p className="text-base font-semibold">Guarantor has responded</p>
             </div>
-            <Button title="Click to view" variant="text" />
+            <Button title="Click to view" variant="text" onClick={()=>{
+              setModalContent(<ViewGuarantorCard />)
+            }}/>
           </>
         )
       ) : null}
