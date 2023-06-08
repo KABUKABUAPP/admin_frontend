@@ -43,22 +43,13 @@ const Driver: NextPage = () => {
 
         {data && !isLoading && !isError && (
           <ViewDriverLayout
-            secondRow={
-              <>
-                {/* <TripHistoryCard tripHistoryData={mockTripHistory} /> */}
-              </>
-            }
             firstRow={
               <>
-                <DriverInfoCard {...data.driverInfo} />
+                <DriverInfoCard {...data.driverInfo} bg="#FEE2E9" />
 
-                <CarDetailsCard {...data.carDetails} />
+                <GuarantorDetailsCard {...data.guarantor} bg="#FEE2E9" />
 
-                <FinancialsCard {...data.financials} />
-
-                <GuarantorDetailsCard {...data.guarantor} />
-
-                <CarDocuments {...data.carDocs} />
+                <CarDocuments {...data.carDocs} bg="#FEE2E9" />
               </>
             }
           />

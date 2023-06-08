@@ -12,6 +12,7 @@ interface Props {
   carModel?: string;
   carColor?: string;
   plateNumber?: string;
+  bg?: string
 }
 
 const CarDetailsCard: FC<Props> = ({
@@ -20,9 +21,10 @@ const CarDetailsCard: FC<Props> = ({
   isLoading,
   carColor,
   plateNumber,
+  bg='#FFFFFF'
 }) => {
   return (
-    <Card>
+    <Card bg={bg}>
       <div className="flex flex-col gap-3">
         <p className="text-lg font-semibold">Car Details</p>
 

@@ -9,13 +9,22 @@ interface Props {
   fullname?: string;
   relationship?: string;
   address?: string;
-  phone?: string
+  phone?: string;
   isLoading?: boolean;
+  bg?: string;
 }
 
-const GuarantorDetailsCard: FC<Props> = ({ image, isLoading, fullname, relationship, address, phone }) => {
+const GuarantorDetailsCard: FC<Props> = ({
+  image,
+  isLoading,
+  fullname,
+  relationship,
+  address,
+  phone,
+  bg="#FFFFFF"
+}) => {
   return (
-    <Card>
+    <Card bg={bg}>
       <p className="text-lg font-semibold">Guarantor Details</p>
       <div className="flex gap-2 mt-2">
         <div>
@@ -31,10 +40,10 @@ const GuarantorDetailsCard: FC<Props> = ({ image, isLoading, fullname, relations
           </div>
         </div>
         <div className="flex flex-col gap-2">
-            <p className="text-lg font-semibold">{fullname}</p>
-            <p className="text-sm text-[#9A9A9A]">{relationship}</p>
-            <p className="text-sm text-[#9A9A9A]">{address}</p>
-            <p className="text-sm text-[#9A9A9A]">{phone}</p>
+          <p className="text-lg font-semibold">{fullname}</p>
+          <p className="text-sm text-[#9A9A9A]">{relationship}</p>
+          <p className="text-sm text-[#9A9A9A]">{address}</p>
+          <p className="text-sm text-[#9A9A9A]">{phone}</p>
         </div>
       </div>
     </Card>

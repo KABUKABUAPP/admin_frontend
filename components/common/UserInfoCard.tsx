@@ -16,6 +16,7 @@ interface Props {
   isLoading?: boolean;
   totalCarsProcessed?: number
   role?: string;
+  bg?: string
 }
 
 const UserInfoCard: FC<Props> = ({
@@ -28,10 +29,11 @@ const UserInfoCard: FC<Props> = ({
   image,
   isLoading,
   totalCarsProcessed,
-  role
+  role,
+  bg='#FFFFFF'
 }) => {
   return (
-    <Card>
+    <Card bg={bg}>
       <div className="flex gap-4">
         <div>
           <div className="w-[80px] h-[80px]">
