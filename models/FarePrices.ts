@@ -65,6 +65,7 @@ export interface ViewFarePriceResponse {
     currency: string;
     created_at: string;
     updated_at: string;
+    total_trips_in_state: number;
     __v: number;
   };
   message: string;

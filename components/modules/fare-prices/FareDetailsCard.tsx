@@ -19,7 +19,7 @@ const FareDetailsCard: FC<Props> = ({
   return (
     <div className="bg-[#FFFFFF] p-4 w-full rounded-lg shadow-md">
       <FareDetailCardItem title={fareId} body={fareLocation} />
-      <FareDetailCardItem title="Total fares:" body={totalFares}/>
+      {/* <FareDetailCardItem title="Total fares:" body={totalFares}/> */}
       <FareDetailCardItem title="Total trips in state:" body={totalTripsInState}/>
       <FareDetailCardItem title={`Created on: ${createdOn}`}/>
     </div>

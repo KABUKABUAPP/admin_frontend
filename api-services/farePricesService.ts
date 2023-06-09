@@ -42,11 +42,11 @@ export const farePricesApi = createApi({
             (price) => {
               return {
                 city: price.city,
-                dateCreated: price.created_at,
+                dateCreated: price?.created_at?.toString(),
                 profileId: price._id,
                 stateCountry: `${price.state}, ${price.country}`,
                 totalFares: 0,
-              };
+              } as FarePricesTableData;
             }
           );
 

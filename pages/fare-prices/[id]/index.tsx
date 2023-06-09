@@ -74,7 +74,7 @@ const FarePrice: NextPage = () => {
                 fareId={`#${data.data._id}`}
                 fareLocation={`${data.data.state}, ${data.data.country}`}
                 totalFares={`4`}
-                totalTripsInState={`₦3000`}
+                totalTripsInState={`₦${data?.data?.total_trips_in_state}`}
                 createdOn={new Date(data.data.created_at).toLocaleDateString()}
               />
             }
