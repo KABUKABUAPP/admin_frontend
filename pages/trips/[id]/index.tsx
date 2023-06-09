@@ -4,7 +4,7 @@ import { NextPage } from "next";
 import ActionBar from "@/components/common/ActionBar";
 import Button from "@/components/ui/Button/Button";
 import ViewTripLayout from "@/components/modules/Trips/ViewTripLayout";
-import AppMap from "@/components/common/AppMap";
+import AppMap from "@/components/common/AppMap/AppMap";
 import TripDetailsCard from "@/components/modules/Trips/TripDetailsCard";
 import { TripDetail } from "@/models/Trips";
 import OriginIcon from "@/components/icons/OriginIcon";
@@ -22,7 +22,7 @@ import { useViewTripQuery } from "@/api-services/tripsService";
 import { useRouter } from "next/router";
 
 import { io } from "socket.io-client";
-const socket = io("ws://rideservice-dev.up.railway.app").connect();
+const socket = io("ws://localhost:8080").connect();
 
 const ViewTrip: NextPage = () => {
   const { setIsCalling } = useCallContext();
@@ -34,13 +34,24 @@ const ViewTrip: NextPage = () => {
     { id: id ? String(id) : "" },
     { skip: id === undefined }
   );
+  const [liveLocation, setLiveLocation] = useState<{
+    lat: number;
+    lng: number;
+    address: string;
+  } | null>(null);
 
   useEffect(() => {
+    socket.connect();
+
     if (socket.connected) {
-      socket.on("live_trip", (data) => {
-        console.log("getting data");
-        console.log(data);
-      });
+      socket.on(
+        "live_trip",
+        (data: { lat: number; lng: number; address: string }) => {
+          console.log("getting data");
+          console.log(data);
+          setLiveLocation(data);
+        }
+      );
     }
 
     return () => {
@@ -156,7 +167,7 @@ const ViewTrip: NextPage = () => {
                 />
               )}
               <div className="w-full h-full max-h-[550px] max-md:pl-0">
-                <AppMap zoom={11} location={location} />
+                {liveLocation && <AppMap zoom={11} location={liveLocation} />}
               </div>
             </>
           }

@@ -66,6 +66,12 @@ export const farePricesApi = createApi({
         method: 'POST',
         body
       })
+    }),
+    toggleSurge: build.mutation({
+      query: ()=>({
+        url: `admin/price/toggle-surge/644398d4b0480f78a891ba96`,
+        method: ''
+      })
     })
   }),
 });

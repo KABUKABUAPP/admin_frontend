@@ -33,7 +33,7 @@ const Inspector: FC = () => {
             asideComponents={
               <div className="flex flex-col gap-4">
                 <UserInfoCard
-                  fullname={data.fullname}
+                  fullName={data.fullname}
                   address={data.address}
                   email={data.email}
                   phone={data.phone}

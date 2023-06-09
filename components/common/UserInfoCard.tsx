@@ -5,9 +5,10 @@ import Card from "@/components/common/Card";
 import Skeleton from "react-loading-skeleton";
 import Avatar from "@/components/common/Avatar";
 import Rating from "react-star-ratings";
+import RatingIcon from "../icons/RatingIcon";
 
 interface Props {
-  fullname?: string;
+  fullName?: string;
   address?: string;
   email?: string;
   phone?: string;
@@ -21,7 +22,7 @@ interface Props {
 }
 
 const UserInfoCard: FC<Props> = ({
-  fullname,
+  fullName,
   address,
   email,
   phone,
@@ -35,34 +36,31 @@ const UserInfoCard: FC<Props> = ({
 }) => {
   const router = useRouter();
   const showCarsProcessed = router.pathname.includes("inspector");
+  const showTripCount = !router.pathname.includes("inspector");
+
   return (
     <Card bg={bg}>
       <div className="flex gap-4">
         <div>
           <div className="w-[80px] h-[80px]">
-            {image ? (
+            {(image || fullName) && (
               <Avatar
                 imageUrl={image}
-                fallBack={`${fullname && fullname[0]}`}
+                fallBack={`${fullName && fullName[0]}`}
                 size="lg"
-              />
-            ) : (
-              <Skeleton
-                enableAnimation={isLoading}
-                className="w-[80px] h-[80px] pt-2"
               />
             )}
           </div>
         </div>
         <div className="flex flex-col gap-2">
-          {fullname && <p className="text-3xl font-semibold">{fullname}</p>}
+          {fullName && <p className="text-3xl font-semibold">{fullName}</p>}
           {role && <p className="text-lg font-semibold">{role}</p>}
           {address && <p className="text-lg font-semibold">{address}</p>}
           {email && <p className="text-base font-semibold">{email}</p>}
           {phone && <p className="text-base font-semibold">{phone}</p>}
-          {tripCount === 0 ? (
+          {showTripCount && tripCount === 0 ? (
             <p className="text-sm font-semibold">0 trips</p>
-          ) : (
+          ) : showTripCount &&(
             <p className="text-sm font-semibold">
               {(tripCount && `${tripCount} trips`) || (
                 <Skeleton enableAnimation={isLoading} />
@@ -71,15 +69,13 @@ const UserInfoCard: FC<Props> = ({
           )}
 
           <p className="text-sm font-semibold">
-            {rating && (
+            {rating === 0 ? (
               <span className="flex items-center gap-1">
-                <Rating
-                  rating={rating}
-                  starDimension="11px"
-                  starSpacing="1px"
-                  starRatedColor="#FFBF00"
-                  numberOfStars={5}
-                />
+                <RatingIcon />{rating}
+              </span>
+            ) : (
+              <span className="flex items-center gap-1">
+                <RatingIcon /> {rating}
               </span>
             )}
           </p>

@@ -19,6 +19,7 @@ const Inspectors: NextPage = () => {
     data: inspectors,
     isLoading: inspectorsLoading,
     isError: inspectorsError,
+    error: inspectorErrorObj,
     refetch: reloadInspectors,
   } = useGetAllInspectorsQuery(
     { limit: pageSize, page: currentPage, search: search },

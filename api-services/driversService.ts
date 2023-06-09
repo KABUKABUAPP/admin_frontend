@@ -57,7 +57,7 @@ export const driversApi = createApi({
                 ? "Regular Driver"
                 : "Sharp Car Driver",
               totalTrips: driver?.user?.total_trips,
-              walletBalance: String(driver?.wallet_balance),
+              walletBalance: driver?.wallet_balance || '0',
               status: driver?.approval_status,
               userId: driver.user._id,
             } as DriversTableBodyData;
@@ -113,8 +113,9 @@ export const driversApi = createApi({
                 return {
                   title: doc.title,
                   docImage: doc.url,
-                  docId: doc._id,
+                  docId: doc?.doc_number,
                   status: doc.status,
+                  id: doc._id
                 };
               }),
             },
@@ -150,11 +151,11 @@ export const driversApi = createApi({
           if (!response) return <MappedViewGuarantorResponse>{};
           else {
             return {
-              address: `${response.data?.guarantor?.city} ${response.data?.guarantor?.state}`,
-              fullname: `${response.data?.guarantor?.name}`,
-              phone: `${response.data?.guarantor?.phone_number}`,
-              relationship: `${response.data?.guarantor?.relationship}`,
-              image: response.data?.guarantor?.image,
+              address: response.data?.address,
+              fullname: response?.data?.full_name,
+              phone: response.data?.phone_number,
+              relationship: response.data?.relationship,
+              image: response?.data?.image,
             } as MappedViewGuarantorResponse;
           }
         },

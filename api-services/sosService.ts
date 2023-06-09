@@ -44,7 +44,7 @@ export const sosApi = createApi({
                 id: sos?._id,
                 origin: `${sos.trip?.start_address.city}, ${sos.trip?.start_address.state}, ${sos.trip?.start_address.country}`,
                 plateNumber: sos?.trip?.car?.plate_number,
-                raisedBy: "",
+                raisedBy: sos?.trip?.user?.full_name,
                 reason: sos?.reason,
                 rider: sos?.trip.user?.full_name,
                 status: sos?.status,

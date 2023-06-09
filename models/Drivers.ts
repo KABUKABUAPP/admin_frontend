@@ -24,7 +24,7 @@ export interface Driver {
     profile_image: string;
   };
   car_owner: true;
-  state: string
+  state: string;
   country: string;
   approval_status: string;
   wallet_balance: number;
@@ -134,6 +134,7 @@ export interface MappedDocument {
   docImage?: string | undefined;
   docId?: string | undefined;
   status?: string | undefined;
+  id: string;
 }
 
 export interface ViewDriverQuery {
@@ -197,40 +198,21 @@ export interface ViewGuarantorResponse {
   status: string;
   code: number;
   data: {
-    guarantor: {
-      name: string;
-      relationship: string;
-      address: string;
-      city: string;
-      state: string;
-      phone_number: string;
-      email: string;
-      image: string;
-    };
-    average_rating: {
-      value: number;
-      count: number;
-    };
     _id: string;
     full_name: string;
     phone_number: string;
-    type: string;
-    isBlocked: boolean;
-    reason_to_block: string;
-    is_onboarding_complete: boolean;
-    onboarding_step: number;
-    online_status: string;
-    guarantor_status: string;
-    guarantor_response: boolean;
-    coordinate: any[];
-    total_trips: number;
-    favourite_locations: any[];
+    email: string;
+    image: string;
+    relationship: string;
+    address: string;
+    city: string;
+    state: string;
+    occupation: string;
+    status: string;
+    driver: string;
     created_at: string;
     updated_at: string;
-    __v: number;
-    email: string;
-    driver: string;
-    accessTokens: string;
+    __v: string;
   };
   message: string;
 }

@@ -41,7 +41,6 @@ const ApproveGuarantorSuccessCard: FC = () => {
           className="w-full"
           onClick={() => {
             setModalContent(null);
-            router.push("/drivers/pending");
           }}
         />
       </div>

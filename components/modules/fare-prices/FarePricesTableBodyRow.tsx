@@ -23,9 +23,9 @@ const FarePricesTableBodyRow: FC<Props> = ({
         </Link>
       </div>
 
-      <div style={{ flex: 1 }} className="flex items-center">
+      {/* <div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">{city}</p>
-      </div>
+      </div> */}
 
       <div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">{stateCountry}</p>
@@ -36,7 +36,7 @@ const FarePricesTableBodyRow: FC<Props> = ({
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{String(dateCreated)}</p>
+        <p className="text-xs font-bold">{new Date(dateCreated).toDateString()}</p>
       </div>
     </div>
   );

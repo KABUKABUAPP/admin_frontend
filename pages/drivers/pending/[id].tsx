@@ -56,7 +56,7 @@ const Driver: NextPage = () => {
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
         <ActionBar>
-          {isApproveButton && (
+          {data && data.guarantor.responseStatus === 'approved' && isApproveButton && (
             <Button
               title="Approve Request"
               className="!bg-[#1FD11B] !text-[#FFFFFF]"

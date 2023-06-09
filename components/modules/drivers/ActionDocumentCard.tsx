@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import Image from "next/image";
 
 import Button from "@/components/ui/Button/Button";
@@ -7,17 +7,27 @@ import TimesIcon from "@/components/icons/TimesIcon";
 import { MappedDocument } from "@/models/Drivers";
 import { useInspectDocumentMutation } from "@/api-services/driversService";
 import Loader from "@/components/ui/Loader/Loader";
+import { toast } from "react-toastify";
 
-interface Props extends MappedDocument {}
+interface Props extends MappedDocument {
+  id: string
+}
 
-const ActionDocumentCard: FC<Props> = ({ docId, docImage, title, status }) => {
+const ActionDocumentCard: FC<Props> = ({ docId, docImage, title, status, id }) => {
   const cardBg: Record<string, string> = {
     PENDING: "#F8F8F8",
     DECLINED: "#FEE2E9",
   };
 
-  const [inspectDocument, { isLoading, isError, isSuccess }] =
+  const [inspectDocument, { isLoading, isError, isSuccess, error }] =
     useInspectDocumentMutation();
+
+  useEffect(()=>{
+    if(error && "data" in error){
+      const { status }:any = error.data
+      toast.error(status)
+    }
+  },[error])
 
   return (
     <div
@@ -45,7 +55,7 @@ const ActionDocumentCard: FC<Props> = ({ docId, docImage, title, status }) => {
               startIcon={<CheckIcon fill="#161616" />}
               onClick={() => {
                 if (docId) {
-                  inspectDocument({ docId, status: "APPROVED" });
+                  inspectDocument({ docId: id, status: "APPROVED" });
                 }
               }}
             />

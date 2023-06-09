@@ -3,7 +3,7 @@ export interface FarePricesTableData {
   city: string;
   stateCountry: string;
   totalFares: number;
-  dateCreated: Date;
+  dateCreated: string;
 }
 
 export interface FarePrice {

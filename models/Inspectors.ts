@@ -18,22 +18,25 @@ export interface Inspector {
   city: string;
   state: string;
   country: string;
-  created_at: Date;
-  updated_at: Date;
+  regCompleted: boolean;
+  cars_processed: number;
+  cars_approved: number;
+  cars_declined: number;
+  created_at: string;
+  updated_at: string;
   __v: number;
 }
 
 export interface GetAllInspectorsResponse {
   status: string;
-  data: {
-    data: Inspector[];
-    pagination: {
-      pageSize: number;
-      totalCount: number;
-      pageCount: number;
-      currentPage: number;
-      hasNext: boolean;
-    };
+
+  data: Inspector[];
+  pagination: {
+    pageSize: number;
+    totalCount: number;
+    pageCount: number;
+    currentPage: number;
+    hasNext: boolean;
   };
   message: string;
 }

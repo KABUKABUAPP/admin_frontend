@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React from "react";
+import React, { useState } from "react";
 
 import AppLayout from "@/layouts/AppLayout";
 import ViewRiderLayout from "@/components/modules/riders/ViewRiderLayout";
@@ -13,6 +13,7 @@ import NextOfKinCard from "@/components/modules/riders/NextOfKinCard";
 import TripHistoryCard from "@/components/common/TripHistoryCard";
 import { useViewRiderQuery } from "@/api-services/ridersService";
 import { useRouter } from "next/router";
+import { useGetDriverTripHistoryQuery } from "@/api-services/tripsService";
 
 const Rider: NextPage = () => {
   const router = useRouter();
@@ -23,7 +24,19 @@ const Rider: NextPage = () => {
     { id: String(id), status: "" },
     { skip: !id, refetchOnReconnect: true, refetchOnMountOrArgChange: true }
   );
-  
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+
+  const {
+    data: tripHistory,
+    isLoading: tripHistoryLoading,
+    isError: tripHistoryError,
+    refetch: refetchTripHistory,
+  } = useGetDriverTripHistoryQuery(
+    { driverId: String(id), limit: pageSize, page: currentPage },
+    { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
 
   return (
     <AppLayout padding="0">
@@ -46,7 +59,18 @@ const Rider: NextPage = () => {
               <NextOfKinCard {...data?.nextOfKin} />
             </>
           }
-          // secondRow={<TripHistoryCard tripHistoryData={mockTripHistory} />}
+          secondRow={
+            <>
+              {tripHistory && <TripHistoryCard
+                tripHistoryData={tripHistory.data}
+                totalCount={tripHistory.totalCount}
+                currentCount={tripHistory.data.length}
+                handleViewMore={() => {
+                  setPageSize((ps) => ps + 5);
+                }}
+              />}
+            </>
+          }
         />
       </div>
     </AppLayout>

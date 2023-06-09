@@ -4,8 +4,12 @@ import Card from "@/components/common/Card";
 import ActionDocumentCard from "./ActionDocumentCard";
 import { MappedDocument } from "@/models/Drivers";
 
+interface Data extends MappedDocument {
+  id: string
+}
+
 interface Props {
-  data?: MappedDocument[];
+  data?: Data[];
 }
 
 const ActionDocumentCardContainer: FC<Props> = ({ data }) => {

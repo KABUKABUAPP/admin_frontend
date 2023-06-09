@@ -10,10 +10,10 @@ const headCellData = [
     title: "Profile ID",
     flex: 1,
   },
-  {
-    title: "City",
-    flex: 1,
-  },
+  // {
+  //   title: "City",
+  //   flex: 1,
+  // },
   {
     title: "State & Country",
     flex: 1,
