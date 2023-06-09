@@ -32,102 +32,56 @@ export interface TripData {
     country: string;
     state: string;
     city: string;
+    street: string;
   };
   end_address: {
     country: string;
     state: string;
     city: string;
+    street: string;
+  };
+  rating: {
+    value: 0;
+    count: 0;
   };
   _id: string;
-  start_point: [number, number];
-  end_point: [number, number];
-  kabu_type: string;
   user: {
-    next_of_kin: {
-      full_name: string;
-      relationship: string;
-      phone_number: string;
-    };
-    coordinate: [];
     _id: string;
     full_name: string;
-    phone_number: string;
-    email: string;
-    profile_image: string;
-    type: string;
-    isBlocked: boolean;
-    onboarding_step: number;
-    is_onboarding_complete: boolean;
-    created_at: Date;
-    updated_at: Date;
-    __v: number;
-    total_trips: number;
   };
   driver: {
-    bvn: {
-      number: string;
-      inputed: boolean;
-    };
-    nin: {
-      number: string;
-      inputed: boolean;
+    average_rating: {
+      count: 0;
+      value: 3.5;
     };
     _id: string;
-    user: string;
-    house_address: string;
-    isVerified: boolean;
-    created_at: Date;
-    updated_at: Date;
-    __v: number;
-    total_trips: number;
-    monthly_charge: string;
+    full_name: string;
+    profile_image: string;
   };
-  order: {
-    start_address: {
-      country: string;
-      state: string;
-      city: string;
-      street: string;
-    };
-    end_address: {
-      country: string;
-      state: string;
-      city: string;
-      street: string;
-    };
-    price_details: {
-      booking_fee: number;
-      base_fare: number;
-      distace: number;
-      time: number;
-      wait_time: number;
-      driver_earned: number;
-      kabu_split: number;
-      state_levy: number;
-      total_charge: number;
-    };
+  car: {
     _id: string;
-    start_point: [number, number];
-    end_point: [number, number];
-    kabu_type: string;
-    payment_type: string;
-    user: string;
-    price_range: [number, number];
-    currency: string;
-    status: string;
-    created_at: Date;
-    updated_at: Date;
-    __v: number;
-    driver: string;
+    brand_name: string;
+    model:string;
+    year: string;
+    color: string;
+    plate_number: string;
   };
   price: number;
-  price_range: [number, number];
-  payment_type: string;
   status: string;
-  createdAt: Date;
-  updatedAt: Date;
-  __v: number;
-  start_time: Date;
+  createdAt: string;
+  end_time: string;
+  price_details: {
+    booking_fee: number;
+    base_fare: number;
+    distace: number;
+    time: number;
+    wait_time: number;
+    driver_earned: number;
+    kabu_split: number;
+    state_levy: number;
+    total_charge: number;
+    price_after_coupon: number;
+  };
   id: string;
 }
 
@@ -298,6 +252,6 @@ export interface DriverTripHistoryModel {
 }
 
 export interface DriverTripHistory {
-  data: DriverTripHistoryModel[],
-  totalCount: number
+  data: DriverTripHistoryModel[];
+  totalCount: number;
 }

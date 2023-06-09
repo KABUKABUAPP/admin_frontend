@@ -27,7 +27,7 @@ const Driver: NextPage = () => {
     { id: String(id) },
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
-
+    
   return (
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">

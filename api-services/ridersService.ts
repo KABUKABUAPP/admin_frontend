@@ -40,13 +40,13 @@ export const ridersApi = createApi({
           const mappedReponse: RidersTableBodyData[] =
             response.data.drivers.map((rider) => {
               return {
-                fullName: rider.full_name,
-                imageUrl: "",
+                fullName: rider?.full_name,
+                imageUrl: rider?.profile_image,
                 location: "",
                 riderId: rider._id,
                 status: "",
                 totalTrips: 0,
-                walletBalance: rider.wallet_balance,
+                walletBalance: rider?.wallet_balance,
               };
             });
 
@@ -66,12 +66,13 @@ export const ridersApi = createApi({
         return {
           driver: {
             fullname: response.data?.full_name,
-            address: ``,
+            address: '',
             tripCount: response.data?.total_trips,
-            rating: 0,
+            rating: response?.data?.average_rating?.value,
+            image: response?.data?.profile_image
           },
           financials: {
-            total: response.data?.total_spent?.toString(),
+            total: response?.data?.total_spent.toString(),
             walletBalance: response.data?.wallet_balance?.toString(),
           },
           nextOfKin: {

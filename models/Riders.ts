@@ -11,7 +11,11 @@ export interface RidersTableBodyData {
 export interface Rider {
   _id: string;
   full_name: string;
-  is_onboarding_complete: boolean;
+  type: string;
+  isBlocked: boolean;
+  total_trips: number;
+  created_at: string;
+  profile_image: string;
   wallet_balance: number;
 }
 
@@ -32,7 +36,7 @@ export interface GetAllRidersResponse {
 export interface GetAllRidersQuery {
   limit: number;
   page: number;
-  search: string
+  search: string;
 }
 
 export interface MappedRidersData {
@@ -67,7 +71,7 @@ export interface ViewRiderResponse {
 
 export interface ViewRiderQuery {
   id: string;
-  status?: string 
+  status?: string;
 }
 
 export interface MappedViewRider {
@@ -75,15 +79,15 @@ export interface MappedViewRider {
     fullname: string;
     address: string;
     tripCount: number;
-    rating: number
+    rating: number;
   };
   financials: {
     total: string;
     walletBalance: string;
-  }
+  };
   nextOfKin: {
     fullname: string;
     relationship: string;
-    phone: string
-  }
+    phone: string;
+  };
 }

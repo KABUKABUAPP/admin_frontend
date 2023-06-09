@@ -68,9 +68,9 @@ const PendingTripsTable: FC<Props> = ({ setTripCount, tableSearch }) => {
           trip.end_address.state || ""
         }, ${trip.end_address.country || ""}`,
         rider: trip.user?.full_name || "",
-        driver: "Driver name",
-        carModel: "Toyota Corolla",
-        plateNumber: "AX40-ZBY",
+        driver: trip?.driver?.full_name,
+        carModel: trip?.car?.brand_name + ' ' + trip?.car?.model,
+        plateNumber: trip?.car?.plate_number,
         status: trip.status,
       };
     });

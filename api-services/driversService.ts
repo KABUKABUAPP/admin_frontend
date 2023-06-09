@@ -18,6 +18,7 @@ import {
   VerifyGuarantorPayloadModel,
   MappedViewGuarantorResponse,
   ViewGuarantorResponse,
+  DriversTableBodyData,
 } from "@/models/Drivers";
 
 export const driversApi = createApi({
@@ -51,15 +52,15 @@ export const driversApi = createApi({
               driverId: driver?._id,
               fullName: driver.user?.full_name,
               location: `${driver.country}, ${driver.state}`,
-              imageUrl: "",
+              imageUrl: driver?.user?.profile_image,
               driverType: driver?.car_owner
                 ? "Regular Driver"
                 : "Sharp Car Driver",
-              totalTrips: driver?.total_trips,
-              walletBalance: driver?.wallet_balance,
-              status: "",
+              totalTrips: driver?.user?.total_trips,
+              walletBalance: String(driver?.wallet_balance),
+              status: driver?.approval_status,
               userId: driver.user._id,
-            };
+            } as DriversTableBodyData;
           });
 
           return { data: mappedReponse, totalCount: totalCount };
@@ -77,7 +78,7 @@ export const driversApi = createApi({
           const { data } = response;
           const mapped: MappedViewDriver = {
             driverInfo: {
-              image: "",
+              image: data?.driver?.user?.profile_image,
               fullName: data.driver?.user?.full_name,
               address: data?.driver?.house_address,
               email: data?.driver?.user.email,
@@ -93,8 +94,8 @@ export const driversApi = createApi({
               plateNumber: data.car_details?.plate_number,
             },
             financials: {
-              walletBalance: data?.wallet_balance?.toLocaleString(),
-              total: data?.total_earned?.toLocaleString(),
+              walletBalance: '',
+              total: '',
               subscriptionDue: "",
             },
             guarantor: {
@@ -153,7 +154,7 @@ export const driversApi = createApi({
               fullname: `${response.data?.guarantor?.name}`,
               phone: `${response.data?.guarantor?.phone_number}`,
               relationship: `${response.data?.guarantor?.relationship}`,
-              image: response.data?.guarantor?.image
+              image: response.data?.guarantor?.image,
             } as MappedViewGuarantorResponse;
           }
         },

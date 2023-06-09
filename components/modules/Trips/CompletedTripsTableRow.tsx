@@ -35,11 +35,14 @@ const CompletedTripsTableRow: FC<Props> = ({
   },
   index,
 }) => {
-  
-  const router = useRouter()
+  const router = useRouter();
 
   return (
-    <div onClick={()=>router.push(`/trips/${id}`)} className="flex p-3 gap-6 border-b border-b[#E6E6E6] cursor-pointer" key={index}>
+    <div
+      onClick={() => router.push(`/trips/${id}`)}
+      className="flex p-3 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
+      key={index}
+    >
       <div style={{ flex: 2 }} className="flex items-center cursor-pointer">
         <Link href={`/trips/${id}`}>
           <p className="text-xs font-bold">{id}</p>
@@ -75,12 +78,17 @@ const CompletedTripsTableRow: FC<Props> = ({
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <Rating
-          rating={rating}
-          starDimension="11px"
-          starSpacing="1px"
-          starRatedColor="#FFBF00"
-        />
+        {rating === 0 ? (
+          <p className="text-xs font-bold">0</p>
+        ) : (
+          <Rating
+            rating={rating}
+            starDimension="11px"
+            starSpacing="1px"
+            starRatedColor="#FFBF00"
+            numberOfStars={rating}
+          />
+        )}
       </div>
     </div>
   );

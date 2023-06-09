@@ -67,11 +67,12 @@ const TripOrdersTable: FC<Props> = ({ setTripCount, tableSearch }) => {
         destination: `${trip.end_address.city || ""}, ${
           trip.end_address.state || ""
         }, ${trip.end_address.country || ""}`,
-        rider: trip.user?.full_name || "",
-        driver: "Driver name",
-        carModel: "Toyota Corolla",
-        plateNumber: "AX40-ZBY",
+        rider: trip.user?.full_name,
+        driver: trip?.driver?.full_name,
+        carModel: trip?.car?.brand_name + ' ' + trip?.car?.model,
+        plateNumber: trip?.car?.plate_number,
         status: trip.status,
+        
       };
     });
 

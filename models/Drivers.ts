@@ -16,16 +16,18 @@ export interface DriversMappedResponse {
 }
 
 export interface Driver {
-  total_trips: number;
   _id: string;
   user: {
     _id: string;
     full_name: string;
+    total_trips: 0;
+    profile_image: string;
   };
-  car_owner: boolean;
-  state: string;
+  car_owner: true;
+  state: string
   country: string;
-  wallet_balance: string;
+  approval_status: string;
+  wallet_balance: number;
 }
 
 export interface GetAllDriversResponse {
@@ -52,15 +54,16 @@ export interface GetAllDriversQuery {
 }
 
 export interface Document {
-  status: string;
   _id: string;
   title: string;
   doc_number: string;
   url: string;
+  status: string;
   owner: string;
   created_at: string;
   updated_at: string;
   __v: number;
+  approved_by: string;
 }
 
 export interface ViewDriverResponse {
@@ -71,37 +74,38 @@ export interface ViewDriverResponse {
       _id: string;
       user: {
         guarantor: {
-          isVerified: false;
           name: string;
           relationship: string;
           address: string;
           city: string;
           state: string;
           phone_number: string;
+          email: string;
           image: string;
         };
-        guarantor_response: boolean;
-        guarantor_status: "pending" | "approved" | "declined";
         _id: string;
         full_name: string;
         phone_number: string;
-        email: string;
+        guarantor_status: "pending" | "approved" | "declined";
+        guarantor_response: boolean;
         total_trips: number;
+        email: string;
+        profile_image: string;
       };
       house_address: string;
       city: string;
       state: string;
       country: string;
+      admin_approval: string;
       current_car: string;
+      admin_approval_remark: string;
     };
     car_details: {
       camera: {
         isSynched: boolean;
-        serial_number: string;
       };
       location_tracker: {
         isSynched: boolean;
-        serial_number: string;
       };
       _id: string;
       brand_name: string;
@@ -113,16 +117,14 @@ export interface ViewDriverResponse {
       images: string[];
       plate_number: string;
       isVerified: boolean;
-      on_a_trip: false;
-      assigned: false;
-      coordinate: number[];
+      on_a_trip: boolean;
+      assigned: boolean;
+      coordinate: (string | number)[];
       created_at: string;
       updated_at: string;
       __v: 0;
     };
     car_documents: Document[];
-    wallet_balance: number;
-    total_earned: number;
   };
   message: string;
 }
@@ -248,5 +250,5 @@ export interface MappedViewGuarantorResponse {
   fullname: string;
   relationship: string;
   phone: string;
-  image: string
+  image: string;
 }

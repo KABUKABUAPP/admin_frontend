@@ -1,9 +1,10 @@
 import React, { FC } from "react";
+import { useRouter } from "next/router";
 
 import Card from "@/components/common/Card";
 import Skeleton from "react-loading-skeleton";
 import Avatar from "@/components/common/Avatar";
-import RatingIcon from "@/components/icons/RatingIcon";
+import Rating from "react-star-ratings";
 
 interface Props {
   fullname?: string;
@@ -14,9 +15,9 @@ interface Props {
   rating?: number;
   image?: string;
   isLoading?: boolean;
-  totalCarsProcessed?: number
+  totalCarsProcessed?: number;
   role?: string;
-  bg?: string
+  bg?: string;
 }
 
 const UserInfoCard: FC<Props> = ({
@@ -30,15 +31,21 @@ const UserInfoCard: FC<Props> = ({
   isLoading,
   totalCarsProcessed,
   role,
-  bg='#FFFFFF'
+  bg = "#FFFFFF",
 }) => {
+  const router = useRouter();
+  const showCarsProcessed = router.pathname.includes("inspector");
   return (
     <Card bg={bg}>
       <div className="flex gap-4">
         <div>
           <div className="w-[80px] h-[80px]">
-            {fullname ? (
-              <Avatar imageUrl={image} fallBack={fullname[0]} size="lg" />
+            {image ? (
+              <Avatar
+                imageUrl={image}
+                fallBack={`${fullname && fullname[0]}`}
+                size="lg"
+              />
             ) : (
               <Skeleton
                 enableAnimation={isLoading}
@@ -53,23 +60,35 @@ const UserInfoCard: FC<Props> = ({
           {address && <p className="text-lg font-semibold">{address}</p>}
           {email && <p className="text-base font-semibold">{email}</p>}
           {phone && <p className="text-base font-semibold">{phone}</p>}
-          {tripCount && (
+          {tripCount === 0 ? (
+            <p className="text-sm font-semibold">0 trips</p>
+          ) : (
             <p className="text-sm font-semibold">
               {(tripCount && `${tripCount} trips`) || (
                 <Skeleton enableAnimation={isLoading} />
               )}
             </p>
           )}
-          {rating && (
-            <p className="text-sm font-semibold">
-              {rating && (
-                <span className="flex items-center gap-1">
-                  <RatingIcon /> {rating}
-                </span>
-              )}
+
+          <p className="text-sm font-semibold">
+            {rating && (
+              <span className="flex items-center gap-1">
+                <Rating
+                  rating={rating}
+                  starDimension="11px"
+                  starSpacing="1px"
+                  starRatedColor="#FFBF00"
+                  numberOfStars={5}
+                />
+              </span>
+            )}
+          </p>
+
+          {showCarsProcessed && (
+            <p className="text-lg font-semibold">
+              {totalCarsProcessed} Car(s) processed
             </p>
           )}
-          {<p className="text-lg font-semibold">{totalCarsProcessed} Car(s) processed</p>}
         </div>
       </div>
     </Card>
