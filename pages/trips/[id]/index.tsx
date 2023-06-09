@@ -22,7 +22,7 @@ import { useViewTripQuery } from "@/api-services/tripsService";
 import { useRouter } from "next/router";
 
 import { io } from "socket.io-client";
-const socket = io("ws://localhost:8080").connect();
+const socket = io("https://rideservice-dev.up.railway.app");
 
 const ViewTrip: NextPage = () => {
   const { setIsCalling } = useCallContext();
@@ -41,29 +41,25 @@ const ViewTrip: NextPage = () => {
   } | null>(null);
 
   useEffect(() => {
-    socket.connect();
+    socket.on("connect", () => {
+      console.log("inside effect", socket.connected);
+      joinRoom();
+    });
 
-    if (socket.connected) {
-      socket.on(
-        "live_trip",
-        (data: { lat: number; lng: number; address: string }) => {
-          console.log("getting data");
-          console.log(data);
-          setLiveLocation(data);
-        }
-      );
-    }
+    socket.on("driver-location", (data: { lat: number; long: number }) => {
+      const location = { lat: data.lat, lng: data.long, address: "" };
+      setLiveLocation(location);
+    });
 
-    return () => {
-      socket.disconnect();
-    };
-  }, [socket.connected]);
+    socket.on("join-room", (data) => {
+      console.log("jon room data", data);
+    });
+  }, []);
 
-  useEffect(() => {
-    if (data) {
-      socket.emit("join_room", [data.orderId]);
-    }
-  }, [data]);
+  const joinRoom = () => {
+    console.log("joining room");
+    socket.emit("join-room", ["64837b8bf8c9b9efa5472538"]);
+  };
 
   const handleCall = (isRider: boolean) => {
     setModalContent(

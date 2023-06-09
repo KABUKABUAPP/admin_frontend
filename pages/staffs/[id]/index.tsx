@@ -53,7 +53,7 @@ const Staff: NextPage = () => {
           firstRow={
             <>
               <UserInfoCard
-                fullname="John Doe"
+                fullName="John Doe"
                 email="jdoe@gmail.com"
                 phone="+234 909 888 7655"
                 address="30, Ebinpejo Lane, Idumota, Lagos, Nigeia"

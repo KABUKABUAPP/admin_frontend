@@ -38,7 +38,7 @@ const SharpCar: NextPage = () => {
             <>
               <UserInfoCard
                 image="/testUser.jpg"
-                fullname="John Doe"
+                fullName="John Doe"
                 address="30, Ebinpejo Lane, Idumota, Lagos, Nigeria"
                 email="jdoe@gmail.com"
                 phone="+234 909 888 7655"
