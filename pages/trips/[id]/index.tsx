@@ -41,24 +41,25 @@ const ViewTrip: NextPage = () => {
   } | null>(null);
 
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log("inside effect", socket.connected);
-      joinRoom();
-    });
+    if (data) {
+      socket.on("connect", () => {
+        joinRoom(data.orderId);
+      });
+    }
 
     socket.on("driver-location", (data: { lat: number; long: number }) => {
       const location = { lat: data.lat, lng: data.long, address: "" };
       setLiveLocation(location);
     });
 
-    socket.on("join-room", (data) => {
-      console.log("jon room data", data);
-    });
-  }, []);
+    return () => {
+      socket.disconnect();
+      setLiveLocation(null)
+    };
+  }, [data]);
 
-  const joinRoom = () => {
-    console.log("joining room");
-    socket.emit("join-room", ["64837b8bf8c9b9efa5472538"]);
+  const joinRoom = (orderId: string) => {
+    socket.emit("join-room", [orderId]);
   };
 
   const handleCall = (isRider: boolean) => {
