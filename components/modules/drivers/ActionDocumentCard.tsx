@@ -65,7 +65,7 @@ const ActionDocumentCard: FC<Props> = ({ docId, docImage, title, status, id }) =
               startIcon={<TimesIcon fill="#EF2C5B" />}
               onClick={() => {
                 if (docId) {
-                  inspectDocument({ docId, status: "DECLINED" });
+                  inspectDocument({ docId: id, status: "DECLINED" });
                 }
               }}
             />
