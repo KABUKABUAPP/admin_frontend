@@ -83,6 +83,7 @@ export interface ViewDriverResponse {
           email: string;
           image: string;
         };
+        isBlocked: boolean;
         _id: string;
         full_name: string;
         phone_number: string;
@@ -152,6 +153,7 @@ export interface MappedViewDriver {
     tripCount: number;
     rating: number;
     id: string;
+    isBlocked: boolean
   };
   carDetails: {
     carImages: string[];
@@ -165,7 +167,7 @@ export interface MappedViewDriver {
     subscriptionDue: string;
   };
   guarantor: {
-    reason: string
+    reason: string;
     address: string;
     fullname: string;
     image?: string;

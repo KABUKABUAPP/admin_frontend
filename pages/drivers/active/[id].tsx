@@ -1,6 +1,6 @@
 import AppLayout from "@/layouts/AppLayout";
 import { NextPage } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import ActionBar from "@/components/common/ActionBar";
 import Button from "@/components/ui/Button/Button";
@@ -14,12 +14,16 @@ import GuarantorDetailsCard from "@/components/common/GuarantorDetailsCard";
 import CarDocuments from "@/components/common/CarDocuments";
 import TripHistoryCard from "@/components/common/TripHistoryCard";
 import { useRouter } from "next/router";
-import { useViewDriverQuery } from "@/api-services/driversService";
+import {
+  useToggleBlockDriverMutation,
+  useViewDriverQuery,
+} from "@/api-services/driversService";
 import Loader from "@/components/ui/Loader/Loader";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import { useGetDriverTripHistoryQuery } from "@/api-services/tripsService";
 import BlockDriverConfirmation from "@/components/modules/drivers/BlockDriverConfirmation";
 import { useModalContext } from "@/contexts/ModalContext";
+import { toast } from "react-toastify";
 
 const Driver: NextPage = () => {
   const router = useRouter();
@@ -46,20 +50,61 @@ const Driver: NextPage = () => {
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
+  const [
+    unblockDriver,
+    {
+      isLoading: unblockLoading,
+      isSuccess: unblockSuccess,
+      error: unblockError,
+    },
+  ] = useToggleBlockDriverMutation();
+
+  useEffect(() => {
+    if (unblockSuccess) {
+      toast.success("Driver Successfully Unblocked");
+    }
+  }, [unblockSuccess]);
+
+  useEffect(() => {
+    if (unblockError && "data" in unblockError) {
+      const { message, status }: any = unblockError;
+      if (message) toast.error(message);
+      if (status) toast.error(status);
+    }
+  }, [unblockError]);
+
   return (
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
         <ActionBar>
           <Button title="Call Driver" startIcon={<PhoneIcon />} size="large" />
-          {data && <Button
-            title="Block Driver"
-            startIcon={<BlockIcon />}
-            size="large"
-            color="secondary"
-            onClick={() => {
-              setModalContent(<BlockDriverConfirmation driverId={data?.driverInfo.id}/>);
-            }}
-          />}
+          {data && data.driverInfo.isBlocked === false && (
+            <Button
+              title="Block Driver"
+              startIcon={<BlockIcon />}
+              size="large"
+              color="secondary"
+              onClick={() => {
+                setModalContent(
+                  <BlockDriverConfirmation driverId={String(id)} />
+                );
+              }}
+            />
+          )}
+          {data && data.driverInfo.isBlocked === true && (
+            <Button
+              title="Unblock Driver"
+              startIcon={<BlockIcon />}
+              loading={unblockLoading}
+              disabled={unblockLoading}
+              size="large"
+              color="secondary"
+              className="!bg-[#1FD11B] !text-[#FFFFFF]"
+              onClick={() => {
+                unblockDriver({ driverId: String(id), reason: "" });
+              }}
+            />
+          )}
         </ActionBar>
 
         {data && !isLoading && !isError && (
@@ -91,15 +136,30 @@ const Driver: NextPage = () => {
             }
             firstRow={
               <>
-                <DriverInfoCard {...data.driverInfo} />
+                <DriverInfoCard
+                  {...data.driverInfo}
+                  bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+                />
 
-                <CarDetailsCard {...data.carDetails} />
+                <CarDetailsCard
+                  {...data.carDetails}
+                  bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+                />
 
-                <FinancialsCard {...data.financials} />
+                <FinancialsCard
+                  {...data.financials}
+                  bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+                />
 
-                <GuarantorDetailsCard {...data.guarantor} />
+                <GuarantorDetailsCard
+                  {...data.guarantor}
+                  bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+                />
 
-                <CarDocuments {...data.carDocs} />
+                <CarDocuments
+                  {...data.carDocs}
+                  bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+                />
               </>
             }
           />

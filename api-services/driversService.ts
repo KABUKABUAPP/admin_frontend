@@ -87,6 +87,7 @@ export const driversApi = createApi({
               tripCount: data?.driver?.user?.total_trips,
               rating: 0,
               id: data?.driver?._id,
+              isBlocked: data?.driver?.user?.isBlocked
             },
             carDetails: {
               carImages: data?.car_details.images,
@@ -174,7 +175,8 @@ export const driversApi = createApi({
       query: ({ reason, driverId })=>({
         url: `admin/driver/block-unblock/${driverId}?reason=${reason}`,
         method: 'PUT'
-      })
+      }),
+      invalidatesTags: ['driver']
     })
   }),
 });
