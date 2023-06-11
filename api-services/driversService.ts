@@ -100,6 +100,7 @@ export const driversApi = createApi({
               subscriptionDue: "",
             },
             guarantor: {
+              reason: data.driver?.admin_approval_remark,
               address: data.driver?.user?.guarantor?.address,
               fullname: data.driver?.user?.guarantor?.name,
               image: data.driver?.user?.guarantor?.image,

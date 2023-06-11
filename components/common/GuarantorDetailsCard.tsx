@@ -24,6 +24,7 @@ interface Props {
   bg?: string;
   responded?: boolean;
   responseStatus?: "pending" | "approved" | "declined";
+  reason?: string
 }
 
 const GuarantorDetailsCard: FC<Props> = ({
@@ -35,6 +36,7 @@ const GuarantorDetailsCard: FC<Props> = ({
   phone,
   responded,
   responseStatus,
+  reason,
   bg = "#FFFFFF",
 }) => {
   const router = useRouter();
@@ -156,7 +158,7 @@ const GuarantorDetailsCard: FC<Props> = ({
       {responseStatus === "declined" && showGuarantorStatus ? (
         <div className="flex items-center gap-3 mt-3">
           <TimesIcon fill="#EF2C5B" />
-          <p className="text-[#EF2C5B] font-semibold">Declined</p>
+          <p className="text-[#EF2C5B] font-semibold">Declined [{reason}]</p>
         </div>
       ) : null}
     </Card>

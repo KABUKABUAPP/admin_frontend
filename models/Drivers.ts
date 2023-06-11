@@ -91,6 +91,7 @@ export interface ViewDriverResponse {
         total_trips: number;
         email: string;
         profile_image: string;
+        admin_approval_remark: string;
       };
       house_address: string;
       city: string;
@@ -164,6 +165,7 @@ export interface MappedViewDriver {
     subscriptionDue: string;
   };
   guarantor: {
+    reason: string
     address: string;
     fullname: string;
     image?: string;
@@ -237,5 +239,5 @@ export interface MappedViewGuarantorResponse {
 
 export interface BlockDriverQuery {
   reason: string;
-  driverId: string
+  driverId: string;
 }
