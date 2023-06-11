@@ -1,5 +1,6 @@
 import { NextPage } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 import AppLayout from "@/layouts/AppLayout";
 import AccountBalanceCardContainer from "@/components/modules/Transactions/AccountBalanceCardContainer";
@@ -7,14 +8,28 @@ import SearchFilterBar from "@/components/common/SearchFilterBar";
 import TransactionsTable from "@/components/modules/Transactions/TransactionsTable";
 import { useGetAllTransactionsQuery } from "@/api-services/transactionsService";
 import Pagination from "@/components/common/Pagination";
+import OptionBar from "@/components/common/OptionsBar";
+import { transactionsOptionsBar } from "@/constants";
+import AllTransactionsTable from "@/components/modules/Transactions/AllTransactionsTable";
+import SharpPaymentsTable from "@/components/modules/Transactions/SharpPaymentsTable";
+import SubscriptionsTable from "@/components/modules/Transactions/SubscriptionsTable";
+import TopUpTable from "@/components/modules/Transactions/TopUpTable";
+import TripChargesTable from "@/components/modules/Transactions/TripChargesTable";
+import TripPaymentsTable from "@/components/modules/Transactions/TripPaymentsTable";
+import WithdrawalsTable from "@/components/modules/Transactions/WithdrawalsTable";
 
 const Transactions: NextPage = () => {
+  const router = useRouter();
+  const { tab } = router.query;
   const [accountCardData, setAccountCardData] = useState(mockData);
+  const [transactionOptions, setTransactionOptions] = useState(
+    transactionsOptionsBar
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState<string>("");
   const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
-    { limit: pageSize, page: currentPage, search: search },
+    { limit: pageSize, page: currentPage, search: search, filter: "" },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
   const handleClickAccountCard = (title: string) => {
@@ -35,13 +50,53 @@ const Transactions: NextPage = () => {
     dropDownOptions.find((opt) => opt.default === true)?.value || ""
   );
 
-  
+  const handleClickOption = (keyVal: string) => {
+    if (keyVal !== "")
+      router.push(`/transactions?tab=${keyVal}`, undefined, { shallow: true });
+    else router.push(`/transactions`, undefined, { shallow: true });
+  };
+
+  const handleActiveTab = (keyVal: string) => {
+    const mutatedOptions = transactionOptions.map((item) => {
+      return item.keyVal === keyVal
+        ? { ...item, isActive: true }
+        : { ...item, isActive: false };
+    });
+    setTransactionOptions(mutatedOptions);
+  };
+
+  useEffect(() => {
+    let currentKey = "";
+    if (tab) {
+      const option = transactionOptions.filter((t) => t.keyVal === tab)[0];
+      currentKey = option?.keyVal;
+    } else {
+      currentKey = "";
+    }
+    handleActiveTab(currentKey);
+  }, [tab]);
+
+  enum Tab {
+    all_transactions = "undefined",
+    trip_payments = "trip_payments",
+    trip_charges = "trip_charges",
+    top_up = "top_up",
+    withdrawals = "withdrawals",
+    subscriptions = "subscriptions",
+    sharp_payments = "sharp_payments",
+  }
 
   return (
     <AppLayout>
       <AccountBalanceCardContainer
         data={accountCardData}
         handleClick={(title) => {}}
+      />
+      <OptionBar
+        options={transactionOptions}
+        handleClickOption={(key) => {
+          handleClickOption(key);
+        }}
       />
       <SearchFilterBar
         filterOptions={dropDownOptions}
@@ -52,7 +107,19 @@ const Transactions: NextPage = () => {
         searchValue={search}
         handleSearch={(val) => setSearch(val)}
       />
-      <TransactionsTable
+      {String(tab) === Tab.all_transactions && <AllTransactionsTable />}
+      {String(tab) === Tab.sharp_payments && <SharpPaymentsTable />}
+
+      {String(tab) === Tab.subscriptions && <SubscriptionsTable />}
+
+      {String(tab) === Tab.top_up && <TopUpTable />}
+
+      {String(tab) === Tab.trip_charges && <TripChargesTable />}
+
+      {String(tab) === Tab.trip_payments && <TripPaymentsTable />}
+
+      {String(tab) === Tab.withdrawals && <WithdrawalsTable />}
+      {/* <TransactionsTable
         isError={isError}
         isLoading={isLoading}
         refetch={refetch}
@@ -66,7 +133,7 @@ const Transactions: NextPage = () => {
           pageSize={pageSize}
           onPageChange={(page) => setCurrentPage(page)}
         />
-      )}
+      )} */}
     </AppLayout>
   );
 };

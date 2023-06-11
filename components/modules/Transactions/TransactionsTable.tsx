@@ -3,7 +3,6 @@ import React, { FC } from "react";
 import TransactionsTableHeadRow from "./TransactionsTableHeadRow";
 import TransactionsTableRow from "./TransactionsTableRow";
 import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
-import { transactionsMockData } from "@/constants";
 import { TransactionsModel } from "@/models/Transactions";
 
 const headCellData = [

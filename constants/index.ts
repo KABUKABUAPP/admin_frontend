@@ -1,6 +1,6 @@
 export const AUTH_BASE_URL = process.env.NEXT_PUBLIC_AUTH_URL;
 export const RIDES_BASE_URL = process.env.NEXT_PUBLIC_RIDE_BASE_URL;
-export const HUBS_BASE_URL = process.env.NEXT_PUBLIC_HUBS_BASE_URL
+export const HUBS_BASE_URL = process.env.NEXT_PUBLIC_HUBS_BASE_URL;
 export const milliSecondToSecondConversionRate = 1000;
 export const ACCESS_TOKEN = "AUTH_TOKEN__ACESS-$";
 export const USER_TOKEN = "USER_stoRED_$##";
@@ -42,8 +42,8 @@ export const nigerianStates = [
   "Sokoto",
   "Taraba",
   "Yobe",
-  "Zamfara"
-]
+  "Zamfara",
+];
 export const TripsOptionsBarData = [
   {
     title: "Trip Orders",
@@ -112,19 +112,57 @@ export const sharpCarsOptionsData = [
   {
     title: "Active Cars",
     isActive: true,
-    keyVal: ""
+    keyVal: "",
   },
   {
     title: "Unassinged Cars",
     isActive: false,
-    keyVal: "unassigned-cars"
+    keyVal: "unassigned-cars",
   },
   {
     title: "Car Deliveries",
     isActive: false,
-    keyVal: "car-deliveries"
+    keyVal: "car-deliveries",
   },
-]
+];
+
+export const transactionsOptionsBar = [
+  {
+    title: "All Transactions",
+    isActive: true,
+    keyVal: "",
+  },
+  {
+    title: "Trip Payments",
+    isActive: false,
+    keyVal: "trip_payments",
+  },
+  {
+    title: "Trip Charges",
+    isActive: false,
+    keyVal: "trip_charges",
+  },
+  {
+    title: "Top Up",
+    isActive: false,
+    keyVal: "top_up",
+  },
+  {
+    title: "Withdrawals",
+    isActive: false,
+    keyVal: "withdrawals",
+  },
+  {
+    title: "Subsciptions",
+    isActive: false,
+    keyVal: "subscriptions",
+  },
+  {
+    title: "Sharp Payments",
+    isActive: false,
+    keyVal: "sharp_payments",
+  },
+];
 
 export const tripsRowMockData = [
   {

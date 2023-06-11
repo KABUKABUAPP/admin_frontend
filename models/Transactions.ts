@@ -5,6 +5,9 @@ export interface TransactionsDataModel {
   narration: string;
   price: string;
   date: string;
+  amountRemaining: string;
+  userType: string
+  tripId: string
 }
 
 export interface TransactionsModel {
@@ -16,6 +19,7 @@ export interface GetAllTransactionsQuery {
   limit: number;
   page: number;
   search: string
+  filter: string;
 }
 
 export interface GetAllTransactions {
@@ -46,4 +50,5 @@ export interface TransactionDto {
   currency: string;
   narration: string;
   full_name: string;
+  user_type: string
 }
