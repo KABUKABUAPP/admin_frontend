@@ -14,6 +14,8 @@ import StartSurgeCard from "@/components/modules/fare-prices/StartSurgeCard";
 import { useRouter } from "next/router";
 import { useViewFarePriceQuery } from "@/api-services/farePricesService";
 import Loader from "@/components/ui/Loader/Loader";
+import EditDriverFeeForm from "@/components/modules/fare-prices/EditDriverFeeForm";
+import EditNormalFeesForm from "@/components/modules/fare-prices/EditNormalFeesForm";
 
 const FarePrice: NextPage = () => {
   const { setModalContent } = useModalContext();
@@ -82,6 +84,9 @@ const FarePrice: NextPage = () => {
               <>
                 <FarePriceCard
                   title="Driver Fee"
+                  handleEdit={() => {
+                    setModalContent(<EditDriverFeeForm />);
+                  }}
                   cardData={[
                     {
                       title: "Monthly Payment",
@@ -95,6 +100,9 @@ const FarePrice: NextPage = () => {
                 />
                 <FarePriceCard
                   title="Fares[Normal]"
+                  handleEdit={() => {
+                    setModalContent(<EditNormalFeesForm />);
+                  }}
                   cardData={[
                     { title: "Base Fare", body: `₦${data.data.base_fare}` },
                     {
