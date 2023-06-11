@@ -18,6 +18,8 @@ import { useViewDriverQuery } from "@/api-services/driversService";
 import Loader from "@/components/ui/Loader/Loader";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import { useGetDriverTripHistoryQuery } from "@/api-services/tripsService";
+import BlockDriverConfirmation from "@/components/modules/drivers/BlockDriverConfirmation";
+import { useModalContext } from "@/contexts/ModalContext";
 
 const Driver: NextPage = () => {
   const router = useRouter();
@@ -28,6 +30,8 @@ const Driver: NextPage = () => {
     { id: String(id) },
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
+
+  const { setModalContent } = useModalContext();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
@@ -41,18 +45,21 @@ const Driver: NextPage = () => {
     { driverId: String(id), limit: pageSize, page: currentPage },
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
-    console.log(data)
+
   return (
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
         <ActionBar>
           <Button title="Call Driver" startIcon={<PhoneIcon />} size="large" />
-          <Button
+          {data && <Button
             title="Block Driver"
             startIcon={<BlockIcon />}
             size="large"
             color="secondary"
-          />
+            onClick={() => {
+              setModalContent(<BlockDriverConfirmation driverId={data?.driverInfo.id}/>);
+            }}
+          />}
         </ActionBar>
 
         {data && !isLoading && !isError && (
@@ -64,8 +71,8 @@ const Driver: NextPage = () => {
                     tripHistoryData={tripHistory.data}
                     totalCount={tripHistory.totalCount}
                     currentCount={tripHistory.data.length}
-                    handleViewMore={()=>{
-                      setPageSize((ps)=>ps+5)
+                    handleViewMore={() => {
+                      setPageSize((ps) => ps + 5);
                     }}
                   />
                 )}

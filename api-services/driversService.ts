@@ -19,6 +19,7 @@ import {
   MappedViewGuarantorResponse,
   ViewGuarantorResponse,
   DriversTableBodyData,
+  BlockDriverQuery,
 } from "@/models/Drivers";
 
 export const driversApi = createApi({
@@ -168,6 +169,12 @@ export const driversApi = createApi({
         body: { ...rest },
       }),
     }),
+    toggleBlockDriver: build.mutation<any, BlockDriverQuery>({
+      query: ({ reason, driverId })=>({
+        url: `admin/driver/block-unblock/${driverId}?reason=${reason}`,
+        method: 'PUT'
+      })
+    })
   }),
 });
 
@@ -178,4 +185,5 @@ export const {
   useInspectDocumentMutation,
   useViewGuarantorQuery,
   useVerifyGuarantorMutation,
+  useToggleBlockDriverMutation
 } = driversApi;

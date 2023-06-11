@@ -234,3 +234,8 @@ export interface MappedViewGuarantorResponse {
   phone: string;
   image: string;
 }
+
+export interface BlockDriverQuery {
+  reason: string;
+  driverId: string
+}
