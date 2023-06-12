@@ -8,6 +8,7 @@ export interface DriversTableBodyData {
   walletBalance?: string;
   status?: string;
   userId?: string;
+  statusRemark?: string
 }
 
 export interface DriversMappedResponse {
@@ -28,6 +29,7 @@ export interface Driver {
   country: string;
   approval_status: string;
   wallet_balance: number;
+  status_remark: string;
 }
 
 export interface GetAllDriversResponse {
@@ -93,8 +95,10 @@ export interface ViewDriverResponse {
         email: string;
         profile_image: string;
         admin_approval_remark: string;
+        status_remark: string;
       };
       house_address: string;
+      admin_decline_count: number;
       city: string;
       state: string;
       country: string;
@@ -153,7 +157,8 @@ export interface MappedViewDriver {
     tripCount: number;
     rating: number;
     id: string;
-    isBlocked: boolean
+    isBlocked: boolean;
+    declineCount: number
   };
   carDetails: {
     carImages: string[];

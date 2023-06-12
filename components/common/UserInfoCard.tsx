@@ -19,6 +19,7 @@ interface Props {
   totalCarsProcessed?: number;
   role?: string;
   bg?: string;
+  declineCount?: number
 }
 
 const UserInfoCard: FC<Props> = ({
@@ -32,11 +33,13 @@ const UserInfoCard: FC<Props> = ({
   isLoading,
   totalCarsProcessed,
   role,
+  declineCount,
   bg = "#FFFFFF",
 }) => {
   const router = useRouter();
   const showCarsProcessed = router.pathname.includes("inspector");
   const showTripCount = !router.pathname.includes("inspector");
+  const showDeclineCount = router.pathname.includes("pending")
 
   return (
     <Card bg={bg}>
@@ -83,6 +86,12 @@ const UserInfoCard: FC<Props> = ({
           {showCarsProcessed && (
             <p className="text-lg font-semibold">
               {totalCarsProcessed} Car(s) processed
+            </p>
+          )}
+
+          {showDeclineCount && (
+            <p className="text-lg font-semibold">
+              Declined {declineCount} time(s)
             </p>
           )}
         </div>

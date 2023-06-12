@@ -99,7 +99,7 @@
     color: var(--text-primary);
     overscroll-behavior-x: none;
     font-family: 'Sofia Sans Semi Condensed', sans-serif;
-    @apply select-none;
+    /* @apply select-none; */
   }
   
   body {

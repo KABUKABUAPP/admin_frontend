@@ -20,7 +20,8 @@ const DriversTableBodyRow: FC<Props> = ({
     status,
     totalTrips,
     walletBalance,
-    userId
+    userId,
+    statusRemark
   },
   subPath
 }) => {
@@ -61,7 +62,7 @@ const DriversTableBodyRow: FC<Props> = ({
         <p className="text-xs font-bold">{driverType || <Skeleton />}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{status || <Skeleton />}</p>
+        <p className="text-xs font-bold">{statusRemark || <Skeleton />}</p>
       </div>
     </div>
   );

@@ -61,6 +61,7 @@ export const driversApi = createApi({
               walletBalance: driver?.wallet_balance || '0',
               status: driver?.approval_status,
               userId: driver.user._id,
+              statusRemark: driver?.status_remark
             } as DriversTableBodyData;
           });
 
@@ -87,7 +88,8 @@ export const driversApi = createApi({
               tripCount: data?.driver?.user?.total_trips,
               rating: 0,
               id: data?.driver?._id,
-              isBlocked: data?.driver?.user?.isBlocked
+              isBlocked: data?.driver?.user?.isBlocked,
+              declineCount: data?.driver?.admin_decline_count
             },
             carDetails: {
               carImages: data?.car_details.images,
