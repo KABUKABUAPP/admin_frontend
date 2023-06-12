@@ -54,7 +54,7 @@ export const driversApi = createApi({
               fullName: driver.user?.full_name,
               location: `${driver.country}, ${driver.state}`,
               imageUrl: driver?.user?.profile_image,
-              driverType: driver?.car_owner
+              driverType: driver?.car_owner ===true
                 ? "Regular Driver"
                 : "Sharp Car Driver",
               totalTrips: driver?.user?.total_trips,

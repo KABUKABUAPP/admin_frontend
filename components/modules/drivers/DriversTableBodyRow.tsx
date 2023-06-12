@@ -21,11 +21,12 @@ const DriversTableBodyRow: FC<Props> = ({
     totalTrips,
     walletBalance,
     userId,
-    statusRemark
+    statusRemark,
   },
-  subPath
+  subPath,
 }) => {
   const router = useRouter();
+  const isStatusRemark = router.pathname.includes("drivers/pending");
 
   return (
     <div
@@ -62,7 +63,9 @@ const DriversTableBodyRow: FC<Props> = ({
         <p className="text-xs font-bold">{driverType || <Skeleton />}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{statusRemark || <Skeleton />}</p>
+        <p className="text-xs font-bold">
+          {isStatusRemark ? statusRemark : status || <Skeleton />}
+        </p>
       </div>
     </div>
   );

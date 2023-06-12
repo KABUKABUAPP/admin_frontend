@@ -35,7 +35,7 @@ const EnhancedTable: FC<Props> = ({
     scrollbar-thumb-gray-900 scrollbar-track-gray-300"
       style={{ maxWidth: maxWidth }}
     >
-      <div className=" bg-transparent  min-w-[800px]">
+      <div className=" bg-transparent  min-w-[1000px]">
         <EnhancedTableHead
           TableHeadComponent={
             generic && headCellData ? (
