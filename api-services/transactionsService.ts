@@ -42,7 +42,7 @@ export const transactionsApi = createApi({
                   type: tx?.type,
                   user: tx?.user_id,
                   amountRemaining: '',
-                  tripId: '',
+                  tripId: tx?.narration_id,
                   userType: tx?.user_type
                 } as TransactionsDataModel
             })

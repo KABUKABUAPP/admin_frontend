@@ -18,7 +18,7 @@ const Card: FC<PropsWithChildren<Props>> = ({
 }) => {
   return (
     <div
-      className={`rounded-lg w-full p-4 ${elevation ? 'shadow-md' : ''} ${maxHeight ? 'overflow-y-auto scrollbar-none':''}`}
+      className={`rounded-lg w-full p-4 ${elevation ? 'shadow-md' : ''} ${maxHeight ? 'overflow-y-auto scrollbar-none':''} transition-all ease-in-out duration-500`}
       style={{ maxWidth, height, maxHeight, backgroundColor: bg }}
     >
       {children}
