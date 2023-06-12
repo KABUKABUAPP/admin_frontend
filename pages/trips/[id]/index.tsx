@@ -108,10 +108,10 @@ const ViewTrip: NextPage = () => {
       },
       {
         topTitle: "Trip started",
-        topValue: tripStarted,
+        topValue: new Date(tripStarted).toUTCString(),
         topIcon: <ClockIcon />,
         bottomTitle: "Trip to end",
-        bottomValue: new Date(tripToEnd).toLocaleDateString(),
+        bottomValue: new Date(tripToEnd).toUTCString(),
         bottomIcon: <ClockIcon />,
       },
     ];
@@ -180,7 +180,7 @@ const ViewTrip: NextPage = () => {
                     estimatedPrice: data.estimatedPrice.toString(),
                     paymentType: data.paymentType,
                     tripStarted: data.tripStarted,
-                    tripToEnd: data.tripEnded,
+                    tripToEnd:  data.tripEnded,
                   })
                 }
               />

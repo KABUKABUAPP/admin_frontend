@@ -62,7 +62,7 @@ export const tripsApi = createApi({
           riderRating: response.data.rider_details.average_rating.value,
           riderTripCount: response.data.rider_details.total_trips,
           tripEnded: response.data.trip_completion_time,
-          tripStarted: ``,
+          tripStarted: response?.data?.start_time,
           driverImage: "",
           riderImage: response.data.rider_details.profile_image,
           orderId: response.data.order_id,

@@ -29,10 +29,20 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
       });
     } else {
       mutatedSidebarItems = sidebarItems.map((item) => {
-        if (pathname.includes(item.link) && item.title !== "Dashboard") {
-          return { ...item, isActive: true };
+        if ("subLinks" in item) {
+          if (pathname.includes(item.link) && item.title !== "Dashboard") {
+            return { ...item, isActive: true };
+          }
+          else if(item.subLinks?.some((i)=>pathname.includes(i))){
+            return { ...item, isActive: true };
+          }
+          else return {...item, isActive: false}
+        } else {
+          if (pathname.includes(item.link) && item.title !== "Dashboard") {
+            return { ...item, isActive: true };
+          }
+          return { ...item, isActive: false };
         }
-        return { ...item, isActive: false };
       });
     }
 

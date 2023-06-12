@@ -61,7 +61,7 @@ export interface TripData {
   car: {
     _id: string;
     brand_name: string;
-    model:string;
+    model: string;
     year: string;
     color: string;
     plate_number: string;
@@ -130,6 +130,7 @@ export interface ViewTripResponse {
       state: string;
       city: string;
     };
+    start_time: string;
     estimated_price: number;
     order_id: string;
     payment_type: string;
