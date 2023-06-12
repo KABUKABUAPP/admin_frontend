@@ -30,12 +30,12 @@ const Driver: NextPage = () => {
       <div className="lg:h-screen lg:overflow-hidden p-4">
         <ActionBar>
           <Button title="Call Driver" startIcon={<PhoneIcon />} size="large" />
-          <Button
+          {/* <Button
             title="Block Driver"
             startIcon={<BlockIcon />}
             size="large"
             color="secondary"
-          />
+          /> */}
         </ActionBar>
 
         {data && !isLoading && !isError && (

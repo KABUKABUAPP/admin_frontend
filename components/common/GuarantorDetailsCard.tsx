@@ -54,7 +54,7 @@ const GuarantorDetailsCard: FC<Props> = ({
   } = useViewGuarantorQuery(
     { id: String(id) },
     {
-      skip: isNotFetchGuarantorUpload || !id,
+      skip: isNotFetchGuarantorUpload || !id || !responded,
       refetchOnMountOrArgChange: true,
       refetchOnReconnect: true,
     }
