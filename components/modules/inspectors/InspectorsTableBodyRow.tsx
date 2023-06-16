@@ -28,7 +28,7 @@ const InspectorsTableBodyRow: FC<Props> = ({
     >
       <div style={{ flex: 1 }} className="flex items-center">
         <Link href={`/inspectors/${inspectorId}`}>
-          <p className="text-xs font-bold cursor-pointer">{inspectorId}</p>
+          <p className="text-xs font-bold cursor-pointer break-all">{inspectorId}</p>
         </Link>
       </div>
       <div style={{ flex: 2 }} className="flex items-center gap-2">

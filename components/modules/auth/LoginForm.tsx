@@ -54,8 +54,6 @@ const LoginForm: FC = () => {
   useEffect(() => {
     if (data) {
       const { accessTokens, __v, ...rest } = data.data.loggedInAdmin
-
-      Cookies.set(USER_TOKEN, JSON.stringify(rest))
       Cookies.set(ACCESS_TOKEN, accessTokens)
       const userData: User = {
         _id: rest._id,
@@ -68,6 +66,7 @@ const LoginForm: FC = () => {
         status: false, 
         updated_at: rest.updated_at
       }
+      Cookies.set(USER_TOKEN, JSON.stringify(userData))
       setUser({...userData})
       toast.success("Login Successful");
       router.push("/");
