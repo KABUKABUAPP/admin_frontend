@@ -15,6 +15,7 @@ import { useUserContext } from "@/contexts/UserContext";
 import { useFormik, Form, FormikProvider } from "formik";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import { User } from "@/models/User";
 
 const initialValues = {
   email: "",
@@ -56,7 +57,7 @@ const LoginForm: FC = () => {
 
       Cookies.set(USER_TOKEN, JSON.stringify(rest))
       Cookies.set(ACCESS_TOKEN, accessTokens)
-      setUser(rest)
+      setUser({...rest, role: rest.role.name})
       toast.success("Login Successful");
       router.push("/");
     }
