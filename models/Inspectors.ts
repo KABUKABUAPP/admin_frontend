@@ -30,13 +30,15 @@ export interface Inspector {
 export interface GetAllInspectorsResponse {
   status: string;
 
-  data: Inspector[];
-  pagination: {
-    pageSize: number;
-    totalCount: number;
-    pageCount: number;
-    currentPage: number;
-    hasNext: boolean;
+  data: {
+    data: Inspector[];
+    pagination: {
+      pageSize: number;
+      totalCount: number;
+      pageCount: number;
+      currentPage: number;
+      hasNext: boolean;
+    };
   };
   message: string;
 }

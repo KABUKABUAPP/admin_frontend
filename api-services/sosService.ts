@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import {  RIDES_BASE_URL } from "@/constants";
+import { RIDES_BASE_URL } from "@/constants";
 import { secondsToMilliSeconds } from "@/utils";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "@/constants";
@@ -28,8 +28,8 @@ export const sosApi = createApi({
   }),
   endpoints: (build) => ({
     getAllSos: build.query<MappedSosResponse, GetAllSosQuery>({
-      query: ({ limit, page, date, dateRange , search}) => ({
-        url: `admin/sos/get-all?limit=${limit}&page=${page}&date=${date}&search=${search}`,
+      query: ({ limit, page, date, startDate, endDate, search, order }) => ({
+        url: `admin/sos/get-all?limit=${limit}&page=${page}&date=${date}&search=${search}&order=${order}${startDate ? '&dateRange=' : ''}${startDate||''}${endDate ? '&dateRange=' : ''}${endDate||''}`,
       }),
       transformResponse: (response: GetAllSOSResponse) => {
         if (!response) return {} as MappedSosResponse;

@@ -34,8 +34,8 @@ export const tripsApi = createApi({
   }),
   endpoints: (build) => ({
     getAllTrips: build.query<GetAllTripsResponse, GetAllTripsQuery>({
-      query: ({ limit, page, status, search }) => ({
-        url: `/admin/trip/get-all?limit=${limit}&page=${page}&status=${status}&search=${search}`,
+      query: ({ limit, page, status, search, order }) => ({
+        url: `/admin/trip/get-all?limit=${limit}&page=${page}&status=${status}&search=${search}&order=${order}`,
       }),
     }),
     viewTrip: build.query<MappedViewTripResponse, ViewTripQuery>({

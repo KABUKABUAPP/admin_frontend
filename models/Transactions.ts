@@ -20,6 +20,7 @@ export interface GetAllTransactionsQuery {
   page: number;
   search: string;
   filter: string;
+  order: string;
 }
 
 export interface GetAllTransactions {

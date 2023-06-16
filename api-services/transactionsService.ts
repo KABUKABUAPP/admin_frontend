@@ -27,8 +27,8 @@ export const transactionsApi = createApi({
   }),
   endpoints: (build) => ({
     getAllTransactions: build.query<TransactionsModel, GetAllTransactionsQuery>({
-      query: ({ limit, page, search, filter }) => ({
-        url: `/admin/transaction/all?limit=${limit}&page=${page}&search=${search}&filter=${filter}`,
+      query: ({ limit, page, search, filter, order }) => ({
+        url: `/admin/transaction/all?limit=${limit}&page=${page}&search=${search}&filter=${filter}&order=${order}`,
       }),
       transformResponse: (response: GetAllTransactions)=>{
         if(!response) return response as TransactionsModel

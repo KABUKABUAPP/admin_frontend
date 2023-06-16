@@ -38,6 +38,8 @@ const Inspectors: NextPage = () => {
     filterOptions.find((opt) => opt.default === true)?.value || ""
   );
 
+  console.log(inspectorErrorObj)
+
   return (
     <AppLayout>
       <SearchFilterBar

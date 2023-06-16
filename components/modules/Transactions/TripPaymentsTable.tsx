@@ -14,7 +14,11 @@ const headCellData = [
   { title: "", flex: 2 },
 ];
 
-const TripPaymentsTable: FC = () => {
+interface Props {
+  order: string;
+}
+
+const TripPaymentsTable: FC<Props> = ({order}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState<string>("");
@@ -24,6 +28,7 @@ const TripPaymentsTable: FC = () => {
       page: currentPage,
       search: search,
       filter: "trip_payment",
+      order
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );

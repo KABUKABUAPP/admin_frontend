@@ -65,14 +65,14 @@ export interface GetAllSOSResponse {
   message: string;
 }
 
-type DateOptions = "this_week"
-
 export interface GetAllSosQuery {
     limit: number;
-    date: DateOptions;
+    date: string;
     page: number;
-    dateRange?: string;
-    search: string
+    startDate?: string;
+    endDate?: string;
+    search: string;
+    order: string
 }
 
 export interface MappedSosResponse {

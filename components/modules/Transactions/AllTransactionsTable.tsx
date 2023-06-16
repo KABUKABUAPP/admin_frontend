@@ -15,12 +15,16 @@ const headCellData = [
   { title: "", flex: 2 },
 ];
 
-const AllTransactionsTable: FC = () => {
+interface Props {
+  order: string;
+}
+
+const AllTransactionsTable: FC<Props> = ({ order }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState<string>("");
   const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
-    { limit: pageSize, page: currentPage, search: search, filter: "" },
+    { limit: pageSize, page: currentPage, search: search, filter: "", order },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 

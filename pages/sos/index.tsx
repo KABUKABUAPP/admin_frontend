@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import AppLayout from "@/layouts/AppLayout";
 import CountHeader from "@/components/common/CountHeader";
@@ -8,33 +8,86 @@ import SosTable from "@/components/modules/Sos/SosTable";
 import { useGetAllSosQuery } from "@/api-services/sosService";
 import Pagination from "@/components/common/Pagination";
 import DropDown from "@/components/ui/DropDown";
+import DateRangeFilter from "@/components/modules/Sos/DateRangeFilter";
+import { useModalContext } from "@/contexts/ModalContext";
 
 const SOS: NextPage = () => {
+  const { setModalContent } = useModalContext();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(2);
   const [search, setSearch] = useState<string>("");
-  const { data, isLoading, isError, refetch } = useGetAllSosQuery(
-    { limit: pageSize, page: currentPage, date: "this_week", search: search },
-    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
-  );
-
   const timeFilterOptions = [
-    { label: "Newest First", value: "", default: true },
-    { label: "Oldest First", value: "", default: false },
+    { label: "Newest First", value: "newest_first", default: true },
+    { label: "Oldest First", value: "oldest_first", default: false },
   ];
   const sortDirectionFilterOptions = [
-    { label: "Today", value: "today", default: true },
+    { label: "Today", value: "today", default: false },
     { label: "Yesterday", value: "yesterday", default: false },
-    { label: "This Week", value: "this_week", default: false },
+    { label: "This Week", value: "this_week", default: true },
+    { label: "Date Range", value: "date_range", default: true },
   ];
+  const [directionFilterOptions, setDirectionFilterOptions] = useState(
+    sortDirectionFilterOptions
+  );
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
 
   const [selectedTimeFilter, setSelectedTimeFilter] = useState<string>(
-    timeFilterOptions.find((opt) => opt.default === true)?.value || ""
+    timeFilterOptions.find((opt) => opt.default === true)?.value ||
+      "newest_first"
   );
 
   const [selectedSortFilter, setSelectedSortFilter] = useState<string>(
-    sortDirectionFilterOptions.find((opt) => opt.default === true)?.value || ""
+    directionFilterOptions.find((opt) => opt.default === true)?.value ||
+      "this_week"
   );
+
+  const { data, isLoading, isError, refetch } = useGetAllSosQuery(
+    {
+      limit: pageSize,
+      page: currentPage,
+      date: selectedSortFilter,
+      search: search,
+      order: selectedTimeFilter,
+      startDate,
+      endDate,
+    },
+    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
+
+  const handleSortDirectionFilter = (val: string) => {
+    if (val === "date_range") {
+      setModalContent(
+        <DateRangeFilter
+          handleSelectDate={({ startDate, endDate }) => {
+            const pseudoLabel = `From ${startDate} to ${endDate}`;
+            setDirectionFilterOptions(
+              directionFilterOptions.map((item) => {
+                if (item.value === "date_range")
+                  return { ...item, pseudoLabel: pseudoLabel };
+                else return item;
+              })
+            );
+            setStartDate(startDate);
+            setEndDate(endDate);
+            setModalContent(null)
+          }}
+        />
+      );
+    } else {
+      setDirectionFilterOptions(
+        directionFilterOptions.map((item) => {
+          if (item.value === "date_range") return { ...item, pseudoLabel: "" };
+          else return item;
+        })
+      );
+      setSelectedSortFilter(val);
+    }
+  };
+
+  useEffect(() => {
+    console.log(directionFilterOptions);
+  }, [JSON.stringify(directionFilterOptions)]);
 
   return (
     <AppLayout>
@@ -42,12 +95,13 @@ const SOS: NextPage = () => {
       <SearchFilterBar
         searchValue={search}
         handleSearch={(val) => setSearch(val)}
-        filterOptions={sortDirectionFilterOptions}
-        handleDropDown={(val) => setSelectedSortFilter(String(val))}
+        filterOptions={directionFilterOptions}
+        handleDropDown={(val) => handleSortDirectionFilter(String(val))}
         dropDownOptionSelected={selectedSortFilter}
+        title="Show:"
       >
         <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
-          <span>Show:</span>
+          <span>Sort:</span>
           <DropDown
             placeholder="Filter"
             options={timeFilterOptions}

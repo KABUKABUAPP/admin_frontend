@@ -20,10 +20,11 @@ const headCellData = [
 
 interface Props {
   setTripCount: React.Dispatch<React.SetStateAction<number | undefined>>;
-  tableSearch: string
+  tableSearch: string;
+  order: string
 }
 
-const CancelledTripsTable: FC<Props> = ({ setTripCount, tableSearch }) => {
+const CancelledTripsTable: FC<Props> = ({ setTripCount, tableSearch, order }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const { data, isLoading, isError, refetch } = useGetAllTripsQuery(
@@ -31,7 +32,8 @@ const CancelledTripsTable: FC<Props> = ({ setTripCount, tableSearch }) => {
       page: currentPage,
       limit: pageSize,
       status: "cancelled",
-      search: tableSearch
+      search: tableSearch,
+      order
     },
     {
       refetchOnMountOrArgChange: true,
