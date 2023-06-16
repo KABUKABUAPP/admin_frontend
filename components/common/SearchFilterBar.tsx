@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren } from "react";
+import React, { FC, PropsWithChildren, useEffect, useState } from "react";
 import TextField from "@/components/ui/Input/TextField/TextField";
 import SearchIcon from "@/components/icons/SearchIcon";
 import DropDown from "../ui/DropDown";
@@ -13,6 +13,7 @@ interface Props {
   handleDropDown?: (val: string | number) => void;
   searchValue?: string;
   handleSearch?: (val: string) => void;
+  title?: string
 }
 
 const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
@@ -22,7 +23,10 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
   handleDropDown,
   searchValue,
   handleSearch,
+  title='Sort:'
 }) => {
+  
+
   return (
     <div className="rounded-lg bg-[#F1F1F1] w-full min-h-10 shadow-sm my-6 py-4 px-8 flex items-center justify-between max-sm:flex-col max-sm:gap-5">
       <div className="w-[200px]">
@@ -40,7 +44,7 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
       <div className="flex-1">{children}</div>
 
       <div className="text-xs flex gap-3 items-center cursor-pointer">
-        <span>Sort:</span>
+        <span>{title}</span>
         <DropDown
           placeholder="Filter"
           options={filterOptions}

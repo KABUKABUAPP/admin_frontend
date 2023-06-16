@@ -69,7 +69,8 @@ export interface GetAllSosQuery {
     limit: number;
     date: string;
     page: number;
-    dateRange?: string;
+    startDate?: string;
+    endDate?: string;
     search: string;
     order: string
 }
