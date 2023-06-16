@@ -13,29 +13,30 @@ const SOS: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(2);
   const [search, setSearch] = useState<string>("");
-  const { data, isLoading, isError, refetch } = useGetAllSosQuery(
-    { limit: pageSize, page: currentPage, date: "this_week", search: search },
-    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
-  );
-
   const timeFilterOptions = [
-    { label: "Newest First", value: "", default: true },
-    { label: "Oldest First", value: "", default: false },
+    { label: "Newest First", value: "newest_first", default: true },
+    { label: "Oldest First", value: "oldest_first", default: false },
   ];
   const sortDirectionFilterOptions = [
-    { label: "Today", value: "today", default: true },
+    { label: "Today", value: "today", default: false },
     { label: "Yesterday", value: "yesterday", default: false },
-    { label: "This Week", value: "this_week", default: false },
+    { label: "This Week", value: "this_week", default: true },
   ];
 
   const [selectedTimeFilter, setSelectedTimeFilter] = useState<string>(
-    timeFilterOptions.find((opt) => opt.default === true)?.value || ""
+    timeFilterOptions.find((opt) => opt.default === true)?.value || "newest_first"
   );
 
   const [selectedSortFilter, setSelectedSortFilter] = useState<string>(
-    sortDirectionFilterOptions.find((opt) => opt.default === true)?.value || ""
+    sortDirectionFilterOptions.find((opt) => opt.default === true)?.value || "this_week"
   );
 
+  const { data, isLoading, isError, refetch } = useGetAllSosQuery(
+    { limit: pageSize, page: currentPage, date: selectedSortFilter, search: search, order: selectedTimeFilter },
+    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
+
+  
   return (
     <AppLayout>
       <CountHeader title="SOS Today" count={data?.totalCount} />
