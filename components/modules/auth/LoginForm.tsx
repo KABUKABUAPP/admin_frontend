@@ -57,7 +57,18 @@ const LoginForm: FC = () => {
 
       Cookies.set(USER_TOKEN, JSON.stringify(rest))
       Cookies.set(ACCESS_TOKEN, accessTokens)
-      setUser({...rest, role: rest.role.name})
+      const userData: User = {
+        _id: rest._id,
+        created_at: rest.created_at,
+        email: rest.email,
+        full_name: rest.full_name,
+        isBlocked: rest.isBlocked,
+        phone_number: rest.phone_number,
+        role: rest.role.name,
+        status: false, 
+        updated_at: rest.updated_at
+      }
+      setUser({...userData})
       toast.success("Login Successful");
       router.push("/");
     }

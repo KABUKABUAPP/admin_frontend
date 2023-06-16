@@ -54,7 +54,7 @@ const SideBar: FC<Props> = ({ data }) => {
             <UserAvatarBox
               userId={user._id}
               fullName={user.full_name}
-              role={user.role}
+              role={String(user.role)}
               image={""}
               handleClick={() => setIsLogoutPopUp(true)}
             />

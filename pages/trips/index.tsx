@@ -21,12 +21,16 @@ const Trips: NextPage = () => {
   const { tab } = router.query;
   const tabOptions = [undefined, "pending", "active", "completed", "declined"];
 
-  const filterOptions = [
-    { label: "Newest First", value: "", default: true },
-    { label: "Oldest First", value: "", default: false },
+  const filterOptions: {
+    label: string;
+    value: string;
+    default: boolean;
+  }[] = [
+    { label: "Newest First", value: "newest_first", default: true },
+    { label: "Oldest First", value: "oldest_first", default: false },
   ];
   const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
-    filterOptions.find((opt) => opt.default === true)?.value || ""
+    filterOptions.find((opt) => opt.default === true)?.value || "newest_first"
   );
   const [tableSearch, setTableSearch] = useState<string>("");
 
@@ -93,30 +97,35 @@ const Trips: NextPage = () => {
         <TripOrdersTable
           setTripCount={setTripCount}
           tableSearch={tableSearch}
+          order={selectedFilterOption}
         />
       )}
       {tab === tabOptions[Tab.PENDING_TRIPS] && (
         <PendingTripsTable
           setTripCount={setTripCount}
           tableSearch={tableSearch}
+          order={selectedFilterOption}
         />
       )}
       {tab === tabOptions[Tab.ACTIVE_TRIPS] && (
         <ActiveTripsTable
           setTripCount={setTripCount}
           tableSearch={tableSearch}
+          order={selectedFilterOption}
         />
       )}
       {tab === tabOptions[Tab.COMPLETED_TRIPS] && (
         <CompletedTripsTable
           setTripCount={setTripCount}
           tableSearch={tableSearch}
+          order={selectedFilterOption}
         />
       )}
       {tab === tabOptions[Tab.CANCELLED_ORDERS] && (
         <CancelledTripsTable
           setTripCount={setTripCount}
           tableSearch={tableSearch}
+          order={selectedFilterOption}
         />
       )}
     </AppLayout>

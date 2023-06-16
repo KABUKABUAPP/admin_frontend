@@ -105,6 +105,7 @@ export interface GetAllTripsQuery {
   page: number;
   status: "disputed" | "cancelled" | "completed" | "initiated" | "started";
   search: string;
+  order: string
 }
 
 export interface TripDetail {
