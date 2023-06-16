@@ -12,7 +12,7 @@ const AccountSettings: FC = () => {
 
   return (
     <div className="bg-[#FFFFFF] rounded-lg flex flex-col items-center p-6 gap-3 h-full">
-      <RoleBox />
+      {/* <RoleBox /> */}
       <Avatar fallBack="A" imageUrl="/testUser.jpg" shape="round" size="lg" />
       <p className="text-2xl font-medium">Samson Chukwuemeka</p>
       <p className="text-base font-medium">schdadad@gmail.com</p>
