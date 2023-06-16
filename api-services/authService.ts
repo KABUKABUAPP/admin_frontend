@@ -6,14 +6,26 @@ import {
   LoginResponse,
   CreateAdminPayload,
   CreateAdminResponse,
+  UpdatePasswordPayload,
 } from "@/models/Auth";
 import { secondsToMilliSeconds } from "@/utils";
+import Cookies from "js-cookie";
+import { ACCESS_TOKEN } from "@/constants";
 
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
     baseUrl: `${RIDES_BASE_URL}/`,
     timeout: secondsToMilliSeconds(30),
+    prepareHeaders(headers) {
+      const token = Cookies.get(ACCESS_TOKEN);
+
+      if (token) {
+        headers.set("authorization", `Bearer ${token}`);
+      }
+
+      return headers;
+    },
   }),
   endpoints: (build) => ({
     login: build.mutation<LoginResponse, LoginPayload>({
@@ -30,7 +42,14 @@ export const authApi = createApi({
         body: { ...payload },
       }),
     }),
+    updatePassword: build.mutation<any, UpdatePasswordPayload>({
+      query: (body) => ({
+        url: "admin/auth/update-password",
+        body,
+        method: "PUT",
+      }),
+    }),
   }),
 });
 
-export const { useCreateAdminMutation, useLoginMutation } = authApi;
+export const { useCreateAdminMutation, useLoginMutation, useUpdatePasswordMutation } = authApi;

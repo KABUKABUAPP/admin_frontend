@@ -5,7 +5,6 @@ import TextField from "@/components/ui/Input/TextField/TextField";
 import Button from "@/components/ui/Button/Button";
 import { useModalContext } from "@/contexts/ModalContext";
 import UpdatePasswordModal from "./UpdatePasswordModal";
-import RoleBox from "./RoleBox";
 import { useUserContext } from "@/contexts/UserContext";
 
 const AccountSettings: FC = () => {
