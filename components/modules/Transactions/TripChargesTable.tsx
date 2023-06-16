@@ -1,21 +1,24 @@
-import { useGetAllTransactionsQuery } from '@/api-services/transactionsService';
-import EnhancedTable from '@/components/common/EnhancedTable/EnhancedTable';
-import Pagination from '@/components/common/Pagination';
-import React, { FC, useState } from 'react'
-import TripChargesTableRow from './TableRows/TripChargesTableRow';
+import { useGetAllTransactionsQuery } from "@/api-services/transactionsService";
+import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
+import Pagination from "@/components/common/Pagination";
+import React, { FC, useState } from "react";
+import TripChargesTableRow from "./TableRows/TripChargesTableRow";
 
 const headCellData = [
-    { title: "Transaction ID", flex: 1 },
-    { title: "Trip ID", flex: 2 },
-    { title: "Type", flex: 1 },
-    { title: "Narration", flex: 1 },
-    { title: "Price", flex: 1 },
-    { title: "Date", flex: 1 },
-    { title: "", flex: 2 },
-  ];
+  { title: "Transaction ID", flex: 1 },
+  { title: "Trip ID", flex: 2 },
+  { title: "Type", flex: 1 },
+  { title: "Narration", flex: 1 },
+  { title: "Price", flex: 1 },
+  { title: "Date", flex: 1 },
+  { title: "", flex: 2 },
+];
 
-const TripChargesTable:FC = () => {
-  
+interface Props {
+  order: string;
+}
+
+const TripChargesTable: FC<Props> = ({order}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState<string>("");
@@ -25,6 +28,7 @@ const TripChargesTable:FC = () => {
       page: currentPage,
       search: search,
       filter: "trip_charges",
+      order
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
@@ -37,7 +41,7 @@ const TripChargesTable:FC = () => {
         maxWidth="100vw"
         isLoading={isLoading}
         refetch={refetch}
-        rowComponent={(rows)=><TripChargesTableRow data={rows}/>}
+        rowComponent={(rows) => <TripChargesTableRow data={rows} />}
         rowData={data?.data}
       />
       {data && (
@@ -50,7 +54,7 @@ const TripChargesTable:FC = () => {
         />
       )}
     </>
-  )
-}
+  );
+};
 
-export default TripChargesTable
+export default TripChargesTable;

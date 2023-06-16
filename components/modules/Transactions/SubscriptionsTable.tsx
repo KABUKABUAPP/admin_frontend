@@ -15,7 +15,11 @@ const headCellData = [
   { title: "", flex: 2 },
 ];
 
-const SubscriptionsTable: FC = () => {
+interface Props {
+  order: string;
+}
+
+const SubscriptionsTable: FC<Props> = ({order}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState<string>("");
@@ -25,6 +29,7 @@ const SubscriptionsTable: FC = () => {
       page: currentPage,
       search: search,
       filter: "driver_subscription",
+      order
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );

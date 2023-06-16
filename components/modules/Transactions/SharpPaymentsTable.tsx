@@ -15,13 +15,17 @@ const headCellData = [
   { title: "", flex: 2 },
 ];
 
-const SharpPaymentsTable:FC = () => {
+interface Props {
+  order: string;
+}
+
+const SharpPaymentsTable:FC<Props> = ({order}) => {
   
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState<string>("");
   const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
-    { limit: pageSize, page: currentPage, search: search, filter: 'sharp_payment' },
+    { limit: pageSize, page: currentPage, search: search, filter: 'sharp_payment', order },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 

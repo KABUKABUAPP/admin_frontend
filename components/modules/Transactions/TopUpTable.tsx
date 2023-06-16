@@ -16,7 +16,11 @@ const headCellData = [
   { title: "", flex: 2 },
 ];
 
-const TopUpTable: FC = () => {
+interface Props {
+  order: string;
+}
+
+const TopUpTable: FC<Props> = ({order}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState<string>("");
@@ -26,6 +30,7 @@ const TopUpTable: FC = () => {
       page: currentPage,
       search: search,
       filter: "wallet_topup",
+      order
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );

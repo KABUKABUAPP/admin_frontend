@@ -28,8 +28,23 @@ const Transactions: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState<string>("");
+  const dropDownOptions = [
+    { label: "Newest First", value: "newest_first", default: true },
+    { label: "Oldest First", value: "oldest_first", default: false },
+  ];
+
+  const [selectedDropDown, setSelectedDropDown] = useState<string>(
+    dropDownOptions.find((opt) => opt.default === true)?.value || "newest_first"
+  );
+
   const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
-    { limit: pageSize, page: currentPage, search: search, filter: "" },
+    {
+      limit: pageSize,
+      page: currentPage,
+      search: search,
+      filter: "",
+      order: selectedDropDown,
+    },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
   const handleClickAccountCard = (title: string) => {
@@ -40,15 +55,6 @@ const Transactions: NextPage = () => {
 
     setAccountCardData(mutated);
   };
-
-  const dropDownOptions = [
-    { label: "Newest First", value: "", default: true },
-    { label: "Oldest First", value: "", default: false },
-  ];
-
-  const [selectedDropDown, setSelectedDropDown] = useState<string>(
-    dropDownOptions.find((opt) => opt.default === true)?.value || ""
-  );
 
   const handleClickOption = (keyVal: string) => {
     if (keyVal !== "")
@@ -107,16 +113,16 @@ const Transactions: NextPage = () => {
         searchValue={search}
         handleSearch={(val) => setSearch(val)}
       />
-      {String(tab) === Tab.all_transactions && <AllTransactionsTable />}
-      {String(tab) === Tab.sharp_payments && <SharpPaymentsTable />}
+      {String(tab) === Tab.all_transactions && <AllTransactionsTable order={selectedDropDown}/>}
+      {String(tab) === Tab.sharp_payments && <SharpPaymentsTable order={selectedDropDown}/>}
 
-      {String(tab) === Tab.subscriptions && <SubscriptionsTable />}
+      {String(tab) === Tab.subscriptions && <SubscriptionsTable order={selectedDropDown}/>}
 
-      {String(tab) === Tab.top_up && <TopUpTable />}
+      {String(tab) === Tab.top_up && <TopUpTable order={selectedDropDown}/>}
 
-      {String(tab) === Tab.trip_charges && <TripChargesTable />}
+      {String(tab) === Tab.trip_charges && <TripChargesTable order={selectedDropDown}/>}
 
-      {String(tab) === Tab.trip_payments && <TripPaymentsTable />}
+      {String(tab) === Tab.trip_payments && <TripPaymentsTable order={selectedDropDown}/>}
 
       {String(tab) === Tab.withdrawals && <WithdrawalsTable />}
       {/* <TransactionsTable
