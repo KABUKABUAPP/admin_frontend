@@ -32,33 +32,4 @@ export interface LoginResponse {
   message: string;
 }
 
-export interface CreateAdminPayload {
-  full_name: string;
-  phone_number: string;
-  email: string;
-  password: string;
-  role: string;
-}
 
-export interface CreateAdminResponse {
-  status: string;
-  data: {
-    full_name: string;
-    phone_number: string;
-    email: string;
-    password: string;
-    role: string;
-    isBlocked: boolean;
-    status: boolean;
-    _id: string;
-    created_at: Date;
-    updated_at: Date;
-    __v: number;
-  };
-  message: string;
-}
-
-export interface UpdatePasswordPayload {
-  current_password: string;
-  new_password: string;
-}

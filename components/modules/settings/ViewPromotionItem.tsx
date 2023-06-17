@@ -20,7 +20,7 @@ const ViewPromotionItem: FC<Props> = ({ handleBack }) => {
         />
       </span>
       <div className="pt-14">
-        <PromotionItem />
+        {/* <PromotionItem /> */}
       </div>
 
       <div className="mt-6">
