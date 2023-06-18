@@ -45,7 +45,7 @@ const ViewRole: FC<Props> = ({ handleBack }) => {
       <div className="mt-6 grid grid-cols-3 gap-4">
         {data && (
           <>
-            <RoleBox title="Dasboard"/>
+            {/* <RoleBox title="Dasboard"/> */}
           </>
         )}
       </div>

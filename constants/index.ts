@@ -5,12 +5,12 @@ export const milliSecondToSecondConversionRate = 1000;
 export const ACCESS_TOKEN = "AUTH_TOKEN__ACESS-$";
 export const USER_TOKEN = "USER_stoRED_$##";
 
-export const rolesArr: {
+export const rolesOptionsArr: {
   title: string;
   label: string;
-  isChecked: false;
-  read: false;
-  write: false;
+  isChecked: boolean;
+  read: boolean;
+  write: boolean;
 }[] = [
   {
     title: "Dashboard",

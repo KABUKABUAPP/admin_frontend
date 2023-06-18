@@ -31,7 +31,7 @@ const Roles: FC = () => {
         />
       )}
 
-      {currentView === "create_role" && <CreateRole />}
+      {currentView === "create_role" && <CreateRole handleBack={()=>setCurrentView('all_roles')}/>}
     </div>
   );
 };

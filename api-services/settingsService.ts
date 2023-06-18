@@ -8,6 +8,7 @@ import {
   CreateAdminPayload,
   CreateAdminResponse,
   CreatePromotionPayload,
+  CreateRolePayload,
   GetRolesQuery,
   GetRolesResponse,
   MappedGetRoles,
@@ -38,6 +39,7 @@ export const settingsApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ["roles"],
   endpoints: (build) => ({
     createAdmin: build.mutation<CreateAdminResponse, CreateAdminPayload>({
       query: (payload) => ({
@@ -129,6 +131,7 @@ export const settingsApi = createApi({
       query: ({ limit, page }) => ({
         url: `admin/role/all?limit=${limit}&page=${page}&search=`,
       }),
+      providesTags: ["roles"],
       transformResponse: (response: GetRolesResponse) => {
         if (!response) return <MappedGetRoles>{};
         else {
@@ -162,9 +165,17 @@ export const settingsApi = createApi({
             ...rest
           } = response.data;
 
-          return {...rest, id: _id}
+          return { ...rest, id: _id };
         }
       },
+    }),
+    createRole: build.mutation<any, CreateRolePayload>({
+      query: (body) => ({
+        url: "admin/role/create",
+        body,
+        method: "POST",
+      }),
+      invalidatesTags: ["roles"],
     }),
   }),
 });
@@ -175,5 +186,7 @@ export const {
   useViewAllPromosQuery,
   useViewPromoQuery,
   useGetRolesQuery,
-  useViewRoleQuery
+  useViewRoleQuery,
+  useCreatePromoMutation,
+  useCreateRoleMutation,
 } = settingsApi;
