@@ -3,12 +3,13 @@ import React, { FC } from "react";
 interface Props {
   handleClick?: () => void;
   data: {
-    promoCode: string;
-    amount: number;
-    status: boolean;
-    createdDate: string;
-    expiryDate: string;
+    promoCode?: string;
+    amount?: number;
+    status?: boolean;
+    createdDate?: string;
+    expiryDate?: string;
     totalSubscribers: number;
+    promotionType?: string;
     id: string;
   };
 }
@@ -25,18 +26,29 @@ const PromotionItem: FC<Props> = ({ handleClick, data }) => {
         style={{ flex: 1 }}
         className="border-r border-r-[#1FD11B] flex flex-col gap-1"
       >
-        <p className="text-2xl font-semibold">{data.promoCode}</p>
-        <p className="text-base font-medium">₦{data.amount}</p>
-        <p className="text-sm font-medium">{data.status}</p>
-        <p className="text-sm break-words text-[#9A9A9A]">
-          Created {new Date(data.createdDate).toLocaleDateString()} | Expires{" "}
-          {new Date(data.expiryDate).toLocaleDateString()}
-        </p>
+        {data.promoCode && (
+          <p className="text-2xl font-semibold">{data.promoCode}</p>
+        )}
+        {data.amount && <p className="text-base font-medium">₦{data.amount}</p>}
+        {data.status && <p className="text-sm font-medium">{data.status}</p>}
+        {data.expiryDate && data.createdDate && (
+          <p className="text-sm break-words text-[#9A9A9A]">
+            Created {new Date(data.createdDate).toLocaleDateString()} | Expires{" "}
+            {new Date(data.expiryDate).toLocaleDateString()}
+          </p>
+        )}
+        {data.promotionType && (
+          <p className="text-sm break-words text-[#9A9A9A]">
+            {data.promotionType} promotion
+          </p>
+        )}
       </div>
       <div style={{ flex: 1 }}>
-        <p className="text-2xl font-semibold text-right">
-          {data.totalSubscribers}
-        </p>
+        {
+          <p className="text-2xl font-semibold text-right">
+            {data.totalSubscribers}
+          </p>
+        }
         <p className="text-sm font-medium text-right">Total Subscribers</p>
       </div>
     </div>

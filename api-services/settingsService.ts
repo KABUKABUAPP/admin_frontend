@@ -8,9 +8,12 @@ import {
   CreateAdminPayload,
   CreateAdminResponse,
   MappedPromoResponse,
+  MappedViewResponse,
   UpdatePasswordPayload,
   ViewAllPromosQuery,
   ViewAllPromosResponse,
+  ViewPromotionQuery,
+  ViewPromotionResponse,
 } from "@/models/Settings";
 
 export const settingsApi = createApi({
@@ -58,7 +61,7 @@ export const settingsApi = createApi({
               createdDate: res.createdAt,
               expiryDate: res.expiry_date,
               totalSubscribers: res.total_subscribers,
-              id: res._id
+              id: res._id,
             };
           });
 
@@ -69,8 +72,51 @@ export const settingsApi = createApi({
         }
       },
     }),
+    viewPromo: build.query<MappedViewResponse, ViewPromotionQuery>({
+      query: ({ limit, page, promoId }) => ({
+        url: `admin/promotions/view/${promoId}?limit=${limit}&page=${page}`,
+      }),
+      transformResponse: (response: ViewPromotionResponse) => {
+        if (!response) return <MappedViewResponse>{};
+        else {
+          const mappedPromo = {
+            promoCode: response.data.promotion.code,
+            status: response.data.promotion.active_status,
+            createdDate: response.data.promotion.createdAt,
+            expiryDate: response.data.promotion.expiry_date,
+            totalSubscribers: response.data.subscribers.pagination.totalCount,
+            promotionType: response.data.promotion.auto_or_manual,
+            id: response.data.promotion._id,
+          };
+
+          const mappedSubscribers = response.data.subscribers.data.map(
+            (sub) => {
+              return {
+                fullname: sub.user.full_name,
+                image: sub.user.profile_image,
+                id: sub.user._id,
+              };
+            }
+          );
+
+          const totalCount = response.data.subscribers.pagination.totalCount;
+
+          return {
+            promo: mappedPromo,
+            subscribers: {
+              data: mappedSubscribers,
+              totalCount: totalCount,
+            },
+          };
+        }
+      },
+    }),
   }),
 });
 
-export const { useCreateAdminMutation, useUpdatePasswordMutation, useViewAllPromosQuery } =
-  settingsApi;
+export const {
+  useCreateAdminMutation,
+  useUpdatePasswordMutation,
+  useViewAllPromosQuery,
+  useViewPromoQuery,
+} = settingsApi;
