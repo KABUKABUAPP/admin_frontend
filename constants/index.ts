@@ -5,6 +5,92 @@ export const milliSecondToSecondConversionRate = 1000;
 export const ACCESS_TOKEN = "AUTH_TOKEN__ACESS-$";
 export const USER_TOKEN = "USER_stoRED_$##";
 
+export const rolesArr: {
+  title: string;
+  label: string;
+  isChecked: false;
+  read: false;
+  write: false;
+}[] = [
+  {
+    title: "Dashboard",
+    label: "dashboard_permissions",
+    read: false,
+    write: false,
+    isChecked: false,
+  },
+  {
+    title: "Trips",
+    label: "trips_permissions",
+    read: false,
+    write: false,
+    isChecked: false,
+  },
+  {
+    title: "SOS",
+    label: "sos_permisions",
+    read: false,
+    write: false,
+    isChecked: false,
+  },
+  {
+    title: "Transactions",
+    label: "transactions_permissions",
+    read: false,
+    write: false,
+    isChecked: false,
+  },
+  {
+    title: "Riders",
+    label: "riders_permissions",
+    read: false,
+    write: false,
+    isChecked: false,
+  },
+  {
+    title: "Drivers",
+    label: "drivers_permissions",
+    read: false,
+    write: false,
+    isChecked: false,
+  },
+  {
+    title: "Inspectors",
+    label: "inspectors_permissions",
+    read: false,
+    write: false,
+    isChecked: false,
+  },
+  {
+    title: "Fare Prices",
+    label: "fare_prices_permissions",
+    read: false,
+    write: false,
+    isChecked: false,
+  },
+  {
+    title: "Hubs",
+    label: "hubs_permissions",
+    read: false,
+    write: false,
+    isChecked: false,
+  },
+  {
+    title: "Staff",
+    label: "staffs_permissions",
+    read: false,
+    write: false,
+    isChecked: false,
+  },
+  {
+    title: "Settings",
+    label: "settings_permissions",
+    read: false,
+    write: false,
+    isChecked: false,
+  },
+];
+
 export const nigerianStates = [
   "Abia",
   "Adamawa",

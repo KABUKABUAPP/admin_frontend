@@ -7,13 +7,21 @@ import { useGetRolesQuery } from "@/api-services/settingsService";
 import Pagination from "@/components/common/Pagination";
 import Loader from "@/components/ui/Loader/Loader";
 
-const AllRolesView: FC = () => {
+interface Props {
+  handleViewRole: () => void;
+  handleCreateRole: ()=>void
+}
+
+const AllRolesView: FC<Props> = ({ handleViewRole, handleCreateRole }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(4);
-  const { data, isLoading, error, refetch } = useGetRolesQuery({
-    limit: pageSize,
-    page: currentPage,
-  });
+  const { data, isLoading, error, refetch } = useGetRolesQuery(
+    {
+      limit: pageSize,
+      page: currentPage,
+    },
+    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
   const { push } = useRouter();
 
   return (
@@ -21,7 +29,7 @@ const AllRolesView: FC = () => {
       <div className="flex justify-between items-center w-full">
         <p className="text-2xl font-medium">Roles</p>
         <div>
-          <Button title="New Role" size="large" />
+          <Button title="New Role" size="large" onClick={handleCreateRole}/>
         </div>
       </div>
 
@@ -35,6 +43,7 @@ const AllRolesView: FC = () => {
               key={idx}
               handleClick={(id) => {
                 push(`/settings?roleId=${id}`, undefined, { shallow: true });
+                handleViewRole()
               }}
             />
           );
