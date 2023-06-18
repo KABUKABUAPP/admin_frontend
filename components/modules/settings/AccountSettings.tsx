@@ -9,11 +9,17 @@ import { useUserContext } from "@/contexts/UserContext";
 
 const AccountSettings: FC = () => {
   const { setModalContent } = useModalContext();
-  const { user } = useUserContext()
+  const { user } = useUserContext();
   return (
     <div className="bg-[#FFFFFF] rounded-lg flex flex-col items-center p-6 gap-3 h-full">
-      {/* <RoleBox /> */}
-      {user && <Avatar fallBack={user.full_name[0]} imageUrl={''} shape="round" size="lg" />}
+      {user && (
+        <Avatar
+          fallBack={user.full_name[0]}
+          imageUrl={""}
+          shape="round"
+          size="lg"
+        />
+      )}
       <p className="text-2xl font-medium">{user?.full_name}</p>
       <p className="text-base font-medium">{user?.email}</p>
       <p className="text-base font-medium">{user?.role}</p>

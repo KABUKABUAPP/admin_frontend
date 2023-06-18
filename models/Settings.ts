@@ -172,3 +172,108 @@ export interface ViewPromotionQuery {
   limit: number;
   page: number;
 }
+
+export interface CreatePromotionPayload {
+  name: string;
+  audience: string;
+  activation_date: string;
+  expiry_date: string;
+  total_quatity: number;
+  auto_or_manual: string;
+  type: string;
+  value: number;
+  minimum_amount_to_apply: number;
+  cap: number;
+}
+
+export interface Role {
+  _id: string;
+  name: string;
+  level: number;
+  created_by: string;
+  total_number_of_permissions: number;
+}
+
+export interface GetRolesResponse {
+  status: string;
+  code: number;
+  data: {
+    data: Role[];
+    pagination: {
+      pageSize: number;
+      totalCount: number;
+      pageCount: number;
+      currentPage: number;
+      hasNext: boolean;
+    };
+  };
+  message: string;
+}
+
+export interface MappedRole {
+  id: string;
+  title: string;
+  roleCount: number;
+}
+
+export interface MappedGetRoles {
+  data: MappedRole[];
+  totalCount: number;
+}
+
+export interface GetRolesQuery {
+  limit: number;
+  page: number;
+}
+
+export interface ViewRoleQuery {
+  roleId: string;
+}
+
+export interface Permission {
+  read: boolean;
+  write: boolean;
+}
+
+export interface ViewRoleResponse {
+  status: "success";
+  code: 200;
+  data: {
+    dashboard_permissions: Permission;
+    trips_permissions: Permission;
+    sos_permisions: Permission;
+    transactions_permissions: Permission;
+    riders_permissions: Permission;
+    drivers_permissions: Permission;
+    inspectors_permissions: Permission;
+    fare_prices_permissions: Permission;
+    hubs_permissions: Permission;
+    staffs_permissions: Permission;
+    settings_permissions: Permission;
+    _id: string;
+    name: string;
+    level: number;
+    created_by: string;
+    created_at: string;
+    updated_at: string;
+    __v: number;
+    last_edited_by: string;
+  };
+  message: string;
+}
+
+export interface MappedViewRole {
+  name: string;
+  id: string;
+  dashboard_permissions: Permission;
+  trips_permissions: Permission;
+  sos_permisions: Permission;
+  transactions_permissions: Permission;
+  riders_permissions: Permission;
+  drivers_permissions: Permission;
+  inspectors_permissions: Permission;
+  fare_prices_permissions: Permission;
+  hubs_permissions: Permission;
+  staffs_permissions: Permission;
+  settings_permissions: Permission;
+}

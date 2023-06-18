@@ -7,13 +7,20 @@ import { ACCESS_TOKEN } from "@/constants";
 import {
   CreateAdminPayload,
   CreateAdminResponse,
+  CreatePromotionPayload,
+  GetRolesQuery,
+  GetRolesResponse,
+  MappedGetRoles,
   MappedPromoResponse,
   MappedViewResponse,
+  MappedViewRole,
   UpdatePasswordPayload,
   ViewAllPromosQuery,
   ViewAllPromosResponse,
   ViewPromotionQuery,
   ViewPromotionResponse,
+  ViewRoleQuery,
+  ViewRoleResponse,
 } from "@/models/Settings";
 
 export const settingsApi = createApi({
@@ -111,6 +118,54 @@ export const settingsApi = createApi({
         }
       },
     }),
+    createPromo: build.mutation<any, CreatePromotionPayload>({
+      query: (body) => ({
+        url: "admin/promotions/create-general",
+        body,
+        method: "POST",
+      }),
+    }),
+    getRoles: build.query<MappedGetRoles, GetRolesQuery>({
+      query: ({ limit, page }) => ({
+        url: `admin/role/all?limit=${limit}&page=${page}&search=`,
+      }),
+      transformResponse: (response: GetRolesResponse) => {
+        if (!response) return <MappedGetRoles>{};
+        else {
+          const mappedRoles = response.data.data.map((role) => ({
+            id: role._id,
+            title: role.name,
+            roleCount: role.total_number_of_permissions,
+          }));
+
+          const totalCount = response.data.pagination.totalCount;
+
+          return { data: mappedRoles, totalCount };
+        }
+      },
+    }),
+    viewRole: build.query<MappedViewRole, ViewRoleQuery>({
+      query: ({ roleId }) => ({
+        url: `admin/role/view/${roleId}`,
+      }),
+      transformResponse: (response: ViewRoleResponse) => {
+        if (!response) return <MappedViewRole>{};
+        else {
+          const {
+            _id,
+            level,
+            created_at,
+            created_by,
+            updated_at,
+            __v,
+            last_edited_by,
+            ...rest
+          } = response.data;
+
+          return {...rest, id: _id}
+        }
+      },
+    }),
   }),
 });
 
@@ -119,4 +174,6 @@ export const {
   useUpdatePasswordMutation,
   useViewAllPromosQuery,
   useViewPromoQuery,
+  useGetRolesQuery,
+  useViewRoleQuery
 } = settingsApi;
