@@ -9,6 +9,7 @@ import { CreateRoleValidationSchema } from "@/validationschemas/CreateRoleSchema
 import { useCreateRoleMutation } from "@/api-services/settingsService";
 import { CreateRolePayload } from "@/models/Settings";
 import { toast } from "react-toastify";
+import ChevronLeft from "@/components/icons/ChevronLeft";
 
 interface Props {
   handleBack: () => void;
@@ -19,7 +20,7 @@ const initialValues = {
 };
 
 const CreateRole: FC<Props> = ({ handleBack }) => {
-  const [roleOptions, setRoleOptions] = useState(rolesOptionsArr);
+  const [roleOptions, setRoleOptions] = useState([...rolesOptionsArr]);
   const [createRole, { isSuccess, error, isLoading }] = useCreateRoleMutation();
   const [roles, setRoles] = useState(roleOptions.map((r) => r.label));
 
@@ -83,6 +84,16 @@ const CreateRole: FC<Props> = ({ handleBack }) => {
   };
 
   useEffect(() => {
+    // reset roles
+    const reset = roleOptions.map((item) => ({
+      ...item,
+      read: false,
+      write: false,
+    }));
+    setRoleOptions(reset);
+  }, []);
+
+  useEffect(() => {
     if (error && "data" in error) {
       const { message }: any = error.data;
       toast.error(message);
@@ -92,7 +103,7 @@ const CreateRole: FC<Props> = ({ handleBack }) => {
   useEffect(() => {
     if (isSuccess) {
       toast.success("Role Successfully Created");
-      handleBack()
+      handleBack();
     }
   }, [isSuccess]);
 
@@ -100,7 +111,13 @@ const CreateRole: FC<Props> = ({ handleBack }) => {
     <FormikProvider value={formik}>
       <Form>
         <div>
-          <div className="pb-5 mb-6 border-b border-b-[#E6E6E6]">
+          <Button
+            title="Back to roles"
+            variant="text"
+            startIcon={<ChevronLeft />}
+            onClick={handleBack}
+          />
+          <div className="pt-10 pb-5 mb-6 border-b border-b-[#E6E6E6]">
             <p className="text-xl mb-3">Role Title</p>
             <div>
               <TextField

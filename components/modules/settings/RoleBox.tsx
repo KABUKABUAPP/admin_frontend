@@ -26,7 +26,7 @@ const RoleBox: FC<Props> = ({
       <div className="pb-2 border-b border-b-gray-400 flex items-center gap-3">
         <Checkbox
           borderColor="#000000"
-          checked={isChecked}
+          checked={true}
           borderRadius={3}
           icon={
             <div className="w-[10px] h-[10px] bg-[#000000] rounded-sm"></div>

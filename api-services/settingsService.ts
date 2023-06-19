@@ -16,6 +16,7 @@ import {
   MappedViewResponse,
   MappedViewRole,
   UpdatePasswordPayload,
+  UpdateRoleQuery,
   ViewAllPromosQuery,
   ViewAllPromosResponse,
   ViewPromotionQuery,
@@ -156,7 +157,6 @@ export const settingsApi = createApi({
         else {
           const {
             _id,
-            level,
             created_at,
             created_by,
             updated_at,
@@ -177,6 +177,14 @@ export const settingsApi = createApi({
       }),
       invalidatesTags: ["roles"],
     }),
+    updateRole: build.mutation<any, UpdateRoleQuery>({
+      query: ({ roleId, payload }) => ({
+        url: `admin/role/update/${roleId}`,
+        body: payload,
+        method: "PUT",
+      }),
+      invalidatesTags: ["roles"],
+    }),
   }),
 });
 
@@ -189,4 +197,5 @@ export const {
   useViewRoleQuery,
   useCreatePromoMutation,
   useCreateRoleMutation,
+  useUpdateRoleMutation
 } = settingsApi;

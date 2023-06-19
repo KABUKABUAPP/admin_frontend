@@ -250,6 +250,7 @@ export interface ViewRoleResponse {
     hubs_permissions: Permission;
     staffs_permissions: Permission;
     settings_permissions: Permission;
+    total_number_of_permissions: number;
     _id: string;
     name: string;
     level: number;
@@ -265,6 +266,7 @@ export interface ViewRoleResponse {
 export interface MappedViewRole {
   name: string;
   id: string;
+  level: number;
   dashboard_permissions: Permission;
   trips_permissions: Permission;
   sos_permisions: Permission;
@@ -276,6 +278,7 @@ export interface MappedViewRole {
   hubs_permissions: Permission;
   staffs_permissions: Permission;
   settings_permissions: Permission;
+  total_number_of_permissions: number
 }
 
 export interface CreateRolePayload {
@@ -333,4 +336,9 @@ export interface CreateRolePayload {
     read: boolean;
     write: boolean;
   };
+}
+
+export interface UpdateRoleQuery {
+  roleId: string;
+  payload: CreateRolePayload;
 }
