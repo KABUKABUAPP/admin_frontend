@@ -13,6 +13,7 @@ import { sharpCarsApi } from "@/api-services/sharpCarsService";
 import { sosApi } from "@/api-services/sosService";
 import { transactionsApi } from "@/api-services/transactionsService";
 import { settingsApi } from "@/api-services/settingsService";
+import { staffApi } from "@/api-services/staffService";
 
 export const reduxStore = configureStore({
   reducer: {
@@ -29,6 +30,7 @@ export const reduxStore = configureStore({
     [sosApi.reducerPath]: sosApi.reducer,
     [transactionsApi.reducerPath]: transactionsApi.reducer,
     [settingsApi.reducerPath]: settingsApi.reducer,
+    [staffApi.reducerPath]: staffApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -45,6 +47,7 @@ export const reduxStore = configureStore({
       sosApi.middleware,
       transactionsApi.middleware,
       settingsApi.middleware,
+      staffApi.middleware,
     ]),
 });
 

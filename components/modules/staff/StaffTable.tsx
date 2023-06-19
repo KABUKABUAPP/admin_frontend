@@ -6,7 +6,11 @@ import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
 import { StaffsTableData } from "@/models/Staffs";
 
 interface Props {
-    data: StaffsTableData[]
+    data?: StaffsTableData[]
+    isError: boolean;
+    isLoading: boolean;
+    refetch: ()=>void;
+    headBg: string;
 }
 
 const headCellData = [
@@ -32,13 +36,18 @@ const headCellData = [
   },
 ];
 
-const StaffTable:FC<Props> = ({ data }) => {
+const StaffTable:FC<Props> = ({ data, isError, isLoading, refetch, headBg }) => {
   return (
     <EnhancedTable
       TableHeadComponent={<StaffTableHeadRow headCellData={headCellData} />}
       rowComponent={(row)=><StaffTableBodyRow data={row}/>}
       rowData={data}
       maxWidth="100vw"
+      isError={isError}
+      isLoading={isLoading}
+      refetch={refetch}
+      headCellData={headCellData}
+      headBg={headBg}
     />
   );
 };

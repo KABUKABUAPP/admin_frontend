@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import AppLayout from "@/layouts/AppLayout";
 import CountHeader from "@/components/common/CountHeader";
@@ -84,10 +84,6 @@ const SOS: NextPage = () => {
       setSelectedSortFilter(val);
     }
   };
-
-  useEffect(() => {
-    console.log(directionFilterOptions);
-  }, [JSON.stringify(directionFilterOptions)]);
 
   return (
     <AppLayout>
