@@ -20,6 +20,7 @@ const Staffs: NextPage = () => {
     page: currentPage,
     order: selectedSortFilter,
     status: selectedStatus,
+    search: search
   });
 
   return (

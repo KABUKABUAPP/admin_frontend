@@ -16,6 +16,7 @@ export interface GetAllStaffQuery {
   page: number;
   order: string;
   status: string
+  search: string;
 }
 
 export interface Staff {

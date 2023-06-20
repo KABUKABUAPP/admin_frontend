@@ -32,8 +32,8 @@ export const staffApi = createApi({
   }),
   endpoints: (build) => ({
     getAllStaff: build.query<MappedGetAllStaff, GetAllStaffQuery>({
-      query: ({ limit, order, page, status }) => ({
-        url: `admin/staff/all?limit=${limit}&page=${page}&order=${order}&status=${status}`,
+      query: ({ limit, order, page, status, search }) => ({
+        url: `admin/staff/all?limit=${limit}&page=${page}&order=${order}&status=${status}&search=${search}`,
       }),
       transformResponse: (response: GetAllStaffResponse) => {
         if (!response) return <MappedGetAllStaff>{};

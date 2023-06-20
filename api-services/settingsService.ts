@@ -197,5 +197,5 @@ export const {
   useViewRoleQuery,
   useCreatePromoMutation,
   useCreateRoleMutation,
-  useUpdateRoleMutation
+  useUpdateRoleMutation,
 } = settingsApi;
