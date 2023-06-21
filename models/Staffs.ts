@@ -15,7 +15,7 @@ export interface GetAllStaffQuery {
   limit: number;
   page: number;
   order: string;
-  status: string
+  status: string;
   search: string;
 }
 
@@ -88,17 +88,30 @@ export interface ViewStaff {
 export interface ViewStaffResponse {
   status: string;
   code: number;
-  message: string;
   data: {
-    data: ViewStaff;
-    pagination: {
-      pageSize: number;
-      totalCount: number;
-      pageCount: number;
-      currentPage: number;
-      hasNext: boolean;
+    _id: string;
+    full_name: string;
+    phone_number: string;
+    email: string;
+    role: {
+      _id: string;
+      name: string;
+      total_number_of_permissions: number;
+    };
+    isBlocked: boolean;
+    status: boolean;
+    created_at: string;
+    updated_at: string;
+    __v: number;
+    accessTokens: string;
+    profile_image: string;
+    address: {
+      street: string;
+      city: string;
+      state: string;
     };
   };
+  message: string;
 }
 
 export interface MappedViewStaff {
@@ -108,7 +121,9 @@ export interface MappedViewStaff {
     phone: string;
     address: string;
     role: string;
+    image: string;
   };
+  isBlocked: boolean;
 }
 
 export interface ViewStaffQuery {

@@ -13,6 +13,7 @@ import {
   MappedGetAllStaff,
   MappedViewStaff,
   ViewStaffQuery,
+  ViewStaffResponse,
 } from "@/models/Staffs";
 
 export const staffApi = createApi({
@@ -30,11 +31,13 @@ export const staffApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ['view-staff', 'all-staff'],
   endpoints: (build) => ({
     getAllStaff: build.query<MappedGetAllStaff, GetAllStaffQuery>({
       query: ({ limit, order, page, status, search }) => ({
         url: `admin/staff/all?limit=${limit}&page=${page}&order=${order}&status=${status}&search=${search}`,
       }),
+      providesTags: ['all-staff'],
       transformResponse: (response: GetAllStaffResponse) => {
         if (!response) return <MappedGetAllStaff>{};
         else {
@@ -67,11 +70,30 @@ export const staffApi = createApi({
         url: `admin/staff/disable-staff/${staffId}`,
         method: "PUT",
       }),
+      invalidatesTags: ['view-staff', 'all-staff']
     }),
     viewStaff: build.query<MappedViewStaff, ViewStaffQuery>({
       query: ({ staffId }) => ({
         url: `admin/staff/view/${staffId}`,
       }),
+      providesTags: ['view-staff'],
+      transformResponse: (response: ViewStaffResponse) => {
+        if (!response) return <MappedViewStaff>{};
+        else {
+          const mappedStaff = {
+            fullName: response.data.full_name,
+            email: response.data.email,
+            phone: response.data.phone_number,
+            address: response.data.address.city,
+            role: response.data.role.name,
+            image: response.data.profile_image
+          };
+
+          const isBlocked = response.data.isBlocked
+
+          return { userInfo: mappedStaff, isBlocked };
+        }
+      },
     }),
   }),
 });
@@ -80,5 +102,5 @@ export const {
   useGetAllStaffQuery,
   useCreateStaffMutation,
   useDisableStaffMutation,
-  useViewStaffQuery
+  useViewStaffQuery,
 } = staffApi;
