@@ -86,7 +86,7 @@ const CompletedTripsTableRow: FC<Props> = ({
             starDimension="11px"
             starSpacing="1px"
             starRatedColor="#FFBF00"
-            numberOfStars={rating}
+            numberOfStars={5}
           />
         )}
       </div>

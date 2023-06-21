@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React from "react";
+import React, { useEffect } from "react";
 
 import AppLayout from "@/layouts/AppLayout";
 import ViewStaffLayout from "@/components/modules/staff/ViewStaffLayout";
@@ -14,9 +14,41 @@ import { useModalContext } from "@/contexts/ModalContext";
 import ResetPasswordCard from "@/components/modules/staff/ResetPasswordCard";
 import ResetPasswordNotification from "@/components/modules/staff/ResetPasswordNotification";
 import DisabledStaffCard from "@/components/modules/staff/DisabledStaffCard";
+import { useViewStaffQuery } from "@/api-services/staffService";
+import { useRouter } from "next/router";
+import { useDisableStaffMutation } from "@/api-services/staffService";
+import { toast } from "react-toastify";
 
 const Staff: NextPage = () => {
   const { setModalContent } = useModalContext();
+  const { id } = useRouter().query;
+  const { data, isLoading, error, refetch } = useViewStaffQuery(
+    { staffId: String(id) },
+    { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
+
+  const [
+    enableStaff,
+    {
+      isLoading: enableStaffLoading,
+      error: enableStaffError,
+      isSuccess: enableStaffSuccess,
+    },
+  ] = useDisableStaffMutation();
+
+  useEffect(() => {
+    if (enableStaffSuccess) {
+      toast.success("Staff Successfully Enabled");
+    }
+  }, [enableStaffSuccess]);
+
+  useEffect(() => {
+    if (enableStaffError && "data" in enableStaffError) {
+      const { message, status }: any = enableStaffError;
+      if (message) toast.error(message);
+      if (status) toast.error(status);
+    }
+  }, [enableStaffError]);
 
   const handleResetPassword = () => {
     setModalContent(
@@ -40,33 +72,44 @@ const Staff: NextPage = () => {
             startIcon={<LockIcon />}
             onClick={handleResetPassword}
           />
-          <Button
-            title="Disable Staff"
-            color="secondary"
-            size="large"
-            startIcon={<BlockIcon />}
-            onClick={handleDisableStaff}
-          />
+          {data && data.isBlocked === false && (
+            <Button
+              title="Disable Staff"
+              color="secondary"
+              size="large"
+              startIcon={<BlockIcon />}
+              onClick={handleDisableStaff}
+            />
+          )}
+          {data && data.isBlocked === true && (
+            <Button
+              title="Enable Staff"
+              color="secondary"
+              size="large"
+              loading={enableStaffLoading}
+              disabled={enableStaffLoading}
+              startIcon={<BlockIcon />}
+              className="!bg-[#1FD11B] !text-[#FFFFFF]"
+              onClick={()=>{
+                enableStaff({staffId: String(id)})
+              }}
+            />
+          )}
         </ActionBar>
 
         <ViewStaffLayout
           firstRow={
             <>
-              <UserInfoCard
-                fullName="John Doe"
-                email="jdoe@gmail.com"
-                phone="+234 909 888 7655"
-                address="30, Ebinpejo Lane, Idumota, Lagos, Nigeia"
-                role="Dispute Resolutor"
-              />
-              <SummaryCard disputesRaised={110} pendingDisputes={0} />
+              {data && !isLoading && !error && (
+                <UserInfoCard
+                  {...data.userInfo}
+                  bg={data.isBlocked === true ? "#FEE2E9" : "#FFFFFF"}
+                />
+              )}
+              {/* <SummaryCard disputesRaised={110} pendingDisputes={0} /> */}
             </>
           }
-          secondRow={
-            <>
-              <ActivityLogCard logs={mockLogs} />
-            </>
-          }
+          secondRow={<>{/* <ActivityLogCard logs={mockLogs} /> */}</>}
         />
       </div>
     </AppLayout>

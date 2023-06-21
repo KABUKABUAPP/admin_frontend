@@ -1,38 +1,172 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
+import { useRouter } from "next/router";
 
 import Card from "@/components/common/Card";
 import TextField from "@/components/ui/Input/TextField/TextField";
 import Button from "@/components/ui/Button/Button";
+import { AddStaffValidation } from "@/validationschemas/AddStaffValidationSchema";
+import { useFormik, Form, FormikProvider } from "formik";
+import { useCreateStaffMutation } from "@/api-services/staffService";
+import { useGetRolesQuery } from "@/api-services/settingsService";
+import SelectField from "@/components/ui/Input/SelectField";
+import { nigerianStates } from "@/constants";
+import { toast } from "react-toastify";
+import { verifyIsDigit } from "@/utils";
+
+const initialValues = {
+  first_name: "",
+  last_name: "",
+  phone_number: "",
+  email: "",
+  password: "",
+  role: "",
+  address: "",
+  city: "",
+  state: "",
+};
 
 const AddStaffForm: FC = () => {
-  return (
-    <>
-      <p className="text-2xl font-semibold pb-4">Add New Staff</p>
-      <Card>
-        <div className="flex flex-col gap-8 py-5">
-          <TextField label="First name" placeholder="Name here" />
-          <TextField label="Last name" placeholder="Name here" />
-          <TextField label="Role" placeholder="Admin" />
-          <TextField label="Address" placeholder="House Address here" />
-          <div className="flex justify-between gap-3 max-sm:flex-col">
-            <TextField
-              label="City"
-              placeholder="City here"
-              className="w-full"
-            />
-            <TextField
-              label="State"
-              placeholder="Lagos State"
-              className="w-full"
-            />
-          </div>
-        </div>
-      </Card>
+  const router = useRouter();
+  const [createStaff, { data, isLoading, error, isSuccess }] =
+    useCreateStaffMutation();
+  const { data: roles } = useGetRolesQuery(
+    {
+      limit: 50,
+      page: 1,
+    },
+    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
 
-      <div className="flex justify-end">
-        <Button title="Add Staff" className="!text-[16px] mt-6" size="large" />
-      </div>
-    </>
+  const formik = useFormik({
+    initialValues,
+    validationSchema: AddStaffValidation,
+    onSubmit: (values) => {
+      createStaff(values);
+    },
+  });
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Staff Successfully Created");
+      router.push("/staffs");
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    if (error && "data" in error) {
+      const { message }: any = error.data;
+      toast.error(message);
+    }
+  }, [error]);
+
+  return (
+    <FormikProvider value={formik}>
+      <Form>
+        <p className="text-2xl font-semibold pb-4">Add New Staff</p>
+        <Card>
+          <div className="flex flex-col gap-8 py-5">
+            <TextField
+              label="First name"
+              placeholder="Name here"
+              {...formik.getFieldProps("first_name")}
+              error={
+                formik.touched.first_name ? formik.errors.first_name : undefined
+              }
+            />
+            <TextField
+              label="Last name"
+              placeholder="Name here"
+              {...formik.getFieldProps("last_name")}
+              error={
+                formik.touched.last_name ? formik.errors.last_name : undefined
+              }
+            />
+            <TextField
+              label="Email"
+              placeholder="Email here"
+              {...formik.getFieldProps("email")}
+              error={
+                formik.touched.email ? formik.errors.email : undefined
+              }
+            />
+            <TextField
+              label="Password"
+              placeholder="Password here"
+              {...formik.getFieldProps("password")}
+              error={
+                formik.touched.password ? formik.errors.password : undefined
+              }
+            />
+            <TextField
+              label="Phone"
+              placeholder="2333333333"
+              {...formik.getFieldProps("phone_number")}
+              error={
+                formik.touched.phone_number ? formik.errors.phone_number : undefined
+              }
+              onChange={(e)=>{
+                if(verifyIsDigit(e.target.value)){
+                  formik.setFieldValue('phone_number', e.target.value)
+                }
+              }}
+            />
+            <SelectField
+              label="Role"
+              disabled={!roles}
+              options={
+                !roles
+                  ? []
+                  : roles.data.map((i) => ({
+                      label: i.title,
+                      value: i.title,
+                    }))
+              }
+              placeholder="Admin"
+              {...formik.getFieldProps("role")}
+              error={formik.touched.role ? formik.errors.role : undefined}
+            />
+            <TextField
+              label="Address"
+              placeholder="House Address here"
+              {...formik.getFieldProps("address")}
+              error={formik.touched.address ? formik.errors.address : undefined}
+            />
+            <div className="flex justify-between gap-3 max-sm:flex-col">
+              <SelectField
+                options={[...nigerianStates].map((i) => ({
+                  label: i,
+                  value: i,
+                }))}
+                label="City"
+                placeholder="City here"
+                className="w-full"
+                {...formik.getFieldProps("city")}
+                error={formik.touched.city ? formik.errors.city : undefined}
+              />
+              <SelectField
+                options={[{ label: "Nigeria", value: "Nigeria" }]}
+                label="State"
+                placeholder="Lagos State"
+                className="w-full"
+                {...formik.getFieldProps("state")}
+                error={formik.touched.state ? formik.errors.state : undefined}
+              />
+            </div>
+          </div>
+        </Card>
+
+        <div className="flex justify-end">
+          <Button
+            title="Add Staff"
+            className="!text-[16px] mt-6"
+            size="large"
+            type="submit"
+            disabled={isLoading}
+            loading={isLoading}
+          />
+        </div>
+      </Form>
+    </FormikProvider>
   );
 };
 

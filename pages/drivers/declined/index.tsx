@@ -23,6 +23,17 @@ const Drivers: NextPage = () => {
   const [pageSize, setPageSize] = useState(5);
   const [searchDriver, setSearchDriver] = useState<string>("");
 
+  const filterOptions = [
+    { label: "Newest First", value: "newest_first", default: true },
+    { label: "Oldest First", value: "oldest_first", default: false },
+    // { label: "A-Z", value: "", default: false },
+    // { label: "Z-A", value: "", default: false },
+  ];
+
+  const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
+    filterOptions.find((opt) => opt.default === true)?.value || "newest_first"
+  );
+
   const {
     data: drivers,
     isLoading: driversLoading,
@@ -35,6 +46,7 @@ const Drivers: NextPage = () => {
       limit: pageSize,
       page: currentPage,
       search: searchDriver,
+      order: selectedFilterOption
     },
     {
       refetchOnMountOrArgChange: true,
@@ -77,16 +89,7 @@ const Drivers: NextPage = () => {
     setDriverTypeOptions(() => mutatedOptions);
   };
 
-  const filterOptions = [
-    { label: "Newest First", value: "", default: true },
-    { label: "Oldest First", value: "", default: false },
-    { label: "A-Z", value: "", default: false },
-    { label: "Z-A", value: "", default: false },
-  ];
-
-  const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
-    filterOptions.find((opt) => opt.default === true)?.value || ""
-  );
+  
 
   return (
     <AppLayout>

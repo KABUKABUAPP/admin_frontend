@@ -7,7 +7,7 @@ import { useFormik, Form, FormikProvider } from "formik";
 import useClickOutside from "@/hooks/useClickOutside";
 import { useModalContext } from "@/contexts/ModalContext";
 import CloseIcon from "@/components/icons/CloseIcon";
-import { useUpdatePasswordMutation } from "@/api-services/authService";
+import { useUpdatePasswordMutation } from "@/api-services/settingsService";
 import { updatePasswordValidationSchema } from "@/validationschemas/UpdatePasswordValidationSchema";
 import { toast } from "react-toastify";
 

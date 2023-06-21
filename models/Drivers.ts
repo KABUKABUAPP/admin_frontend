@@ -53,6 +53,7 @@ export interface GetAllDriversQuery {
   driverStatus: string;
   carOwner: boolean;
   search: string;
+  order: string;
 }
 
 export interface Document {

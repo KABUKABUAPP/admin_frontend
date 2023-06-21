@@ -61,18 +61,16 @@ const UserInfoCard: FC<Props> = ({
           {address && <p className="text-lg font-semibold">{address}</p>}
           {email && <p className="text-base font-semibold">{email}</p>}
           {phone && <p className="text-base font-semibold">{phone}</p>}
-          {showTripCount && tripCount === 0 ? (
+          {showTripCount && (tripCount === 0 ? (
             <p className="text-sm font-semibold">0 trips</p>
           ) : showTripCount &&(
             <p className="text-sm font-semibold">
-              {(tripCount && `${tripCount} trips`) || (
-                <Skeleton enableAnimation={isLoading} />
-              )}
+              {(tripCount && `${tripCount} trips`)}
             </p>
-          )}
+          ))}
 
           <p className="text-sm font-semibold">
-            {rating === 0 ? (
+            {Boolean(rating) && (rating === 0 ? (
               <span className="flex items-center gap-1">
                 <RatingIcon />{rating}
               </span>
@@ -80,7 +78,7 @@ const UserInfoCard: FC<Props> = ({
               <span className="flex items-center gap-1">
                 <RatingIcon /> {rating}
               </span>
-            )}
+            ))}
           </p>
 
           {showCarsProcessed && (
