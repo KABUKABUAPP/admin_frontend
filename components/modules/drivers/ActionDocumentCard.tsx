@@ -8,26 +8,35 @@ import { MappedDocument } from "@/models/Drivers";
 import { useInspectDocumentMutation } from "@/api-services/driversService";
 import Loader from "@/components/ui/Loader/Loader";
 import { toast } from "react-toastify";
+import { useEnlargedImageContext } from "@/contexts/EnlargeImageContext";
 
 interface Props extends MappedDocument {
-  id: string
+  id: string;
 }
 
-const ActionDocumentCard: FC<Props> = ({ docId, docImage, title, status, id }) => {
+const ActionDocumentCard: FC<Props> = ({
+  docId,
+  docImage,
+  title,
+  status,
+  id,
+}) => {
   const cardBg: Record<string, string> = {
     PENDING: "#F8F8F8",
     DECLINED: "#FEE2E9",
   };
 
+  const { setImageUrl } = useEnlargedImageContext();
+
   const [inspectDocument, { isLoading, isError, isSuccess, error }] =
     useInspectDocumentMutation();
 
-  useEffect(()=>{
-    if(error && "data" in error){
-      const { status }:any = error.data
-      toast.error(status)
+  useEffect(() => {
+    if (error && "data" in error) {
+      const { status }: any = error.data;
+      toast.error(status);
     }
-  },[error])
+  }, [error]);
 
   return (
     <div
@@ -39,7 +48,10 @@ const ActionDocumentCard: FC<Props> = ({ docId, docImage, title, status, id }) =
     >
       <div style={{ flex: 1 }}>
         {docImage && (
-          <div className="relative h-[80px] w-full">
+          <div
+            className="relative h-[80px] w-full cursor-pointer"
+            onClick={() => setImageUrl(docImage)}
+          >
             <Image src={docImage} layout="fill" objectFit="cover" />
           </div>
         )}
@@ -76,11 +88,13 @@ const ActionDocumentCard: FC<Props> = ({ docId, docImage, title, status, id }) =
             <div>
               {status === "APPROVED" ? (
                 <div className="flex items-center gap-3">
-                  <CheckIcon fill="#1FD11B"/> <p className="text-[#1FD11B]">Approved</p>
+                  <CheckIcon fill="#1FD11B" />{" "}
+                  <p className="text-[#1FD11B]">Approved</p>
                 </div>
               ) : (
                 <div className="flex items-center gap-3">
-                  <TimesIcon fill="#EF2C5B"/> <p className="text-[#EF2C5B]">Declined</p> 
+                  <TimesIcon fill="#EF2C5B" />{" "}
+                  <p className="text-[#EF2C5B]">Declined</p>
                 </div>
               )}
             </div>

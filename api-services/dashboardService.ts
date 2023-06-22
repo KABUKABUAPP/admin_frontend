@@ -130,6 +130,7 @@ export const dashboardApi = createApi({
               fullName: application.user.full_name,
               location: `${application.state}, ${application.city}`,
               image: "",
+              id: application._id
             };
           });
         }
@@ -152,6 +153,7 @@ export const dashboardApi = createApi({
               fullName: application.user.full_name,
               location: `${application.state}, ${application.city}`,
               image: "",
+              id: application._id
             };
           });
         }
@@ -198,6 +200,7 @@ export const pendingTripsApi = createApi({
               fullName: application.user?.full_name || '',
               location: `${application.state}, ${application.city}`,
               image: "",
+              id: application?.user?._id
             };
           });
         }
@@ -220,6 +223,7 @@ export const pendingTripsApi = createApi({
               fullName: application.user?.full_name,
               location: `${application.state}, ${application.city}`,
               image: "",
+              id: application.user._id
             };
           });
         }
