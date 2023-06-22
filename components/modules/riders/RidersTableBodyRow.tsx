@@ -33,7 +33,7 @@ const RidersTableBodyRow: FC<Props> = ({
       </div>
       <div style={{ flex: 2 }} className="flex items-center gap-2">
         <div>
-          <Avatar fallBack={fullName[0]} imageUrl={imageUrl} size="sm" />
+          <Avatar fallBack={fullName[0]} imageUrl={imageUrl} size="sm" allowEnlarge={false}/>
         </div>
         <p className="text-xs font-bold">{fullName}</p>
       </div>
