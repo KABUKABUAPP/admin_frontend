@@ -36,6 +36,7 @@ export interface FarePricesMappedData {
 
 export interface GetAllFarePricesQuery {
   search: string;
+  order: string
 }
 
 export interface ViewFarePriceResponse {

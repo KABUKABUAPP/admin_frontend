@@ -15,15 +15,11 @@ const Riders: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [searchRider, setSearchRider] = useState<string>("");
-
-  const { data, isLoading, isError, refetch } = useGetAllRidesQuery(
-    { limit: pageSize, page: currentPage, search: searchRider },
-    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
-  );
-
   const timeFilterOptions = [
-    { label: "Newest First", value: "", default: true },
-    { label: "Oldest First", value: "", default: false },
+    { label: "Newest First", value: "newest_first", default: true },
+    { label: "Oldest First", value: "oldest_first", default: false },
+    { label: "A-Z", value: "a-z", default: false },
+    { label: "Z-A", value: "z-a", default: false },
   ];
   const statusFilterOptions = [
     { label: "Active", value: "active", default: true },
@@ -31,11 +27,23 @@ const Riders: NextPage = () => {
   ];
 
   const [selectedTimeFilter, setSelectedTimeFilter] = useState<string>(
-    timeFilterOptions.find((opt) => opt.default === true)?.value || ""
+    timeFilterOptions.find((opt) => opt.default === true)?.value ||
+      "newest_first"
   );
 
   const [statusFilter, setStatusFilter] = useState<string>(
-    statusFilterOptions.find((opt) => opt.default === true)?.value || ""
+    statusFilterOptions.find((opt) => opt.default === true)?.value || "active"
+  );
+
+  const { data, isLoading, isError, refetch } = useGetAllRidesQuery(
+    {
+      limit: pageSize,
+      page: currentPage,
+      search: searchRider,
+      order: selectedTimeFilter,
+      status: statusFilter,
+    },
+    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
   return (
@@ -47,7 +55,7 @@ const Riders: NextPage = () => {
           setSearchRider(value);
         }}
         filterOptions={timeFilterOptions}
-        handleDropDown={(val)=>setSelectedTimeFilter(String(val))}
+        handleDropDown={(val) => setSelectedTimeFilter(String(val))}
         dropDownOptionSelected={selectedTimeFilter}
       >
         <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
@@ -63,7 +71,7 @@ const Riders: NextPage = () => {
         </div>
       </SearchFilterBar>
       <RidersTable
-        headBg={statusFilter === 'blocked' ? "#FEE2E9" : ""}
+        headBg={statusFilter === "blocked" ? "#FEE2E9" : ""}
         ridersData={data?.data}
         isLoading={isLoading}
         isError={isError}

@@ -31,8 +31,8 @@ export const ridersApi = createApi({
   }),
   endpoints: (build) => ({
     getAllRides: build.query<MappedRidersData, GetAllRidersQuery>({
-      query: ({ limit, page, search }) => ({
-        url: `admin/rider/all?limit=${limit}&page=${page}&search=${search}`,
+      query: ({ limit, page, search, order, status }) => ({
+        url: `admin/rider/all?limit=${limit}&page=${page}&search=${search}&order=${order}&status=${status}`,
       }),
       transformResponse: (response: GetAllRidersResponse) => {
         if (!response) return {} as MappedRidersData;

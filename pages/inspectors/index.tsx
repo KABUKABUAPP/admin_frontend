@@ -15,6 +15,18 @@ const Inspectors: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState<string>("");
+
+  const filterOptions = [
+    { label: "Newest First", value: "newest_first", default: true },
+    { label: "Oldest First", value: "oldest_first", default: false },
+    { label: "A-Z", value: "a-z", default: false },
+    { label: "Z-A", value: "z-a", default: false },
+  ];
+
+  const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
+    filterOptions.find((opt) => opt.default === true)?.value || "newest_first"
+  );
+
   const {
     data: inspectors,
     isLoading: inspectorsLoading,
@@ -22,23 +34,12 @@ const Inspectors: NextPage = () => {
     error: inspectorErrorObj,
     refetch: reloadInspectors,
   } = useGetAllInspectorsQuery(
-    { limit: pageSize, page: currentPage, search: search },
+    { limit: pageSize, page: currentPage, search: search, order: selectedFilterOption },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
   const router = useRouter();
 
-  const filterOptions = [
-    { label: "Newest First", value: "", default: true },
-    { label: "Oldest First", value: "", default: false },
-    { label: "A-Z", value: "", default: false },
-    { label: "Z-A", value: "", default: false },
-  ];
-
-  const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
-    filterOptions.find((opt) => opt.default === true)?.value || ""
-  );
-
-  console.log(inspectorErrorObj)
+  
 
   return (
     <AppLayout>

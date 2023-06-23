@@ -32,8 +32,8 @@ export const farePricesApi = createApi({
   }),
   endpoints: (build) => ({
     getAllFarePrices: build.query<FarePricesMappedData, GetAllFarePricesQuery>({
-      query: ({search}) => ({
-        url: `admin/price/all?search=${search}`,
+      query: ({search, order}) => ({
+        url: `admin/price/all?search=${search}&order=${order}`,
       }),
       transformResponse: (response: GetAllFarePricesResponse) => {
         if (!response) return {} as FarePricesMappedData;

@@ -32,8 +32,8 @@ export const hubsApi = createApi({
   }),
   endpoints: (build) => ({
     getAllHubs: build.query<MappedHubData, GetAllHubsQuery>({
-      query: ({ limit, page }) => ({
-        url: `admin/hub/all?limit=${limit}&page=${page}`,
+      query: ({ limit, page, order, search }) => ({
+        url: `admin/hub/all?limit=${limit}&page=${page}&search=${search}&order=${order}`,
       }),
       transformResponse: (response: GetAllHubsResponse) => {
         if (!response) return {} as MappedHubData;

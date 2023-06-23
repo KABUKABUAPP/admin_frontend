@@ -54,6 +54,7 @@ export interface GetAllDriversQuery {
   carOwner: boolean;
   search: string;
   order: string;
+  status?: string
 }
 
 export interface Document {

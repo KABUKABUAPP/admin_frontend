@@ -57,6 +57,8 @@ export interface MappedHubData {
 export interface GetAllHubsQuery {
   limit: number;
   page: number;
+  order: string;
+  search: string
 }
 
 export interface ViewHubResponse {
