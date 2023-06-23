@@ -109,6 +109,7 @@ export interface PendingApplicationsMappedResponse {
   fullName: string;
   location: string;
   image: string;
+  id: string
 }
 
 export interface GetPendingSharpApplicationsData {

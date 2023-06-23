@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { useEnlargedImageContext } from "@/contexts/EnlargeImageContext";
 
 import Image from "next/image";
 
@@ -9,16 +10,23 @@ interface Props {
 }
 
 const Document: FC<Props> = ({ docId, docImage, title }) => {
+  const { setImageUrl } = useEnlargedImageContext();
+
   return (
     <div className="flex flex-col gap-2">
       {docImage && (
         <div className="relative ">
-          <div className="w-full h-[150px] max-w-[400px] relative">
+          <div
+            className="w-full h-[150px] max-w-[400px] cursor-pointer relative"
+            onClick={() => {
+              setImageUrl(docImage);
+            }}
+          >
             <Image
               layout="fill"
               src={docImage}
               alt="uploaded document"
-              objectFit='cover'
+              objectFit="cover"
             />
           </div>
         </div>

@@ -12,13 +12,24 @@ import { useRouter } from "next/router";
 const FarePrices: NextPage = () => {
   const [search, setSearch] = useState<string>("");
 
+  const filterOptions = [
+    { label: "Newest First", value: "newest_first", default: true },
+    { label: "Oldest First", value: "oldest_first", default: false },
+    { label: "A-Z", value: "a-z", default: false },
+    { label: "Z-A", value: "z-a", default: false },
+  ];
+
+  const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
+    filterOptions.find((opt) => opt.default === true)?.value || "newest_first"
+  );
+
   const {
     data: farePrices,
     isLoading: farePricesLoading,
     isError: farePricesError,
     refetch: reloadFarePrices,
   } = useGetAllFarePricesQuery(
-    { search },
+    { search, order: selectedFilterOption },
     {
       refetchOnReconnect: true,
       refetchOnMountOrArgChange: true,
@@ -27,16 +38,7 @@ const FarePrices: NextPage = () => {
 
   const router = useRouter();
 
-  const filterOptions = [
-    { label: "Newest First", value: "", default: true },
-    { label: "Oldest First", value: "", default: false },
-    { label: "A-Z", value: "", default: false },
-    { label: "Z-A", value: "", default: false },
-  ];
-
-  const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
-    filterOptions.find((opt) => opt.default === true)?.value || ""
-  );
+  
 
   return (
     <AppLayout>

@@ -52,6 +52,7 @@ export interface GetAllInspectorsQuery {
   limit: number;
   page: number;
   search: string;
+  order: string
 }
 
 export interface ViewInspectorResponse {

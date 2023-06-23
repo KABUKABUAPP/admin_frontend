@@ -5,6 +5,7 @@ import Image from "next/image";
 import Button from "@/components/ui/Button/Button";
 import RatingIcon from "@/components/icons/RatingIcon";
 import Skeleton from "react-loading-skeleton";
+import Avatar from "@/components/common/Avatar";
 
 interface Props {
   isRider?: boolean;
@@ -31,7 +32,7 @@ const CarOccupantDetailsCard: FC<Props> = ({
   carModel,
   carPlateNumber,
   viewProfileLink,
-  isLoading
+  isLoading,
 }) => {
   const router = useRouter();
 
@@ -40,24 +41,19 @@ const CarOccupantDetailsCard: FC<Props> = ({
       <p className="font-bold mb-2">
         {isRider ? "Rider's Details" : "Driver's Details"}
       </p>
-      <div className="flex ">
+      <div className="flex gap-3">
         <div style={{ flex: 1 }}>
-          <div className="relative overflow-hidden w-10 h-10 rounded-full">
-            {imageUri ? (
-              <Image
-                layout="fill"
-                src={imageUri}
-                style={{ objectFit: "contain" }}
-                alt="user image"
-              />
-            ) : (
-              <Skeleton enableAnimation={isLoading} className="w-10 h-10 pt-2"/>
-            )}
+          <div className="relative overflow-hidden">
+            <Avatar imageUrl={imageUri} fallBack="" />
           </div>
         </div>
         <div style={{ flex: 4 }}>
-          <p className="text-xs mb-2 font-bold">{name || <Skeleton enableAnimation={isLoading} />}</p>
-          <p className="text-xs mb-2">{location || <Skeleton enableAnimation={isLoading} />}</p>
+          <p className="text-xs mb-2 font-bold">
+            {name || <Skeleton enableAnimation={isLoading} />}
+          </p>
+          <p className="text-xs mb-2">
+            {location || <Skeleton enableAnimation={isLoading} />}
+          </p>
           <p className="text-xs mb-2">
             {tripCount} {tripCount === 1 ? "trip" : "trips"}
           </p>

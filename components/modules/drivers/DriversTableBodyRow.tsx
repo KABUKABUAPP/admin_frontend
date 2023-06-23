@@ -43,7 +43,12 @@ const DriversTableBodyRow: FC<Props> = ({
       <div style={{ flex: 2 }} className="flex items-center gap-2">
         <div>
           {fullName ? (
-            <Avatar fallBack={fullName[0]} imageUrl={imageUrl} size="sm" />
+            <Avatar
+              fallBack={fullName[0]}
+              imageUrl={imageUrl}
+              size="sm"
+              allowEnlarge={false}
+            />
           ) : (
             <Skeleton />
           )}

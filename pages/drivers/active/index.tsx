@@ -11,6 +11,7 @@ import DriverTypeFilterBox from "@/components/modules/drivers/DriverTypeFilterBo
 import { useRouter } from "next/router";
 import { useGetAllDriversQuery } from "@/api-services/driversService";
 import Pagination from "@/components/common/Pagination";
+import DropDown from "@/components/ui/DropDown";
 
 const Drivers: NextPage = () => {
   const router = useRouter();
@@ -30,6 +31,15 @@ const Drivers: NextPage = () => {
     // { label: "Z-A", value: "", default: false },
   ];
 
+  const statusFilterOptions = [
+    { label: "Active", value: "active", default: true },
+    { label: "Blocked", value: "blocked", default: false },
+  ];
+
+  const [statusFilter, setStatusFilter] = useState<string>(
+    statusFilterOptions.find((opt) => opt.default === true)?.value || "active"
+  );
+
   const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
     filterOptions.find((opt) => opt.default === true)?.value || "newest_first"
   );
@@ -47,7 +57,8 @@ const Drivers: NextPage = () => {
       limit: pageSize,
       page: currentPage,
       search: searchDriver,
-      order: selectedFilterOption
+      order: selectedFilterOption,
+      status: statusFilter,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -90,8 +101,6 @@ const Drivers: NextPage = () => {
     if (activeOption) setCarOwner(carOwnerObj[activeOption]);
   }, [JSON.stringify(driverTypeOptions)]);
 
-  
-
   return (
     <AppLayout>
       <CountHeader count={drivers?.totalCount} title="Drivers" />
@@ -110,10 +119,23 @@ const Drivers: NextPage = () => {
         dropDownOptionSelected={selectedFilterOption}
         handleDropDown={(val) => setSelectedFilterOption(String(val))}
       >
-        <DriverTypeFilterBox
-          options={driverTypeOptions}
-          handleClickOption={(keyVal) => handleDriverTypeOption(keyVal)}
-        />
+        <div className="flex items-center max-sm:flex-col gap-3">
+          <DriverTypeFilterBox
+            options={driverTypeOptions}
+            handleClickOption={(keyVal) => handleDriverTypeOption(keyVal)}
+          />
+          <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
+            <span>Show:</span>
+            <DropDown
+              placeholder="Filter"
+              options={statusFilterOptions}
+              value={statusFilter}
+              handleChange={(val) => {
+                setStatusFilter(String(val));
+              }}
+            />
+          </div>
+        </div>
       </SearchFilterBar>
       <div className="mt-5">
         <DriversTable
@@ -122,6 +144,7 @@ const Drivers: NextPage = () => {
           isLoading={driversLoading}
           refetch={reloadDrivers}
           subPath="active"
+          headBg={statusFilter === "blocked" ? "#FEE2E9" : ""}
         />
         {drivers && (
           <Pagination

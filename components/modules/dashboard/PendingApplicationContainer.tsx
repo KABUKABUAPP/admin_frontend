@@ -11,7 +11,8 @@ interface Props {
   data?: PendingApplication[];
   loading: boolean;
   error: boolean;
-  refetch: ()=>void
+  refetch: () => void;
+  route: string;
 }
 
 const PendingApplicationContainer: FC<Props> = ({
@@ -19,7 +20,8 @@ const PendingApplicationContainer: FC<Props> = ({
   data,
   loading,
   error,
-  refetch
+  refetch,
+  route,
 }) => {
   const viewState = data && !loading && !error;
   const loadingtState = !data && loading && !error;
@@ -28,7 +30,9 @@ const PendingApplicationContainer: FC<Props> = ({
   return (
     <div className="max-w-[380px] w-full max-sm:max-w-[250px]">
       <PendingApplicationHeader title={title} />
-      {viewState && <PendingApplicationItemContainer data={data} />}
+      {viewState && (
+        <PendingApplicationItemContainer route={route} data={data} />
+      )}
       {loadingtState && (
         <div>
           <PendingApplicationItem />
@@ -36,13 +40,14 @@ const PendingApplicationContainer: FC<Props> = ({
           <PendingApplicationItem />
         </div>
       )}
-      {
-        errorState && 
+      {errorState && (
         <div className="flex flex-col items-center py-2">
-          <p className="text-xs text-rose-700 mb-2">Oops! Error fetching pending applications</p>
-          <Button title="Reload" onClick={refetch}/>
+          <p className="text-xs text-rose-700 mb-2">
+            Oops! Error fetching pending applications
+          </p>
+          <Button title="Reload" onClick={refetch} />
         </div>
-      }
+      )}
     </div>
   );
 };

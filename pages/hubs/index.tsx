@@ -13,28 +13,31 @@ import { useRouter } from "next/router";
 const Hubs: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(2);
+  const [search, setSearch] = useState<string>("");
+
+  const filterOptions = [
+    { label: "Newest First", value: "newest_first", default: true },
+    { label: "Oldest First", value: "oldest_first", default: false },
+    { label: "A-Z", value: "a-z", default: false },
+    { label: "Z-A", value: "z-a", default: false },
+  ];
+
+  const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
+    filterOptions.find((opt) => opt.default === true)?.value || "newest_first"
+  );
 
   const { data, isLoading, isError, refetch, error } = useGetAllHubsQuery(
-    { limit: pageSize, page: currentPage },
+    { limit: pageSize, page: currentPage, order: selectedFilterOption, search },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
   const router = useRouter();
 
-  const filterOptions = [
-    { label: "Newest First", value: "", default: true },
-    { label: "Oldest First", value: "", default: false },
-    { label: "A-Z", value: "", default: false },
-    { label: "Z-A", value: "", default: false },
-  ];
-
-  const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
-    filterOptions.find((opt) => opt.default === true)?.value || ""
-  );
-
   return (
     <AppLayout>
       <SearchFilterBar
+        searchValue={search}
+        handleSearch={(val) => setSearch(val)}
         filterOptions={filterOptions}
         dropDownOptionSelected={selectedFilterOption}
         handleDropDown={(val) => setSelectedFilterOption(String(val))}

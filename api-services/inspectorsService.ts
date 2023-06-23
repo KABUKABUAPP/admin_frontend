@@ -33,8 +33,8 @@ export const inspectorsApi = createApi({
   }),
   endpoints: (build) => ({
     getAllInspectors: build.query<InspectorsMappedData, GetAllInspectorsQuery>({
-      query: ({ limit, page, search }) => ({
-        url: `admin/inspector/all?limit=${limit}&page=${page}&search=${search}`,
+      query: ({ limit, page, search, order }) => ({
+        url: `admin/inspector/all?limit=${limit}&page=${page}&search=${search}&order=${order}`,
       }),
       transformResponse: (response: GetAllInspectorsResponse) => {
         if (!response) return {} as InspectorsMappedData;

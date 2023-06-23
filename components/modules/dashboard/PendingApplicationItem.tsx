@@ -1,4 +1,6 @@
 import React, { FC } from "react";
+import Link from "next/link";
+
 import Image from "next/image";
 import Button from "@/components/ui/Button/Button";
 import { PendingApplication } from "@/models/PendingApplication";
@@ -9,24 +11,32 @@ const PendingApplicationItem: FC<PendingApplication> = ({
   fullName,
   location,
   image,
+  id,
+  route
 }) => {
   return (
-    <div className="flex items-center gap-2 w-full py-3 px-2">
-      
+    <Link href={`${route}/${id}`}>
+      <div className="flex items-center gap-2 w-full py-3 px-2">
         {fullName ? (
-          <Avatar imageUrl={image} fallBack={fullName[0]} shape="square" size="sm"/>
+          <Avatar
+            imageUrl={image}
+            fallBack={fullName[0]}
+            shape="square"
+            size="sm"
+          />
         ) : (
           <Skeleton className="h-[30px]" />
         )}
-      
-      <div className="flex-1">
-        <p className="text-xs font-bold mb-1">{fullName || <Skeleton />}</p>
-        <p className="text-xs">{location || <Skeleton />}</p>
+
+        <div className="flex-1">
+          <p className="text-xs font-bold mb-1">{fullName || <Skeleton />}</p>
+          <p className="text-xs">{location || <Skeleton />}</p>
+        </div>
+        <div>
+          {fullName ? <Button title="View" size="small" /> : <Skeleton />}
+        </div>
       </div>
-      <div>
-        {fullName ? <Button title="View" size="small" /> : <Skeleton />}
-      </div>
-    </div>
+    </Link>
   );
 };
 

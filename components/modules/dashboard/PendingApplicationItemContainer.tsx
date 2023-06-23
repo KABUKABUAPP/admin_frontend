@@ -7,9 +7,10 @@ import Button from "@/components/ui/Button/Button";
 
 interface Props {
   data?: PendingApplication[] | undefined;
+  route: string;
 }
 
-const PendingApplicationItemContainer: FC<Props> = ({ data }) => {
+const PendingApplicationItemContainer: FC<Props> = ({ data, route }) => {
   const [isViewAll, setViewAll] = useState<boolean>(false);
   const [ allPendingApps, setAllPendingApps ] = useState<PendingApplication[]>()
   const [ slicedPendingApps, setSlicedPendingApps ] = useState<PendingApplication[]>()
@@ -30,11 +31,11 @@ const PendingApplicationItemContainer: FC<Props> = ({ data }) => {
       "
           >
             {data && isViewAll && allPendingApps?.map((item, idx) => {
-              return <PendingApplicationItem {...item} key={idx} />;
+              return <PendingApplicationItem  {...item} route={route} key={idx} />;
             })}
             {
               data && !isViewAll && slicedPendingApps?.map((item, idx) => {
-                return <PendingApplicationItem {...item} key={idx} />;
+                return <PendingApplicationItem {...item} route={route} key={idx} />;
             })}
           </div>
           <div className="border-t-[#E6E6E6] border-t p-2 pt-4">

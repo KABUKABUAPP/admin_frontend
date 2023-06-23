@@ -37,6 +37,8 @@ export interface GetAllRidersQuery {
   limit: number;
   page: number;
   search: string;
+  order: string;
+  status: string
 }
 
 export interface MappedRidersData {

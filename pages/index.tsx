@@ -86,6 +86,7 @@ const Dashboard: NextPage = () => {
               loading={pendingDriverApplicationsLoading}
               error={pendingDriverApplicationsError}
               refetch={reloadPendingDriverApplications}
+              route={'/drivers/pending'}
             />
             <PendingApplicationContainer
               data={pendingSharpApplications}
@@ -93,6 +94,7 @@ const Dashboard: NextPage = () => {
               loading={pendingSharpApplicationsLoading}
               error={pendingSharpApplicationsError}
               refetch={reloadPendingSharpApplications}
+              route={"/sharp-cars"}
             />
           </div>
         </div>
