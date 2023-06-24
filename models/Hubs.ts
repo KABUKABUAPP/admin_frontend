@@ -106,6 +106,7 @@ export interface MappedViewHub {
   processed: number;
   inspectorAddress: string;
   inspectorPhone: string;
+  inspectorId: string
 }
 
 export interface ViewHubQuery {

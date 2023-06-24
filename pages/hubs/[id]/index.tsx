@@ -76,6 +76,7 @@ const Hub: NextPage = () => {
                   fullName={data.inspectorFullname}
                   address={data.inspectorAddress}
                   phone={data.inspectorPhone}
+                  inspectorId={data.inspectorId}
                 />
               </div>
             }

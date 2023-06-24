@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { useRouter } from "next/router";
 
 import Card from "@/components/common/Card";
 import Button from "@/components/ui/Button/Button";
@@ -9,9 +10,13 @@ interface Props {
   image?: string;
   address: string;
   phone: string;
+  inspectorId: string
 }
 
-const InspectorCard: FC<Props> = ({ fullName, address, image, phone }) => {
+const InspectorCard: FC<Props> = ({ fullName, address, image, phone, inspectorId }) => {
+  
+  const router = useRouter()
+
   return (
     <Card>
       <p className="text-lg font-semibold">Inspector</p>
@@ -27,7 +32,9 @@ const InspectorCard: FC<Props> = ({ fullName, address, image, phone }) => {
         </div>
       </div>
 
-      <Button title="View Inspector Profile" variant="text" />
+      <Button title="View Inspector Profile" variant="text" onClick={()=>{
+        router.push(`/inspectors/${inspectorId}`)
+      }}/>
     </Card>
   );
 };
