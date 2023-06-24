@@ -147,6 +147,7 @@ export interface ViewTripResponse {
       full_name: string;
       total_trips: number;
       profile_image: string;
+      state: string;
     };
     driver_details: {
       average_rating: {

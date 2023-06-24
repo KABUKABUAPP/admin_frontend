@@ -107,11 +107,11 @@ const ViewTrip: NextPage = () => {
         bottomIcon: <WalletIcon />,
       },
       {
-        topTitle: "Trip started",
-        topValue: new Date(tripStarted).toUTCString(),
+        topTitle: tripStarted ? "Trip started" : '',
+        topValue: tripStarted ? new Date(tripStarted).toUTCString() : '',
         topIcon: <ClockIcon />,
-        bottomTitle: "Trip to end",
-        bottomValue: new Date(tripToEnd).toUTCString(),
+        bottomTitle: tripToEnd ? "Trip to end" : '',
+        bottomValue: tripToEnd ? new Date(tripToEnd).toUTCString() : '',
         bottomIcon: <ClockIcon />,
       },
     ];
