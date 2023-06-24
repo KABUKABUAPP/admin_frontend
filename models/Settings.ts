@@ -173,19 +173,6 @@ export interface ViewPromotionQuery {
   page: number;
 }
 
-export interface CreatePromotionPayload {
-  name: string;
-  audience: string;
-  activation_date: string;
-  expiry_date: string;
-  total_quatity: number;
-  auto_or_manual: string;
-  type: string;
-  value: number;
-  minimum_amount_to_apply: number;
-  cap: number;
-}
-
 export interface Role {
   _id: string;
   name: string;
@@ -278,7 +265,7 @@ export interface MappedViewRole {
   hubs_permissions: Permission;
   staffs_permissions: Permission;
   settings_permissions: Permission;
-  total_number_of_permissions: number
+  total_number_of_permissions: number;
 }
 
 export interface CreateRolePayload {
@@ -341,4 +328,29 @@ export interface CreateRolePayload {
 export interface UpdateRoleQuery {
   roleId: string;
   payload: CreateRolePayload;
+}
+
+export interface GenerateAutomaticPromoPayload {
+  name: string;
+  audience: string;
+  promo_type: string;
+  condition: string;
+  count: number;
+  amount_type: string;
+  value: number;
+  cap: number;
+  start_date: string;
+  end_date: string;
+}
+
+export interface GenerateManualPromoPayload {
+  name: string;
+  audience: string;
+  promo_type: string;
+  amount_type: string;
+  value: number;
+  cap: number;
+  total_quantity: number;
+  start_date: string;
+  end_date: string;
 }

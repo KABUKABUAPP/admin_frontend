@@ -98,9 +98,9 @@ export const driversApi = createApi({
               plateNumber: data.car_details?.plate_number,
             },
             financials: {
-              walletBalance: '',
+              walletBalance: data?.wallet_balance?.toLocaleString(),
               total: '',
-              subscriptionDue: "",
+              subscriptionDue: data?.total_earned?.toLocaleString(),
             },
             guarantor: {
               reason: data.driver?.admin_approval_remark,
