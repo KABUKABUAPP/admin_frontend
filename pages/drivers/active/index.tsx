@@ -119,7 +119,7 @@ const Drivers: NextPage = () => {
         dropDownOptionSelected={selectedFilterOption}
         handleDropDown={(val) => setSelectedFilterOption(String(val))}
       >
-        <div className="flex items-center max-sm:flex-col gap-3">
+        <div className="flex items-center max-sm:flex-col gap-3 justify-between">
           <DriverTypeFilterBox
             options={driverTypeOptions}
             handleClickOption={(keyVal) => handleDriverTypeOption(keyVal)}
