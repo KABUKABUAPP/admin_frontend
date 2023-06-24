@@ -8,7 +8,7 @@ interface Props {
 
 const DriverTypeFilterBox: FC<Props> = ({ options, handleClickOption }) => {
   return (
-    <div className="flex max-sm:flex-col w-full">
+    <div className="flex max-sm:flex-col">
       {options.map((option, idx) => (
         <DriverOptionItem
           {...option}

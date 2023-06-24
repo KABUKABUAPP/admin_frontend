@@ -11,6 +11,7 @@ import DriverTypeFilterBox from "@/components/modules/drivers/DriverTypeFilterBo
 import { useRouter } from "next/router";
 import { useGetAllDriversQuery } from "@/api-services/driversService";
 import Pagination from "@/components/common/Pagination";
+import DropDown from "@/components/ui/DropDown";
 
 const Drivers: NextPage = () => {
   const router = useRouter();
@@ -34,6 +35,26 @@ const Drivers: NextPage = () => {
     filterOptions.find((opt) => opt.default === true)?.value || "newest_first"
   );
 
+  const statusRemarkOptions = [
+    { label: "All Status", value: "", default: true },
+    { label: "Pending Approval", value: "pending approval", default: false },
+    {
+      label: "Pending Confirmation",
+      value: "pending confirmation",
+      default: false,
+    },
+    {
+      label: "Pending Inspection",
+      value: "pending inspection",
+      default: false,
+    },
+    { label: "Approved", value: "approved", default: false },
+    { label: "Declined", value: "declined", default: false },
+  ];
+
+  const [selectedStatusRemark, setSelectedStatusRemark] = useState<string>(
+    statusRemarkOptions.find((opt) => opt.default === true)?.value || ""
+  );
 
   const {
     data: drivers,
@@ -47,7 +68,8 @@ const Drivers: NextPage = () => {
       limit: pageSize,
       page: currentPage,
       search: searchDriver,
-      order: selectedFilterOption
+      order: selectedFilterOption,
+      statusRemark: selectedStatusRemark,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -90,7 +112,6 @@ const Drivers: NextPage = () => {
     setDriverTypeOptions(() => mutatedOptions);
   };
 
-  
   return (
     <AppLayout>
       <CountHeader count={drivers?.totalCount} title="Drivers" />
@@ -102,17 +123,31 @@ const Drivers: NextPage = () => {
       />
       <SearchFilterBar
         searchValue={searchDriver}
+        title="Show:"
         handleSearch={(value) => {
           setSearchDriver(value);
         }}
-        filterOptions={filterOptions}
-        dropDownOptionSelected={selectedFilterOption}
-        handleDropDown={(val) => setSelectedFilterOption(String(val))}
+        filterOptions={statusRemarkOptions}
+        dropDownOptionSelected={selectedStatusRemark}
+        handleDropDown={(val) => setSelectedStatusRemark(String(val))}
       >
-        <DriverTypeFilterBox
-          options={driverTypeOptions}
-          handleClickOption={(keyVal) => handleDriverTypeOption(keyVal)}
-        />
+        <div className="flex items-center max-sm:flex-col gap-3 justify-between">
+          <DriverTypeFilterBox
+            options={driverTypeOptions}
+            handleClickOption={(keyVal) => handleDriverTypeOption(keyVal)}
+          />
+          <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
+            <span>Sort:</span>
+            <DropDown
+              placeholder="Filter"
+              options={filterOptions}
+              value={selectedFilterOption}
+              handleChange={(val) => {
+                setSelectedFilterOption(String(val));
+              }}
+            />
+          </div>
+        </div>
       </SearchFilterBar>
       <div className="mt-5">
         <DriversTable

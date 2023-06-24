@@ -55,6 +55,7 @@ export interface GetAllDriversQuery {
   search: string;
   order: string;
   status?: string;
+  statusRemark?: string
 }
 
 export interface Document {
