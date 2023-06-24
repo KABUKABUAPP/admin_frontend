@@ -7,8 +7,9 @@ import { ACCESS_TOKEN } from "@/constants";
 import {
   CreateAdminPayload,
   CreateAdminResponse,
-  CreatePromotionPayload,
   CreateRolePayload,
+  GenerateAutomaticPromoPayload,
+  GenerateManualPromoPayload,
   GetRolesQuery,
   GetRolesResponse,
   MappedGetRoles,
@@ -121,7 +122,14 @@ export const settingsApi = createApi({
         }
       },
     }),
-    createPromo: build.mutation<any, CreatePromotionPayload>({
+    createManualPromo: build.mutation<any, GenerateManualPromoPayload>({
+      query: (body) => ({
+        url: "admin/promotions/create-general",
+        body,
+        method: "POST",
+      }),
+    }),
+    createAutomaticPromo: build.mutation<any, GenerateAutomaticPromoPayload>({
       query: (body) => ({
         url: "admin/promotions/create-general",
         body,
@@ -195,7 +203,8 @@ export const {
   useViewPromoQuery,
   useGetRolesQuery,
   useViewRoleQuery,
-  useCreatePromoMutation,
   useCreateRoleMutation,
   useUpdateRoleMutation,
+  useCreateAutomaticPromoMutation,
+  useCreateManualPromoMutation
 } = settingsApi;

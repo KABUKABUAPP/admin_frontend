@@ -38,7 +38,7 @@ export interface GetAllRidersQuery {
   page: number;
   search: string;
   order: string;
-  status: string
+  status: string;
 }
 
 export interface MappedRidersData {
@@ -47,8 +47,6 @@ export interface MappedRidersData {
 }
 
 export interface ViewRiderResponse {
-  status: string;
-  code: number;
   data: {
     _id: string;
     next_of_kin: {
@@ -64,11 +62,10 @@ export interface ViewRiderResponse {
     phone_number: string;
     email: string;
     total_trips: number;
-    profile_image: string;
     total_spent: number;
+    profile_image: string;
     wallet_balance: number;
   };
-  message: string;
 }
 
 export interface ViewRiderQuery {
@@ -78,7 +75,7 @@ export interface ViewRiderQuery {
 
 export interface MappedViewRider {
   driver: {
-    fullname: string;
+    fullName: string;
     address: string;
     tripCount: number;
     rating: number;

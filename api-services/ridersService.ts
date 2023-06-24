@@ -65,20 +65,20 @@ export const ridersApi = createApi({
         if (!response) return <MappedViewRider>{};
         return {
           driver: {
-            fullname: response.data?.full_name,
+            fullName: response?.data?.full_name,
             address: '',
-            tripCount: response.data?.total_trips,
+            tripCount: response?.data?.total_trips,
             rating: response?.data?.average_rating?.value,
             image: response?.data?.profile_image
           },
           financials: {
-            total: response?.data?.total_spent.toString(),
-            walletBalance: response.data?.wallet_balance?.toString(),
+            total: response?.data?.total_spent?.toString(),
+            walletBalance: response?.data?.wallet_balance?.toString(),
           },
           nextOfKin: {
-            fullname: response.data?.next_of_kin.full_name,
-            relationship: response.data?.next_of_kin.relationship,
-            phone: response.data?.next_of_kin.phone_number?.toString(),
+            fullname: response?.data?.next_of_kin.full_name,
+            relationship: response?.data?.next_of_kin.relationship,
+            phone: response?.data?.next_of_kin.phone_number?.toString(),
           },
         };
       },

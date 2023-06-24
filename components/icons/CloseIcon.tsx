@@ -1,10 +1,15 @@
 import React, { FC } from "react";
 
-const CloseIcon: FC = () => {
+interface Props {
+  width?: string;
+  height?: string
+}
+
+const CloseIcon: FC<Props> = ({ width="15", height="15" }) => {
   return (
     <svg
-      width="15"
-      height="15"
+      width={width}
+      height={height}
       viewBox="0 0 28 28"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

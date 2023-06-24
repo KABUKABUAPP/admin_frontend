@@ -22,7 +22,7 @@ const EnlargedImage: FC<Props> = (props) => {
           onClick={() => setImageUrl(null)}
           className="absolute top-5 right-10 z-30 cursor-pointer bg-[#FFFFFF] rounded-full"
         >
-          <CloseIcon />
+          <CloseIcon width="20" height="20"/>
         </span>
         <Image src={props.imageUrl} layout="fill" objectFit="contain" />
       </div>

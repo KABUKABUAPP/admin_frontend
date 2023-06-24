@@ -12,8 +12,6 @@ export function assertIsNode(e: EventTarget | null): asserts e is Node {
 export const verifyIsDigit = (value: string | number): boolean => {
   const re = /^[0-9\b]+$/;
 
-  // if value is not blank, then test the regex
-
   if (value === "" || re.test(String(value))) {
     return true;
   }

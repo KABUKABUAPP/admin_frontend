@@ -29,7 +29,22 @@ const ViewTrip: NextPage = () => {
   const { setModalContent } = useModalContext();
   const [isFeed, setIsFeed] = useState(false);
   const router = useRouter();
-  const { id } = router.query;
+  const [ currentCardSubTitle, setCurrentCardSubTitle ] = useState('')
+  const { id, tab } = router.query;
+  const tabOptions = [undefined, "pending", "active", "completed", "declined"];
+  const cardSubTitleMap: Record<string, string> = {
+    'pending': 'Driving to rider',
+    'active': 'Driving to destination',
+    'completed': 'Trip completed',
+    'declined': 'Cancelled order'
+  }
+  enum Tab {
+    TRIP_ORDERS,
+    PENDING_TRIPS,
+    ACTIVE_TRIPS,
+    COMPLETED_TRIPS,
+    CANCELLED_ORDERS,
+  }
   const { data, isLoading, isError, refetch } = useViewTripQuery(
     { id: id ? String(id) : "" },
     { skip: id === undefined }
@@ -39,6 +54,15 @@ const ViewTrip: NextPage = () => {
     lng: number;
     address: string;
   } | null>(null);
+
+  useEffect(()=>{
+    if(tab===undefined){
+      setCurrentCardSubTitle('Looking for driver')
+    }
+    else {
+      setCurrentCardSubTitle(cardSubTitleMap[`${tab}`])
+    }
+  },[tab])
 
   useEffect(() => {
     if (data) {
@@ -54,7 +78,7 @@ const ViewTrip: NextPage = () => {
 
     return () => {
       socket.disconnect();
-      setLiveLocation(null)
+      setLiveLocation(null);
     };
   }, [data]);
 
@@ -107,11 +131,11 @@ const ViewTrip: NextPage = () => {
         bottomIcon: <WalletIcon />,
       },
       {
-        topTitle: "Trip started",
-        topValue: new Date(tripStarted).toUTCString(),
+        topTitle: tripStarted ? "Trip started" : '',
+        topValue: tripStarted ? new Date(tripStarted).toUTCString() : '',
         topIcon: <ClockIcon />,
-        bottomTitle: "Trip to end",
-        bottomValue: new Date(tripToEnd).toUTCString(),
+        bottomTitle: tripToEnd ? "Trip to end" : '',
+        bottomValue: tripToEnd ? new Date(tripToEnd).toUTCString() : '',
         bottomIcon: <ClockIcon />,
       },
     ];
@@ -171,7 +195,7 @@ const ViewTrip: NextPage = () => {
           asideComponents={
             <>
               <TripDetailsCard
-                cardSubTitle="Driving to destination"
+                cardSubTitle={currentCardSubTitle}
                 data={
                   data &&
                   getTripDetails({
@@ -180,7 +204,7 @@ const ViewTrip: NextPage = () => {
                     estimatedPrice: data.estimatedPrice.toString(),
                     paymentType: data.paymentType,
                     tripStarted: data.tripStarted,
-                    tripToEnd:  data.tripEnded,
+                    tripToEnd: data.tripEnded,
                   })
                 }
               />

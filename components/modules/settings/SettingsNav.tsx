@@ -16,7 +16,7 @@ const SettingsNav: FC<Props> = ({ navItems, handleCick }) => {
             } py-4 pl-3 border-l-8 border-transparent`}
             onClick={()=>handleCick(item.title)}
           >
-            <p className="cursor-pointer">{item.title}</p>
+            <p className={`cursor-pointer ${item.isActive ? 'font-bold' : 'font-normal'}`}>{item.title}</p>
           </div>
         );
       })}

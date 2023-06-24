@@ -24,7 +24,7 @@ const AccountSettings: FC = () => {
       <p className="text-base font-medium">{user?.email}</p>
       <p className="text-base font-medium">{user?.role}</p>
 
-      <div className="w-full flex flex-col gap-6 mt-4">
+      {/* <div className="w-full flex flex-col gap-6 mt-4">
         <div className="flex max-sm:flex-col gap-6">
           <div style={{ flex: 1 }}>
             <TextField label="First name" />
@@ -41,9 +41,9 @@ const AccountSettings: FC = () => {
             <TextField label="Phone Number" />
           </div>
         </div>
-      </div>
-      <div className="border-t border-t-gray-200 my-5 w-full"></div>
-      <div className="w-full">
+      </div> */}
+      <div className="my-2 w-full"></div>
+      <div className="w-full flex justify-center">
         <Button
           title="Update Password"
           size="large"

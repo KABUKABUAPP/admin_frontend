@@ -40,8 +40,19 @@ export const driversApi = createApi({
   tagTypes: ["drivers", "driver"],
   endpoints: (build) => ({
     getAllDrivers: build.query<DriversMappedResponse, GetAllDriversQuery>({
-      query: ({ limit, page, carOwner, driverStatus, search, order, status }) => ({
-        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}&search=${search}&order=${order}&status=${status ? status : ''}`,
+      query: ({
+        limit,
+        page,
+        carOwner,
+        driverStatus,
+        search,
+        order,
+        status,
+        statusRemark,
+      }) => ({
+        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}&search=${search}&order=${order}&is_blocked=${
+          status ? status : ""
+        }&status_remark=${statusRemark ? statusRemark : ""}`,
       }),
       providesTags: ["drivers"],
       transformResponse: (response: GetAllDriversResponse) => {
@@ -54,14 +65,15 @@ export const driversApi = createApi({
               fullName: driver.user?.full_name,
               location: `${driver.country}, ${driver.state}`,
               imageUrl: driver?.user?.profile_image,
-              driverType: driver?.car_owner ===true
-                ? "Regular Driver"
-                : "Sharp Car Driver",
+              driverType:
+                driver?.car_owner === true
+                  ? "Regular Driver"
+                  : "Sharp Car Driver",
               totalTrips: driver?.user?.total_trips,
-              walletBalance: driver?.wallet_balance || '0',
+              walletBalance: driver?.wallet_balance || "0",
               status: driver?.approval_status,
               userId: driver.user._id,
-              statusRemark: driver?.status_remark
+              statusRemark: driver?.status_remark,
             } as DriversTableBodyData;
           });
 
@@ -89,7 +101,7 @@ export const driversApi = createApi({
               rating: 0,
               id: data?.driver?._id,
               isBlocked: data?.driver?.user?.isBlocked,
-              declineCount: data?.driver?.admin_decline_count
+              declineCount: data?.driver?.admin_decline_count,
             },
             carDetails: {
               carImages: data?.car_details.images,
@@ -98,9 +110,9 @@ export const driversApi = createApi({
               plateNumber: data.car_details?.plate_number,
             },
             financials: {
-              walletBalance: '',
-              total: '',
-              subscriptionDue: "",
+              walletBalance: data?.wallet_balance?.toLocaleString(),
+              total: data?.total_earned?.toLocaleString(),
+              subscriptionDue: data?.subscription_due?.toLocaleString(),
             },
             guarantor: {
               reason: data.driver?.admin_approval_remark,
@@ -120,7 +132,7 @@ export const driversApi = createApi({
                   docImage: doc.url,
                   docId: doc?.doc_number,
                   status: doc.status,
-                  id: doc._id
+                  id: doc._id,
                 };
               }),
             },
@@ -174,12 +186,12 @@ export const driversApi = createApi({
       }),
     }),
     toggleBlockDriver: build.mutation<any, BlockDriverQuery>({
-      query: ({ reason, driverId })=>({
+      query: ({ reason, driverId }) => ({
         url: `admin/driver/block-unblock/${driverId}?reason=${reason}`,
-        method: 'PUT'
+        method: "PUT",
       }),
-      invalidatesTags: ['driver']
-    })
+      invalidatesTags: ["driver"],
+    }),
   }),
 });
 
@@ -190,5 +202,5 @@ export const {
   useInspectDocumentMutation,
   useViewGuarantorQuery,
   useVerifyGuarantorMutation,
-  useToggleBlockDriverMutation
+  useToggleBlockDriverMutation,
 } = driversApi;

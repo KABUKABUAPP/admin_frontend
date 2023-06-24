@@ -63,8 +63,8 @@ const SideBar: FC<Props> = ({ data }) => {
             <motion.span
               className="absolute -top-10 left-[100%] z-50 shadow-md"
               ref={ref}
-              initial={{ translateX: 300 }}
-              whileInView={{ translateX: 0, transition: { duration: 0.3 } }}
+              initial={{ translateY: 100 }}
+              whileInView={{ translateY: 0, transition: { duration: 0.3 } }}
               viewport={{ once: true }}
             >
               <LogoutPopUp handleClick={() => setIsModal(true)} />

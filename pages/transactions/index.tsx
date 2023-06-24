@@ -6,7 +6,10 @@ import AppLayout from "@/layouts/AppLayout";
 import AccountBalanceCardContainer from "@/components/modules/Transactions/AccountBalanceCardContainer";
 import SearchFilterBar from "@/components/common/SearchFilterBar";
 import TransactionsTable from "@/components/modules/Transactions/TransactionsTable";
-import { useGetAllTransactionsQuery } from "@/api-services/transactionsService";
+import {
+  useGetAllTransactionsQuery,
+  useGetTransactionsCardQuery,
+} from "@/api-services/transactionsService";
 import Pagination from "@/components/common/Pagination";
 import OptionBar from "@/components/common/OptionsBar";
 import { transactionsOptionsBar } from "@/constants";
@@ -17,6 +20,7 @@ import TopUpTable from "@/components/modules/Transactions/TopUpTable";
 import TripChargesTable from "@/components/modules/Transactions/TripChargesTable";
 import TripPaymentsTable from "@/components/modules/Transactions/TripPaymentsTable";
 import WithdrawalsTable from "@/components/modules/Transactions/WithdrawalsTable";
+import DropDown from "@/components/ui/DropDown";
 
 const Transactions: NextPage = () => {
   const router = useRouter();
@@ -47,6 +51,7 @@ const Transactions: NextPage = () => {
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
+
   const handleClickAccountCard = (title: string) => {
     const mutated = accountCardData.map((item) => {
       if (item.title === title) return { ...item, isActive: true };
@@ -92,12 +97,47 @@ const Transactions: NextPage = () => {
     sharp_payments = "sharp_payments",
   }
 
+  const statusFilterOptions = [
+    { label: "Today", value: "today", default: false },
+    { label: "Yesterday", value: "yesterday", default: false },
+    { label: "This Week", value: "this_week", default: true },
+    // { label: "Yesterday", value: "yesterday", default: false },
+  ];
+
+  const [statusFilter, setStatusFilter] = useState<string>(
+    statusFilterOptions.find((opt) => opt.default === true)?.value || "today"
+  );
+
+  const {
+    data: transactionCard,
+    isLoading: transactionCardLoading,
+    error: transactionCardError,
+    refetch: refetchTransactionCard,
+  } = useGetTransactionsCardQuery(
+    { range: statusFilter },
+    { refetchOnMountOrArgChange: true }
+  );
+
   return (
     <AppLayout>
-      <AccountBalanceCardContainer
-        data={accountCardData}
-        handleClick={(title) => {}}
-      />
+      <div className="text-xs flex items-center mb-2">
+        <span>Show transactions of:</span>
+        <DropDown
+          left={0}
+          placeholder="Filter"
+          options={statusFilterOptions}
+          value={statusFilter}
+          handleChange={(val) => {
+            setStatusFilter(String(val));
+          }}
+        />
+      </div>
+      {transactionCard && (
+        <AccountBalanceCardContainer
+          data={transactionCard}
+          handleClick={(title) => {}}
+        />
+      )}
       <OptionBar
         options={transactionOptions}
         handleClickOption={(key) => {
@@ -113,16 +153,26 @@ const Transactions: NextPage = () => {
         searchValue={search}
         handleSearch={(val) => setSearch(val)}
       />
-      {String(tab) === Tab.all_transactions && <AllTransactionsTable order={selectedDropDown}/>}
-      {String(tab) === Tab.sharp_payments && <SharpPaymentsTable order={selectedDropDown}/>}
+      {String(tab) === Tab.all_transactions && (
+        <AllTransactionsTable order={selectedDropDown} />
+      )}
+      {String(tab) === Tab.sharp_payments && (
+        <SharpPaymentsTable order={selectedDropDown} />
+      )}
 
-      {String(tab) === Tab.subscriptions && <SubscriptionsTable order={selectedDropDown}/>}
+      {String(tab) === Tab.subscriptions && (
+        <SubscriptionsTable order={selectedDropDown} />
+      )}
 
-      {String(tab) === Tab.top_up && <TopUpTable order={selectedDropDown}/>}
+      {String(tab) === Tab.top_up && <TopUpTable order={selectedDropDown} />}
 
-      {String(tab) === Tab.trip_charges && <TripChargesTable order={selectedDropDown}/>}
+      {String(tab) === Tab.trip_charges && (
+        <TripChargesTable order={selectedDropDown} />
+      )}
 
-      {String(tab) === Tab.trip_payments && <TripPaymentsTable order={selectedDropDown}/>}
+      {String(tab) === Tab.trip_payments && (
+        <TripPaymentsTable order={selectedDropDown} />
+      )}
 
       {String(tab) === Tab.withdrawals && <WithdrawalsTable />}
       {/* <TransactionsTable

@@ -54,3 +54,25 @@ export interface TransactionDto {
   user_type: string;
   narration_id: string;
 }
+
+export interface GetTransactionsCardReponse {
+  status: string;
+  code: number;
+  data: {
+    total_transactions: number;
+    net_income: number;
+    active_trips: number;
+    money_in_escrow: number;
+  };
+  message: string;
+}
+
+export interface MappedTransactionsCard {
+  title: string;
+  amount: number;
+  isActive: boolean;
+}
+
+export interface GetTransactionCardQuery {
+  range: string
+}

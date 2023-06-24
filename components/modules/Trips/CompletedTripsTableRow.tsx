@@ -36,10 +36,11 @@ const CompletedTripsTableRow: FC<Props> = ({
   index,
 }) => {
   const router = useRouter();
+  const { tab } = router.query
 
   return (
     <div
-      onClick={() => router.push(`/trips/${id}`)}
+      onClick={() => router.push(`/trips/${id}?tab=${tab}`)}
       className="flex p-3 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
       key={index}
     >

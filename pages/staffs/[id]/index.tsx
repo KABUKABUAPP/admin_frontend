@@ -18,6 +18,8 @@ import { useViewStaffQuery } from "@/api-services/staffService";
 import { useRouter } from "next/router";
 import { useDisableStaffMutation } from "@/api-services/staffService";
 import { toast } from "react-toastify";
+import Loader from "@/components/ui/Loader/Loader";
+import ErrorMessage from "@/components/common/ErrorMessage";
 
 const Staff: NextPage = () => {
   const { setModalContent } = useModalContext();
@@ -90,8 +92,8 @@ const Staff: NextPage = () => {
               disabled={enableStaffLoading}
               startIcon={<BlockIcon />}
               className="!bg-[#1FD11B] !text-[#FFFFFF]"
-              onClick={()=>{
-                enableStaff({staffId: String(id)})
+              onClick={() => {
+                enableStaff({ staffId: String(id) });
               }}
             />
           )}
@@ -105,6 +107,17 @@ const Staff: NextPage = () => {
                   {...data.userInfo}
                   bg={data.isBlocked === true ? "#FEE2E9" : "#FFFFFF"}
                 />
+              )}
+              {!data && !error && isLoading && (
+                <div className="flex items-center justify-center">
+                  <Loader />
+                </div>
+              )}
+              {!data && error && !isLoading && (
+                <div className="flex items-center justify-center flex-col gap-3">
+                  <ErrorMessage message="Oops! Something went wrong"/>
+                  <Button title="Refetch" onClick={refetch}/>
+                </div>
               )}
               {/* <SummaryCard disputesRaised={110} pendingDisputes={0} /> */}
             </>

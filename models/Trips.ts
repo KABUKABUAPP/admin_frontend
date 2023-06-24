@@ -105,7 +105,7 @@ export interface GetAllTripsQuery {
   page: number;
   status: "disputed" | "cancelled" | "completed" | "initiated" | "started";
   search: string;
-  order: string
+  order: string;
 }
 
 export interface TripDetail {
@@ -121,21 +121,21 @@ export interface TripDetail {
 export interface ViewTripResponse {
   status: string;
   data: {
+    order_id: string;
     origin: {
       country: string;
       state: string;
       city: string;
+      street: string;
     };
     destination: {
       country: string;
       state: string;
       city: string;
+      street: string;
     };
-    start_time: string;
     estimated_price: number;
-    order_id: string;
     payment_type: string;
-    trip_completion_time: string;
     rider_rating: number;
     driver_rating: number;
     rider_details: {
@@ -143,25 +143,27 @@ export interface ViewTripResponse {
         value: number;
         count: number;
       };
-      total_trips: number;
       _id: string;
       full_name: string;
+      total_trips: number;
       profile_image: string;
+      state: string;
     };
     driver_details: {
       average_rating: {
         value: number;
         count: number;
       };
-      total_trips: number;
       _id: string;
       full_name: string;
+      total_trips: number;
       driver: {
         _id: string;
         city: string;
         state: string;
         country: string;
       };
+      profile_image: string;
     };
     car: {
       _id: string;
@@ -171,6 +173,8 @@ export interface ViewTripResponse {
       color: string;
       plate_number: string;
     };
+    start_time: string;
+    trip_completion_time: string;
   };
   message: string;
 }
