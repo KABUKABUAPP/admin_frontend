@@ -72,7 +72,7 @@ export const ridersApi = createApi({
             image: response?.data?.profile_image
           },
           financials: {
-            total: '',
+            total: response?.data?.total_spent?.toString(),
             walletBalance: response?.data?.wallet_balance?.toString(),
           },
           nextOfKin: {

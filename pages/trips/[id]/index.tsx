@@ -54,7 +54,7 @@ const ViewTrip: NextPage = () => {
 
     return () => {
       socket.disconnect();
-      setLiveLocation(null)
+      setLiveLocation(null);
     };
   }, [data]);
 
@@ -180,7 +180,7 @@ const ViewTrip: NextPage = () => {
                     estimatedPrice: data.estimatedPrice.toString(),
                     paymentType: data.paymentType,
                     tripStarted: data.tripStarted,
-                    tripToEnd:  data.tripEnded,
+                    tripToEnd: data.tripEnded,
                   })
                 }
               />

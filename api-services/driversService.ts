@@ -41,7 +41,7 @@ export const driversApi = createApi({
   endpoints: (build) => ({
     getAllDrivers: build.query<DriversMappedResponse, GetAllDriversQuery>({
       query: ({ limit, page, carOwner, driverStatus, search, order, status }) => ({
-        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}&search=${search}&order=${order}&status=${status ? status : ''}`,
+        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}&search=${search}&order=${order}&is_blocked=${status ? status : ''}`,
       }),
       providesTags: ["drivers"],
       transformResponse: (response: GetAllDriversResponse) => {
@@ -99,8 +99,8 @@ export const driversApi = createApi({
             },
             financials: {
               walletBalance: data?.wallet_balance?.toLocaleString(),
-              total: '',
-              subscriptionDue: data?.total_earned?.toLocaleString(),
+              total: data?.total_earned?.toLocaleString(),
+              subscriptionDue: data?.subscription_due?.toLocaleString(),
             },
             guarantor: {
               reason: data.driver?.admin_approval_remark,

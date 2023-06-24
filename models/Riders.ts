@@ -62,6 +62,7 @@ export interface ViewRiderResponse {
     phone_number: string;
     email: string;
     total_trips: number;
+    total_spent: number;
     profile_image: string;
     wallet_balance: number;
   };

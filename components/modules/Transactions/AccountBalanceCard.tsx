@@ -21,7 +21,7 @@ const AccountBalanceCard: FC<Props> = ({
       } rounded-lg w-[220px] max-w-[100%] px-8 py-4 transition-all cursor-pointer flex flex-col justify-center`}
     >
       <p className={`font-bold transition-all ${isActive ? "text-2xl" : "text-xl"}`}>
-        N{amount.toLocaleString()}
+        N{amount?.toLocaleString()}
       </p>
       <p className="text-xs font-semibold">{title}</p>
     </div>

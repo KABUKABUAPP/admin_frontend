@@ -135,6 +135,7 @@ export interface ViewDriverResponse {
     car_documents: Document[];
     total_earned: number;
     wallet_balance: number;
+    subscription_due: number;
   };
   message: string;
 }
