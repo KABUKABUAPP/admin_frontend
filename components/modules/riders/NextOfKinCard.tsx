@@ -6,11 +6,17 @@ interface Props {
   fullname?: string;
   relationship?: string;
   phone?: string;
+  bg?: string;
 }
 
-const NextOfKinCard: FC<Props> = ({ fullname, relationship, phone }) => {
+const NextOfKinCard: FC<Props> = ({
+  fullname,
+  relationship,
+  phone,
+  bg = "#FFFFFF",
+}) => {
   return (
-    <Card>
+    <Card bg={bg}>
       <p className="text-lg font-semibold pb-3">Next of kin</p>
 
       <div className="flex justify-between py-2">

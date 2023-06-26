@@ -11,9 +11,14 @@ import UserInfoCard from "@/components/common/UserInfoCard";
 import FinancialsCard from "@/components/modules/riders/FinancialsCard";
 import NextOfKinCard from "@/components/modules/riders/NextOfKinCard";
 import TripHistoryCard from "@/components/common/TripHistoryCard";
-import { useViewRiderQuery } from "@/api-services/ridersService";
+import {
+  useToggleBlockRiderMutation,
+  useViewRiderQuery,
+} from "@/api-services/ridersService";
 import { useRouter } from "next/router";
 import { useGetDriverTripHistoryQuery } from "@/api-services/tripsService";
+import { useModalContext } from "@/contexts/ModalContext";
+import BlockRiderConfirmation from "@/components/modules/riders/BlockRiderConfirmation";
 
 const Rider: NextPage = () => {
   const router = useRouter();
@@ -24,7 +29,7 @@ const Rider: NextPage = () => {
     { id: String(id), status: "" },
     { skip: !id, refetchOnReconnect: true, refetchOnMountOrArgChange: true }
   );
-
+  const { setModalContent } = useModalContext();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
@@ -38,37 +43,78 @@ const Rider: NextPage = () => {
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
+  const [
+    unblockRider,
+    {
+      isSuccess: unblockRiderSuccess,
+      error: unblockRiderError,
+      isLoading: unblockRiderLoading,
+    },
+  ] = useToggleBlockRiderMutation();
+
   return (
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
         <ActionBar>
           <Button title="Call Rider" startIcon={<PhoneIcon />} size="large" />
-          <Button
-            title="Block Rider"
-            startIcon={<BlockIcon />}
-            size="large"
-            color="secondary"
-          />
+          {data && data?.driver.isBlocked === false && (
+            <Button
+              title="Block Rider"
+              startIcon={<BlockIcon />}
+              size="large"
+              color="secondary"
+              onClick={() => {
+                setModalContent(
+                  <BlockRiderConfirmation driverId={String(id)} />
+                );
+              }}
+            />
+          )}
+          {data && data?.driver.isBlocked === true && (
+            <Button
+              title="Unblock Rider"
+              startIcon={<BlockIcon />}
+              size="large"
+              color="secondary"
+              loading={unblockRiderLoading}
+              disabled={unblockRiderLoading}
+              className="!bg-[#1FD11B] !text-[#FFFFFF]"
+              onClick={() => {
+                unblockRider({ driverId: String(id), reason: "" });
+              }}
+            />
+          )}
         </ActionBar>
 
         <ViewRiderLayout
           firstRow={
             <>
-              <UserInfoCard {...data?.driver} />
-              <FinancialsCard {...data?.financials} />
-              <NextOfKinCard {...data?.nextOfKin} />
+              <UserInfoCard
+                {...data?.driver}
+                bg={data?.driver.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+              />
+              <FinancialsCard
+                {...data?.financials}
+                bg={data?.driver.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+              />
+              <NextOfKinCard
+                {...data?.nextOfKin}
+                bg={data?.driver.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+              />
             </>
           }
           secondRow={
             <>
-              {tripHistory && <TripHistoryCard
-                tripHistoryData={tripHistory.data}
-                totalCount={tripHistory.totalCount}
-                currentCount={tripHistory.data.length}
-                handleViewMore={() => {
-                  setPageSize((ps) => ps + 5);
-                }}
-              />}
+              {tripHistory && (
+                <TripHistoryCard
+                  tripHistoryData={tripHistory.data}
+                  totalCount={tripHistory.totalCount}
+                  currentCount={tripHistory.data.length}
+                  handleViewMore={() => {
+                    setPageSize((ps) => ps + 5);
+                  }}
+                />
+              )}
             </>
           }
         />

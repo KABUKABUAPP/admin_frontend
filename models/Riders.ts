@@ -8,6 +8,10 @@ export interface RidersTableBodyData {
   imageUrl: string;
 }
 
+export interface MappedRider extends RidersTableBodyData {
+  isBlocked: boolean
+}
+
 export interface Rider {
   _id: string;
   full_name: string;
@@ -42,7 +46,7 @@ export interface GetAllRidersQuery {
 }
 
 export interface MappedRidersData {
-  data: RidersTableBodyData[];
+  data: MappedRider[];
   totalCount: number;
 }
 
@@ -79,6 +83,8 @@ export interface MappedViewRider {
     address: string;
     tripCount: number;
     rating: number;
+    isBlocked: boolean
+    id: string
   };
   financials: {
     total: string;
