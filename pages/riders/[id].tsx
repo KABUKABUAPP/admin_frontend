@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import AppLayout from "@/layouts/AppLayout";
 import ViewRiderLayout from "@/components/modules/riders/ViewRiderLayout";
@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 import { useGetDriverTripHistoryQuery } from "@/api-services/tripsService";
 import { useModalContext } from "@/contexts/ModalContext";
 import BlockRiderConfirmation from "@/components/modules/riders/BlockRiderConfirmation";
+import { toast } from "react-toastify";
 
 const Rider: NextPage = () => {
   const router = useRouter();
@@ -46,11 +47,25 @@ const Rider: NextPage = () => {
   const [
     unblockRider,
     {
-      isSuccess: unblockRiderSuccess,
-      error: unblockRiderError,
-      isLoading: unblockRiderLoading,
+      isSuccess: unblockSuccess,
+      error: unblockError,
+      isLoading: unblockLoading,
     },
   ] = useToggleBlockRiderMutation();
+
+  useEffect(() => {
+    if (unblockSuccess) {
+      toast.success("Driver Successfully Unblocked");
+    }
+  }, [unblockSuccess]);
+
+  useEffect(() => {
+    if (unblockError && "data" in unblockError) {
+      const { message, status }: any = unblockError;
+      if (message) toast.error(message);
+      if (status) toast.error(status);
+    }
+  }, [unblockError]);
 
   return (
     <AppLayout padding="0">
@@ -76,8 +91,8 @@ const Rider: NextPage = () => {
               startIcon={<BlockIcon />}
               size="large"
               color="secondary"
-              loading={unblockRiderLoading}
-              disabled={unblockRiderLoading}
+              loading={unblockLoading}
+              disabled={unblockLoading}
               className="!bg-[#1FD11B] !text-[#FFFFFF]"
               onClick={() => {
                 unblockRider({ driverId: String(id), reason: "" });
