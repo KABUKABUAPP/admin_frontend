@@ -9,7 +9,6 @@ import { useFormik, Form, FormikProvider } from "formik";
 import { useCreateStaffMutation } from "@/api-services/staffService";
 import { useGetRolesQuery } from "@/api-services/settingsService";
 import SelectField from "@/components/ui/Input/SelectField";
-import { nigerianStates } from "@/constants";
 import { toast } from "react-toastify";
 import { verifyIsDigit } from "@/utils";
 import {
