@@ -45,7 +45,7 @@ const ViewAllPromotions: FC<Props> = ({
           />
           <Divider />
           <Button
-            title="Expired"
+            title="Closed"
             variant="text"
             onClick={() => {
               if (promoStatus !== "expired") setPromoStatus("expired");

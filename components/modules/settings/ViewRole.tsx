@@ -9,7 +9,7 @@ import { rolesOptionsArr } from "@/constants";
 import Loader from "@/components/ui/Loader/Loader";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import { useUpdateRoleMutation } from "@/api-services/settingsService";
-import { CreateRolePayload,} from "@/models/Settings";
+import { CreateRolePayload } from "@/models/Settings";
 import { toast } from "react-toastify";
 
 interface Props {
@@ -24,6 +24,7 @@ const ViewRole: FC<Props> = ({ handleBack }) => {
   ] = useUpdateRoleMutation();
   const [roleOptions, setRoleOptions] = useState([...rolesOptionsArr]);
   const [roles, setRoles] = useState(roleOptions.map((r) => r.label));
+  const [isChangeMade, setIsChangeMade] = useState<boolean>(false);
 
   const { roleId } = router.query;
 
@@ -31,6 +32,10 @@ const ViewRole: FC<Props> = ({ handleBack }) => {
     { roleId: String(roleId) },
     { skip: !roleId, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
+
+  const handleIsChangeMade = () => {
+    if (isChangeMade !== true) setIsChangeMade(true);
+  };
 
   const handleCheckChange = ({
     checked,
@@ -44,14 +49,17 @@ const ViewRole: FC<Props> = ({ handleBack }) => {
     const mapped = roleOptions.map((role) => {
       if (role.label === label) {
         if (key === "isChecked") return { ...role, isChecked: checked };
-        else if (key === "read") return { ...role, read: checked };
-        else if (key === "write") return { ...role, write: checked };
+        else if (key === "read")
+          return { ...role, read: checked, write: false };
+        else if (key === "write")
+          return { ...role, write: checked, read: false };
         return role;
       }
       return role;
     });
 
     setRoleOptions(mapped);
+    handleIsChangeMade()
   };
 
   const getDefaultRights = (
@@ -142,18 +150,20 @@ const ViewRole: FC<Props> = ({ handleBack }) => {
         {data && (
           <div>
             <p className="text-xl font-semibold mb-4">{data.name}</p>
-            <p className="text-base">{data.total_number_of_permissions} permissions</p>
+            <p className="text-base">
+              {data.total_number_of_permissions} permissions
+            </p>
           </div>
         )}
         <div>
-          {data && (
+          {data && isChangeMade && (
             <Button
               title="Save changes"
               loading={updateLoading}
               disabled={updateLoading}
               onClick={() => {
                 const payload = generatePayload({ level: 4, name: data.name });
-                updateRole({payload, roleId: String(roleId)})
+                updateRole({ payload, roleId: String(roleId) });
               }}
             />
           )}

@@ -354,3 +354,7 @@ export interface GenerateManualPromoPayload {
   start_date: string;
   end_date: string;
 }
+
+export interface DeletePromoQuery {
+  promoId: string
+}
