@@ -12,6 +12,7 @@ import {
 import { useCreateAutomaticPromoMutation } from "@/api-services/settingsService";
 import { useCreateManualPromoMutation } from "@/api-services/settingsService";
 import { toast } from "react-toastify";
+import { verifyIsDigit } from "@/utils";
 
 const initialValues = {
   name: "",
@@ -51,7 +52,6 @@ const NewPromotionForm: FC<Props> = ({ handleBack }) => {
     }
   }, [manualPromo.error]);
 
-  
   useEffect(() => {
     if (automaticPromo.isSuccess) {
       toast.success("Promo successfully created");
@@ -65,8 +65,6 @@ const NewPromotionForm: FC<Props> = ({ handleBack }) => {
       toast.error(message);
     }
   }, [automaticPromo.error]);
-
-
 
   const promoAudienceOptions = [
     { label: "Riders", value: "rider" },
@@ -83,7 +81,10 @@ const NewPromotionForm: FC<Props> = ({ handleBack }) => {
     { label: "5 star rating is equal to", value: "rider_ratings" },
   ];
 
-  const amountTypeOptions = [{ label: "Percentage", value: "percentage" }];
+  const amountTypeOptions = [
+    { label: "Percentage", value: "percentage" },
+    { label: "Fixed", value: "fixed" },
+  ];
 
   const formik = useFormik({
     initialValues,
@@ -202,6 +203,11 @@ const NewPromotionForm: FC<Props> = ({ handleBack }) => {
                 label="Count"
                 {...formik.getFieldProps("count")}
                 error={formik.touched.count ? formik.errors.count : undefined}
+                onChange={(e) => {
+                  if (verifyIsDigit(e.target.value)) {
+                    formik.setFieldValue("count", e.target.value);
+                  }
+                }}
               />
             )}
             <SelectField
@@ -218,11 +224,21 @@ const NewPromotionForm: FC<Props> = ({ handleBack }) => {
               label="Value"
               {...formik.getFieldProps("value")}
               error={formik.touched.value ? formik.errors.value : undefined}
+              onChange={(e) => {
+                if (verifyIsDigit(e.target.value)) {
+                  formik.setFieldValue("value", e.target.value);
+                }
+              }}
             />
             <TextField
               label="Total users to use the code"
               {...formik.getFieldProps("cap")}
               error={formik.touched.cap ? formik.errors.cap : undefined}
+              onChange={(e) => {
+                if (verifyIsDigit(e.target.value)) {
+                  formik.setFieldValue("cap", e.target.value);
+                }
+              }}
             />
             {isManualPromo && (
               <TextField
@@ -233,6 +249,11 @@ const NewPromotionForm: FC<Props> = ({ handleBack }) => {
                     ? formik.errors.total_quantity
                     : undefined
                 }
+                onChange={(e) => {
+                  if (verifyIsDigit(e.target.value)) {
+                    formik.setFieldValue("total_quantity", e.target.value);
+                  }
+                }}
               />
             )}
             <TextField
