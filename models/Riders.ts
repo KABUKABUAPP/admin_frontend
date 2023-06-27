@@ -9,7 +9,7 @@ export interface RidersTableBodyData {
 }
 
 export interface MappedRider extends RidersTableBodyData {
-  isBlocked: boolean
+  isBlocked: boolean;
 }
 
 export interface Rider {
@@ -65,6 +65,7 @@ export interface ViewRiderResponse {
     full_name: string;
     phone_number: string;
     email: string;
+    isBlocked:boolean;
     total_trips: number;
     total_spent: number;
     profile_image: string;
@@ -83,8 +84,8 @@ export interface MappedViewRider {
     address: string;
     tripCount: number;
     rating: number;
-    isBlocked: boolean
-    id: string
+    isBlocked: boolean;
+    id: string;
   };
   financials: {
     total: string;

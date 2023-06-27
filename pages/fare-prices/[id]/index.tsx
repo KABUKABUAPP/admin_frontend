@@ -84,8 +84,13 @@ const FarePrice: NextPage = () => {
               <>
                 <FarePriceCard
                   title="Driver Fee"
-                  handleEdit={() => {
-                    setModalContent(<EditDriverFeeForm />);
+                  handleEdit={({ monthlyPayment, sharpPayment }) => {
+                    setModalContent(
+                      <EditDriverFeeForm
+                        currentMontlyPayment={monthlyPayment}
+                        currentSharpPayment={sharpPayment}
+                      />
+                    );
                   }}
                   cardData={[
                     {

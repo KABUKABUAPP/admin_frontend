@@ -31,7 +31,7 @@ export const ridersApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['riders'],
+  tagTypes: ['riders', 'rider'],
   endpoints: (build) => ({
     getAllRides: build.query<MappedRidersData, GetAllRidersQuery>({
       query: ({ limit, page, search, order, status }) => ({
@@ -48,7 +48,7 @@ export const ridersApi = createApi({
                 imageUrl: rider?.profile_image,
                 location: "",
                 riderId: rider._id,
-                status: "",
+                status: rider?.isBlocked === true ? "Blocked" : "Active",
                 totalTrips: 0,
                 walletBalance: rider?.wallet_balance,
                 isBlocked: rider?.isBlocked
@@ -66,6 +66,7 @@ export const ridersApi = createApi({
       query: ({ id, status }) => ({
         url: `admin/rider/view/${id}?status=${status}`,
       }),
+      providesTags: ['rider'],
       transformResponse: (response: ViewRiderResponse) => {
         if (!response) return <MappedViewRider>{};
         return {
@@ -75,7 +76,7 @@ export const ridersApi = createApi({
             tripCount: response?.data?.total_trips,
             rating: response?.data?.average_rating?.value,
             image: response?.data?.profile_image,
-            isBlocked: false,
+            isBlocked: response?.data?.isBlocked,
             id: response?.data?._id
           },
           financials: {
@@ -92,10 +93,10 @@ export const ridersApi = createApi({
     }),
     toggleBlockRider:build.mutation<any, BlockDriverQuery>({
       query: ({ reason, driverId }) => ({
-        url: `admin/driver/block-unblock/${driverId}?reason=${reason}`,
+        url: `admin/rider/block-unblock/${driverId}?reason=${reason}`,
         method: "PUT",
       }),
-      invalidatesTags: ["riders"],
+      invalidatesTags: ["riders", "rider"],
     }),
   }),
 });

@@ -6,7 +6,13 @@ import FarePriceItem from "./FarePriceItem";
 
 interface Props {
   title?: string;
-  handleEdit?: () => void;
+  handleEdit?: ({
+    monthlyPayment,
+    sharpPayment,
+  }: {
+    monthlyPayment: string;
+    sharpPayment: string;
+  }) => void;
   cardData?: { title: string; body: string }[];
 }
 
@@ -20,7 +26,11 @@ const FarePriceCard: FC<Props> = ({ title, handleEdit, cardData }) => {
           color="tetiary"
           icon={<EditIcon />}
           handleClick={() => {
-            if (handleEdit) handleEdit();
+            if (handleEdit && cardData)
+              handleEdit({
+                monthlyPayment: cardData[0].body,
+                sharpPayment: cardData[1].body,
+              });
           }}
         />
       </div>

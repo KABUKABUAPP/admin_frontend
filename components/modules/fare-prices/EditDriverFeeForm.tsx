@@ -1,4 +1,5 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
+import { useRouter } from "next/router";
 
 import { motion } from "framer-motion";
 import useClickOutside from "@/hooks/useClickOutside";
@@ -8,21 +9,55 @@ import Button from "@/components/ui/Button/Button";
 import { useFormik, FormikProvider, Form } from "formik";
 import { EditDriverFeeValidation } from "@/validationschemas/EditDriverFeeValidation";
 import { verifyIsDigit } from "@/utils";
+import { useUpdateDriverFeeMutation } from "@/api-services/farePricesService";
+import { toast } from "react-toastify";
 
 const initialValues = {
   monthlyPayment: "",
   sharpPayment: "",
 };
 
-const EditDriverFeeForm: FC = () => {
+interface Props {
+  currentMontlyPayment: string;
+  currentSharpPayment: string;
+}
+
+const EditDriverFeeForm: FC<Props> = ({
+  currentMontlyPayment,
+  currentSharpPayment,
+}) => {
   const { setModalContent } = useModalContext();
   const ref = useClickOutside<HTMLDivElement>(() => setModalContent(null));
+  const [updateDriverFee, { isLoading, isSuccess, error }] =
+    useUpdateDriverFeeMutation();
+  const { id } = useRouter().query;
 
   const formik = useFormik({
     initialValues,
     validationSchema: EditDriverFeeValidation,
-    onSubmit: (values) => {},
+    onSubmit: (values) => {
+      const payload = {
+        driver_fee_monthly_payment: Number(values.monthlyPayment),
+        driver_fee_sharp_payment: Number(values.sharpPayment),
+      };
+
+      updateDriverFee({ payload, id: String(id) });
+    },
   });
+
+  useEffect(() => {
+    if (error && "data" in error) {
+      const { message }: any = error.data;
+      toast.error(message);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Driver fee updated succesfully");
+      setModalContent(null)
+    }
+  }, [isSuccess]);
 
   return (
     <FormikProvider value={formik}>
@@ -86,6 +121,8 @@ const EditDriverFeeForm: FC = () => {
                 className="w-full"
                 size="large"
                 type="submit"
+                disabled={isLoading}
+                loading={isLoading}
               />
             </div>
           </div>

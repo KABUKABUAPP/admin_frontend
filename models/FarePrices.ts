@@ -36,7 +36,7 @@ export interface FarePricesMappedData {
 
 export interface GetAllFarePricesQuery {
   search: string;
-  order: string
+  order: string;
 }
 
 export interface ViewFarePriceResponse {
@@ -124,4 +124,24 @@ export interface CreateFarePriceResponse {
     __v: 0;
   };
   message: string;
+}
+
+export interface UpdateDriverFeeQuery {
+  payload: {
+    driver_fee_monthly_payment: number;
+    driver_fee_sharp_payment: number;
+  };
+  id: string;
+}
+
+export interface UpdateFareQuery {
+  payload: {
+    base_fare: number;
+    distance_per_km: number;
+    time_per_min: number;
+    state_levy: number;
+    booking_fee: number;
+    waiting_time_per_min: number;
+  };
+  id: string
 }

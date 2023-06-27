@@ -55,7 +55,7 @@ const Rider: NextPage = () => {
 
   useEffect(() => {
     if (unblockSuccess) {
-      toast.success("Driver Successfully Unblocked");
+      toast.success("Rider Successfully Unblocked");
     }
   }, [unblockSuccess]);
 
@@ -95,7 +95,7 @@ const Rider: NextPage = () => {
               disabled={unblockLoading}
               className="!bg-[#1FD11B] !text-[#FFFFFF]"
               onClick={() => {
-                unblockRider({ driverId: String(id), reason: "" });
+                unblockRider({ driverId: String(id), reason: "unblock" });
               }}
             />
           )}
