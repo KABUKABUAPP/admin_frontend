@@ -1,4 +1,5 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
+import { useRouter } from "next/router";
 
 import { motion } from "framer-motion";
 import useClickOutside from "@/hooks/useClickOutside";
@@ -8,6 +9,8 @@ import Button from "@/components/ui/Button/Button";
 import { useFormik, FormikProvider, Form } from "formik";
 import { EditNormalFeesValidation } from "@/validationschemas/EditNormalFeesValidation";
 import { verifyIsDigit } from "@/utils";
+import { useUpdateFarePriceMutation } from "@/api-services/farePricesService";
+import { toast } from "react-toastify";
 
 const initialValues = {
   baseFare: "",
@@ -21,12 +24,41 @@ const initialValues = {
 const EditNormalFeesForm: FC = () => {
   const { setModalContent } = useModalContext();
   const ref = useClickOutside<HTMLDivElement>(() => setModalContent(null));
+  const [updateFare, { isLoading, isSuccess, error }] =
+  useUpdateFarePriceMutation();
+  const { id } = useRouter().query;
 
   const formik = useFormik({
     initialValues,
     validationSchema: EditNormalFeesValidation,
-    onSubmit: (values) => {},
+    onSubmit: (values) => {
+      const payload = {
+        base_fare: Number(values.baseFare),
+        distance_per_km: Number(values.distance),
+        time_per_min: Number(values.time),
+        state_levy: Number(values.lasgLevy),
+        booking_fee: Number(values.bookingFee),
+        waiting_time_per_min: Number(values.waitingTime),
+      }
+
+      updateFare({payload, id: String(id)})
+    },
   });
+
+  useEffect(() => {
+    if (error && "data" in error) {
+      const { message }: any = error.data;
+      toast.error(message);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Fare price updated succesfully");
+      setModalContent(null)
+    }
+  }, [isSuccess]);
+
 
   return (
     <FormikProvider value={formik}>
@@ -156,6 +188,8 @@ const EditNormalFeesForm: FC = () => {
                 className="w-full"
                 size="large"
                 type="submit"
+                disabled={isLoading}
+                loading={isLoading}
               />
             </div>
           </div>

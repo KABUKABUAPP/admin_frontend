@@ -6,11 +6,12 @@ import Button from "@/components/ui/Button/Button";
 interface Props {
   walletBalance?: string | number;
   total?: string | number;
+  bg?: string
 }
 
-const FinancialsCard: FC<Props> = ({ walletBalance, total }) => {
+const FinancialsCard: FC<Props> = ({ walletBalance, total, bg='#FFFFFF' }) => {
   return (
-    <Card>
+    <Card bg={bg}>
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <p className="text-lg font-semibold">Financials</p>

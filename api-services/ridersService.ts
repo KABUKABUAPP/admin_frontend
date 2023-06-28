@@ -12,7 +12,9 @@ import {
   MappedViewRider,
   ViewRiderQuery,
   ViewRiderResponse,
+  MappedRider,
 } from "@/models/Riders";
+import { BlockDriverQuery } from "@/models/Drivers";
 
 export const ridersApi = createApi({
   reducerPath: "ridersApi",
@@ -29,24 +31,27 @@ export const ridersApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ['riders', 'rider'],
   endpoints: (build) => ({
     getAllRides: build.query<MappedRidersData, GetAllRidersQuery>({
       query: ({ limit, page, search, order, status }) => ({
         url: `admin/rider/all?limit=${limit}&page=${page}&search=${search}&order=${order}&status=${status}`,
       }),
+      providesTags: ['riders'],
       transformResponse: (response: GetAllRidersResponse) => {
         if (!response) return {} as MappedRidersData;
         else {
-          const mappedReponse: RidersTableBodyData[] =
+          const mappedReponse: MappedRider[] =
             response.data.drivers.map((rider) => {
               return {
                 fullName: rider?.full_name,
                 imageUrl: rider?.profile_image,
                 location: "",
                 riderId: rider._id,
-                status: "",
+                status: rider?.isBlocked === true ? "Blocked" : "Active",
                 totalTrips: 0,
                 walletBalance: rider?.wallet_balance,
+                isBlocked: rider?.isBlocked
               };
             });
 
@@ -61,6 +66,7 @@ export const ridersApi = createApi({
       query: ({ id, status }) => ({
         url: `admin/rider/view/${id}?status=${status}`,
       }),
+      providesTags: ['rider'],
       transformResponse: (response: ViewRiderResponse) => {
         if (!response) return <MappedViewRider>{};
         return {
@@ -69,7 +75,9 @@ export const ridersApi = createApi({
             address: '',
             tripCount: response?.data?.total_trips,
             rating: response?.data?.average_rating?.value,
-            image: response?.data?.profile_image
+            image: response?.data?.profile_image,
+            isBlocked: response?.data?.isBlocked,
+            id: response?.data?._id
           },
           financials: {
             total: response?.data?.total_spent?.toString(),
@@ -83,7 +91,14 @@ export const ridersApi = createApi({
         };
       },
     }),
+    toggleBlockRider:build.mutation<any, BlockDriverQuery>({
+      query: ({ reason, driverId }) => ({
+        url: `admin/rider/block-unblock/${driverId}?reason=${reason}`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["riders", "rider"],
+    }),
   }),
 });
 
-export const { useGetAllRidesQuery, useViewRiderQuery } = ridersApi;
+export const { useGetAllRidesQuery, useViewRiderQuery, useToggleBlockRiderMutation } = ridersApi;

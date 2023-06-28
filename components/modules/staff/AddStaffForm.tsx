@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import Card from "@/components/common/Card";
@@ -9,9 +9,12 @@ import { useFormik, Form, FormikProvider } from "formik";
 import { useCreateStaffMutation } from "@/api-services/staffService";
 import { useGetRolesQuery } from "@/api-services/settingsService";
 import SelectField from "@/components/ui/Input/SelectField";
-import { nigerianStates } from "@/constants";
 import { toast } from "react-toastify";
 import { verifyIsDigit } from "@/utils";
+import {
+  useGetNigerianCityByStateQuery,
+  useGetNigerianStatesQuery,
+} from "@/api-services/geoLocationService";
 
 const initialValues = {
   first_name: "",
@@ -27,6 +30,7 @@ const initialValues = {
 
 const AddStaffForm: FC = () => {
   const router = useRouter();
+  const [selectedStateId, setSelectedStateId] = useState<string>("");
   const [createStaff, { data, isLoading, error, isSuccess }] =
     useCreateStaffMutation();
   const { data: roles } = useGetRolesQuery(
@@ -37,13 +41,38 @@ const AddStaffForm: FC = () => {
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
+  const {
+    data: states,
+    isLoading: statesLoading,
+    error: statesError,
+    refetch: refetchStates,
+  } = useGetNigerianStatesQuery(null);
+
+  const {
+    data: cities,
+    isLoading: citiesLoading,
+    error: citiesError,
+    refetch: refetchCities,
+  } = useGetNigerianCityByStateQuery(
+    { id: selectedStateId },
+    { skip: !selectedStateId, refetchOnMountOrArgChange: true }
+  );
+
   const formik = useFormik({
     initialValues,
     validationSchema: AddStaffValidation,
     onSubmit: (values) => {
-      createStaff(values);
+      const stateName = states?.filter((s)=>s.value==values.state)[0].label as string
+      createStaff({...values, state: stateName});
     },
   });
+
+  useEffect(() => {
+    if (formik.values.state && states?.length) {
+      const stateId = states.filter((s) => s.value === formik.values.state)[0]?.value as string;
+      if (stateId) setSelectedStateId(stateId);
+    }
+  }, [formik.values.state, states]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -85,9 +114,7 @@ const AddStaffForm: FC = () => {
               label="Email"
               placeholder="Email here"
               {...formik.getFieldProps("email")}
-              error={
-                formik.touched.email ? formik.errors.email : undefined
-              }
+              error={formik.touched.email ? formik.errors.email : undefined}
             />
             <TextField
               label="Password"
@@ -102,11 +129,13 @@ const AddStaffForm: FC = () => {
               placeholder="2333333333"
               {...formik.getFieldProps("phone_number")}
               error={
-                formik.touched.phone_number ? formik.errors.phone_number : undefined
+                formik.touched.phone_number
+                  ? formik.errors.phone_number
+                  : undefined
               }
-              onChange={(e)=>{
-                if(verifyIsDigit(e.target.value)){
-                  formik.setFieldValue('phone_number', e.target.value)
+              onChange={(e) => {
+                if (verifyIsDigit(e.target.value)) {
+                  formik.setFieldValue("phone_number", e.target.value);
                 }
               }}
             />
@@ -133,10 +162,8 @@ const AddStaffForm: FC = () => {
             />
             <div className="flex justify-between gap-3 max-sm:flex-col">
               <SelectField
-                options={[...nigerianStates].map((i) => ({
-                  label: i,
-                  value: i,
-                }))}
+                options={cities ? cities : []}
+                disabled={!cities?.length}
                 label="City"
                 placeholder="City here"
                 className="w-full"
@@ -144,7 +171,8 @@ const AddStaffForm: FC = () => {
                 error={formik.touched.city ? formik.errors.city : undefined}
               />
               <SelectField
-                options={[{ label: "Nigeria", value: "Nigeria" }]}
+                options={states ? states : []}
+                disabled={!states?.length}
                 label="State"
                 placeholder="Lagos State"
                 className="w-full"

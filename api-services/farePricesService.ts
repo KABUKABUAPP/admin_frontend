@@ -11,8 +11,10 @@ import {
   FarePricesTableData,
   GetAllFarePricesQuery,
   GetAllFarePricesResponse,
+  UpdateDriverFeeQuery,
+  UpdateFareQuery,
   ViewFarePriceResponse,
-  ViewFareQuery
+  ViewFareQuery,
 } from "@/models/FarePrices";
 
 export const farePricesApi = createApi({
@@ -32,7 +34,7 @@ export const farePricesApi = createApi({
   }),
   endpoints: (build) => ({
     getAllFarePrices: build.query<FarePricesMappedData, GetAllFarePricesQuery>({
-      query: ({search, order}) => ({
+      query: ({ search, order }) => ({
         url: `admin/price/all?search=${search}&order=${order}`,
       }),
       transformResponse: (response: GetAllFarePricesResponse) => {
@@ -56,24 +58,47 @@ export const farePricesApi = createApi({
     }),
 
     viewFarePrice: build.query<ViewFarePriceResponse, ViewFareQuery>({
-      query: ({ id })=>({
-        url: `admin/price/view/${id}`
-      })
+      query: ({ id }) => ({
+        url: `admin/price/view/${id}`,
+      }),
     }),
-    createFarePrice: build.mutation<CreateFarePriceResponse, CreateFarePricePayload>({
-      query: (body)=>({
-        url: 'admin/price/create',
-        method: 'POST',
-        body
-      })
+    createFarePrice: build.mutation<
+      CreateFarePriceResponse,
+      CreateFarePricePayload
+    >({
+      query: (body) => ({
+        url: "admin/price/create",
+        method: "POST",
+        body,
+      }),
     }),
     toggleSurge: build.mutation({
-      query: ()=>({
+      query: () => ({
         url: `admin/price/toggle-surge/644398d4b0480f78a891ba96`,
-        method: ''
-      })
-    })
+        method: "",
+      }),
+    }),
+    updateDriverFee: build.mutation<any, UpdateDriverFeeQuery>({
+      query: ({ id, payload: body }) => ({
+        url: `admin/price/update/${id}`,
+        method: "PUT",
+        body,
+      }),
+    }),
+    updateFarePrice: build.mutation<any, UpdateFareQuery>({
+      query: ({ id, payload: body }) => ({
+        url: `admin/price/update/${id}`,
+        method: "PUT",
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useGetAllFarePricesQuery, useViewFarePriceQuery, useCreateFarePriceMutation } = farePricesApi
+export const {
+  useGetAllFarePricesQuery,
+  useViewFarePriceQuery,
+  useCreateFarePriceMutation,
+  useUpdateDriverFeeMutation,
+  useUpdateFarePriceMutation,
+} = farePricesApi;

@@ -76,6 +76,7 @@ const Hub: NextPage = () => {
                   fullName={data.inspectorFullname}
                   address={data.inspectorAddress}
                   phone={data.inspectorPhone}
+                  inspectorId={data.inspectorId}
                 />
               </div>
             }
@@ -101,103 +102,3 @@ const Hub: NextPage = () => {
 
 export default Hub;
 
-const mockCars = [
-  {
-    carColor: "Black",
-    carId: "12345",
-    carImage: "/testUser.jpg",
-    carModel: "Toyota Corolla 2020",
-    plateNumber: "ABC 123 JYK",
-  },
-  {
-    carColor: "Black",
-    carId: "12345",
-    carImage: "/testUser.jpg",
-    carModel: "Toyota Corolla 2020",
-    plateNumber: "ABC 123 JYK",
-  },
-  {
-    carColor: "Black",
-    carId: "12345",
-    carImage: "/testUser.jpg",
-    carModel: "Toyota Corolla 2020",
-    plateNumber: "ABC 123 JYK",
-  },
-  {
-    carColor: "Black",
-    carId: "12345",
-    carImage: "/testUser.jpg",
-    carModel: "Toyota Corolla 2020",
-    plateNumber: "ABC 123 JYK",
-  },
-  {
-    carColor: "Black",
-    carId: "12345",
-    carImage: "/testUser.jpg",
-    carModel: "Toyota Corolla 2020",
-    plateNumber: "ABC 123 JYK",
-  },
-  {
-    carColor: "Black",
-    carId: "12345",
-    carImage: "/testUser.jpg",
-    carModel: "Toyota Corolla 2020",
-    plateNumber: "ABC 123 JYK",
-  },
-  {
-    carColor: "Black",
-    carId: "12345",
-    carImage: "/testUser.jpg",
-    carModel: "Toyota Corolla 2020",
-    plateNumber: "ABC 123 JYK",
-  },
-  {
-    carColor: "Black",
-    carId: "12345",
-    carImage: "/testUser.jpg",
-    carModel: "Toyota Corolla 2020",
-    plateNumber: "ABC 123 JYK",
-  },
-  {
-    carColor: "Black",
-    carId: "12345",
-    carImage: "/testUser.jpg",
-    carModel: "Toyota Corolla 2020",
-    plateNumber: "ABC 123 JYK",
-  },
-  {
-    carColor: "Black",
-    carId: "12345",
-    carImage: "/testUser.jpg",
-    carModel: "Toyota Corolla 2020",
-    plateNumber: "ABC 123 JYK",
-  },
-  {
-    carColor: "Black",
-    carId: "12345",
-    carImage: "/testUser.jpg",
-    carModel: "Toyota Corolla 2020",
-    plateNumber: "ABC 123 JYK",
-  },
-  {
-    carColor: "Black",
-    carId: "12345",
-    carImage: "/testUser.jpg",
-    carModel: "Toyota Corolla 2020",
-    plateNumber: "ABC 123 JYK",
-  },
-  {
-    carColor: "Black",
-    carId: "12345",
-    carImage: "/testUser.jpg",
-    carModel: "Toyota Corolla 2020",
-    plateNumber: "ABC 123 JYK",
-  },
-  {
-    carColor: "Black",
-    carId: "12345",
-    carImage: "/testUser.jpg",
-    carModel: "Toyota Corolla 2020",
-    plateNumber: "ABC 123 JYK",
-  },
-];

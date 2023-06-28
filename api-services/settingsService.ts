@@ -8,6 +8,7 @@ import {
   CreateAdminPayload,
   CreateAdminResponse,
   CreateRolePayload,
+  DeletePromoQuery,
   GenerateAutomaticPromoPayload,
   GenerateManualPromoPayload,
   GetRolesQuery,
@@ -41,7 +42,7 @@ export const settingsApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["roles"],
+  tagTypes: ["roles", "all-promos"],
   endpoints: (build) => ({
     createAdmin: build.mutation<CreateAdminResponse, CreateAdminPayload>({
       query: (payload) => ({
@@ -61,6 +62,7 @@ export const settingsApi = createApi({
       query: ({ limit, page, status }) => ({
         url: `admin/promotions/all/${status}?limit=${limit}&page=${page}`,
       }),
+      providesTags: ["all-promos"],
       transformResponse: (response: ViewAllPromosResponse) => {
         if (!response) return <MappedPromoResponse>{};
         else {
@@ -136,6 +138,13 @@ export const settingsApi = createApi({
         method: "POST",
       }),
     }),
+    deletePromo: build.mutation<any, DeletePromoQuery>({
+      query: ({ promoId }) => ({
+        url: `admin/promotions/delete/${promoId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["all-promos"]
+    }),
     getRoles: build.query<MappedGetRoles, GetRolesQuery>({
       query: ({ limit, page }) => ({
         url: `admin/role/all?limit=${limit}&page=${page}&search=`,
@@ -206,5 +215,6 @@ export const {
   useCreateRoleMutation,
   useUpdateRoleMutation,
   useCreateAutomaticPromoMutation,
-  useCreateManualPromoMutation
+  useCreateManualPromoMutation,
+  useDeletePromoMutation
 } = settingsApi;

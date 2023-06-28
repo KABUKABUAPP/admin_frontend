@@ -56,7 +56,6 @@ const CreateRole: FC<Props> = ({ handleBack }) => {
     validationSchema: CreateRoleValidationSchema,
     onSubmit: (values) => {
       const payload = generatePayload({ level: 4, name: values.title });
-      console.log(payload);
       createRole(payload);
     },
   });
@@ -73,8 +72,8 @@ const CreateRole: FC<Props> = ({ handleBack }) => {
     const mapped = roleOptions.map((role) => {
       if (role.label === label) {
         if (key === "isChecked") return { ...role, isChecked: checked };
-        else if (key === "read") return { ...role, read: checked };
-        else if (key === "write") return { ...role, write: checked };
+        else if (key === "read") return { ...role, read: checked, write: false };
+        else if (key === "write") return { ...role, write: checked, read: false };
         return role;
       }
       return role;

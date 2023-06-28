@@ -6,11 +6,14 @@ import TextField from "@/components/ui/Input/TextField/TextField";
 import Button from "@/components/ui/Button/Button";
 import { useFormik, Form, FormikProvider } from "formik";
 import { toast } from "react-toastify";
-import { nigerianStates } from "@/constants";
 import NewInspectorValidations from "@/validationschemas/AddInspectorSchema";
 import SelectField from "@/components/ui/Input/SelectField";
 import { useAddNewInspectorMutation } from "@/api-services/inspectorsService";
 import { verifyIsDigit } from "@/utils";
+import {
+  useGetNigerianCityByStateQuery,
+  useGetNigerianStatesQuery,
+} from "@/api-services/geoLocationService";
 
 const initialValues = {
   first_name: "",
@@ -23,8 +26,26 @@ const initialValues = {
 };
 
 const AddInspectorForm: FC = () => {
+  const [selectedStateId, setSelectedStateId] = useState<string>("");
   const [addInspector, { isLoading, isError, isSuccess }] =
     useAddNewInspectorMutation();
+
+  const {
+    data: states,
+    isLoading: statesLoading,
+    error: statesError,
+    refetch: refetchStates,
+  } = useGetNigerianStatesQuery(null);
+
+  const {
+    data: cities,
+    isLoading: citiesLoading,
+    error: citiesError,
+    refetch: refetchCities,
+  } = useGetNigerianCityByStateQuery(
+    { id: selectedStateId },
+    { skip: !selectedStateId, refetchOnMountOrArgChange: true }
+  );
 
   const router = useRouter();
 
@@ -32,9 +53,18 @@ const AddInspectorForm: FC = () => {
     initialValues: initialValues,
     validationSchema: NewInspectorValidations,
     onSubmit: (values) => {
-      addInspector(values);
+      const stateName = states?.filter((s)=>s.value==values.state)[0].label as string
+      addInspector({...values, state: stateName});
     },
   });
+
+  useEffect(() => {
+    if (formik.values.state && states?.length) {
+      const stateId = states.filter((s) => s.value === formik.values.state)[0]
+        ?.value as string;
+      if (stateId) setSelectedStateId(stateId);
+    }
+  }, [formik.values.state, states]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -100,9 +130,12 @@ const AddInspectorForm: FC = () => {
               />
               <div className="flex justify-between gap-3 max-sm:flex-col">
                 <div className="w-full">
-                  <TextField
+                  <SelectField
+                    options={cities ? cities : []}
+                    disabled={!cities?.length}
                     label="City"
-                    placeholder="Lagos Island"
+                    placeholder="City here"
+                    className="w-full"
                     {...formik.getFieldProps("city")}
                     error={formik.touched.city ? formik.errors.city : undefined}
                   />
@@ -110,12 +143,11 @@ const AddInspectorForm: FC = () => {
 
                 <div className="w-full">
                   <SelectField
+                    options={states ? states : []}
+                    disabled={!states?.length}
                     label="State"
                     placeholder="Lagos State"
-                    options={[...nigerianStates].map((i) => ({
-                      label: i,
-                      value: i,
-                    }))}
+                    className="w-full"
                     {...formik.getFieldProps("state")}
                     error={
                       formik.touched.state ? formik.errors.state : undefined

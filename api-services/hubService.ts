@@ -87,6 +87,7 @@ export const hubsApi = createApi({
             inspectorAddress: response.data.inspector?.house_address,
             inspectorPhone: response.data.inspector?.phone_number,
             inspectionCenterLocation: `${response.data.state}, ${response.data.city}, ${response.data.country}`,
+            inspectorId: response.data.inspector._id
           };
           return mapped;
         }

@@ -1,14 +1,17 @@
 import { useRouter } from "next/router";
+import React, { FC, useState, useEffect } from "react";
 
 import ChevronLeft from "@/components/icons/ChevronLeft";
 import Button from "@/components/ui/Button/Button";
-import React, { FC, useState } from "react";
 import PromotionItem from "./PromotionItem";
 import Subscriber from "./Subscriber";
 import { useViewPromoQuery } from "@/api-services/settingsService";
 import Loader from "@/components/ui/Loader/Loader";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Pagination from "@/components/common/Pagination";
+import { useDeletePromoMutation } from "@/api-services/settingsService";
+import TrashIcon from "@/components/icons/TrashIcon";
+import { toast } from "react-toastify";
 
 interface Props {
   handleBack: () => void;
@@ -28,16 +31,50 @@ const ViewPromotionItem: FC<Props> = ({ handleBack }) => {
     }
   );
 
+  const [
+    deletePromo,
+    {
+      isSuccess: promoDeleteSuccess,
+      isLoading: promoDeleteLoading,
+      error: promoDeleteError,
+    },
+  ] = useDeletePromoMutation();
+
+  useEffect(() => {
+    if (promoDeleteSuccess) {
+      toast.success("Promo Successfully Deleted");
+      handleBack();
+    }
+  }, [promoDeleteSuccess]);
+
+  useEffect(() => {
+    if (promoDeleteError && "data" in promoDeleteError) {
+      const { message }: any = promoDeleteError;
+      toast.error(message);
+    }
+  }, [promoDeleteError]);
+
   return (
     <div className="relative">
-      <span className="absolute top-3 left-0">
+      <div className="flex justify-between items-center">
         <Button
           onClick={handleBack}
           title="Back"
           variant="text"
           startIcon={<ChevronLeft />}
         />
-      </span>
+        {data && (
+          <Button
+            onClick={() => deletePromo({ promoId: String(promoId) })}
+            title="Delete Promotion"
+            color="secondary"
+            startIcon={<TrashIcon />}
+            loading={promoDeleteLoading}
+            disabled={promoDeleteLoading}
+          />
+        )}
+      </div>
+      <span className="absolute top-3 left-0"></span>
       {data && !error && !isLoading && (
         <>
           <div className="pt-14">
@@ -45,7 +82,9 @@ const ViewPromotionItem: FC<Props> = ({ handleBack }) => {
           </div>
 
           <div className="mt-6">
-            <p className="text-xl font-medium mb-6">{data.subscribers.totalCount ? 'Subscribers' : ''}</p>
+            <p className="text-xl font-medium mb-6">
+              {data.subscribers.totalCount ? "Subscribers" : ""}
+            </p>
             <div className="mt-2 grid grid-cols-2 gap-4">
               {data?.subscribers &&
                 data.subscribers.data.map((sub, idx) => (
