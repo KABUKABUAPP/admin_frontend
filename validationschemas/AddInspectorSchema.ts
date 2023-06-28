@@ -6,7 +6,7 @@ const NewInspectorValidations = yup.object({
     city: yup.string().required('Required'),
     state: yup.string().required('Required'),
     house_address: yup.string().required('Required'),
-    phone_number: yup.number().required('Required').test('len', 'Must be exactly 11 characters', val => String(val).trim().length === 11),
+    phone_number: yup.number().required('Required').test('len', 'Must be exactly 11 characters', val => String(val).trim().length === 10),
     email: yup.string().email().required('Required'),
 })
 
