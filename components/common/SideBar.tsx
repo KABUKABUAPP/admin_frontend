@@ -13,6 +13,7 @@ import { useUserContext } from "@/contexts/UserContext";
 import { motion } from "framer-motion";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN, USER_TOKEN } from "@/constants";
+import Logo from "./Logo";
 
 interface Props {
   data: SidebarLink[];
@@ -41,7 +42,7 @@ const SideBar: FC<Props> = ({ data }) => {
         </Modal>
       )}
       <aside className="border w-full max-w-[200px] h-full p-2 bg-[#FDFDFD] max-lg:hidden flex flex-col">
-        <p className="text-xl font-bold h-fit">Kabukabu</p>
+        <Logo />
         <div className="overflow-y-auto h-[85%] mt-2">
           <div className="flex-1">
             {data.map((item, idx) => {
