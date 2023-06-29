@@ -58,7 +58,7 @@ export interface GetAllHubsQuery {
   limit: number;
   page: number;
   order: string;
-  search: string
+  search: string;
 }
 
 export interface ViewHubResponse {
@@ -71,6 +71,9 @@ export interface ViewHubResponse {
     state: string;
     country: string;
     hub_images: string[];
+    cars_approved: number;
+    cars_declined: number;
+    cars_processed: number;
     inspector: {
       _id: string;
       first_name: string;
@@ -93,10 +96,10 @@ export interface ViewHubResponse {
 }
 
 export interface MappedViewHub {
-  inspectionCars: Car[]
+  inspectionCars: Car[];
   hubCars: string[];
   inspectionCenterId: string;
-  inspectionCenterImages: string[]
+  inspectionCenterImages: string[];
   inspectorFullname: string;
   inspectionCenterDateAdded: string;
   inspectionCenterLocation: string;
@@ -106,11 +109,11 @@ export interface MappedViewHub {
   processed: number;
   inspectorAddress: string;
   inspectorPhone: string;
-  inspectorId: string
+  inspectorId: string;
 }
 
 export interface ViewHubQuery {
-  hubId: string
+  hubId: string;
 }
 
 export interface Car {

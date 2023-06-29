@@ -78,9 +78,9 @@ export const hubsApi = createApi({
               response.data.created_at
             ).toDateString(),
             inspectionCenterTitle: response.data.name,
-            approved: 0,
-            declined: 0,
-            processed: 0,
+            approved: response.data.cars_approved,
+            declined: response.data.cars_declined,
+            processed: response.data.cars_processed,
             inspectorAddress: response.data.inspector?.house_address,
             inspectorPhone: response.data.inspector?.phone_number,
             inspectionCenterLocation: `${response.data.state}, ${response.data.city}, ${response.data.country}`,
@@ -94,7 +94,7 @@ export const hubsApi = createApi({
       query: (body) => ({
         url: `admin/hub/add-new`,
         method: "POST",
-        body
+        body,
       }),
     }),
   }),
