@@ -26,9 +26,21 @@ const initialValues = {
 };
 
 const AddInspectorForm: FC = () => {
-  const [selectedStateId, setSelectedStateId] = useState<string>("");
+  const [selectedStateName, setSelectedStateName] = useState<string>("");
   const [addInspector, { isLoading, isError, isSuccess }] =
     useAddNewInspectorMutation();
+
+  const router = useRouter();
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    validationSchema: NewInspectorValidations,
+    onSubmit: (values) => {
+      const stateName = states?.filter((s) => s.value == values.state)[0]
+        .label as string;
+      addInspector({ ...values, state: stateName });
+    },
+  });
 
   const {
     data: states,
@@ -43,26 +55,15 @@ const AddInspectorForm: FC = () => {
     error: citiesError,
     refetch: refetchCities,
   } = useGetNigerianCityByStateQuery(
-    { id: selectedStateId },
-    { skip: !selectedStateId, refetchOnMountOrArgChange: true }
+    { id: formik.values.state },
+    { skip: !formik.values.state, refetchOnMountOrArgChange: true }
   );
-
-  const router = useRouter();
-
-  const formik = useFormik({
-    initialValues: initialValues,
-    validationSchema: NewInspectorValidations,
-    onSubmit: (values) => {
-      const stateName = states?.filter((s)=>s.value==values.state)[0].label as string
-      addInspector({...values, state: stateName});
-    },
-  });
 
   useEffect(() => {
     if (formik.values.state && states?.length) {
-      const stateId = states.filter((s) => s.value === formik.values.state)[0]
-        ?.value as string;
-      if (stateId) setSelectedStateId(stateId);
+      const stateName = states.filter((s) => s.value === formik.values.state)[0]
+        ?.label as string;
+      if (stateName) setSelectedStateName(stateName);
     }
   }, [formik.values.state, states]);
 

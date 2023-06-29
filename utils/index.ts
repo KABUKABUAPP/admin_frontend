@@ -3,6 +3,11 @@ import Cookie from "js-cookie";
 
 import { milliSecondToSecondConversionRate } from "@/constants";
 
+export const getImageUrl = (img: File) => {
+  const objectUrl = URL.createObjectURL(img);
+  return objectUrl
+};
+
 export function assertIsNode(e: EventTarget | null): asserts e is Node {
   if (!e || !("nodeType" in e)) {
     throw new Error(`Node expected`);

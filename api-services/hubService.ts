@@ -73,13 +73,18 @@ export const hubsApi = createApi({
                 carId: "",
                 carImage: item,
                 plateNumber: "",
-                carModel: ""
+                carModel: "",
               };
             }),
             inspectionCenterId: response.data._id,
             inspectionCenterImages: [],
-            inspectorFullname: response.data.inspector?.last_name || '' + ' ' + response.data.inspector?.first_name || '',
-            inspectionCenterDateAdded:new Date(response.data.created_at).toDateString(),
+            inspectorFullname:
+              response.data.inspector?.last_name ||
+              "" + " " + response.data.inspector?.first_name ||
+              "",
+            inspectionCenterDateAdded: new Date(
+              response.data.created_at
+            ).toDateString(),
             inspectionCenterTitle: response.data.name,
             approved: 0,
             declined: 0,
@@ -87,13 +92,21 @@ export const hubsApi = createApi({
             inspectorAddress: response.data.inspector?.house_address,
             inspectorPhone: response.data.inspector?.phone_number,
             inspectionCenterLocation: `${response.data.state}, ${response.data.city}, ${response.data.country}`,
-            inspectorId: response.data.inspector._id
+            inspectorId: response.data.inspector._id,
           };
           return mapped;
         }
       },
     }),
+    addHub: build.mutation<any, FormData>({
+      query: (body) => ({
+        url: `admin/hub/add-new`,
+        method: "POST",
+        body
+      }),
+    }),
   }),
 });
 
-export const { useGetAllHubsQuery, useViewHubQuery } = hubsApi;
+export const { useGetAllHubsQuery, useViewHubQuery, useAddHubMutation } =
+  hubsApi;

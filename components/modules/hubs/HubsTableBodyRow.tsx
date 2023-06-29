@@ -24,7 +24,7 @@ const HubsTableBodyRow: FC<Props> = ({
       onClick={() => router.push(`/hubs/${hubId}`)}
       className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
     >
-      <div style={{ flex: 1 }} className="flex items-center">
+      <div style={{ flex: 1 }} className="flex items-center break-all">
         <Link href={`/hubs/${hubId}`}>
           <p className="text-xs font-bold cursor-pointer">{hubId}</p>
         </Link>
