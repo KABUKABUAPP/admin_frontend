@@ -67,15 +67,7 @@ export const hubsApi = createApi({
         else {
           const mapped: MappedViewHub = {
             inspectionCars: [] as Car[],
-            hubCars: response.data.hub_images.map((item) => {
-              return {
-                carColor: "",
-                carId: "",
-                carImage: item,
-                plateNumber: "",
-                carModel: "",
-              };
-            }),
+            hubCars: response.data.hub_images,
             inspectionCenterId: response.data._id,
             inspectionCenterImages: [],
             inspectorFullname:

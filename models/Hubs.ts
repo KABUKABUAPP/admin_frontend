@@ -94,7 +94,7 @@ export interface ViewHubResponse {
 
 export interface MappedViewHub {
   inspectionCars: Car[]
-  hubCars: Car[];
+  hubCars: string[];
   inspectionCenterId: string;
   inspectionCenterImages: string[]
   inspectorFullname: string;

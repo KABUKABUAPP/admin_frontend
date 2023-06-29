@@ -53,7 +53,7 @@ const Hub: NextPage = () => {
                 />
                 <CarDescriptionContainer
                   title="Cars in hub"
-                  cars={data.hubCars}
+                  cars={[]}
                 />
               </div>
             }
@@ -61,7 +61,8 @@ const Hub: NextPage = () => {
               <div className="flex flex-col gap-4">
                 <InspectionCenterDetails
                   id={data.inspectionCenterId}
-                  images={data.inspectionCenterImages}
+                  inspectorId={data.inspectorId}
+                  images={data.hubCars}
                   inspector={data.inspectorFullname}
                   addedOn={data.inspectionCenterDateAdded}
                   location={data.inspectorAddress}
