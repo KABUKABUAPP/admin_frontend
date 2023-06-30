@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 
 const Hubs: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(2);
+  const [pageSize, setPageSize] = useState(10);
   const [search, setSearch] = useState<string>("");
 
   const filterOptions = [

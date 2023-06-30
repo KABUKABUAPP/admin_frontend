@@ -42,14 +42,14 @@ const TopUpTableRow: FC<Props> = ({ data }) => {
       </div>
 
       <div style={{ flex: 2 }} className="flex items-center">
-        <Button
+        {/* <Button
           title="View Receipt"
           onClick={() => {
             setModalContent(
               <Receipt handleClose={() => setModalContent(null)} />
             );
           }}
-        />
+        /> */}
       </div>
     </div>
   );

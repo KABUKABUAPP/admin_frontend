@@ -17,15 +17,7 @@ const AddNew: FC = () => {
           firstRow={
             <>
               <p className="text-2xl font-semibold mb-2">Add New Car</p>
-              <CarImagesCard
-                images={[
-                  { image: "/testUser.jpg", imageId: "3" },
-                  { image: "/testUser.jpg", imageId: "3" },
-                  { image: "/testUser.jpg", imageId: "3" },
-                  { image: "/testUser.jpg", imageId: "3" },
-                  { image: "/testUser.jpg", imageId: "3" },
-                ]}
-              />
+              <CarImagesCard images={undefined} handleChange={()=>{}} handleDelete={()=>{}}/>
               <CarDetailsCard />
             </>
           }

@@ -4,6 +4,7 @@ import Card from "@/components/common/Card";
 import Avatar from "@/components/common/Avatar";
 import OriginIcon from "@/components/icons/OriginIcon";
 import Button from "@/components/ui/Button/Button";
+import { useRouter } from "next/router";
 
 interface Props {
   images: string[];
@@ -12,6 +13,7 @@ interface Props {
   location: string;
   inspector: string;
   addedOn: string;
+  inspectorId: string
 }
 
 const InspectionCenterDetails: FC<Props> = ({
@@ -21,7 +23,9 @@ const InspectionCenterDetails: FC<Props> = ({
   location,
   inspector,
   addedOn,
+  inspectorId
 }) => {
+  const router = useRouter();
   return (
     <Card>
       <div className="flex flex-col gap-2">
@@ -47,7 +51,9 @@ const InspectionCenterDetails: FC<Props> = ({
         <div className="flex items-center gap-3">
           <p className="text-sm font-semibold">Inspector: </p>
           <p className="text-sm font-semibold">{inspector}</p>
-          <Button title="View Inspector" variant="text" size="small" />
+          <Button title="View Inspector" variant="text" size="small" onClick={()=>{
+            router.push(`/inspectors/${inspectorId}`)
+          }}/>
         </div>
 
         <p className="text-sm font-semibold">Added on: {addedOn}</p>
