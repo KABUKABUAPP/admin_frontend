@@ -174,6 +174,8 @@ export interface ViewTripResponse {
       plate_number: string;
     };
     start_time: string;
+    end_point: [number, number];
+    start_point: [number, number];
     trip_completion_time: string;
   };
   message: string;
@@ -205,6 +207,8 @@ export interface MappedViewTripResponse {
   riderImage: string;
   driverImage: string;
   orderId: string;
+  endPoint: [number, number];
+  startPoint: [number, number];
 }
 
 export interface GetDriverTripHistoryQuery {
