@@ -66,6 +66,8 @@ export const tripsApi = createApi({
           driverImage: response?.data?.driver_details?.profile_image,
           riderImage: response.data.rider_details.profile_image,
           orderId: response.data.order_id,
+          startPoint: response?.data?.start_point,
+          endPoint: response?.data?.end_point,
         } as MappedViewTripResponse;
       },
     }),

@@ -20,6 +20,7 @@ import RaiseSosCard from "@/components/modules/Trips/RaiseSosCard";
 import ViewFeed from "@/components/modules/Trips/ViewFeed";
 import { useViewTripQuery } from "@/api-services/tripsService";
 import { useRouter } from "next/router";
+import StaticMap from "@/components/common/AppMap/StaticMap";
 
 import { io } from "socket.io-client";
 const socket = io("https://rideservice-dev.up.railway.app");
@@ -29,15 +30,15 @@ const ViewTrip: NextPage = () => {
   const { setModalContent } = useModalContext();
   const [isFeed, setIsFeed] = useState(false);
   const router = useRouter();
-  const [ currentCardSubTitle, setCurrentCardSubTitle ] = useState('')
+  const [currentCardSubTitle, setCurrentCardSubTitle] = useState("");
   const { id, tab } = router.query;
   const tabOptions = [undefined, "pending", "active", "completed", "declined"];
   const cardSubTitleMap: Record<string, string> = {
-    'pending': 'Driving to rider',
-    'active': 'Driving to destination',
-    'completed': 'Trip completed',
-    'declined': 'Cancelled order'
-  }
+    pending: "Driving to rider",
+    active: "Driving to destination",
+    completed: "Trip completed",
+    declined: "Cancelled order",
+  };
   enum Tab {
     TRIP_ORDERS,
     PENDING_TRIPS,
@@ -55,14 +56,13 @@ const ViewTrip: NextPage = () => {
     address: string;
   } | null>(null);
 
-  useEffect(()=>{
-    if(tab===undefined){
-      setCurrentCardSubTitle('Looking for driver')
+  useEffect(() => {
+    if (tab === undefined) {
+      setCurrentCardSubTitle("Looking for driver");
+    } else {
+      setCurrentCardSubTitle(cardSubTitleMap[`${tab}`]);
     }
-    else {
-      setCurrentCardSubTitle(cardSubTitleMap[`${tab}`])
-    }
-  },[tab])
+  }, [tab]);
 
   useEffect(() => {
     if (data) {
@@ -131,11 +131,11 @@ const ViewTrip: NextPage = () => {
         bottomIcon: <WalletIcon />,
       },
       {
-        topTitle: tripStarted ? "Trip started" : '',
-        topValue: tripStarted ? new Date(tripStarted).toUTCString() : '',
+        topTitle: tripStarted ? "Trip started" : "",
+        topValue: tripStarted ? new Date(tripStarted).toUTCString() : "",
         topIcon: <ClockIcon />,
-        bottomTitle: tripToEnd ? "Trip to end" : '',
-        bottomValue: tripToEnd ? new Date(tripToEnd).toUTCString() : '',
+        bottomTitle: tripToEnd ? "Trip to end" : "",
+        bottomValue: tripToEnd ? new Date(tripToEnd).toUTCString() : "",
         bottomIcon: <ClockIcon />,
       },
     ];
@@ -188,7 +188,15 @@ const ViewTrip: NextPage = () => {
                 />
               )}
               <div className="w-full h-full max-h-[550px] max-md:pl-0">
-                {liveLocation && <AppMap zoom={11} location={liveLocation} />}
+                
+                {tab !== "completed"
+                  ? liveLocation && <AppMap zoom={11} location={liveLocation} />
+                  : data && (
+                      <StaticMap
+                        endPoint={data.endPoint}
+                        startPoint={data.startPoint}
+                      />
+                    )}
               </div>
             </>
           }
