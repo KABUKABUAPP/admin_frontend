@@ -17,14 +17,14 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <UserProvider>
       <Provider store={reduxStore}>
-        <ModalProvider>
-          <EnlaredImageProvider>
+        <EnlaredImageProvider>
+          <ModalProvider>
             <CallProvider>
               <Component {...pageProps} />
               <ToastContainer />
             </CallProvider>
-          </EnlaredImageProvider>
-        </ModalProvider>
+          </ModalProvider>
+        </EnlaredImageProvider>
       </Provider>
     </UserProvider>
   );
