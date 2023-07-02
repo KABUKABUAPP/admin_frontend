@@ -12,12 +12,6 @@ export interface CreatePasswordPayload {
   otp: string;
 }
 
-
-export interface ResetPasswordPayload {
-  password: string;
-  otp: string
-}
-
 export interface LoginResponse {
   status: string;
   code: 200;

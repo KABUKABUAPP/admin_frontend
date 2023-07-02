@@ -5,7 +5,6 @@ import {
   CreatePasswordPayload,
   LoginPayload,
   LoginResponse,
-  ResetPasswordPayload,
 } from "@/models/Auth";
 import { secondsToMilliSeconds } from "@/utils";
 import Cookies from "js-cookie";
