@@ -1,7 +1,4 @@
 import React, { FC, useEffect, useState } from "react";
-import CarIcon from "../../icons/CarIcon";
-import s from "./styles.module.css";
-import LocationPinIcon from "@/components/icons/LocationPinIcon";
 
 import {
   GoogleMap,
