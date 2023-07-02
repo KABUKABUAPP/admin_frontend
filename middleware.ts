@@ -17,7 +17,7 @@ export function middleware(req: NextRequest) {
       const parsedUser = JSON.parse(user);
 
       let userAccessibleRoutes = routePermissionsMapping.map((rp) => {
-        if (parsedUser.permissions[`${rp.permissionLabel}`].read === true) {
+        if (parsedUser.permissions[`${rp.permissionLabel}`].read === true || parsedUser.permissions[`${rp.permissionLabel}`].write === true) {
           return rp.route;
         }
       });
