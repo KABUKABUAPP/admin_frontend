@@ -29,7 +29,7 @@ const LoginForm: FC = () => {
 
   const [login, { data, isLoading, error, isError }] = useLoginMutation();
 
-  const { setUser } = useUserContext()
+  const { setUser } = useUserContext();
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -46,15 +46,22 @@ const LoginForm: FC = () => {
       if ("data" in error) {
         const { message } = error.data as { message: string };
         toast.error(message);
-      }
-      else toast.error("Oops! Something went wrong")
+      } else toast.error("Oops! Something went wrong");
     }
   }, [error]);
 
   useEffect(() => {
     if (data) {
-      const { accessTokens, __v, ...rest } = data.data.loggedInAdmin
-      Cookies.set(ACCESS_TOKEN, accessTokens)
+      const { accessTokens, __v, ...rest } = data.data.loggedInAdmin;
+      Cookies.set(ACCESS_TOKEN, accessTokens);
+      const {
+        _id,
+        name,
+        updated_at,
+        __v: v,
+        level,
+        ...permissions
+      } = rest.role;
       const userData: User = {
         _id: rest._id,
         created_at: rest.created_at,
@@ -63,16 +70,16 @@ const LoginForm: FC = () => {
         isBlocked: rest.isBlocked,
         phone_number: rest.phone_number,
         role: rest.role.name,
-        hasResetDefaultPassword: rest.status, 
-        updated_at: rest.updated_at
-      }
-      Cookies.set(USER_TOKEN, JSON.stringify(userData))
-      setUser({...userData})
+        hasResetDefaultPassword: rest.status,
+        updated_at: rest.updated_at,
+        permissions: permissions,
+      };
+      Cookies.set(USER_TOKEN, JSON.stringify(userData));
+      setUser({ ...userData });
       toast.success("Login Successful");
-      router.push("/");
+      router.push("/dashboard");
     }
   }, [data]);
-
 
   return (
     <div className="w-full max-w-[70%] mx-auto py-6 px-2 max-sm:max-w-full">

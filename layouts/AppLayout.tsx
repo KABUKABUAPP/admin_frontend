@@ -2,7 +2,6 @@ import React, { FC, PropsWithChildren, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import SideBar from "@/components/common/SideBar";
 import sidebarNavLinks from "@/navigation/sidebarNavLinks";
-import Container from "@/components/common/Container";
 import { SidebarLink } from "@/models/SidebarLink";
 import Transition from "@/components/common/Transition";
 
@@ -30,7 +29,7 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
     } else {
       mutatedSidebarItems = sidebarItems.map((item) => {
         if ("subLinks" in item) {
-          if (pathname.includes(item.link) && item.title !== "Dashboard") {
+          if (pathname.includes(item.link)) {
             return { ...item, isActive: true };
           }
           else if(item.subLinks?.some((i)=>pathname.includes(i))){
@@ -38,7 +37,7 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
           }
           else return {...item, isActive: false}
         } else {
-          if (pathname.includes(item.link) && item.title !== "Dashboard") {
+          if (pathname.includes(item.link)) {
             return { ...item, isActive: true };
           }
           return { ...item, isActive: false };
