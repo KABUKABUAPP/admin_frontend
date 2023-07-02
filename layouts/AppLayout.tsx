@@ -53,24 +53,27 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
     const user = Cookies.get(USER_TOKEN);
     if (user) {
       const parsedUser = JSON.parse(user);
-      const acccessibleLinks = routePermissionsMapping.filter((item)=>{
-        if(parsedUser.permissions[`${item.permissionLabel}`].read === true){
-          return true
-        }
-        else return false
-      }).map((item)=>{
-        if(item.route === '/drivers') return '/drivers/active'
-        else return item.route
-      })
+      const acccessibleLinks = routePermissionsMapping
+        .filter((item) => {
+          if (
+            parsedUser.permissions[`${item.permissionLabel}`].read === true ||
+            parsedUser.permissions[`${item.permissionLabel}`].write === true
+          ) {
+            return true;
+          } else return false;
+        })
+        .map((item) => {
+          if (item.route === "/drivers") return "/drivers/active";
+          else return item.route;
+        });
 
-      const accessibleSidebarLinks = sidebarItems.filter((item)=>{
-        if(acccessibleLinks.indexOf(item.link) !== -1) return true
-        else return false
-      })
+      const accessibleSidebarLinks = sidebarItems.filter((item) => {
+        if (acccessibleLinks.indexOf(item.link) !== -1) return true;
+        else return false;
+      });
 
-      return accessibleSidebarLinks
-    }
-    else return [] as SidebarLink[]
+      return accessibleSidebarLinks;
+    } else return [] as SidebarLink[];
   };
 
   const [links, setLinks] = useState<SidebarLink[]>(sidebarNavLinks);
