@@ -46,27 +46,27 @@ export const dashboardApi = createApi({
         return [
           {
             title: "Total trips",
-            value: response.data.total_trips,
+            value: response?.data?.total_trips,
             iconBg: "#FFBF00",
           },
           {
             title: "Active trips",
-            value: response.data.active_trips,
+            value: response?.data?.active_trips,
             iconBg: "#2C3FEF",
           },
           {
             title: "SOS",
-            value: response.data.sos,
+            value: response?.data?.sos,
             iconBg: "#EF2C5B",
           },
           {
             title: "Pending trips",
-            value: response.data.pending_trips,
+            value: response?.data?.pending_trips,
             iconBg: "#FFBF00",
           },
           {
             title: "Total Earnings",
-            value: response.data.total_earnings,
+            value: response?.data?.total_earnings,
             iconBg: "#FFBF00",
           },
         ];

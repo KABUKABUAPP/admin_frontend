@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@djthoms/pretty-checkbox": "^3.1.0",
+    "@react-google-maps/api": "^2.18.1",
     "@reduxjs/toolkit": "^1.9.3",
     "@types/node": "18.14.1",
     "@types/react": "18.0.28",

@@ -93,26 +93,26 @@ export const settingsApi = createApi({
         if (!response) return <MappedViewResponse>{};
         else {
           const mappedPromo = {
-            promoCode: response.data.promotion.code,
-            status: response.data.promotion.active_status,
-            createdDate: response.data.promotion.createdAt,
-            expiryDate: response.data.promotion.expiry_date,
-            totalSubscribers: response.data.subscribers.pagination.totalCount,
-            promotionType: response.data.promotion.auto_or_manual,
-            id: response.data.promotion._id,
+            promoCode: response?.data?.promotion.code,
+            status: response?.data?.promotion?.active_status,
+            createdDate: response?.data?.promotion?.createdAt,
+            expiryDate: response?.data?.promotion?.expiry_date,
+            totalSubscribers: response?.data?.subscribers?.pagination?.totalCount,
+            promotionType: response?.data?.promotion?.auto_or_manual,
+            id: response?.data?.promotion?._id,
           };
 
           const mappedSubscribers = response.data.subscribers.data.map(
             (sub) => {
               return {
-                fullname: sub.user.full_name,
-                image: sub.user.profile_image,
-                id: sub.user._id,
+                fullname: sub?.user?.full_name,
+                image: sub?.user?.profile_image,
+                id: sub?.user?._id,
               };
             }
           );
 
-          const totalCount = response.data.subscribers.pagination.totalCount;
+          const totalCount = response?.data?.subscribers?.pagination?.totalCount;
 
           return {
             promo: mappedPromo,
@@ -154,12 +154,12 @@ export const settingsApi = createApi({
         if (!response) return <MappedGetRoles>{};
         else {
           const mappedRoles = response.data.data.map((role) => ({
-            id: role._id,
-            title: role.name,
-            roleCount: role.total_number_of_permissions,
+            id: role?._id,
+            title: role?.name,
+            roleCount: role?.total_number_of_permissions,
           }));
 
-          const totalCount = response.data.pagination.totalCount;
+          const totalCount = response?.data?.pagination?.totalCount;
 
           return { data: mappedRoles, totalCount };
         }

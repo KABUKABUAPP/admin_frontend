@@ -57,7 +57,7 @@ export const ridersApi = createApi({
 
           return {
             data: mappedReponse,
-            totalCount: response.data.pagination.totalCount,
+            totalCount: response?.data?.pagination?.totalCount,
           };
         }
       },
@@ -85,8 +85,8 @@ export const ridersApi = createApi({
           },
           nextOfKin: {
             fullname: response?.data?.next_of_kin.full_name,
-            relationship: response?.data?.next_of_kin.relationship,
-            phone: response?.data?.next_of_kin.phone_number?.toString(),
+            relationship: response?.data?.next_of_kin?.relationship,
+            phone: response?.data?.next_of_kin?.phone_number?.toString(),
           },
         };
       },

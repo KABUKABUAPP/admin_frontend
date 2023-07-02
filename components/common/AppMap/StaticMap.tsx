@@ -1,9 +1,13 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import CarIcon from "../../icons/CarIcon";
-import DestinationIcon from "../../icons/DestinationIcon";
-import GoogleMapReact from "google-map-react";
 import s from "./styles.module.css";
 import LocationPinIcon from "@/components/icons/LocationPinIcon";
+
+import {
+  GoogleMap,
+  DirectionsService,
+  DirectionsRenderer,
+} from "@react-google-maps/api";
 
 interface Props {
   startPoint: [number, number];
@@ -11,55 +15,73 @@ interface Props {
 }
 
 const StaticMap: FC<Props> = ({ startPoint, endPoint }) => {
-  const mapRef = React.createRef<any>();
+  const [directions, setDirections] = useState<any>(null);
 
-  const key = "";
-  // AIzaSyDYJFRC6Hn7pHOLdLEJgPvjUHTa-XHs8Kw
+  const containerStyle = {
+    width: "100%",
+    height: "100%",
+  };
+
+  const center = {
+    lat: -3.745,
+    lng: -38.523,
+  };
 
   useEffect(() => {
-    console.log(startPoint, endPoint);
-  }, [JSON.stringify(startPoint), endPoint]);
+    if (startPoint && endPoint) {
+      const origin = { lat: startPoint[0], lng: startPoint[1] };
+      const destination = { lat: endPoint[0], lng: endPoint[1] };
+
+      const directionsService = new window.google.maps.DirectionsService();
+      directionsService.route(
+        {
+          origin,
+          destination,
+          travelMode: window.google.maps.TravelMode.DRIVING,
+        },
+        (result, status) => {
+          if (status === window.google.maps.DirectionsStatus.OK) {
+            if (result) setDirections(result);
+          } else {
+            console.error("Error fetching directions:", status);
+          }
+        }
+      );
+    }
+  }, [startPoint, endPoint]);
 
   return (
     <div className="w-full h-full rounded-lg overflow-hidden" id="map">
-      <GoogleMapReact
-        ref={mapRef}
-        bootstrapURLKeys={{ key }}
-        defaultCenter={{ lat: startPoint[0], lng: startPoint[1] }}
-        // layerTypes={["TrafficLayer", "TransitLayer"]}
-        defaultZoom={12}
-      >
-        {startPoint.length && (
-          <StartMarker lat={startPoint[0]} lng={startPoint[1]} />
+      <GoogleMap mapContainerStyle={containerStyle} zoom={10} center={center}>
+        {directions && (
+          <DirectionsRenderer
+            directions={directions}
+            options={{
+              polylineOptions: {
+                strokeColor: "#000000",
+                strokeOpacity: 0.8,
+                strokeWeight: 4,
+              },
+            }}
+          />
         )}
-        {endPoint.length && <EndMarker lat={endPoint[0]} lng={endPoint[1]} />}
-      </GoogleMapReact>
+
+        <DirectionsService
+          options={{
+            destination: { lat: startPoint[0], lng: startPoint[1] },
+            origin: { lat: startPoint[0], lng: startPoint[1] },
+            travelMode: window.google.maps.TravelMode.DRIVING,
+          }}
+          callback={(result) => {
+            if (result !== null) {
+              // console.log(result)
+              // setDirections(result);
+            }
+          }}
+        />
+      </GoogleMap>
     </div>
   );
 };
 
 export default StaticMap;
-
-const StartMarker: FC<any> = ({ text, lat, lng }) => {
-  return (
-    <div
-      className={s["car-marker"]}
-      style={{ top: `${lat}px`, left: `${lng}px` }}
-    >
-      <span style={{ color: "#FFBF00" }}>
-        <CarIcon />
-      </span>
-      <p>{text}</p>
-    </div>
-  );
-};
-
-const EndMarker: FC<any> = ({ text, lat, lng }) => {
-  return (
-    <div>
-      <span style={{ color: "#FFBF00" }}>
-        <LocationPinIcon fill="#FFBF00" />
-      </span>
-    </div>
-  );
-};

@@ -33,16 +33,18 @@ const SideBar: FC<Props> = ({ data }) => {
           <LogoutConfirmationPopUp
             handleCancel={() => setIsModal(false)}
             handleLogout={() => {
-              setUser(null)
-              Cookies.remove(USER_TOKEN)
-              Cookies.remove(ACCESS_TOKEN)
+              setUser(null);
+              Cookies.remove(USER_TOKEN);
+              Cookies.remove(ACCESS_TOKEN);
               router.push("/auth/login");
             }}
           />
         </Modal>
       )}
       <aside className="border w-full max-w-[200px] h-full p-2 bg-[#FDFDFD] max-lg:hidden flex flex-col">
-        <Logo />
+        <div className="py-6">
+          <Logo />
+        </div>
         <div className="overflow-y-auto h-[85%] mt-2">
           <div className="flex-1">
             {data.map((item, idx) => {

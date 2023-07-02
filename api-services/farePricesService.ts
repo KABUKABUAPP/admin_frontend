@@ -43,10 +43,10 @@ export const farePricesApi = createApi({
           const mappedReponse: FarePricesTableData[] = response.data.data.map(
             (price) => {
               return {
-                city: price.city,
+                city: price?.city,
                 dateCreated: price?.created_at?.toString(),
-                profileId: price._id,
-                stateCountry: `${price.state}, ${price.country}`,
+                profileId: price?._id,
+                stateCountry: `${price?.state}, ${price?.country}`,
                 totalFares: 0,
               } as FarePricesTableData;
             }

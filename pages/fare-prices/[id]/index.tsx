@@ -115,7 +115,7 @@ const FarePrice: NextPage = () => {
                       body: `₦${data.data.distance_per_km}/km`,
                     },
                     { title: "Time", body: `₦${data.data.time_per_min}/min` },
-                    { title: "LASG Levy", body: `${data.data.state_levy}%` },
+                    { title: "VAT", body: `${data.data.state_levy}%` },
                     { title: "Booking Fee", body: `₦${data.data.booking_fee}` },
                     {
                       title: "Surge Multiplier",

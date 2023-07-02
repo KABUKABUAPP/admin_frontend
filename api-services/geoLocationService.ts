@@ -39,8 +39,8 @@ export const geoLocationApi = createApi({
         else {
           return response.data.data.map((state) => {
             return {
-              label: state.name,
-              value: state._id,
+              label: state?.name,
+              value: state?._id,
             };
           });
         }
@@ -55,8 +55,8 @@ export const geoLocationApi = createApi({
         else {
           return response.data.data.map((city) => {
             return {
-              label: city.name,
-              value: city._id,
+              label: city?.name,
+              value: city?._id,
             };
           });
         }

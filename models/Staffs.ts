@@ -85,6 +85,24 @@ export interface ViewStaff {
   created_at: string;
 }
 
+// {
+//   "_id": "649e923e68859917795f6bd9",
+//   "full_name": "edward cullen",
+//   "phone_number": "+2348023208744",
+//   "email": "babafemi.olasunmade@onboard.com.ng",
+//   "role": {
+//       "_id": "6484a32f118f1bbb48966ddd",
+//       "name": "dispute resolutor",
+//       "total_number_of_permissions": 6
+//   },
+//   "isBlocked": false,
+//   "status": true,
+//   "created_at": "2023-06-30T08:28:46.330Z",
+//   "updated_at": "2023-07-01T09:07:17.420Z",
+//   "__v": 0,
+//   "accessTokens": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OWU5MjNlNjg4NTk5MTc3OTVmNmJkOSIsImVtYWlsIjoiYmFiYWZlbWkub2xhc3VubWFkZUBvbmJvYXJkLmNvbS5uZyIsImlhdCI6MTY4ODIwMjQzN30.iIJUcj71myefvGIcJpew0ywMB1ZhXhUbJD7AFOLKIMQ"
+// }
+
 export interface ViewStaffResponse {
   status: string;
   code: number;

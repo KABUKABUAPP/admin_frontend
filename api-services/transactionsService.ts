@@ -44,7 +44,7 @@ export const transactionsApi = createApi({
                 date: tx?.createdAt,
                 narration: tx?.narration,
                 price: `${tx?.currency}${tx?.amount}`,
-                transactionId: String(tx.id),
+                transactionId: String(tx?.id),
                 type: tx?.type,
                 user: tx?.user_id,
                 amountRemaining: "",
