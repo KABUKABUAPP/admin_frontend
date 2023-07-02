@@ -123,7 +123,7 @@ const EditNormalFeesForm: FC = () => {
             </div>
             <div style={{ flex: 1 }}>
               <TextField
-                label="LASG levy %"
+                label="VAT"
                 error={
                   formik.touched.lasgLevy
                     ? formik.errors.lasgLevy

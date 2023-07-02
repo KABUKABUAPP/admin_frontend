@@ -37,17 +37,17 @@ export const sharpCarsApi = createApi({
           const mappedReponse: SharpCarsTableBodyData[] =
             response.data.data.map((car) => {
               return {
-                carBrandModel: car.brand_name,
-                carId: car._id,
-                dateTimeAdded: car.created_at.toDateString(),
+                carBrandModel: car?.brand_name,
+                carId: car?._id,
+                dateTimeAdded: car?.created_at.toDateString(),
                 driver: "",
-                licenseNumber: car.plate_number,
+                licenseNumber: car?.plate_number,
               };
             });
 
           return {
             data: mappedReponse,
-            totalCount: response.data.pagination.totalCount,
+            totalCount: response?.data?.pagination?.totalCount,
           };
         }
       },

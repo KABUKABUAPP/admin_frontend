@@ -5,8 +5,9 @@ import { milliSecondToSecondConversionRate } from "@/constants";
 
 export const getImageUrl = (img: File) => {
   const objectUrl = URL.createObjectURL(img);
-  return objectUrl
+  return objectUrl;
 };
+
 
 export function assertIsNode(e: EventTarget | null): asserts e is Node {
   if (!e || !("nodeType" in e)) {

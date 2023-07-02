@@ -18,8 +18,8 @@ const AuthLayout: FC<PropsWithChildren> = ({ children }) => {
           Manage Kabukabu's Affairs
         </p>
       </section>
-      <section className="flex justify-center items-center w-7/12 p-2 py-20 max-lg:w-full">
-        <div className="border-[#FFBF00] min-h-[100%] border w-full rounded-lg max-w-[70%] p-1 max-sm:max-w-full">
+      <section className="flex justify-center items-center w-7/12 p-2 max-lg:w-full">
+        <div className="border-[#FFBF00] border min-h-[600px] py-10 w-full rounded-lg max-w-[650px] p-1 max-sm:max-w-full">
           <Transition>{children}</Transition>
         </div>
       </section>

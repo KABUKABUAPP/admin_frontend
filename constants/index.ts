@@ -91,6 +91,60 @@ export const rolesOptionsArr: {
   },
 ];
 
+export const routePermissionsMapping: {
+  route: string;
+  permissionLabel: string;
+}[] = [
+  {
+    route: '/dashboard',
+    permissionLabel: 'dashboard_permissions'
+  },
+  {
+    route: '/trips',
+    permissionLabel: 'trips_permissions'
+  },
+  {
+    route: '/sos',
+    permissionLabel: 'sos_permisions'
+  },
+  {
+    route: '/transactions',
+    permissionLabel: 'transactions_permissions'
+  },
+  {
+    route: '/riders',
+    permissionLabel: 'riders_permissions'
+  },
+  {
+    route: '/drivers',
+    permissionLabel: 'drivers_permissions'
+  },
+  {
+    route: '/sharp-cars',
+    permissionLabel: 'sharp_program_permissions'
+  },
+  {
+    route: '/inspectors',
+    permissionLabel: 'inspectors_permissions'
+  },
+  {
+    route: '/fare-prices',
+    permissionLabel: 'fare_prices_permissions'
+  },
+  {
+    route: '/hubs',
+    permissionLabel: 'hubs_permissions'
+  },
+  {
+    route: '/staffs',
+    permissionLabel: 'staffs_permissions'
+  },
+  {
+    route: '/settings',
+    permissionLabel: 'settings_permissions'
+  },
+];
+
 export const nigerianStates = [
   "Abia",
   "Adamawa",

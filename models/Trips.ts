@@ -28,6 +28,7 @@ export interface MappedTripOrderResponse {
 }
 
 export interface TripData {
+  cancel_trip_reason: string;
   start_address: {
     country: string;
     state: string;

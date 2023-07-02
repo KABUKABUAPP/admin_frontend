@@ -7,6 +7,11 @@ export interface LoginPayload {
   password: string;
 }
 
+export interface CreatePasswordPayload {
+  new_password: string;
+  otp: string;
+}
+
 export interface LoginResponse {
   status: string;
   code: 200;
@@ -19,6 +24,61 @@ export interface LoginResponse {
       role: {
         _id: string;
         name: string;
+        updated_at: string;
+        __v: number;
+        level: number;
+        dashboard_permissions: {
+          read: boolean;
+          write: boolean;
+        };
+        trips_permissions: {
+          read: boolean;
+          write: boolean;
+        };
+        sos_permisions: {
+          read: boolean;
+          write: boolean;
+        };
+        transactions_permissions: {
+          read: boolean;
+          write: boolean;
+        };
+        riders_permissions: {
+          read: boolean;
+          write: boolean;
+        };
+        drivers_permissions: {
+          read: boolean;
+          write: boolean;
+        };
+        sharp_program_permissions: {
+          read: boolean;
+          write: boolean;
+        };
+        inspectors_permissions: {
+          read: boolean;
+          write: boolean;
+        };
+        fare_prices_permissions: {
+          read: boolean;
+          write: boolean;
+        };
+        hubs_permissions: {
+          read: boolean;
+          write: boolean;
+        };
+        staffs_permissions: {
+          read: boolean;
+          write: boolean;
+        };
+        promotions_permissions: {
+          read: boolean;
+          write: boolean;
+        };
+        settings_permissions: {
+          read: boolean;
+          write: boolean;
+        };
       };
       isBlocked: boolean;
       status: boolean;
@@ -31,5 +91,3 @@ export interface LoginResponse {
   };
   message: string;
 }
-
-

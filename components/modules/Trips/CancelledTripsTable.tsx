@@ -66,7 +66,7 @@ const CancelledTripsTable: FC<Props> = ({ setTripCount, tableSearch, order }) =>
         carModel: trip?.car?.brand_name + ' ' + trip?.car?.model,
         plateNumber: trip?.car?.plate_number,
         status: trip.status,
-        reason: 'N/A'
+        reason: trip.cancel_trip_reason
       };
     });
 

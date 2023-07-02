@@ -14,7 +14,7 @@ import SettingsIcon from "@/components/icons/SettingsIcon";
 const sidebarNavLinks: SidebarLink[] = [
   {
     title: "Dashboard",
-    link: "/",
+    link: "/dashboard",
     isActive: false,
     icon: <DashboardIcon />,
   },

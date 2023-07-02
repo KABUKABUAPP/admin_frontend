@@ -41,19 +41,19 @@ export const hubsApi = createApi({
           const mappedReponse: HubsTableBodyData[] = response.data.data.map(
             (hub) => {
               return {
-                hubId: hub._id,
+                hubId: hub?._id,
                 hubName: hub?.name,
-                dateCreated: new Date(hub.created_at).toDateString(),
+                dateCreated: new Date(hub?.created_at)?.toDateString(),
                 inspector: `${hub.inspector?.last_name} ${hub.inspector?.first_name}`,
                 stateCountry: `${hub?.state}, ${hub?.country}`,
-                totalCarsProcessed: 0,
+                totalCarsProcessed: hub?.cars_processed || 0,
               };
             }
           );
 
           return {
             data: mappedReponse,
-            totalCount: response.data.pagination.totalCount,
+            totalCount: response?.data?.pagination?.totalCount,
           };
         }
       },
@@ -67,24 +67,24 @@ export const hubsApi = createApi({
         else {
           const mapped: MappedViewHub = {
             inspectionCars: [] as Car[],
-            hubCars: response.data.hub_images,
-            inspectionCenterId: response.data._id,
+            hubCars: response?.data?.hub_images,
+            inspectionCenterId: response?.data?._id,
             inspectionCenterImages: [],
             inspectorFullname:
-              response.data.inspector?.last_name ||
-              "" + " " + response.data.inspector?.first_name ||
+              response?.data.inspector?.last_name ||
+              "" + " " + response?.data.inspector?.first_name ||
               "",
             inspectionCenterDateAdded: new Date(
-              response.data.created_at
+              response?.data.created_at
             ).toDateString(),
-            inspectionCenterTitle: response.data.name,
-            approved: response.data.cars_approved,
-            declined: response.data.cars_declined,
-            processed: response.data.cars_processed,
-            inspectorAddress: response.data.inspector?.house_address,
-            inspectorPhone: response.data.inspector?.phone_number,
-            inspectionCenterLocation: `${response.data.state}, ${response.data.city}, ${response.data.country}`,
-            inspectorId: response.data.inspector._id,
+            inspectionCenterTitle: response?.data.name,
+            approved: response?.data?.cars_approved,
+            declined: response?.data?.cars_declined,
+            processed: response?.data?.cars_processed,
+            inspectorAddress: response?.data.inspector?.house_address,
+            inspectorPhone: response?.data.inspector?.phone_number,
+            inspectionCenterLocation: `${response?.data?.state}, ${response?.data?.city}, ${response?.data?.country}`,
+            inspectorId: response?.data?.inspector?._id,
           };
           return mapped;
         }

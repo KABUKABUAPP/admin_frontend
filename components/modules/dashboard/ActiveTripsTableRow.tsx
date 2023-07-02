@@ -14,23 +14,26 @@ interface Props {
 }
 
 const ActiveTripsTableRow: FC<Props> = ({ id, ...props }) => {
-  
-  const router = useRouter()
+  const router = useRouter();
 
   return (
-    <div onClick={()=>router.push(`/trips/${id}`)} className="w-full min-w-[600px] border-b-[#E6E6E6] border-b last:border-none p-3 flex justify-between gap-2 cursor-pointer">
+    <div
+      onClick={() => router.push(`/trips/${id}`)}
+      className="w-full min-w-[600px] border-b-[#E6E6E6] border-b last:border-none p-3 flex justify-between gap-2 cursor-pointer"
+    >
       {Object.entries(props).map(([title, body], idx) => {
         return <ActiveTripsTableCell key={idx} title={title} body={body} />;
       })}
       <div className="flex items-center">
-        <Link href={`/trips/${id}`}>
-          <Button
-            title="View Trip"
-            size="small"
-            variant="contained"
-            color="tetiary"
-          />
-        </Link>
+        <Button
+          title="View Trip"
+          size="small"
+          variant="contained"
+          color="tetiary"
+          onClick={() => {
+            router.push(`/trips/${id}`);
+          }}
+        />
       </div>
     </div>
   );

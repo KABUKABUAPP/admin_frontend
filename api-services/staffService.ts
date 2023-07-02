@@ -43,16 +43,16 @@ export const staffApi = createApi({
         else {
           const mapped = response.data.data.map((staff) => {
             return {
-              staffId: staff._id,
-              fullName: staff.full_name,
-              role: staff.role.name,
+              staffId: staff?._id,
+              fullName: staff?.full_name,
+              role: staff?.role?.name,
               location: `${staff?.address?.street}, ${staff?.address?.city} ${staff?.address?.state}`,
-              status: `${staff.isBlocked === true ? "blocked" : "active"}`,
+              status: `${staff?.isBlocked === true ? "blocked" : "active"}`,
             };
           });
 
           return {
-            totalCount: response.data.pagination.totalCount,
+            totalCount: response?.data?.pagination?.totalCount,
             data: mapped,
           };
         }
@@ -64,6 +64,7 @@ export const staffApi = createApi({
         method: "POST",
         body,
       }),
+      invalidatesTags: ['all-staff']
     }),
     disableStaff: build.mutation<any, DisableStaffQuery>({
       query: ({ staffId }) => ({
@@ -81,15 +82,15 @@ export const staffApi = createApi({
         if (!response) return <MappedViewStaff>{};
         else {
           const mappedStaff = {
-            fullName: response.data.full_name,
-            email: response.data.email,
-            phone: response.data.phone_number,
-            address: response.data.address.city,
-            role: response.data.role.name,
-            image: response.data.profile_image
+            fullName: response?.data?.full_name,
+            email: response?.data?.email,
+            phone: response?.data?.phone_number,
+            address: response?.data?.address?.city,
+            role: response?.data?.role.name,
+            image: response?.data?.profile_image
           };
 
-          const isBlocked = response.data.isBlocked
+          const isBlocked = response?.data?.isBlocked
 
           return { userInfo: mappedStaff, isBlocked };
         }

@@ -2,9 +2,11 @@ import React, { FC, PropsWithChildren, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import SideBar from "@/components/common/SideBar";
 import sidebarNavLinks from "@/navigation/sidebarNavLinks";
-import Container from "@/components/common/Container";
 import { SidebarLink } from "@/models/SidebarLink";
 import Transition from "@/components/common/Transition";
+import Cookies from "js-cookie";
+import { USER_TOKEN } from "@/constants";
+import { routePermissionsMapping } from "@/constants";
 
 interface Props {
   padding?: string;
@@ -30,15 +32,13 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
     } else {
       mutatedSidebarItems = sidebarItems.map((item) => {
         if ("subLinks" in item) {
-          if (pathname.includes(item.link) && item.title !== "Dashboard") {
+          if (pathname.includes(item.link)) {
             return { ...item, isActive: true };
-          }
-          else if(item.subLinks?.some((i)=>pathname.includes(i))){
+          } else if (item.subLinks?.some((i) => pathname.includes(i))) {
             return { ...item, isActive: true };
-          }
-          else return {...item, isActive: false}
+          } else return { ...item, isActive: false };
         } else {
-          if (pathname.includes(item.link) && item.title !== "Dashboard") {
+          if (pathname.includes(item.link)) {
             return { ...item, isActive: true };
           }
           return { ...item, isActive: false };
@@ -49,6 +49,30 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
     return mutatedSidebarItems;
   };
 
+  const getAccessibleLinks = (sidebarItems: SidebarLink[]) => {
+    const user = Cookies.get(USER_TOKEN);
+    if (user) {
+      const parsedUser = JSON.parse(user);
+      const acccessibleLinks = routePermissionsMapping.filter((item)=>{
+        if(parsedUser.permissions[`${item.permissionLabel}`].read === true){
+          return true
+        }
+        else return false
+      }).map((item)=>{
+        if(item.route === '/drivers') return '/drivers/active'
+        else return item.route
+      })
+
+      const accessibleSidebarLinks = sidebarItems.filter((item)=>{
+        if(acccessibleLinks.indexOf(item.link) !== -1) return true
+        else return false
+      })
+
+      return accessibleSidebarLinks
+    }
+    else return [] as SidebarLink[]
+  };
+
   const [links, setLinks] = useState<SidebarLink[]>(sidebarNavLinks);
 
   useEffect(() => {
@@ -57,7 +81,7 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <SideBar data={links} />
+      <SideBar data={getAccessibleLinks(links)} />
       <main
         className="h-screen w-[calc(100%-200px)] max-lg:w-full bg-[#f8f8f8] overflow-auto"
         style={{ padding: padding }}

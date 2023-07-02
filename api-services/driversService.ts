@@ -58,12 +58,12 @@ export const driversApi = createApi({
       transformResponse: (response: GetAllDriversResponse) => {
         if (!response) return {} as DriversMappedResponse;
         else {
-          const totalCount = response.data.pagination.totalCount;
-          const mappedReponse = response.data.drivers.map((driver) => {
+          const totalCount = response?.data?.pagination?.totalCount;
+          const mappedReponse = response?.data?.drivers?.map((driver) => {
             return {
               driverId: driver?._id,
-              fullName: driver.user?.full_name,
-              location: `${driver.country}, ${driver.state}`,
+              fullName: driver?.user?.full_name,
+              location: `${driver?.country}, ${driver?.state}`,
               imageUrl: driver?.user?.profile_image,
               driverType:
                 driver?.car_owner === true
@@ -72,7 +72,7 @@ export const driversApi = createApi({
               totalTrips: driver?.user?.total_trips,
               walletBalance: driver?.wallet_balance || "0",
               status: driver?.approval_status,
-              userId: driver.user._id,
+              userId: driver?.user._id,
               statusRemark: driver?.status_remark,
             } as DriversTableBodyData;
           });
@@ -93,10 +93,10 @@ export const driversApi = createApi({
           const mapped: MappedViewDriver = {
             driverInfo: {
               image: data?.driver?.user?.profile_image,
-              fullName: data.driver?.user?.full_name,
+              fullName: data?.driver?.user?.full_name,
               address: data?.driver?.house_address,
               email: data?.driver?.user.email,
-              phone: data.driver?.user?.phone_number,
+              phone: data?.driver?.user?.phone_number,
               tripCount: data?.driver?.user?.total_trips,
               rating: 0,
               id: data?.driver?._id,
@@ -104,10 +104,10 @@ export const driversApi = createApi({
               declineCount: data?.driver?.admin_decline_count,
             },
             carDetails: {
-              carImages: data?.car_details.images,
-              carModel: data.car_details?.model,
-              carColor: data.car_details?.color,
-              plateNumber: data.car_details?.plate_number,
+              carImages: data?.car_details?.images,
+              carModel: data?.car_details?.model,
+              carColor: data?.car_details?.color,
+              plateNumber: data?.car_details?.plate_number,
             },
             financials: {
               walletBalance: data?.wallet_balance?.toLocaleString(),
@@ -115,24 +115,24 @@ export const driversApi = createApi({
               subscriptionDue: data?.subscription_due?.toLocaleString(),
             },
             guarantor: {
-              reason: data.driver?.admin_approval_remark,
-              address: data.driver?.user?.guarantor?.address,
-              fullname: data.driver?.user?.guarantor?.name,
-              image: data.driver?.user?.guarantor?.image,
-              phone: data.driver?.user?.guarantor?.phone_number,
-              relationship: data.driver?.user?.guarantor?.relationship,
-              responded: data.driver?.user?.guarantor_response,
-              responseStatus: data.driver?.user?.guarantor_status,
+              reason: data?.driver?.admin_approval_remark,
+              address: data?.driver?.user?.guarantor?.address,
+              fullname: data?.driver?.user?.guarantor?.name,
+              image: data?.driver?.user?.guarantor?.image,
+              phone: data?.driver?.user?.guarantor?.phone_number,
+              relationship: data?.driver?.user?.guarantor?.relationship,
+              responded: data?.driver?.user?.guarantor_response,
+              responseStatus: data?.driver?.user?.guarantor_status,
             },
             carDocs: {
-              totalDocs: data.car_documents.length,
-              documents: data.car_documents?.map((doc) => {
+              totalDocs: data?.car_documents.length,
+              documents: data?.car_documents?.map((doc) => {
                 return {
-                  title: doc.title,
-                  docImage: doc.url,
+                  title: doc?.title,
+                  docImage: doc?.url,
                   docId: doc?.doc_number,
-                  status: doc.status,
-                  id: doc._id,
+                  status: doc?.status,
+                  id: doc?._id,
                 };
               }),
             },
@@ -168,10 +168,10 @@ export const driversApi = createApi({
           if (!response) return <MappedViewGuarantorResponse>{};
           else {
             return {
-              address: response.data?.address,
+              address: response?.data?.address,
               fullname: response?.data?.full_name,
               phone: response.data?.phone_number,
-              relationship: response.data?.relationship,
+              relationship: response?.data?.relationship,
               image: response?.data?.image,
             } as MappedViewGuarantorResponse;
           }

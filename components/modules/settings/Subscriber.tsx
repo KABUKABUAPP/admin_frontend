@@ -12,7 +12,7 @@ const Subscriber: FC<Props> = ({fullname, image, id}) => {
   const router = useRouter()
   return (
     <div className="flex items-center gap-2 cursor-pointer" onClick={()=>router.push(`/riders/${id}`)}>
-      <Avatar fallBack={fullname} shape="round" imageUrl={image}/>
+      <Avatar fallBack={fullname[0]} shape="round" imageUrl={image}/>
       <p className="text-sm font-semibold">{fullname}</p>
     </div>
   );
