@@ -120,7 +120,7 @@ export const routePermissionsMapping: {
     permissionLabel: 'drivers_permissions'
   },
   {
-    route: 'sharp-cars',
+    route: '/sharp-cars',
     permissionLabel: 'sharp_program_permissions'
   },
   {
