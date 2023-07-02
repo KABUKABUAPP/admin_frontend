@@ -41,13 +41,6 @@ export const authApi = createApi({
         body
       })
     }),
-    resetPassword: build.mutation<any, ResetPasswordPayload>({
-      query: (body)=>({
-        url: 'admin/auth/reset-password',
-        method: 'POST',
-         body
-      })
-    }),
     generateOTP: build.mutation({
       query: ()=>({
         url: 'admin/auth/generate-otp'
@@ -56,4 +49,4 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useCreatePasswordMutation, useResetPasswordMutation, useGenerateOTPMutation } = authApi;
+export const { useLoginMutation, useCreatePasswordMutation, useGenerateOTPMutation } = authApi;

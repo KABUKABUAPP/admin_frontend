@@ -9,7 +9,7 @@ export function middleware(req: NextRequest) {
   const userCookie = req.cookies.get(USER_TOKEN);
   let parsedCookie!: User;
   const userRequiresNewPasswordRoute = "/auth/create-password";
-  const loggedOutRoutes = ["/auth/login", "/auth/reset-password"];
+  const loggedOutRoutes = ["/auth/login"];
 
   if (userCookie) {
     parsedCookie = JSON.parse(userCookie);
@@ -52,7 +52,6 @@ export const config = {
   matcher: [
     "/",
     "/auth/login",
-    "/auth/reset-password",
     "/auth/create-password",
     "/auth/forgot-password",
     "/drivers",

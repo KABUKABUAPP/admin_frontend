@@ -46,7 +46,7 @@ export const hubsApi = createApi({
                 dateCreated: new Date(hub?.created_at)?.toDateString(),
                 inspector: `${hub.inspector?.last_name} ${hub.inspector?.first_name}`,
                 stateCountry: `${hub?.state}, ${hub?.country}`,
-                totalCarsProcessed: 0,
+                totalCarsProcessed: hub?.cars_processed || 0,
               };
             }
           );

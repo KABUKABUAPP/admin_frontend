@@ -13,6 +13,7 @@ export interface Hub {
   address: string;
   city: string;
   state: string;
+  cars_processed: number;
   country: string;
   hub_images: [string, string];
   inspector: {
