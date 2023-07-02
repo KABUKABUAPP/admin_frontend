@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 
 import TextField from "@/components/ui/Input/TextField/TextField";
 import CloseEyeIcon from "@/components/icons/CloseEyeIcon";
@@ -18,6 +18,7 @@ const initialValues = {
 const ResetPasswordForm: FC = () => {
   const [hidePassword, setHidePassword] = useState<boolean>(true);
   const [hideConfirmPassword, setHideConfirmPassword] = useState<boolean>(true);
+  const [isPassMismatch, setisPassMismatch] = useState(false);
 
   const formik = useFormik({
     initialValues,
@@ -25,11 +26,23 @@ const ResetPasswordForm: FC = () => {
     onSubmit: (values) => {},
   });
 
+  useEffect(() => {
+    if (formik.values.new_password && formik.values.confirm_password) {
+      if (formik.values.confirm_password !== formik.values.new_password) {
+        setisPassMismatch(true);
+      } else {
+        setisPassMismatch(false);
+      }
+    } else {
+      setisPassMismatch(false);
+    }
+  }, [formik.values.confirm_password, formik.values.new_password]);
+
   return (
     <div className="w-full max-w-[70%] mx-auto py-6 px-2 max-sm:max-w-full">
       <p className="text-center mb-2 text-3xl font-medium">Reset Password</p>
       <p className="text-center text-sm font-medium mb-6">
-        Set new password tot sign in
+        Set new password to sign in
       </p>
       <FormikProvider value={formik}>
         <Form>

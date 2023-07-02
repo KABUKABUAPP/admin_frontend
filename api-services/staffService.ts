@@ -64,6 +64,7 @@ export const staffApi = createApi({
         method: "POST",
         body,
       }),
+      invalidatesTags: ['all-staff']
     }),
     disableStaff: build.mutation<any, DisableStaffQuery>({
       query: ({ staffId }) => ({

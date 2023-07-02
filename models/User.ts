@@ -5,7 +5,7 @@ export interface User {
   email: string;
   role: string;
   isBlocked: boolean;
-  status: boolean;
+  hasResetDefaultPassword: boolean;
   created_at: Date | string;
   updated_at: Date | string;
 }

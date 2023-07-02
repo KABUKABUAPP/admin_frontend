@@ -147,7 +147,7 @@ const AddStaffForm: FC = () => {
                   ? []
                   : roles.data.map((i) => ({
                       label: i.title,
-                      value: i.title,
+                      value: i.id,
                     }))
               }
               placeholder="Admin"

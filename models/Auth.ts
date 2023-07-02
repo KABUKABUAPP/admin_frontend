@@ -7,6 +7,17 @@ export interface LoginPayload {
   password: string;
 }
 
+export interface CreatePasswordPayload {
+  new_password: string;
+  otp: string;
+}
+
+
+export interface ResetPasswordPayload {
+  password: string;
+  otp: string
+}
+
 export interface LoginResponse {
   status: string;
   code: 200;
@@ -31,5 +42,3 @@ export interface LoginResponse {
   };
   message: string;
 }
-
-

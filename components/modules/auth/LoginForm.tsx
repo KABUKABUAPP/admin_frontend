@@ -63,7 +63,7 @@ const LoginForm: FC = () => {
         isBlocked: rest.isBlocked,
         phone_number: rest.phone_number,
         role: rest.role.name,
-        status: false, 
+        hasResetDefaultPassword: rest.status, 
         updated_at: rest.updated_at
       }
       Cookies.set(USER_TOKEN, JSON.stringify(userData))
