@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 
 import AppLayout from "@/layouts/AppLayout";
@@ -16,6 +16,8 @@ import Loader from "@/components/ui/Loader/Loader";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import DeleteHubCard from "@/components/modules/hubs/DeleteHubCard";
 import { useModalContext } from "@/contexts/ModalContext";
+import { useGetCarInspectionHistoryQuery } from "@/api-services/hubService";
+import { useGetCarsInHubQuery } from "@/api-services/hubService";
 
 const Hub: NextPage = () => {
   const router = useRouter();
@@ -24,6 +26,40 @@ const Hub: NextPage = () => {
   const { data, isLoading, isError, refetch } = useViewHubQuery(
     { hubId: String(id) },
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
+
+  const [currentPageInspectors, setCurrentPageInspectors] = useState(1);
+  const [pageSizeInspectors, setPageSizeInspectors] = useState(5);
+  const {
+    data: carInspection,
+    isLoading: carInspectionLoading,
+    isError: carInspectionError,
+    refetch: refetchCarInspection,
+  } = useGetCarInspectionHistoryQuery(
+    {
+      id: String(id),
+      status: "approved",
+      limit: pageSizeInspectors,
+      page: currentPageInspectors,
+    },
+    { skip: !id }
+  );
+
+  const [currentPageHubs, setCurrentPageHubs] = useState(1);
+  const [pageSizeHubs, setPageSizeHubs] = useState(5);
+  const {
+    data: carHubs,
+    isLoading: carHubsLoading,
+    isError: carHubsError,
+    refetch: refetchCarHubs,
+  } = useGetCarsInHubQuery(
+    {
+      id: String(id),
+      status: "approved",
+      limit: pageSizeHubs,
+      page: currentPageHubs,
+    },
+    { skip: !id }
   );
 
   return (
@@ -43,46 +79,63 @@ const Hub: NextPage = () => {
           />
         </ActionBar>
 
-        {data && !isLoading && !isError && (
-          <ViewHubLayout
-            mainComponents={
-              <div className="flex flex-col gap-4 pb-4">
-                <CarDescriptionContainer
-                  title="Car inspection history"
-                  cars={data.inspectionCars}
-                />
-                <CarDescriptionContainer
-                  title="Cars in hub"
-                  cars={[]}
-                />
-              </div>
-            }
-            asideComponents={
-              <div className="flex flex-col gap-4">
-                <InspectionCenterDetails
-                  id={data.inspectionCenterId}
-                  inspectorId={data.inspectorId}
-                  images={data.hubCars}
-                  inspector={data.inspectorFullname}
-                  addedOn={data.inspectionCenterDateAdded}
-                  location={data.inspectorAddress}
-                  title={data.inspectionCenterTitle}
-                />
-                <SummaryCard
-                  approved={data.approved}
-                  declined={data.declined}
-                  processed={data.processed}
-                />
-                <InspectorCard
-                  fullName={data.inspectorFullname}
-                  address={data.inspectorAddress}
-                  phone={data.inspectorPhone}
-                  inspectorId={data.inspectorId}
-                />
-              </div>
-            }
-          />
-        )}
+        <ViewHubLayout
+          mainComponents={
+            <div className="flex flex-col gap-4 pb-4">
+              <CarDescriptionContainer
+                title="Car inspection history"
+                cars={carInspection?.data}
+                isLoading={carInspectionLoading}
+                isError={carInspectionError}
+                refetch={refetchCarInspection}
+                totalCount={carInspection?.totalCount}
+                handleViewCount={(count) => {
+                  setPageSizeInspectors(count);
+                }}
+              />
+
+              <CarDescriptionContainer
+                title="Cars in hub"
+                cars={carHubs?.data}
+                isLoading={carHubsLoading}
+                isError={carHubsError}
+                refetch={refetchCarHubs}
+                totalCount={carHubs?.totalCount}
+                handleViewCount={(count) => {
+                  setPageSizeHubs(count);
+                }}
+              />
+            </div>
+          }
+          asideComponents={
+            <div className="flex flex-col gap-4">
+              {data && !isLoading && !isError && (
+                <>
+                  <InspectionCenterDetails
+                    id={data.inspectionCenterId}
+                    inspectorId={data.inspectorId}
+                    images={data.hubCars}
+                    inspector={data.inspectorFullname}
+                    addedOn={data.inspectionCenterDateAdded}
+                    location={data.inspectorAddress}
+                    title={data.inspectionCenterTitle}
+                  />
+                  <SummaryCard
+                    approved={data.approved}
+                    declined={data.declined}
+                    processed={data.processed}
+                  />
+                  <InspectorCard
+                    fullName={data.inspectorFullname}
+                    address={data.inspectorAddress}
+                    phone={data.inspectorPhone}
+                    inspectorId={data.inspectorId}
+                  />
+                </>
+              )}
+            </div>
+          }
+        />
 
         {isLoading && !data && !isError && (
           <div className="pt-4 flex items-center justify-center">
@@ -102,4 +155,3 @@ const Hub: NextPage = () => {
 };
 
 export default Hub;
-

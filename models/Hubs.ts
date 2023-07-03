@@ -124,3 +124,87 @@ export interface Car {
   carModel: string;
   plateNumber: string;
 }
+
+export interface GetCarInspectionHistoryQuery {
+  id: string;
+  limit: number;
+  page: number;
+  status: string;
+}
+
+export interface GetCarsInHubQuery {
+  id: string;
+  limit: number;
+  page: number;
+  status: string;
+}
+
+export interface CarInHub {
+  _id: string;
+  brand_name: string;
+  user: string;
+  model: string;
+  year: string;
+  color: string;
+  images: string[];
+  plate_number: string;
+}
+
+export interface GetCarsInHubResponse {
+  status: string;
+  data: {
+    data: CarInHub[];
+    pagination: {
+      pageSize: number;
+      totalCount: number;
+      pageCount: number;
+      currentPage: number;
+      hasNext: boolean;
+    };
+  };
+  message: string;
+}
+
+export interface InspectionHistory {
+  _id: string;
+  brand_name: string;
+  user: string;
+  model: string;
+  year: string;
+  color: string;
+  images: string[];
+  plate_number: string;
+}
+
+export interface GetCarInspectionHistoryRepsonse {
+  status: string;
+  data: {
+    data: InspectionHistory[];
+    pagination: {
+      pageSize: number;
+      totalCount: number;
+      pageCount: number;
+      currentPage: number;
+      hasNext: boolean;
+    };
+  };
+  message: string;
+}
+
+export interface CarDescription {
+  carModel: string;
+  carColor: string;
+  plateNumber: string;
+  carImage: string;
+  carId: string;
+}
+
+export interface MappedInspectionHistory {
+  data: CarDescription[];
+  totalCount: number;
+}
+
+export interface MappedCarInHubs {
+  data: CarDescription[];
+  totalCount: number;
+}
