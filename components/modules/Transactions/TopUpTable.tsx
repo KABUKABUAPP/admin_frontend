@@ -43,6 +43,7 @@ const TopUpTable: FC<Props> = ({order}) => {
         maxWidth="100vw"
         isLoading={isLoading}
         refetch={refetch}
+        isError={isError}
         rowComponent={(rows)=><TopUpTableRow data={rows}/>}
         rowData={data?.data}
       />

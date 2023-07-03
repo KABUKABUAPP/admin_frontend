@@ -36,6 +36,7 @@ const SharpPaymentsTable:FC<Props> = ({order}) => {
         generic={true}
         maxWidth="100vw"
         isLoading={isLoading}
+        isError={isError}
         refetch={refetch}
         rowComponent={(rows)=><SharpPaymentsTableRow data={rows}/>}
         rowData={data?.data}

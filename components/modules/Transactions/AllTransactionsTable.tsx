@@ -35,6 +35,7 @@ const AllTransactionsTable: FC<Props> = ({ order }) => {
         generic={true}
         maxWidth="100vw"
         isLoading={isLoading}
+        isError={isError}
         refetch={refetch}
         rowComponent={(rows) => <AllTransactionsTableRow data={rows}/>}
         rowData={data?.data}

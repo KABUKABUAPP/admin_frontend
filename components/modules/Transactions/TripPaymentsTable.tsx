@@ -40,6 +40,7 @@ const TripPaymentsTable: FC<Props> = ({order}) => {
         generic={true}
         maxWidth="100vw"
         isLoading={isLoading}
+        isError={isError}
         refetch={refetch}
         rowComponent={(rows)=><TripPaymentsTableRow data={rows}/>}
         rowData={data?.data}
