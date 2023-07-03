@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 
 import Card from "@/components/common/Card";
 import CarDescriptionItem from "./CarDescriptionItem";
@@ -26,8 +26,6 @@ const CarDescriptionContainer: FC<Props> = ({
   totalCount,
   handleViewCount,
 }) => {
-  const [isViewAll, setIsViewAll] = useState(false);
-
   return (
     <Card>
       <p className="text-lg font-semibold mb-2">{title}</p>
