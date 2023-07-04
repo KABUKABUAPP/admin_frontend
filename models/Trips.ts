@@ -207,6 +207,8 @@ export interface MappedViewTripResponse {
   driverId: string;
   riderImage: string;
   driverImage: string;
+  driverTripRating: number,
+  riderTripRating: number
   orderId: string;
   endPoint: [number, number];
   startPoint: [number, number];

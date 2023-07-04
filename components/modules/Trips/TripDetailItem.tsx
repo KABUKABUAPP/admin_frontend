@@ -11,6 +11,12 @@ const TripDetailItem: FC<Props> = ({
   isLastItem,
   ...props
 }) => {
+  const topRating = isRating ? Math.floor(Number(props.topValue)) : undefined
+  const bottomRating = isRating ? Math.floor(Number(props.bottomValue)) : undefined
+
+  function isValidRating  (val:any):boolean {
+    return typeof val==='number' && val >=0 && val <=5
+  }
   return (
     <div>
       {props.topTitle && (
@@ -20,12 +26,13 @@ const TripDetailItem: FC<Props> = ({
             <div>
               <p className="text-xs text-[#9A9A9A] mb-2">{props.topTitle}</p>
               <p className="text-xs font-bold">
-                {isRating ? (
+                {isRating && isValidRating(topRating) ? (
                   <Rating
-                    rating={Number(props.topValue)}
+                    rating={topRating}
                     starDimension="11px"
                     starSpacing="1px"
                     starRatedColor="#FFBF00"
+                    numberOfStars={5}
                   />
                 ) : (
                   props.topValue
@@ -47,12 +54,13 @@ const TripDetailItem: FC<Props> = ({
             <p className="text-xs text-[#9A9A9A] mb-2">{props.bottomTitle}</p>
             <p className="text-xs font-bold">
               {" "}
-              {isRating ? (
+              {isRating && isValidRating(bottomRating) ? (
                 <Rating
-                  rating={Number(props.bottomValue)}
+                  rating={bottomRating}
                   starDimension="11px"
                   starSpacing="1px"
                   starRatedColor="#FFBF00"
+                  numberOfStars={5}
                 />
               ) : (
                 props.bottomValue
