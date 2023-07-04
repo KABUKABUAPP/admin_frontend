@@ -20,6 +20,7 @@ import { useGetDriverTripHistoryQuery } from "@/api-services/tripsService";
 import { useModalContext } from "@/contexts/ModalContext";
 import BlockRiderConfirmation from "@/components/modules/riders/BlockRiderConfirmation";
 import { toast } from "react-toastify";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 const Rider: NextPage = () => {
   const router = useRouter();
@@ -67,24 +68,31 @@ const Rider: NextPage = () => {
     }
   }, [unblockError]);
 
+  const { userPermissions } = useUserPermissions();
+
   return (
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
         <ActionBar>
-          <Button title="Call Rider" startIcon={<PhoneIcon />} size="large" />
-          {data && data?.driver.isBlocked === false && (
-            <Button
-              title="Block Rider"
-              startIcon={<BlockIcon />}
-              size="large"
-              color="secondary"
-              onClick={() => {
-                setModalContent(
-                  <BlockRiderConfirmation driverId={String(id)} />
-                );
-              }}
-            />
+          {userPermissions && userPermissions.riders_permissions.write && (
+            <Button title="Call Rider" startIcon={<PhoneIcon />} size="large" />
           )}
+          {userPermissions &&
+            userPermissions.riders_permissions.write &&
+            data &&
+            data?.driver.isBlocked === false && (
+              <Button
+                title="Block Rider"
+                startIcon={<BlockIcon />}
+                size="large"
+                color="secondary"
+                onClick={() => {
+                  setModalContent(
+                    <BlockRiderConfirmation driverId={String(id)} />
+                  );
+                }}
+              />
+            )}
           {data && data?.driver.isBlocked === true && (
             <Button
               title="Unblock Rider"
@@ -120,16 +128,19 @@ const Rider: NextPage = () => {
           }
           secondRow={
             <>
-              {tripHistory && (
-                <TripHistoryCard
-                  tripHistoryData={tripHistory.data}
-                  totalCount={tripHistory.totalCount}
-                  currentCount={tripHistory.data.length}
-                  handleViewMore={() => {
-                    setPageSize((ps) => ps + 5);
-                  }}
-                />
-              )}
+              {userPermissions &&
+                (userPermissions.trips_permissions.read ||
+                  userPermissions.trips_permissions.write) &&
+                tripHistory && (
+                  <TripHistoryCard
+                    tripHistoryData={tripHistory.data}
+                    totalCount={tripHistory.totalCount}
+                    currentCount={tripHistory.data.length}
+                    handleViewMore={() => {
+                      setPageSize((ps) => ps + 5);
+                    }}
+                  />
+                )}
             </>
           }
         />

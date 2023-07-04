@@ -12,6 +12,7 @@ import { useViewInspectorQuery } from "@/api-services/inspectorsService";
 import { useRouter } from "next/router";
 import Loader from "@/components/ui/Loader/Loader";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 const Inspector: FC = () => {
   const { id } = useRouter().query;
@@ -21,11 +22,17 @@ const Inspector: FC = () => {
     { skip: !id, refetchOnReconnect: true, refetchOnMountOrArgChange: true }
   );
 
+  const { userPermissions } = useUserPermissions();
+
   return (
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
         <ActionBar>
-          <Button title="Call Inspector" startIcon={<PhoneIcon />} />
+          {userPermissions &&
+            (userPermissions.inspectors_permissions.read ||
+              userPermissions.inspectors_permissions.write) && (
+              <Button title="Call Inspector" startIcon={<PhoneIcon />} />
+            )}
         </ActionBar>
 
         {data && !isLoading && !isError && (

@@ -8,6 +8,7 @@ import UploadDetailsCard from "./UploadDetailsCard";
 import CloseIcon from "@/components/icons/CloseIcon";
 import DeclineGuarantorReasonCard from "./DeclineGuarantorReasonCard";
 import ApproveGuarantorRequestCard from "./ApproveGuarantorRequestCard";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 interface Props {
   driverUpload: {
@@ -16,7 +17,7 @@ interface Props {
     relationship: string;
     address: string;
     phone: string;
-    image: string
+    image: string;
   };
   guarantorUpload: {
     title: string;
@@ -24,12 +25,13 @@ interface Props {
     relationship: string;
     address: string;
     phone: string;
-    image: string
+    image: string;
   };
 }
 
 const ViewGuarantorCard: FC<Props> = ({ driverUpload, guarantorUpload }) => {
   const { setModalContent } = useModalContext();
+  const { userPermissions } = useUserPermissions();
 
   return (
     <Card maxWidth="800px">
@@ -58,27 +60,31 @@ const ViewGuarantorCard: FC<Props> = ({ driverUpload, guarantorUpload }) => {
         </div>
       </div>
       <div className="flex justify-between gap-6 max-sm:flex-col">
-        <div style={{ flex: 1 }}>
-          <Button
-            title="Reject Guarantor"
-            size="large"
-            color="secondary"
-            className="!w-full"
-            onClick={() => {
-              setModalContent(<DeclineGuarantorReasonCard />);
-            }}
-          />
-        </div>
-        <div style={{ flex: 1 }}>
-          <Button
-            title="Approve Guarantor"
-            size="large"
-            className="!bg-[#1FD11B] !text-[#FFFFFF] !w-full"
-            onClick={() => {
-              setModalContent(<ApproveGuarantorRequestCard />);
-            }}
-          />
-        </div>
+        {userPermissions && userPermissions.drivers_permissions.write && (
+          <div style={{ flex: 1 }}>
+            <Button
+              title="Reject Guarantor"
+              size="large"
+              color="secondary"
+              className="!w-full"
+              onClick={() => {
+                setModalContent(<DeclineGuarantorReasonCard />);
+              }}
+            />
+          </div>
+        )}
+        {userPermissions && userPermissions.drivers_permissions.write && (
+          <div style={{ flex: 1 }}>
+            <Button
+              title="Approve Guarantor"
+              size="large"
+              className="!bg-[#1FD11B] !text-[#FFFFFF] !w-full"
+              onClick={() => {
+                setModalContent(<ApproveGuarantorRequestCard />);
+              }}
+            />
+          </div>
+        )}
       </div>
     </Card>
   );

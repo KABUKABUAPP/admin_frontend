@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button/Button";
 import RatingIcon from "@/components/icons/RatingIcon";
 import Skeleton from "react-loading-skeleton";
 import Avatar from "@/components/common/Avatar";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 interface Props {
   isRider?: boolean;
@@ -19,6 +20,7 @@ interface Props {
   carModel?: string;
   carPlateNumber?: string;
   isLoading: boolean;
+  permissionKey: "riders_permissions" | "drivers_permissions";
 }
 
 const CarOccupantDetailsCard: FC<Props> = ({
@@ -33,9 +35,10 @@ const CarOccupantDetailsCard: FC<Props> = ({
   carPlateNumber,
   viewProfileLink,
   isLoading,
+  permissionKey,
 }) => {
   const router = useRouter();
-
+  const { userPermissions } = useUserPermissions();
   return (
     <div className="p-4 bg-[#FFFFFF] rounded-lg">
       <p className="font-bold mb-2">
@@ -74,13 +77,14 @@ const CarOccupantDetailsCard: FC<Props> = ({
         </div>
       </div>
       <div className="mt-4">
-        {viewProfileLink ? (
+        {userPermissions &&
+        (userPermissions[permissionKey].read ||
+          userPermissions[permissionKey].write) &&
+        viewProfileLink && (
           <Button
             title={buttonTitle}
             onClick={() => router.push(viewProfileLink)}
           />
-        ) : (
-          <Skeleton enableAnimation={isLoading} />
         )}
       </div>
     </div>

@@ -18,6 +18,7 @@ import ApproveRequestCard from "@/components/modules/drivers/ApproveRequestCard"
 import DeclineRequestCard from "@/components/modules/drivers/DeclineRequestCard";
 import { useModalContext } from "@/contexts/ModalContext";
 import ActionDocumentCardContainer from "@/components/modules/drivers/ActionDocumentCardContainer";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 const Driver: NextPage = () => {
   const router = useRouter();
@@ -52,32 +53,40 @@ const Driver: NextPage = () => {
     }
   }, [JSON.stringify(data)]);
 
+  const { userPermissions } = useUserPermissions();
+
   return (
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
         <ActionBar>
-          {data && data.guarantor.responseStatus === 'approved' && isApproveButton && (
-            <Button
-              title="Approve Request"
-              className="!bg-[#1FD11B] !text-[#FFFFFF]"
-              startIcon={<CheckIcon />}
-              size="large"
-              onClick={() =>
-                setModalContent(<ApproveRequestCard id={String(id)} />)
-              }
-            />
-          )}
-          {isDeclineButton && (
-            <Button
-              title="Decline Request"
-              startIcon={<TimesIcon />}
-              size="large"
-              color="secondary"
-              onClick={() => {
-                setModalContent(<DeclineRequestCard id={String(id)} />);
-              }}
-            />
-          )}
+          {userPermissions &&
+            userPermissions.drivers_permissions.write &&
+            data &&
+            data.guarantor.responseStatus === "approved" &&
+            isApproveButton && (
+              <Button
+                title="Approve Request"
+                className="!bg-[#1FD11B] !text-[#FFFFFF]"
+                startIcon={<CheckIcon />}
+                size="large"
+                onClick={() =>
+                  setModalContent(<ApproveRequestCard id={String(id)} />)
+                }
+              />
+            )}
+          {userPermissions &&
+            userPermissions.drivers_permissions.write &&
+            isDeclineButton && (
+              <Button
+                title="Decline Request"
+                startIcon={<TimesIcon />}
+                size="large"
+                color="secondary"
+                onClick={() => {
+                  setModalContent(<DeclineRequestCard id={String(id)} />);
+                }}
+              />
+            )}
         </ActionBar>
 
         {data && !isLoading && !isError && (

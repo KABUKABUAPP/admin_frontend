@@ -9,6 +9,7 @@ import AddIcon from "@/components/icons/AddIcon";
 import { useGetAllInspectorsQuery } from "@/api-services/inspectorsService";
 import Pagination from "@/components/common/Pagination";
 import { useRouter } from "next/router";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 const Inspectors: NextPage = () => {
   const [carOwner, setCarOwner] = useState<boolean>(false);
@@ -34,12 +35,17 @@ const Inspectors: NextPage = () => {
     error: inspectorErrorObj,
     refetch: reloadInspectors,
   } = useGetAllInspectorsQuery(
-    { limit: pageSize, page: currentPage, search: search, order: selectedFilterOption },
+    {
+      limit: pageSize,
+      page: currentPage,
+      search: search,
+      order: selectedFilterOption,
+    },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
   const router = useRouter();
 
-  
+  const { userPermissions } = useUserPermissions();
 
   return (
     <AppLayout>
@@ -51,13 +57,15 @@ const Inspectors: NextPage = () => {
         handleDropDown={(val) => setSelectedFilterOption(String(val))}
       >
         <div className="flex justify-end mr-3">
-          <Button
-            title="Add Inspector"
-            startIcon={<AddIcon />}
-            onClick={() => {
-              router.push("inspectors/add-inspector");
-            }}
-          />
+          {userPermissions && userPermissions.inspectors_permissions.write && (
+            <Button
+              title="Add Inspector"
+              startIcon={<AddIcon />}
+              onClick={() => {
+                router.push("inspectors/add-inspector");
+              }}
+            />
+          )}
         </div>
       </SearchFilterBar>
       <InspectorsTable

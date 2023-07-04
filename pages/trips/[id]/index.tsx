@@ -25,6 +25,7 @@ import RatingIcon from "@/components/icons/RatingIcon";
 
 import { io } from "socket.io-client";
 import TimesIcon from "@/components/icons/TimesIcon";
+import useUserPermissions from "@/hooks/useUserPermissions";
 const socket = io("https://rideservice-dev.up.railway.app");
 
 const ViewTrip: NextPage = () => {
@@ -115,7 +116,7 @@ const ViewTrip: NextPage = () => {
     tripStarted,
     tripToEnd,
     driverRating,
-    riderRating
+    riderRating,
   }: Record<string, string | number>) => {
     return [
       {
@@ -125,7 +126,7 @@ const ViewTrip: NextPage = () => {
         bottomTitle: "Destination",
         bottomValue: destination,
         bottomIcon: <DestinationIcon />,
-        isRating: false
+        isRating: false,
       },
       {
         topTitle: "Estimated Price",
@@ -134,7 +135,7 @@ const ViewTrip: NextPage = () => {
         bottomTitle: "Payment Type",
         bottomValue: paymentType,
         bottomIcon: <WalletIcon />,
-        isRating: false
+        isRating: false,
       },
       {
         topTitle: tripStarted ? "Trip started" : "",
@@ -143,28 +144,30 @@ const ViewTrip: NextPage = () => {
         bottomTitle: tripToEnd ? "Trip to end" : "",
         bottomValue: tripToEnd ? new Date(tripToEnd).toUTCString() : "",
         bottomIcon: <ClockIcon />,
-        isRating: true
+        isRating: true,
       },
       {
-        topTitle: driverRating ? "Driver Rating" : '',
+        topTitle: driverRating ? "Driver Rating" : "",
         topValue: driverRating,
-        topIcon: <RatingIcon fill="#000000"/>,
-        bottomTitle: riderRating ? "Rider Rating" : '',
+        topIcon: <RatingIcon fill="#000000" />,
+        bottomTitle: riderRating ? "Rider Rating" : "",
         bottomValue: riderRating,
-        bottomIcon: <RatingIcon fill="#000000"/>,
-        isRating: true
+        bottomIcon: <RatingIcon fill="#000000" />,
+        isRating: true,
       },
       {
-        topTitle: reason ? "Reason" : '',
+        topTitle: reason ? "Reason" : "",
         topValue: String(reason),
-        topIcon: <TimesIcon fill="#000000"/>,
-        bottomTitle: '',
-        bottomValue: '',
-        bottomIcon: <TimesIcon fill="#000000"/>,
-        isRating: false
+        topIcon: <TimesIcon fill="#000000" />,
+        bottomTitle: "",
+        bottomValue: "",
+        bottomIcon: <TimesIcon fill="#000000" />,
+        isRating: false,
       },
     ];
   };
+
+  const { userPermissions } = useUserPermissions();
 
   return (
     <AppLayout padding="0">
@@ -185,22 +188,28 @@ const ViewTrip: NextPage = () => {
               onClick={() => setIsFeed(true)}
             />
           )}
-          <Button
-            title="Call Rider"
-            size="large"
-            onClick={() => handleCall(true)}
-          />
-          <Button
-            title="Call Driver"
-            size="large"
-            onClick={() => handleCall(false)}
-          />
-          <Button
-            title="Raise SOS"
-            color="secondary"
-            size="large"
-            onClick={handleRaiseSos}
-          />
+          {userPermissions && userPermissions.riders_permissions.write && (
+            <Button
+              title="Call Rider"
+              size="large"
+              onClick={() => handleCall(true)}
+            />
+          )}
+          {userPermissions && userPermissions.drivers_permissions.write && (
+            <Button
+              title="Call Driver"
+              size="large"
+              onClick={() => handleCall(false)}
+            />
+          )}
+          {userPermissions && userPermissions.sos_permisions.write && (
+            <Button
+              title="Raise SOS"
+              color="secondary"
+              size="large"
+              onClick={handleRaiseSos}
+            />
+          )}
         </ActionBar>
         <ViewTripLayout
           mainComponents={
@@ -213,7 +222,6 @@ const ViewTrip: NextPage = () => {
                 />
               )}
               <div className="w-full h-full max-h-[550px] max-md:pl-0">
-                
                 {tab !== "completed"
                   ? liveLocation && <AppMap zoom={11} location={liveLocation} />
                   : data && (
@@ -239,7 +247,7 @@ const ViewTrip: NextPage = () => {
                     tripStarted: data.tripStarted,
                     tripToEnd: data.tripEnded,
                     driverRating: data.driverTripRating,
-                    riderRating: data.riderTripRating
+                    riderRating: data.riderTripRating,
                   })
                 }
               />
@@ -254,6 +262,7 @@ const ViewTrip: NextPage = () => {
                   buttonTitle="View Rider's Profile"
                   imageUri={data?.riderImage}
                   isLoading={isLoading}
+                  permissionKey="riders_permissions"
                 />
               </div>
               <div className="mt-5">
@@ -271,6 +280,7 @@ const ViewTrip: NextPage = () => {
                   buttonTitle="View Driver's Profile"
                   imageUri={data?.driverImage}
                   isLoading={isLoading}
+                  permissionKey="drivers_permissions"
                 />
               </div>
             </>

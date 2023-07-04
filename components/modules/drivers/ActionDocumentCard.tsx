@@ -9,6 +9,7 @@ import { useInspectDocumentMutation } from "@/api-services/driversService";
 import Loader from "@/components/ui/Loader/Loader";
 import { toast } from "react-toastify";
 import { useEnlargedImageContext } from "@/contexts/EnlargeImageContext";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 interface Props extends MappedDocument {
   id: string;
@@ -30,6 +31,8 @@ const ActionDocumentCard: FC<Props> = ({
 
   const [inspectDocument, { isLoading, isError, isSuccess, error }] =
     useInspectDocumentMutation();
+
+  const { userPermissions } = useUserPermissions();
 
   useEffect(() => {
     if (error && "data" in error) {
@@ -59,30 +62,33 @@ const ActionDocumentCard: FC<Props> = ({
         <p className="text-sm text-[#9A9A9A]">{docId}</p>
       </div>
       <div className="flex flex-col gap-4" style={{ flex: 1 }}>
-        {!isLoading && status === "PENDING" && (
-          <>
-            <Button
-              title="Approve"
-              className="!bg-transparent border !border-[#161616]"
-              startIcon={<CheckIcon fill="#161616" />}
-              onClick={() => {
-                if (docId) {
-                  inspectDocument({ docId: id, status: "APPROVED" });
-                }
-              }}
-            />
-            <Button
-              title="Decline"
-              className="!bg-transparent border !border-[#EF2C5B] !text-[#EF2C5B]"
-              startIcon={<TimesIcon fill="#EF2C5B" />}
-              onClick={() => {
-                if (docId) {
-                  inspectDocument({ docId: id, status: "DECLINED" });
-                }
-              }}
-            />
-          </>
-        )}
+        {userPermissions &&
+          userPermissions.drivers_permissions.write &&
+          !isLoading &&
+          status === "PENDING" && (
+            <>
+              <Button
+                title="Approve"
+                className="!bg-transparent border !border-[#161616]"
+                startIcon={<CheckIcon fill="#161616" />}
+                onClick={() => {
+                  if (docId) {
+                    inspectDocument({ docId: id, status: "APPROVED" });
+                  }
+                }}
+              />
+              <Button
+                title="Decline"
+                className="!bg-transparent border !border-[#EF2C5B] !text-[#EF2C5B]"
+                startIcon={<TimesIcon fill="#EF2C5B" />}
+                onClick={() => {
+                  if (docId) {
+                    inspectDocument({ docId: id, status: "DECLINED" });
+                  }
+                }}
+              />
+            </>
+          )}
         {!isLoading && status !== "PENDING" && (
           <>
             <div>

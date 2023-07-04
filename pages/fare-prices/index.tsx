@@ -8,6 +8,7 @@ import AddIcon from "@/components/icons/AddIcon";
 import FarePricesTable from "@/components/modules/fare-prices/FarePricesTable";
 import { useGetAllFarePricesQuery } from "@/api-services/farePricesService";
 import { useRouter } from "next/router";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 const FarePrices: NextPage = () => {
   const [search, setSearch] = useState<string>("");
@@ -38,7 +39,7 @@ const FarePrices: NextPage = () => {
 
   const router = useRouter();
 
-  
+  const { userPermissions } = useUserPermissions();
 
   return (
     <AppLayout>
@@ -50,13 +51,15 @@ const FarePrices: NextPage = () => {
         handleDropDown={(val) => setSelectedFilterOption(String(val))}
       >
         <div className="flex justify-end mr-3">
-          <Button
-            title="Add New Fare Profile"
-            startIcon={<AddIcon />}
-            onClick={() => {
-              router.push("/fare-prices/new-fare-price");
-            }}
-          />
+          {userPermissions && userPermissions.fare_prices_permissions.write && (
+            <Button
+              title="Add New Fare Profile"
+              startIcon={<AddIcon />}
+              onClick={() => {
+                router.push("/fare-prices/new-fare-price");
+              }}
+            />
+          )}
         </div>
       </SearchFilterBar>
 

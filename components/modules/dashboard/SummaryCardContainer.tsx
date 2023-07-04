@@ -6,7 +6,7 @@ import TripsIcon from "@/components/icons/TripsIcon";
 import SosIcon from "@/components/icons/SosIcon";
 import WithdrawalIcon from "@/components/icons/WithdrawalIcon";
 import Button from "@/components/ui/Button/Button";
-import Skeleton from "react-loading-skeleton";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 const SummaryCardContainer: FC = () => {
   const {
@@ -22,11 +22,23 @@ const SummaryCardContainer: FC = () => {
     !tripsInsight && !tripsInsightsLoading && tripsInsightError;
   const viewState = !tripsInsightError && !tripsInsightsLoading && tripsInsight;
 
+  const { userPermissions } = useUserPermissions();
+
+  const permissionKeyMap: Record<string, ('trips_permissions' | 'sos_permisions')> = {
+    trips: "trips_permissions",
+    sos: "sos_permisions",
+  } ;
+
   return (
     <div className="flex flex-wrap gap-6 max-sm:justify-center">
       {viewState &&
         tripsInsight.map((item, idx) => {
-          return <SummaryCard {...item} icon={icons[item.title]} key={idx} />;
+          return userPermissions &&item.permissionKey &&
+            (userPermissions[`${permissionKeyMap[item.permissionKey]}`].read ||
+              userPermissions[`${permissionKeyMap[item.permissionKey]}`]
+                .write) ? (
+            <SummaryCard {...item} icon={icons[item.title]} key={idx} />
+          ) : null;
         })}
       {loadingState &&
         [
@@ -38,11 +50,14 @@ const SummaryCardContainer: FC = () => {
         ].map((item, idx) => (
           <SummaryCard loading={loadingState} title={item} key={idx} />
         ))}
-      {errorState && 
-      <div>
-        <p className="text-sm text-rose-600 mb-2">Oops! Error getting insights</p>
-        <Button title="Reload Insights" onClick={reloadTrips} />
-        </div>}
+      {errorState && (
+        <div>
+          <p className="text-sm text-rose-600 mb-2">
+            Oops! Error getting insights
+          </p>
+          <Button title="Reload Insights" onClick={reloadTrips} />
+        </div>
+      )}
     </div>
   );
 };

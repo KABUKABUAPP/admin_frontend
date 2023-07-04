@@ -11,6 +11,7 @@ import NewFareProfileValidations from "@/validationschemas/NewFareProfileSchema"
 import { toast } from "react-toastify";
 import { useCreateFarePriceMutation } from "@/api-services/farePricesService";
 import { verifyIsDigit } from "@/utils";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 const initialValues = {
   state: "",
@@ -64,6 +65,8 @@ const NewFareProfileForm: FC = () => {
       formik.setFieldValue(fieldName, value);
     }
   };
+
+  const { userPermissions } = useUserPermissions();
 
   return (
     <div>
@@ -243,13 +246,16 @@ const NewFareProfileForm: FC = () => {
             </FormCard>
           </div>
           <div className="flex justify-end py-8">
-            <Button
-              title="Create Profile"
-              className="!px-10"
-              type="submit"
-              loading={isLoading}
-              disabled={isLoading}
-            />
+            {userPermissions &&
+              userPermissions.fare_prices_permissions.write && (
+                <Button
+                  title="Create Profile"
+                  className="!px-10"
+                  type="submit"
+                  loading={isLoading}
+                  disabled={isLoading}
+                />
+              )}
           </div>
         </Form>
       </FormikProvider>

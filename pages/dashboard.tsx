@@ -15,6 +15,10 @@ import {
   useGetPendingSharpApplicationsQuery,
   useGetTripChartDataQuery,
 } from "@/api-services/dashboardService";
+import Cookies from "js-cookie";
+import { USER_TOKEN } from "@/constants";
+import { UserPermissions } from "@/models/User";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 const Dashboard: NextPage = () => {
   const { user } = useUserContext();
@@ -59,6 +63,10 @@ const Dashboard: NextPage = () => {
     { refetchOnReconnect: true, refetchOnMountOrArgChange: true }
   );
 
+  const { userPermissions } = useUserPermissions();
+
+  console.log(userPermissions);
+
   return (
     <>
       <AppHead title="Kabukabu | Dashboard" />
@@ -70,7 +78,11 @@ const Dashboard: NextPage = () => {
         <div className="pt-12 flex max-md:flex-col gap-7">
           <div className="w-[72%] max-md:w-full flex flex-col gap-12">
             <SummaryCardContainer />
-            <ActiveTripsTable />
+            {userPermissions &&
+              (userPermissions.trips_permissions.read ||
+                userPermissions.trips_permissions.write) && (
+                <ActiveTripsTable />
+              )}
           </div>
 
           <div
@@ -80,14 +92,18 @@ const Dashboard: NextPage = () => {
           max-sm:flex-col
           "
           >
-            <PendingApplicationContainer
-              data={pendingDriverApplications}
-              title="Pending Drivers Applications"
-              loading={pendingDriverApplicationsLoading}
-              error={pendingDriverApplicationsError}
-              refetch={reloadPendingDriverApplications}
-              route={'/drivers/pending'}
-            />
+            {userPermissions &&
+              (userPermissions.drivers_permissions.read ||
+                userPermissions.drivers_permissions.write) && (
+                <PendingApplicationContainer
+                  data={pendingDriverApplications}
+                  title="Pending Drivers Applications"
+                  loading={pendingDriverApplicationsLoading}
+                  error={pendingDriverApplicationsError}
+                  refetch={reloadPendingDriverApplications}
+                  route={"/drivers/pending"}
+                />
+              )}
             <PendingApplicationContainer
               data={pendingSharpApplications}
               title="Pending SHARP Applications"
@@ -99,17 +115,21 @@ const Dashboard: NextPage = () => {
           </div>
         </div>
 
-        <div className="mt-10">
-          <TripsChartContainer
-            chartData={chartData}
-            loading={chartLoading}
-            error={chartError}
-            refetch={reloadChart}
-            filterOptions={chartFilterOptions}
-            handleDropDown={(val) => handleFilterChart(val)}
-            dropDownOptionSelected={chartFilterVal}
-          />
-        </div>
+        {userPermissions &&
+          (userPermissions.trips_permissions.read ||
+            userPermissions.trips_permissions.write) && (
+            <div className="mt-10">
+              <TripsChartContainer
+                chartData={chartData}
+                loading={chartLoading}
+                error={chartError}
+                refetch={reloadChart}
+                filterOptions={chartFilterOptions}
+                handleDropDown={(val) => handleFilterChart(val)}
+                dropDownOptionSelected={chartFilterVal}
+              />
+            </div>
+          )}
       </AppLayout>
     </>
   );

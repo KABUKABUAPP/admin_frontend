@@ -6,6 +6,7 @@ import AddIcon from "@/components/icons/AddIcon";
 import Divider from "@/components/common/Divider";
 import { useRouter } from "next/router";
 import DropDown from "@/components/ui/DropDown";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 interface Props {
   sortFilterValue: string;
@@ -37,6 +38,8 @@ const StaffSearchFilterBar: FC<Props> = ({
     { label: "All Status", value: "", default: true },
   ];
 
+  const { userPermissions } = useUserPermissions();
+
   return (
     <SearchFilterBar
       dropDownOptionSelected={sortFilterValue}
@@ -46,11 +49,13 @@ const StaffSearchFilterBar: FC<Props> = ({
       handleSearch={(val) => handleSearch(val)}
     >
       <div className="flex justify-end mr-3">
-        <Button
-          title="Add New Staff"
-          startIcon={<AddIcon />}
-          onClick={() => router.push(`/staffs/add-staff`)}
-        />
+        {userPermissions && userPermissions.staffs_permissions.write && (
+          <Button
+            title="Add New Staff"
+            startIcon={<AddIcon />}
+            onClick={() => router.push(`/staffs/add-staff`)}
+          />
+        )}
         <div className="mx-4 flex items-center justify-center">
           <Divider height="80%" />
         </div>

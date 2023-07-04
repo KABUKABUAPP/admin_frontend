@@ -9,6 +9,7 @@ import HubsTable from "@/components/modules/hubs/HubsTable";
 import { useGetAllHubsQuery } from "@/api-services/hubService";
 import Pagination from "@/components/common/Pagination";
 import { useRouter } from "next/router";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 const Hubs: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,6 +34,8 @@ const Hubs: NextPage = () => {
 
   const router = useRouter();
 
+  const { userPermissions } = useUserPermissions()
+
   return (
     <AppLayout>
       <SearchFilterBar
@@ -43,13 +46,13 @@ const Hubs: NextPage = () => {
         handleDropDown={(val) => setSelectedFilterOption(String(val))}
       >
         <div className="flex justify-end mr-3">
-          <Button
+          {userPermissions && userPermissions.hubs_permissions.write && <Button
             title="Add New Hub"
             startIcon={<AddIcon />}
             onClick={() => {
               router.push("/hubs/add-hub");
             }}
-          />
+          />}
         </div>
       </SearchFilterBar>
 
