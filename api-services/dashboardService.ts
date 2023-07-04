@@ -48,31 +48,31 @@ export const dashboardApi = createApi({
             title: "Total trips",
             value: response?.data?.total_trips,
             iconBg: "#FFBF00",
-            permissionKey: 'trips'
+            
           },
           {
             title: "Active trips",
             value: response?.data?.active_trips,
             iconBg: "#2C3FEF",
-            permissionKey: 'trips'
+            
           },
           {
             title: "SOS",
             value: response?.data?.sos,
             iconBg: "#EF2C5B",
-            permissionKey: 'sos'
+            
           },
           {
             title: "Pending trips",
             value: response?.data?.pending_trips,
             iconBg: "#FFBF00",
-            permissionKey: 'trips'
+            
           },
           {
             title: "Total Earnings",
             value: response?.data?.total_earnings,
             iconBg: "#FFBF00",
-            permissionKey: ''
+            
           },
         ];
       },

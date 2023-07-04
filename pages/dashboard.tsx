@@ -65,8 +65,6 @@ const Dashboard: NextPage = () => {
 
   const { userPermissions } = useUserPermissions();
 
-  console.log(userPermissions);
-
   return (
     <>
       <AppHead title="Kabukabu | Dashboard" />
@@ -104,14 +102,18 @@ const Dashboard: NextPage = () => {
                   route={"/drivers/pending"}
                 />
               )}
-            <PendingApplicationContainer
-              data={pendingSharpApplications}
-              title="Pending SHARP Applications"
-              loading={pendingSharpApplicationsLoading}
-              error={pendingSharpApplicationsError}
-              refetch={reloadPendingSharpApplications}
-              route={"/sharp-cars"}
-            />
+            {userPermissions &&
+              (userPermissions.sharp_program_permissions.read ||
+                userPermissions.sharp_program_permissions.write) && (
+                <PendingApplicationContainer
+                  data={pendingSharpApplications}
+                  title="Pending SHARP Applications"
+                  loading={pendingSharpApplicationsLoading}
+                  error={pendingSharpApplicationsError}
+                  refetch={reloadPendingSharpApplications}
+                  route={"/sharp-cars"}
+                />
+              )}
           </div>
         </div>
 

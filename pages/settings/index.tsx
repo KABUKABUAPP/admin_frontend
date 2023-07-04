@@ -7,6 +7,8 @@ import SettingsNav from "@/components/modules/settings/SettingsNav";
 import AccountSettings from "@/components/modules/settings/AccountSettings";
 import Roles from "@/components/modules/settings/Roles";
 import Promotions from "@/components/modules/settings/Promotions";
+import useUserPermissions from "@/hooks/useUserPermissions";
+import { UserPermissions } from "@/models/User";
 
 const Settings: NextPage = () => {
   const [nav, setNav] = useState([
@@ -30,12 +32,40 @@ const Settings: NextPage = () => {
     setCurrentView(nav.filter((i) => i.isActive === true)[0].title);
   }, [JSON.stringify(nav)]);
 
+  const { userPermissions } = useUserPermissions();
+
+  const handleShowNavItemsBasedOnPermission = (
+    nav: {
+      title: string;
+      isActive: boolean;
+    }[],
+    permissions?: UserPermissions | null
+  ) => {
+    if (permissions) {
+      const filteredNav = nav.filter((item) => {
+        if (
+          item.title === "Promotions" &&
+          (permissions.promotions_permissions.read === false &&
+            permissions.promotions_permissions.write === false)
+        )
+          return false;
+        else return true;
+      });
+
+      return filteredNav;
+    }
+    return [] as {
+      title: string;
+      isActive: boolean;
+    }[];
+  };
+
   return (
     <AppLayout padding="0">
       <SettingsLayout
         aside={
           <SettingsNav
-            navItems={nav}
+            navItems={handleShowNavItemsBasedOnPermission(nav, userPermissions)}
             handleCick={(title) => {
               handleChangeActiveNav(title);
             }}
@@ -43,9 +73,9 @@ const Settings: NextPage = () => {
         }
         main={
           <>
-          {currentView === 'Account Settings' && <AccountSettings />}
-          {currentView === 'Roles' && <Roles />}
-          {currentView === 'Promotions' && <Promotions />}
+            {currentView === "Account Settings" && <AccountSettings />}
+            {currentView === "Roles" && <Roles />}
+            {currentView === "Promotions" && <Promotions />}
           </>
         }
       />

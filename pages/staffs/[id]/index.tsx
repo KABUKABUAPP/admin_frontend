@@ -20,6 +20,7 @@ import { useDisableStaffMutation } from "@/api-services/staffService";
 import { toast } from "react-toastify";
 import Loader from "@/components/ui/Loader/Loader";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 const Staff: NextPage = () => {
   const { setModalContent } = useModalContext();
@@ -64,39 +65,49 @@ const Staff: NextPage = () => {
     );
   };
 
+  const { userPermissions } = useUserPermissions();
+
   return (
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
         <ActionBar>
-          <Button
-            title="Reset Password"
-            size="large"
-            startIcon={<LockIcon />}
-            onClick={handleResetPassword}
-          />
-          {data && data.isBlocked === false && (
+          {userPermissions && userPermissions.staffs_permissions.write && (
             <Button
-              title="Disable Staff"
-              color="secondary"
+              title="Reset Password"
               size="large"
-              startIcon={<BlockIcon />}
-              onClick={handleDisableStaff}
+              startIcon={<LockIcon />}
+              onClick={handleResetPassword}
             />
           )}
-          {data && data.isBlocked === true && (
-            <Button
-              title="Enable Staff"
-              color="secondary"
-              size="large"
-              loading={enableStaffLoading}
-              disabled={enableStaffLoading}
-              startIcon={<BlockIcon />}
-              className="!bg-[#1FD11B] !text-[#FFFFFF]"
-              onClick={() => {
-                enableStaff({ staffId: String(id) });
-              }}
-            />
-          )}
+          {userPermissions &&
+            userPermissions.staffs_permissions.write &&
+            data &&
+            data.isBlocked === false && (
+              <Button
+                title="Disable Staff"
+                color="secondary"
+                size="large"
+                startIcon={<BlockIcon />}
+                onClick={handleDisableStaff}
+              />
+            )}
+          {userPermissions &&
+            userPermissions.staffs_permissions.write &&
+            data &&
+            data.isBlocked === true && (
+              <Button
+                title="Enable Staff"
+                color="secondary"
+                size="large"
+                loading={enableStaffLoading}
+                disabled={enableStaffLoading}
+                startIcon={<BlockIcon />}
+                className="!bg-[#1FD11B] !text-[#FFFFFF]"
+                onClick={() => {
+                  enableStaff({ staffId: String(id) });
+                }}
+              />
+            )}
         </ActionBar>
 
         <ViewStaffLayout
@@ -115,8 +126,8 @@ const Staff: NextPage = () => {
               )}
               {!data && error && !isLoading && (
                 <div className="flex items-center justify-center flex-col gap-3">
-                  <ErrorMessage message="Oops! Something went wrong"/>
-                  <Button title="Refetch" onClick={refetch}/>
+                  <ErrorMessage message="Oops! Something went wrong" />
+                  <Button title="Refetch" onClick={refetch} />
                 </div>
               )}
               {/* <SummaryCard disputesRaised={110} pendingDisputes={0} /> */}

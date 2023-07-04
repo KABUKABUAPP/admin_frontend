@@ -126,7 +126,7 @@ const CreateRole: FC<Props> = ({ handleBack }) => {
               />
             </div>
           </div>
-          <div className="mt-6 mb-4 grid grid-cols-3 gap-4">
+          <div className="mt-6 mb-4 grid grid-cols-3 gap-4 max-lg:grid-cols-2 max-sm:grid-cols-1 max-sm:flex max-sm:flex-col max-sm:items-center">
             {roleOptions.map((role, idx) => {
               return (
                 <RoleBox

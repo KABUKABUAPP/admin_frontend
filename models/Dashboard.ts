@@ -17,7 +17,6 @@ export interface TripInsightsMappedResponse {
   value: string | number;
   icon: ReactNode;
   iconBg?: string;
-  permissionKey: string
 }
 
 export interface GetTripChartData {

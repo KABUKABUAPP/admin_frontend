@@ -89,6 +89,20 @@ export const rolesOptionsArr: {
     write: false,
     isChecked: false,
   },
+  {
+    title: "Promotions",
+    label: "promotions_permissions",
+    read: false,
+    write: false,
+    isChecked: false,
+  },
+  {
+    title: "Sharp Cars",
+    label: "sharp_program_permissions",
+    read: false,
+    write: false,
+    isChecked: false,
+  },
 ];
 
 export const routePermissionsMapping: {

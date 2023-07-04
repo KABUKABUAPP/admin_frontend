@@ -14,7 +14,7 @@ const NewFarePrice: NextPage = () => {
       <div className="lg:h-screen lg:overflow-hidden p-4">
         <ActionBar />
 
-        {userPermissions && userPermissions.inspectors_permissions.write && (
+        {userPermissions && userPermissions.fare_prices_permissions.write && (
           <AddNewFarePriceLayout>
             <p className="text-3xl font-semibold pb-8">New Fare Profile</p>
             <NewFareProfileForm />
