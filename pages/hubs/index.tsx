@@ -10,6 +10,7 @@ import { useGetAllHubsQuery } from "@/api-services/hubService";
 import Pagination from "@/components/common/Pagination";
 import { useRouter } from "next/router";
 import useUserPermissions from "@/hooks/useUserPermissions";
+import AppHead from "@/components/common/AppHead";
 
 const Hubs: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,44 +35,49 @@ const Hubs: NextPage = () => {
 
   const router = useRouter();
 
-  const { userPermissions } = useUserPermissions()
+  const { userPermissions } = useUserPermissions();
 
   return (
-    <AppLayout>
-      <SearchFilterBar
-        searchValue={search}
-        handleSearch={(val) => setSearch(val)}
-        filterOptions={filterOptions}
-        dropDownOptionSelected={selectedFilterOption}
-        handleDropDown={(val) => setSelectedFilterOption(String(val))}
-      >
-        <div className="flex justify-end mr-3">
-          {userPermissions && userPermissions.hubs_permissions.write && <Button
-            title="Add New Hub"
-            startIcon={<AddIcon />}
-            onClick={() => {
-              router.push("/hubs/add-hub");
-            }}
-          />}
-        </div>
-      </SearchFilterBar>
+    <>
+      <AppHead title="Kabukabu | Hubs" />
+      <AppLayout>
+        <SearchFilterBar
+          searchValue={search}
+          handleSearch={(val) => setSearch(val)}
+          filterOptions={filterOptions}
+          dropDownOptionSelected={selectedFilterOption}
+          handleDropDown={(val) => setSelectedFilterOption(String(val))}
+        >
+          <div className="flex justify-end mr-3">
+            {userPermissions && userPermissions.hubs_permissions.write && (
+              <Button
+                title="Add New Hub"
+                startIcon={<AddIcon />}
+                onClick={() => {
+                  router.push("/hubs/add-hub");
+                }}
+              />
+            )}
+          </div>
+        </SearchFilterBar>
 
-      <HubsTable
-        data={data?.data}
-        isLoading={isLoading}
-        isError={isError}
-        refetch={refetch}
-      />
-      {data && (
-        <Pagination
-          className="pagination-bar"
-          currentPage={currentPage}
-          totalCount={data.totalCount}
-          pageSize={pageSize}
-          onPageChange={(page) => setCurrentPage(page)}
+        <HubsTable
+          data={data?.data}
+          isLoading={isLoading}
+          isError={isError}
+          refetch={refetch}
         />
-      )}
-    </AppLayout>
+        {data && (
+          <Pagination
+            className="pagination-bar"
+            currentPage={currentPage}
+            totalCount={data.totalCount}
+            pageSize={pageSize}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+        )}
+      </AppLayout>
+    </>
   );
 };
 

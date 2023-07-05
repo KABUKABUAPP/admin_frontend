@@ -9,6 +9,7 @@ import Roles from "@/components/modules/settings/Roles";
 import Promotions from "@/components/modules/settings/Promotions";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import { UserPermissions } from "@/models/User";
+import AppHead from "@/components/common/AppHead";
 
 const Settings: NextPage = () => {
   const [nav, setNav] = useState([
@@ -69,25 +70,31 @@ const Settings: NextPage = () => {
   };
 
   return (
-    <AppLayout padding="0">
-      <SettingsLayout
-        aside={
-          <SettingsNav
-            navItems={handleShowNavItemsBasedOnPermission(nav, userPermissions)}
-            handleCick={(title) => {
-              handleChangeActiveNav(title);
-            }}
-          />
-        }
-        main={
-          <>
-            {currentView === "Account Settings" && <AccountSettings />}
-            {currentView === "Roles" && <Roles />}
-            {currentView === "Promotions" && <Promotions />}
-          </>
-        }
-      />
-    </AppLayout>
+    <>
+      <AppHead title="Kabukabu | Settings" />
+      <AppLayout padding="0">
+        <SettingsLayout
+          aside={
+            <SettingsNav
+              navItems={handleShowNavItemsBasedOnPermission(
+                nav,
+                userPermissions
+              )}
+              handleCick={(title) => {
+                handleChangeActiveNav(title);
+              }}
+            />
+          }
+          main={
+            <>
+              {currentView === "Account Settings" && <AccountSettings />}
+              {currentView === "Roles" && <Roles />}
+              {currentView === "Promotions" && <Promotions />}
+            </>
+          }
+        />
+      </AppLayout>
+    </>
   );
 };
 

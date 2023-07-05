@@ -12,6 +12,7 @@ import PendingTripsTable from "@/components/modules/Trips/PendingTripsTable";
 import ActiveTripsTable from "@/components/modules/Trips/ActiveTripsTable";
 import CompletedTripsTable from "@/components/modules/Trips/CompletedTripsTable";
 import CancelledTripsTable from "@/components/modules/Trips/CancelledTripsTable";
+import AppHead from "@/components/common/AppHead";
 
 const Trips: NextPage = () => {
   const [optionsList, setOptionsList] = useState([...TripsOptionsBarData]);
@@ -78,6 +79,8 @@ const Trips: NextPage = () => {
   };
 
   return (
+    <>
+    <AppHead title="Kabukabu | Trips" />
     <AppLayout>
       <CountHeader title={tripTitle} count={tripCount} />
       <TripsOptionBar
@@ -129,6 +132,7 @@ const Trips: NextPage = () => {
         />
       )}
     </AppLayout>
+    </>
   );
 };
 

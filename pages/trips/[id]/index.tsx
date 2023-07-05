@@ -26,6 +26,7 @@ import RatingIcon from "@/components/icons/RatingIcon";
 import { io } from "socket.io-client";
 import TimesIcon from "@/components/icons/TimesIcon";
 import useUserPermissions from "@/hooks/useUserPermissions";
+import AppHead from "@/components/common/AppHead";
 const socket = io("https://rideservice-dev.up.railway.app");
 
 const ViewTrip: NextPage = () => {
@@ -170,124 +171,131 @@ const ViewTrip: NextPage = () => {
   const { userPermissions } = useUserPermissions();
 
   return (
-    <AppLayout padding="0">
-      <div className="lg:h-screen lg:overflow-hidden p-4">
-        <ActionBar>
-          {isFeed ? (
-            <Button
-              title="Close Feed"
-              color="tetiary"
-              size="large"
-              onClick={() => setIsFeed(false)}
-            />
-          ) : (
-            <Button
-              title="View Feed"
-              color="tetiary"
-              size="large"
-              onClick={() => setIsFeed(true)}
-            />
-          )}
-          {userPermissions && userPermissions.riders_permissions.write && (
-            <Button
-              title="Call Rider"
-              size="large"
-              onClick={() => handleCall(true)}
-            />
-          )}
-          {userPermissions && userPermissions.drivers_permissions.write && (
-            <Button
-              title="Call Driver"
-              size="large"
-              onClick={() => handleCall(false)}
-            />
-          )}
-          {userPermissions && userPermissions.sos_permisions.write && (
-            <Button
-              title="Raise SOS"
-              color="secondary"
-              size="large"
-              onClick={handleRaiseSos}
-            />
-          )}
-        </ActionBar>
-        <ViewTripLayout
-          mainComponents={
-            <>
-              {isFeed && (
-                <ViewFeed
-                  handleCloseFeed={() => {
-                    setIsFeed(false);
-                  }}
-                />
-              )}
-              <div className="w-full h-full max-h-[550px] max-md:pl-0">
-                {tab !== "completed"
-                  ? liveLocation && <AppMap zoom={11} location={liveLocation} />
-                  : data && (
-                      <StaticMap
-                        endPoint={data.endPoint}
-                        startPoint={data.startPoint}
-                      />
-                    )}
-              </div>
-            </>
-          }
-          asideComponents={
-            <>
-              <TripDetailsCard
-                cardSubTitle={currentCardSubTitle}
-                data={
-                  data &&
-                  getTripDetails({
-                    origin: data.origin,
-                    destination: data.destination,
-                    estimatedPrice: data.estimatedPrice.toString(),
-                    paymentType: data.paymentType,
-                    tripStarted: data.tripStarted,
-                    tripToEnd: data.tripEnded,
-                    driverRating: data.driverTripRating,
-                    riderRating: data.riderTripRating,
-                  })
-                }
+    <>
+      <AppHead title="Kabukabu | Trips" />
+      <AppLayout padding="0">
+        <div className="lg:h-screen lg:overflow-hidden p-4">
+          <ActionBar>
+            {isFeed ? (
+              <Button
+                title="Close Feed"
+                color="tetiary"
+                size="large"
+                onClick={() => setIsFeed(false)}
               />
-              <div className="mt-5">
-                <CarOccupantDetailsCard
-                  isRider={true}
-                  name={data?.riderFullName}
-                  location={data?.riderLocation}
-                  tripCount={data?.riderTripCount}
-                  rating={data?.riderRating}
-                  viewProfileLink={data?.riderId && `/riders/${data?.riderId}`}
-                  buttonTitle="View Rider's Profile"
-                  imageUri={data?.riderImage}
-                  isLoading={isLoading}
-                  permissionKey="riders_permissions"
-                />
-              </div>
-              <div className="mt-5">
-                <CarOccupantDetailsCard
-                  isRider={false}
-                  name={data?.driverFullname}
-                  location={data?.driverLocation}
-                  tripCount={data?.driverTripCount}
-                  rating={data?.driverRating}
-                  viewProfileLink={
-                    data?.driverId && `/drivers/${data?.driverId}`
+            ) : (
+              <Button
+                title="View Feed"
+                color="tetiary"
+                size="large"
+                onClick={() => setIsFeed(true)}
+              />
+            )}
+            {userPermissions && userPermissions.riders_permissions.write && (
+              <Button
+                title="Call Rider"
+                size="large"
+                onClick={() => handleCall(true)}
+              />
+            )}
+            {userPermissions && userPermissions.drivers_permissions.write && (
+              <Button
+                title="Call Driver"
+                size="large"
+                onClick={() => handleCall(false)}
+              />
+            )}
+            {userPermissions && userPermissions.sos_permisions.write && (
+              <Button
+                title="Raise SOS"
+                color="secondary"
+                size="large"
+                onClick={handleRaiseSos}
+              />
+            )}
+          </ActionBar>
+          <ViewTripLayout
+            mainComponents={
+              <>
+                {isFeed && (
+                  <ViewFeed
+                    handleCloseFeed={() => {
+                      setIsFeed(false);
+                    }}
+                  />
+                )}
+                <div className="w-full h-full max-h-[550px] max-md:pl-0">
+                  {tab !== "completed"
+                    ? liveLocation && (
+                        <AppMap zoom={11} location={liveLocation} />
+                      )
+                    : data && (
+                        <StaticMap
+                          endPoint={data.endPoint}
+                          startPoint={data.startPoint}
+                        />
+                      )}
+                </div>
+              </>
+            }
+            asideComponents={
+              <>
+                <TripDetailsCard
+                  cardSubTitle={currentCardSubTitle}
+                  data={
+                    data &&
+                    getTripDetails({
+                      origin: data.origin,
+                      destination: data.destination,
+                      estimatedPrice: data.estimatedPrice.toString(),
+                      paymentType: data.paymentType,
+                      tripStarted: data.tripStarted,
+                      tripToEnd: data.tripEnded,
+                      driverRating: data.driverTripRating,
+                      riderRating: data.riderTripRating,
+                    })
                   }
-                  carModel={data?.carModel}
-                  carPlateNumber={data?.plateNumber}
-                  buttonTitle="View Driver's Profile"
-                  imageUri={data?.driverImage}
-                  isLoading={isLoading}
-                  permissionKey="drivers_permissions"
                 />
-              </div>
-            </>
-          }
-        />
-      </div>
-    </AppLayout>
+                <div className="mt-5">
+                  <CarOccupantDetailsCard
+                    isRider={true}
+                    name={data?.riderFullName}
+                    location={data?.riderLocation}
+                    tripCount={data?.riderTripCount}
+                    rating={data?.riderRating}
+                    viewProfileLink={
+                      data?.riderId && `/riders/${data?.riderId}`
+                    }
+                    buttonTitle="View Rider's Profile"
+                    imageUri={data?.riderImage}
+                    isLoading={isLoading}
+                    permissionKey="riders_permissions"
+                  />
+                </div>
+                <div className="mt-5">
+                  <CarOccupantDetailsCard
+                    isRider={false}
+                    name={data?.driverFullname}
+                    location={data?.driverLocation}
+                    tripCount={data?.driverTripCount}
+                    rating={data?.driverRating}
+                    viewProfileLink={
+                      data?.driverId && `/drivers/${data?.driverId}`
+                    }
+                    carModel={data?.carModel}
+                    carPlateNumber={data?.plateNumber}
+                    buttonTitle="View Driver's Profile"
+                    imageUri={data?.driverImage}
+                    isLoading={isLoading}
+                    permissionKey="drivers_permissions"
+                  />
+                </div>
+              </>
+            }
+          />
+        </div>
+      </AppLayout>
+    </>
   );
 };
 

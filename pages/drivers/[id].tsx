@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { useViewDriverQuery } from "@/api-services/driversService";
 import Loader from "@/components/ui/Loader/Loader";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import AppHead from "@/components/common/AppHead";
 
 const Driver: NextPage = () => {
   const router = useRouter();
@@ -27,90 +28,65 @@ const Driver: NextPage = () => {
     { id: String(id) },
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
-    
+
   return (
-    <AppLayout padding="0">
-      <div className="lg:h-screen lg:overflow-hidden p-4">
-        <ActionBar>
-          <Button title="Call Driver" startIcon={<PhoneIcon />} size="large" />
-          <Button
-            title="Block Driver"
-            startIcon={<BlockIcon />}
-            size="large"
-            color="secondary"
-          />
-        </ActionBar>
+    <>
+      <AppHead title="Kabukabu | Drivers" />
+      <AppLayout padding="0">
+        <div className="lg:h-screen lg:overflow-hidden p-4">
+          <ActionBar>
+            <Button
+              title="Call Driver"
+              startIcon={<PhoneIcon />}
+              size="large"
+            />
+            <Button
+              title="Block Driver"
+              startIcon={<BlockIcon />}
+              size="large"
+              color="secondary"
+            />
+          </ActionBar>
 
-        {data && !isLoading && !isError && (
-          <ViewDriverLayout
-            secondRow={
-              <>
-                {/* <TripHistoryCard tripHistoryData={mockTripHistory} /> */}
-              </>
-            }
-            firstRow={
-              <>
-                <DriverInfoCard {...data.driverInfo} />
+          {data && !isLoading && !isError && (
+            <ViewDriverLayout
+              secondRow={
+                <>
+                  {/* <TripHistoryCard tripHistoryData={mockTripHistory} /> */}
+                </>
+              }
+              firstRow={
+                <>
+                  <DriverInfoCard {...data.driverInfo} />
 
-                <CarDetailsCard {...data.carDetails} />
+                  <CarDetailsCard {...data.carDetails} />
 
-                <FinancialsCard {...data.financials} />
+                  <FinancialsCard {...data.financials} />
 
-                <GuarantorDetailsCard {...data.guarantor} />
+                  <GuarantorDetailsCard {...data.guarantor} />
 
-                <CarDocuments {...data.carDocs} />
-              </>
-            }
-          />
-        )}
-        {isLoading && !data && !isError && (
-          <div className="pt-4 flex items-center justify-center">
-            <Loader size="medium" />
-          </div>
-        )}
+                  <CarDocuments {...data.carDocs} />
+                </>
+              }
+            />
+          )}
+          {isLoading && !data && !isError && (
+            <div className="pt-4 flex items-center justify-center">
+              <Loader size="medium" />
+            </div>
+          )}
 
-        {!isLoading && !data && isError && (
-          <div className="pt-4 flex flex-col gap-2 items-center justify-center">
-            <ErrorMessage message="Error Fetching Data" />
-            <Button title="Reload" onClick={refetch} />
-          </div>
-        )}
-      </div>
-    </AppLayout>
+          {!isLoading && !data && isError && (
+            <div className="pt-4 flex flex-col gap-2 items-center justify-center">
+              <ErrorMessage message="Error Fetching Data" />
+              <Button title="Reload" onClick={refetch} />
+            </div>
+          )}
+        </div>
+      </AppLayout>
+    </>
   );
 };
 
 export default Driver;
 
-const mockTripHistory = [
-  {
-    originTop: "Kuvuki Land",
-    originBottom: "",
-    destinationTop: "Filmhouse Cinemas IMAX Lekki",
-    destinationBottom: "22, Ozumba Mbadiwe Street, Lekki, Lagos",
-    paymentMethod: "Wallet Payment",
-    date: "20 January, 2023 at 3:30pm",
-    amount: 1300,
-    id: "#12345",
-  },
-  {
-    originTop: "Kuvuki Land",
-    originBottom: "",
-    destinationTop: "Filmhouse Cinemas IMAX Lekki",
-    destinationBottom: "22, Ozumba Mbadiwe Street, Lekki, Lagos",
-    paymentMethod: "Wallet Payment",
-    date: "20 January, 2023 at 3:30pm",
-    amount: 1300,
-    id: "#12345",
-  },
-  {
-    originTop: "Kuvuki Land",
-    originBottom: "",
-    destinationTop: "Filmhouse Cinemas IMAX Lekki",
-    destinationBottom: "22, Ozumba Mbadiwe Street, Lekki, Lagos",
-    paymentMethod: "Wallet Payment",
-    date: "20 January, 2023 at 3:30pm",
-    amount: 1300,
-    id: "#12345",
-  },
-];

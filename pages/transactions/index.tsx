@@ -21,6 +21,7 @@ import TripChargesTable from "@/components/modules/Transactions/TripChargesTable
 import TripPaymentsTable from "@/components/modules/Transactions/TripPaymentsTable";
 import WithdrawalsTable from "@/components/modules/Transactions/WithdrawalsTable";
 import DropDown from "@/components/ui/DropDown";
+import AppHead from "@/components/common/AppHead";
 
 const Transactions: NextPage = () => {
   const router = useRouter();
@@ -119,63 +120,65 @@ const Transactions: NextPage = () => {
   );
 
   return (
-    <AppLayout>
-      <div className="text-xs flex items-center mb-2">
-        <span>Show transactions of:</span>
-        <DropDown
-          left={0}
-          placeholder="Filter"
-          options={statusFilterOptions}
-          value={statusFilter}
-          handleChange={(val) => {
-            setStatusFilter(String(val));
+    <>
+      <AppHead title="Kabukabu | Transactions" />
+      <AppLayout>
+        <div className="text-xs flex items-center mb-2">
+          <span>Show transactions of:</span>
+          <DropDown
+            left={0}
+            placeholder="Filter"
+            options={statusFilterOptions}
+            value={statusFilter}
+            handleChange={(val) => {
+              setStatusFilter(String(val));
+            }}
+          />
+        </div>
+        {transactionCard && (
+          <AccountBalanceCardContainer
+            data={transactionCard}
+            handleClick={(title) => {}}
+          />
+        )}
+        <OptionBar
+          options={transactionOptions}
+          handleClickOption={(key) => {
+            handleClickOption(key);
           }}
         />
-      </div>
-      {transactionCard && (
-        <AccountBalanceCardContainer
-          data={transactionCard}
-          handleClick={(title) => {}}
+        <SearchFilterBar
+          filterOptions={dropDownOptions}
+          dropDownOptionSelected={selectedDropDown}
+          handleDropDown={(val) => {
+            setSelectedDropDown(String(val));
+          }}
+          searchValue={search}
+          handleSearch={(val) => setSearch(val)}
         />
-      )}
-      <OptionBar
-        options={transactionOptions}
-        handleClickOption={(key) => {
-          handleClickOption(key);
-        }}
-      />
-      <SearchFilterBar
-        filterOptions={dropDownOptions}
-        dropDownOptionSelected={selectedDropDown}
-        handleDropDown={(val) => {
-          setSelectedDropDown(String(val));
-        }}
-        searchValue={search}
-        handleSearch={(val) => setSearch(val)}
-      />
-      {String(tab) === Tab.all_transactions && (
-        <AllTransactionsTable order={selectedDropDown} />
-      )}
-      {String(tab) === Tab.sharp_payments && (
-        <SharpPaymentsTable order={selectedDropDown} />
-      )}
+        {String(tab) === Tab.all_transactions && (
+          <AllTransactionsTable order={selectedDropDown} />
+        )}
+        {String(tab) === Tab.sharp_payments && (
+          <SharpPaymentsTable order={selectedDropDown} />
+        )}
 
-      {String(tab) === Tab.subscriptions && (
-        <SubscriptionsTable order={selectedDropDown} />
-      )}
+        {String(tab) === Tab.subscriptions && (
+          <SubscriptionsTable order={selectedDropDown} />
+        )}
 
-      {String(tab) === Tab.top_up && <TopUpTable order={selectedDropDown} />}
+        {String(tab) === Tab.top_up && <TopUpTable order={selectedDropDown} />}
 
-      {String(tab) === Tab.trip_charges && (
-        <TripChargesTable order={selectedDropDown} />
-      )}
+        {String(tab) === Tab.trip_charges && (
+          <TripChargesTable order={selectedDropDown} />
+        )}
 
-      {String(tab) === Tab.trip_payments && (
-        <TripPaymentsTable order={selectedDropDown} />
-      )}
+        {String(tab) === Tab.trip_payments && (
+          <TripPaymentsTable order={selectedDropDown} />
+        )}
 
-      {String(tab) === Tab.withdrawals && <WithdrawalsTable />}
-      {/* <TransactionsTable
+        {String(tab) === Tab.withdrawals && <WithdrawalsTable />}
+        {/* <TransactionsTable
         isError={isError}
         isLoading={isLoading}
         refetch={refetch}
@@ -190,7 +193,8 @@ const Transactions: NextPage = () => {
           onPageChange={(page) => setCurrentPage(page)}
         />
       )} */}
-    </AppLayout>
+      </AppLayout>
+    </>
   );
 };
 

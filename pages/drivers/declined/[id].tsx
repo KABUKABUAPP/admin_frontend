@@ -15,6 +15,7 @@ import { useViewDriverQuery } from "@/api-services/driversService";
 import Loader from "@/components/ui/Loader/Loader";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import useUserPermissions from "@/hooks/useUserPermissions";
+import AppHead from "@/components/common/AppHead";
 
 const Driver: NextPage = () => {
   const router = useRouter();
@@ -29,6 +30,8 @@ const Driver: NextPage = () => {
   const { userPermissions } = useUserPermissions();
 
   return (
+    <>
+    <AppHead title="Kabukabu | Drivers" />
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
         <ActionBar>
@@ -74,40 +77,9 @@ const Driver: NextPage = () => {
         )}
       </div>
     </AppLayout>
+    </>
   );
 };
 
 export default Driver;
 
-const mockTripHistory = [
-  {
-    originTop: "Kuvuki Land",
-    originBottom: "",
-    destinationTop: "Filmhouse Cinemas IMAX Lekki",
-    destinationBottom: "22, Ozumba Mbadiwe Street, Lekki, Lagos",
-    paymentMethod: "Wallet Payment",
-    date: "20 January, 2023 at 3:30pm",
-    amount: 1300,
-    id: "#12345",
-  },
-  {
-    originTop: "Kuvuki Land",
-    originBottom: "",
-    destinationTop: "Filmhouse Cinemas IMAX Lekki",
-    destinationBottom: "22, Ozumba Mbadiwe Street, Lekki, Lagos",
-    paymentMethod: "Wallet Payment",
-    date: "20 January, 2023 at 3:30pm",
-    amount: 1300,
-    id: "#12345",
-  },
-  {
-    originTop: "Kuvuki Land",
-    originBottom: "",
-    destinationTop: "Filmhouse Cinemas IMAX Lekki",
-    destinationBottom: "22, Ozumba Mbadiwe Street, Lekki, Lagos",
-    paymentMethod: "Wallet Payment",
-    date: "20 January, 2023 at 3:30pm",
-    amount: 1300,
-    id: "#12345",
-  },
-];

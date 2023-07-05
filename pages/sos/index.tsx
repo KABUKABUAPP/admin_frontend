@@ -10,6 +10,7 @@ import Pagination from "@/components/common/Pagination";
 import DropDown from "@/components/ui/DropDown";
 import DateRangeFilter from "@/components/modules/Sos/DateRangeFilter";
 import { useModalContext } from "@/contexts/ModalContext";
+import AppHead from "@/components/common/AppHead";
 
 const SOS: NextPage = () => {
   const { setModalContent } = useModalContext();
@@ -70,7 +71,7 @@ const SOS: NextPage = () => {
             );
             setStartDate(startDate);
             setEndDate(endDate);
-            setModalContent(null)
+            setModalContent(null);
           }}
         />
       );
@@ -86,44 +87,47 @@ const SOS: NextPage = () => {
   };
 
   return (
-    <AppLayout>
-      <CountHeader title="SOS Today" count={data?.totalCount} />
-      <SearchFilterBar
-        searchValue={search}
-        handleSearch={(val) => setSearch(val)}
-        filterOptions={directionFilterOptions}
-        handleDropDown={(val) => handleSortDirectionFilter(String(val))}
-        dropDownOptionSelected={selectedSortFilter}
-        title="Show:"
-      >
-        <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
-          <span>Sort:</span>
-          <DropDown
-            placeholder="Filter"
-            options={timeFilterOptions}
-            value={selectedTimeFilter}
-            handleChange={(val) => {
-              setSelectedTimeFilter(String(val));
-            }}
-          />
-        </div>
-      </SearchFilterBar>
-      <SosTable
-        data={data?.data}
-        isError={isError}
-        isLoading={isLoading}
-        refetch={refetch}
-      />
-      {data && (
-        <Pagination
-          className="pagination-bar"
-          currentPage={currentPage}
-          totalCount={data.totalCount}
-          pageSize={pageSize}
-          onPageChange={(page) => setCurrentPage(page)}
+    <>
+      <AppHead title="Kabukabu | SOS" />
+      <AppLayout>
+        <CountHeader title="SOS Today" count={data?.totalCount} />
+        <SearchFilterBar
+          searchValue={search}
+          handleSearch={(val) => setSearch(val)}
+          filterOptions={directionFilterOptions}
+          handleDropDown={(val) => handleSortDirectionFilter(String(val))}
+          dropDownOptionSelected={selectedSortFilter}
+          title="Show:"
+        >
+          <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
+            <span>Sort:</span>
+            <DropDown
+              placeholder="Filter"
+              options={timeFilterOptions}
+              value={selectedTimeFilter}
+              handleChange={(val) => {
+                setSelectedTimeFilter(String(val));
+              }}
+            />
+          </div>
+        </SearchFilterBar>
+        <SosTable
+          data={data?.data}
+          isError={isError}
+          isLoading={isLoading}
+          refetch={refetch}
         />
-      )}
-    </AppLayout>
+        {data && (
+          <Pagination
+            className="pagination-bar"
+            currentPage={currentPage}
+            totalCount={data.totalCount}
+            pageSize={pageSize}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+        )}
+      </AppLayout>
+    </>
   );
 };
 

@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import { useGetAllDriversQuery } from "@/api-services/driversService";
 import Pagination from "@/components/common/Pagination";
 import DropDown from "@/components/ui/DropDown";
+import AppHead from "@/components/common/AppHead";
 
 const Drivers: NextPage = () => {
   const router = useRouter();
@@ -113,61 +114,64 @@ const Drivers: NextPage = () => {
   };
 
   return (
-    <AppLayout>
-      <CountHeader count={drivers?.totalCount} title="Drivers" />
-      <DriverOptionBar
-        options={driverOptions}
-        handleClickOption={(keyVal) => {
-          router.push(`/drivers/${keyVal}`);
-        }}
-      />
-      <SearchFilterBar
-        searchValue={searchDriver}
-        title="Show:"
-        handleSearch={(value) => {
-          setSearchDriver(value);
-        }}
-        filterOptions={statusRemarkOptions}
-        dropDownOptionSelected={selectedStatusRemark}
-        handleDropDown={(val) => setSelectedStatusRemark(String(val))}
-      >
-        <div className="flex items-center max-sm:flex-col gap-3 justify-between">
-          <DriverTypeFilterBox
-            options={driverTypeOptions}
-            handleClickOption={(keyVal) => handleDriverTypeOption(keyVal)}
-          />
-          <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
-            <span>Sort:</span>
-            <DropDown
-              placeholder="Filter"
-              options={filterOptions}
-              value={selectedFilterOption}
-              handleChange={(val) => {
-                setSelectedFilterOption(String(val));
-              }}
-            />
-          </div>
-        </div>
-      </SearchFilterBar>
-      <div className="mt-5">
-        <DriversTable
-          tableData={drivers?.data}
-          isError={driversError}
-          isLoading={driversLoading}
-          refetch={reloadDrivers}
-          subPath="pending"
+    <>
+      <AppHead title="Kabukabu | Drivers" />
+      <AppLayout>
+        <CountHeader count={drivers?.totalCount} title="Drivers" />
+        <DriverOptionBar
+          options={driverOptions}
+          handleClickOption={(keyVal) => {
+            router.push(`/drivers/${keyVal}`);
+          }}
         />
-        {drivers && (
-          <Pagination
-            className="pagination-bar"
-            currentPage={currentPage}
-            totalCount={drivers.totalCount}
-            pageSize={pageSize}
-            onPageChange={(page) => setCurrentPage(page)}
+        <SearchFilterBar
+          searchValue={searchDriver}
+          title="Show:"
+          handleSearch={(value) => {
+            setSearchDriver(value);
+          }}
+          filterOptions={statusRemarkOptions}
+          dropDownOptionSelected={selectedStatusRemark}
+          handleDropDown={(val) => setSelectedStatusRemark(String(val))}
+        >
+          <div className="flex items-center max-sm:flex-col gap-3 justify-between">
+            <DriverTypeFilterBox
+              options={driverTypeOptions}
+              handleClickOption={(keyVal) => handleDriverTypeOption(keyVal)}
+            />
+            <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
+              <span>Sort:</span>
+              <DropDown
+                placeholder="Filter"
+                options={filterOptions}
+                value={selectedFilterOption}
+                handleChange={(val) => {
+                  setSelectedFilterOption(String(val));
+                }}
+              />
+            </div>
+          </div>
+        </SearchFilterBar>
+        <div className="mt-5">
+          <DriversTable
+            tableData={drivers?.data}
+            isError={driversError}
+            isLoading={driversLoading}
+            refetch={reloadDrivers}
+            subPath="pending"
           />
-        )}
-      </div>
-    </AppLayout>
+          {drivers && (
+            <Pagination
+              className="pagination-bar"
+              currentPage={currentPage}
+              totalCount={drivers.totalCount}
+              pageSize={pageSize}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
+          )}
+        </div>
+      </AppLayout>
+    </>
   );
 };
 

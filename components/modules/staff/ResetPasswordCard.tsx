@@ -1,8 +1,11 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
+import { useRouter } from "next/router";
 
 import useClickOutside from "@/hooks/useClickOutside";
 import { motion } from "framer-motion";
 import Button from "@/components/ui/Button/Button";
+import { useResetStaffPasswordMutation } from "@/api-services/staffService";
+import { toast } from "react-toastify";
 
 interface Props {
   handleClose: () => void;
@@ -10,6 +13,25 @@ interface Props {
 
 const ResetPasswordCard: FC<Props> = ({ handleClose }) => {
   const ref = useClickOutside<HTMLDivElement>(() => handleClose());
+
+  const [resetPassword, { isLoading, error, isSuccess }] =
+    useResetStaffPasswordMutation();
+
+  const { id } = useRouter().query;
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Staff password reset successfully");
+      handleClose();
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    if (error && "data" in error) {
+      const { message }: any = error.data;
+      toast.error(message);
+    }
+  }, [error]);
 
   return (
     <motion.div
@@ -31,7 +53,16 @@ const ResetPasswordCard: FC<Props> = ({ handleClose }) => {
           className="w-[43%]"
           onClick={handleClose}
         />
-        <Button title="Yes" size="large" className="w-[43%]" />
+        <Button
+          title="Yes"
+          size="large"
+          className="w-[43%]"
+          disabled={isLoading}
+          loading={isLoading}
+          onClick={() => {
+            resetPassword({ staffId: String(id) });
+          }}
+        />
       </div>
     </motion.div>
   );

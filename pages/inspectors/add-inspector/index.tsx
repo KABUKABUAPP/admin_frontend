@@ -6,10 +6,13 @@ import ActionBar from "@/components/common/ActionBar";
 import AddInspectorLayout from "@/components/modules/inspectors/AddInspectorLayout";
 import AddInspectorForm from "@/components/modules/inspectors/AddInspectorForm";
 import useUserPermissions from "@/hooks/useUserPermissions";
+import AppHead from "@/components/common/AppHead";
 
 const AddInspector: NextPage = () => {
   const { userPermissions } = useUserPermissions();
   return (
+    <>
+    <AppHead title="Kabukabu | Inspectors" />
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
         <ActionBar backButtonText="Cancel" />
@@ -22,6 +25,7 @@ const AddInspector: NextPage = () => {
         </AddInspectorLayout>
       </div>
     </AppLayout>
+    </>
   );
 };
 

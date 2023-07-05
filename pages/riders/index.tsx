@@ -8,6 +8,7 @@ import { useGetAllRidesQuery } from "@/api-services/ridersService";
 import AppLayout from "@/layouts/AppLayout";
 import Pagination from "@/components/common/Pagination";
 import DropDown from "@/components/ui/DropDown";
+import AppHead from "@/components/common/AppHead";
 
 const Riders: NextPage = () => {
   const [isFIlteringByBlockedRiders, setIsFilteringByBlockedRiders] =
@@ -47,46 +48,49 @@ const Riders: NextPage = () => {
   );
 
   return (
-    <AppLayout>
-      <CountHeader title="Riders" count={data?.totalCount} />
-      <SearchFilterBar
-        searchValue={searchRider}
-        handleSearch={(value) => {
-          setSearchRider(value);
-        }}
-        filterOptions={timeFilterOptions}
-        handleDropDown={(val) => setSelectedTimeFilter(String(val))}
-        dropDownOptionSelected={selectedTimeFilter}
-      >
-        <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
-          <span>Show:</span>
-          <DropDown
-            placeholder="Filter"
-            options={statusFilterOptions}
-            value={statusFilter}
-            handleChange={(val) => {
-              setStatusFilter(String(val));
-            }}
-          />
-        </div>
-      </SearchFilterBar>
-      <RidersTable
-        headBg={statusFilter === "blocked" ? "#FEE2E9" : ""}
-        ridersData={data?.data}
-        isLoading={isLoading}
-        isError={isError}
-        refetch={refetch}
-      />
-      {data && (
-        <Pagination
-          className="pagination-bar"
-          currentPage={currentPage}
-          totalCount={data.totalCount}
-          pageSize={pageSize}
-          onPageChange={(page) => setCurrentPage(page)}
+    <>
+      <AppHead title="Kabukabu | Riders" />
+      <AppLayout>
+        <CountHeader title="Riders" count={data?.totalCount} />
+        <SearchFilterBar
+          searchValue={searchRider}
+          handleSearch={(value) => {
+            setSearchRider(value);
+          }}
+          filterOptions={timeFilterOptions}
+          handleDropDown={(val) => setSelectedTimeFilter(String(val))}
+          dropDownOptionSelected={selectedTimeFilter}
+        >
+          <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
+            <span>Show:</span>
+            <DropDown
+              placeholder="Filter"
+              options={statusFilterOptions}
+              value={statusFilter}
+              handleChange={(val) => {
+                setStatusFilter(String(val));
+              }}
+            />
+          </div>
+        </SearchFilterBar>
+        <RidersTable
+          headBg={statusFilter === "blocked" ? "#FEE2E9" : ""}
+          ridersData={data?.data}
+          isLoading={isLoading}
+          isError={isError}
+          refetch={refetch}
         />
-      )}
-    </AppLayout>
+        {data && (
+          <Pagination
+            className="pagination-bar"
+            currentPage={currentPage}
+            totalCount={data.totalCount}
+            pageSize={pageSize}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+        )}
+      </AppLayout>
+    </>
   );
 };
 

@@ -10,6 +10,7 @@ import { useGetAllInspectorsQuery } from "@/api-services/inspectorsService";
 import Pagination from "@/components/common/Pagination";
 import { useRouter } from "next/router";
 import useUserPermissions from "@/hooks/useUserPermissions";
+import AppHead from "@/components/common/AppHead";
 
 const Inspectors: NextPage = () => {
   const [carOwner, setCarOwner] = useState<boolean>(false);
@@ -48,6 +49,8 @@ const Inspectors: NextPage = () => {
   const { userPermissions } = useUserPermissions();
 
   return (
+    <>
+    <AppHead title="Kabukabu | Inspectors" />
     <AppLayout>
       <SearchFilterBar
         searchValue={search}
@@ -84,6 +87,7 @@ const Inspectors: NextPage = () => {
         />
       )}
     </AppLayout>
+    </>
   );
 };
 

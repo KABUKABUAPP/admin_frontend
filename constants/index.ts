@@ -85,8 +85,8 @@ export const rolesOptionsArr: {
     isChecked: false,
   },
   {
-    title: "Settings",
-    label: "settings_permissions",
+    title: "Roles",
+    label: "roles_permissions",
     read: false,
     write: false,
     isChecked: false,
