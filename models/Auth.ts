@@ -75,7 +75,11 @@ export interface LoginResponse {
           read: boolean;
           write: boolean;
         };
-        settings_permissions: {
+        "": {
+          read: boolean;
+          write: boolean;
+        };
+        roles_permissions: {
           read: boolean;
           write: boolean;
         };
