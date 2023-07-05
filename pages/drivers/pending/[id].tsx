@@ -18,6 +18,8 @@ import ApproveRequestCard from "@/components/modules/drivers/ApproveRequestCard"
 import DeclineRequestCard from "@/components/modules/drivers/DeclineRequestCard";
 import { useModalContext } from "@/contexts/ModalContext";
 import ActionDocumentCardContainer from "@/components/modules/drivers/ActionDocumentCardContainer";
+import useUserPermissions from "@/hooks/useUserPermissions";
+import AppHead from "@/components/common/AppHead";
 
 const Driver: NextPage = () => {
   const router = useRouter();
@@ -52,64 +54,75 @@ const Driver: NextPage = () => {
     }
   }, [JSON.stringify(data)]);
 
+  const { userPermissions } = useUserPermissions();
+
   return (
-    <AppLayout padding="0">
-      <div className="lg:h-screen lg:overflow-hidden p-4">
-        <ActionBar>
-          {data && data.guarantor.responseStatus === 'approved' && isApproveButton && (
-            <Button
-              title="Approve Request"
-              className="!bg-[#1FD11B] !text-[#FFFFFF]"
-              startIcon={<CheckIcon />}
-              size="large"
-              onClick={() =>
-                setModalContent(<ApproveRequestCard id={String(id)} />)
+    <>
+      <AppHead title="Kabukabu | Drivers" />
+      <AppLayout padding="0">
+        <div className="lg:h-screen lg:overflow-hidden p-4">
+          <ActionBar>
+            {userPermissions &&
+              userPermissions.drivers_permissions.write &&
+              data &&
+              data.guarantor.responseStatus === "approved" &&
+              isApproveButton && (
+                <Button
+                  title="Approve Request"
+                  className="!bg-[#1FD11B] !text-[#FFFFFF]"
+                  startIcon={<CheckIcon />}
+                  size="large"
+                  onClick={() =>
+                    setModalContent(<ApproveRequestCard id={String(id)} />)
+                  }
+                />
+              )}
+            {userPermissions &&
+              userPermissions.drivers_permissions.write &&
+              isDeclineButton && (
+                <Button
+                  title="Decline Request"
+                  startIcon={<TimesIcon />}
+                  size="large"
+                  color="secondary"
+                  onClick={() => {
+                    setModalContent(<DeclineRequestCard id={String(id)} />);
+                  }}
+                />
+              )}
+          </ActionBar>
+
+          {data && !isLoading && !isError && (
+            <ViewDriverLayout
+              firstRow={
+                <>
+                  <DriverInfoCard {...data.driverInfo} />
+
+                  <GuarantorDetailsCard {...data.guarantor} />
+
+                  <CarDocuments {...data.carDocs} />
+                </>
+              }
+              secondRow={
+                <ActionDocumentCardContainer data={data.carDocs.documents} />
               }
             />
           )}
-          {isDeclineButton && (
-            <Button
-              title="Decline Request"
-              startIcon={<TimesIcon />}
-              size="large"
-              color="secondary"
-              onClick={() => {
-                setModalContent(<DeclineRequestCard id={String(id)} />);
-              }}
-            />
+          {isLoading && !data && !isError && (
+            <div className="pt-4 flex items-center justify-center">
+              <Loader size="medium" />
+            </div>
           )}
-        </ActionBar>
 
-        {data && !isLoading && !isError && (
-          <ViewDriverLayout
-            firstRow={
-              <>
-                <DriverInfoCard {...data.driverInfo} />
-
-                <GuarantorDetailsCard {...data.guarantor} />
-
-                <CarDocuments {...data.carDocs} />
-              </>
-            }
-            secondRow={
-              <ActionDocumentCardContainer data={data.carDocs.documents} />
-            }
-          />
-        )}
-        {isLoading && !data && !isError && (
-          <div className="pt-4 flex items-center justify-center">
-            <Loader size="medium" />
-          </div>
-        )}
-
-        {!isLoading && !data && isError && (
-          <div className="pt-4 flex flex-col gap-2 items-center justify-center">
-            <ErrorMessage message="Error Fetching Data" />
-            <Button title="Reload" onClick={refetch} />
-          </div>
-        )}
-      </div>
-    </AppLayout>
+          {!isLoading && !data && isError && (
+            <div className="pt-4 flex flex-col gap-2 items-center justify-center">
+              <ErrorMessage message="Error Fetching Data" />
+              <Button title="Reload" onClick={refetch} />
+            </div>
+          )}
+        </div>
+      </AppLayout>
+    </>
   );
 };
 

@@ -11,6 +11,7 @@ import DriverTypeFilterBox from "@/components/modules/drivers/DriverTypeFilterBo
 import { useRouter } from "next/router";
 import { useGetAllDriversQuery } from "@/api-services/driversService";
 import Pagination from "@/components/common/Pagination";
+import AppHead from "@/components/common/AppHead";
 
 const Drivers: NextPage = () => {
   const router = useRouter();
@@ -46,7 +47,7 @@ const Drivers: NextPage = () => {
       limit: pageSize,
       page: currentPage,
       search: searchDriver,
-      order: selectedFilterOption
+      order: selectedFilterOption,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -89,51 +90,52 @@ const Drivers: NextPage = () => {
     setDriverTypeOptions(() => mutatedOptions);
   };
 
-  
-
   return (
-    <AppLayout>
-      <CountHeader count={drivers?.totalCount} title="Drivers" />
-      <DriverOptionBar
-        options={driverOptions}
-        handleClickOption={(keyVal) => {
-          router.push(`/drivers/${keyVal}`);
-        }}
-      />
-      <SearchFilterBar
-        searchValue={searchDriver}
-        handleSearch={(value) => {
-          setSearchDriver(value);
-        }}
-        filterOptions={filterOptions}
-        dropDownOptionSelected={selectedFilterOption}
-        handleDropDown={(val) => setSelectedFilterOption(String(val))}
-      >
-        <DriverTypeFilterBox
-          options={driverTypeOptions}
-          handleClickOption={(keyVal) => handleDriverTypeOption(keyVal)}
+    <>
+      <AppHead title="Kabukabu | Drivers" />
+      <AppLayout>
+        <CountHeader count={drivers?.totalCount} title="Drivers" />
+        <DriverOptionBar
+          options={driverOptions}
+          handleClickOption={(keyVal) => {
+            router.push(`/drivers/${keyVal}`);
+          }}
         />
-      </SearchFilterBar>
-      <div className="mt-5">
-        <DriversTable
-          tableData={drivers?.data}
-          isError={driversError}
-          isLoading={driversLoading}
-          refetch={reloadDrivers}
-          subPath="declined"
-          headBg="#FEE2E9"
-        />
-        {drivers && (
-          <Pagination
-            className="pagination-bar"
-            currentPage={currentPage}
-            totalCount={drivers.totalCount}
-            pageSize={pageSize}
-            onPageChange={(page) => setCurrentPage(page)}
+        <SearchFilterBar
+          searchValue={searchDriver}
+          handleSearch={(value) => {
+            setSearchDriver(value);
+          }}
+          filterOptions={filterOptions}
+          dropDownOptionSelected={selectedFilterOption}
+          handleDropDown={(val) => setSelectedFilterOption(String(val))}
+        >
+          <DriverTypeFilterBox
+            options={driverTypeOptions}
+            handleClickOption={(keyVal) => handleDriverTypeOption(keyVal)}
           />
-        )}
-      </div>
-    </AppLayout>
+        </SearchFilterBar>
+        <div className="mt-5">
+          <DriversTable
+            tableData={drivers?.data}
+            isError={driversError}
+            isLoading={driversLoading}
+            refetch={reloadDrivers}
+            subPath="declined"
+            headBg="#FEE2E9"
+          />
+          {drivers && (
+            <Pagination
+              className="pagination-bar"
+              currentPage={currentPage}
+              totalCount={drivers.totalCount}
+              pageSize={pageSize}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
+          )}
+        </div>
+      </AppLayout>
+    </>
   );
 };
 

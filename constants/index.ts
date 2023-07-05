@@ -1,3 +1,5 @@
+import { PermissionLabel } from "@/models/Permission";
+
 export const AUTH_BASE_URL = process.env.NEXT_PUBLIC_AUTH_URL;
 export const RIDES_BASE_URL = process.env.NEXT_PUBLIC_RIDE_BASE_URL;
 export const HUBS_BASE_URL = process.env.NEXT_PUBLIC_HUBS_BASE_URL;
@@ -83,8 +85,22 @@ export const rolesOptionsArr: {
     isChecked: false,
   },
   {
-    title: "Settings",
-    label: "settings_permissions",
+    title: "Roles",
+    label: "roles_permissions",
+    read: false,
+    write: false,
+    isChecked: false,
+  },
+  {
+    title: "Promotions",
+    label: "promotions_permissions",
+    read: false,
+    write: false,
+    isChecked: false,
+  },
+  {
+    title: "Sharp Cars",
+    label: "sharp_program_permissions",
     read: false,
     write: false,
     isChecked: false,
@@ -93,7 +109,7 @@ export const rolesOptionsArr: {
 
 export const routePermissionsMapping: {
   route: string;
-  permissionLabel: string;
+  permissionLabel: PermissionLabel;
 }[] = [
   {
     route: '/dashboard',
@@ -141,7 +157,7 @@ export const routePermissionsMapping: {
   },
   {
     route: '/settings',
-    permissionLabel: 'settings_permissions'
+    permissionLabel: ''
   },
 ];
 

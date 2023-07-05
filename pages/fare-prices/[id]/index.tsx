@@ -16,6 +16,7 @@ import { useViewFarePriceQuery } from "@/api-services/farePricesService";
 import Loader from "@/components/ui/Loader/Loader";
 import EditDriverFeeForm from "@/components/modules/fare-prices/EditDriverFeeForm";
 import EditNormalFeesForm from "@/components/modules/fare-prices/EditNormalFeesForm";
+import AppHead from "@/components/common/AppHead";
 
 const FarePrice: NextPage = () => {
   const { setModalContent } = useModalContext();
@@ -35,100 +36,108 @@ const FarePrice: NextPage = () => {
   };
 
   return (
-    <AppLayout padding="0">
-      <div className="lg:h-screen lg:overflow-hidden p-4">
-        <ActionBar>
-          {data && (
+    <>
+      <AppHead title="Kabukabu | Fare Prices" />
+      <AppLayout padding="0">
+        <div className="lg:h-screen lg:overflow-hidden p-4">
+          <ActionBar>
+            {data && (
+              <Button
+                title={
+                  data.data.surge_status === true ? "End Surge" : "Start Surge"
+                }
+                size="large"
+                color="tetiary"
+                startIcon={<SurgeIcon />}
+                onClick={handleSurge}
+              />
+            )}
             <Button
-              title={
-                data.data.surge_status === true ? "End Surge" : "Start Surge"
-              }
+              title="Delete Profile"
               size="large"
-              color="tetiary"
-              startIcon={<SurgeIcon />}
-              onClick={handleSurge}
+              color="secondary"
+              startIcon={<TrashIcon />}
+            />
+          </ActionBar>
+          {isLoading && !data && !isError && (
+            <div className="pt-6 flex justify-center w-full">
+              <Loader size="medium" />
+            </div>
+          )}
+          {!data && isError && !isLoading && (
+            <div className="flex flex-col items-center gap-3 pt-6">
+              <p className="text-rose-600">Oops! Something went wrong</p>
+              <div>
+                <Button title="Reload" onClick={refetch} />
+              </div>
+            </div>
+          )}
+          {data && !isLoading && !isError && (
+            <ViewFarePriceLayout
+              asideComponents={
+                <FareDetailsCard
+                  fareId={`#${data.data._id}`}
+                  fareLocation={`${data.data.state}, ${data.data.country}`}
+                  totalFares={`4`}
+                  totalTripsInState={`${data?.data?.total_trips_in_state}`}
+                  createdOn={new Date(
+                    data.data.created_at
+                  ).toLocaleDateString()}
+                />
+              }
+              mainComponents={
+                <>
+                  <FarePriceCard
+                    title="Driver Fee"
+                    handleEdit={({ monthlyPayment, sharpPayment }) => {
+                      setModalContent(
+                        <EditDriverFeeForm
+                          currentMontlyPayment={monthlyPayment}
+                          currentSharpPayment={sharpPayment}
+                        />
+                      );
+                    }}
+                    cardData={[
+                      {
+                        title: "Monthly Payment",
+                        body: `₦${data.data.driver_fee.monthly_payment}/Month`,
+                      },
+                      {
+                        title: "Sharp Payment",
+                        body: `₦${data.data.driver_fee.sharp_payment}/Month`,
+                      },
+                    ]}
+                  />
+                  <FarePriceCard
+                    title="Fares[Normal]"
+                    handleEdit={() => {
+                      setModalContent(<EditNormalFeesForm />);
+                    }}
+                    cardData={[
+                      { title: "Base Fare", body: `₦${data.data.base_fare}` },
+                      {
+                        title: "Distance",
+                        body: `₦${data.data.distance_per_km}/km`,
+                      },
+                      { title: "Time", body: `₦${data.data.time_per_min}/min` },
+                      { title: "VAT", body: `${data.data.state_levy}%` },
+                      {
+                        title: "Booking Fee",
+                        body: `₦${data.data.booking_fee}`,
+                      },
+                      {
+                        title: "Surge Multiplier",
+                        body: `${data.data.surge_multiplier}`,
+                      },
+                    ]}
+                  />
+                </>
+              }
             />
           )}
-          <Button
-            title="Delete Profile"
-            size="large"
-            color="secondary"
-            startIcon={<TrashIcon />}
-          />
-        </ActionBar>
-        {isLoading && !data && !isError && (
-          <div className="pt-6 flex justify-center w-full">
-            <Loader size="medium" />
-          </div>
-        )}
-        {!data && isError && !isLoading && (
-          <div className="flex flex-col items-center gap-3 pt-6">
-            <p className="text-rose-600">Oops! Something went wrong</p>
-            <div>
-              <Button title="Reload" onClick={refetch} />
-            </div>
-          </div>
-        )}
-        {data && !isLoading && !isError && (
-          <ViewFarePriceLayout
-            asideComponents={
-              <FareDetailsCard
-                fareId={`#${data.data._id}`}
-                fareLocation={`${data.data.state}, ${data.data.country}`}
-                totalFares={`4`}
-                totalTripsInState={`${data?.data?.total_trips_in_state}`}
-                createdOn={new Date(data.data.created_at).toLocaleDateString()}
-              />
-            }
-            mainComponents={
-              <>
-                <FarePriceCard
-                  title="Driver Fee"
-                  handleEdit={({ monthlyPayment, sharpPayment }) => {
-                    setModalContent(
-                      <EditDriverFeeForm
-                        currentMontlyPayment={monthlyPayment}
-                        currentSharpPayment={sharpPayment}
-                      />
-                    );
-                  }}
-                  cardData={[
-                    {
-                      title: "Monthly Payment",
-                      body: `₦${data.data.driver_fee.monthly_payment}/Month`,
-                    },
-                    {
-                      title: "Sharp Payment",
-                      body: `₦${data.data.driver_fee.sharp_payment}/Month`,
-                    },
-                  ]}
-                />
-                <FarePriceCard
-                  title="Fares[Normal]"
-                  handleEdit={() => {
-                    setModalContent(<EditNormalFeesForm />);
-                  }}
-                  cardData={[
-                    { title: "Base Fare", body: `₦${data.data.base_fare}` },
-                    {
-                      title: "Distance",
-                      body: `₦${data.data.distance_per_km}/km`,
-                    },
-                    { title: "Time", body: `₦${data.data.time_per_min}/min` },
-                    { title: "VAT", body: `${data.data.state_levy}%` },
-                    { title: "Booking Fee", body: `₦${data.data.booking_fee}` },
-                    {
-                      title: "Surge Multiplier",
-                      body: `${data.data.surge_multiplier}`,
-                    },
-                  ]}
-                />
-              </>
-            }
-          />
-        )}
-      </div>
-    </AppLayout>
+        </div>
+      </AppLayout>
+    </>
   );
 };
 

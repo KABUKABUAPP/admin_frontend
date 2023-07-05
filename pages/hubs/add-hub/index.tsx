@@ -6,6 +6,8 @@ import HubImagesCard from "@/components/modules/hubs/HubImagesCard";
 import AddHubLayout from "@/components/modules/hubs/AddHubLayout";
 import HubDetailsForm from "@/components/modules/hubs/HubDetailsForm";
 import { toast } from "react-toastify";
+import useUserPermissions from "@/hooks/useUserPermissions";
+import AppHead from "@/components/common/AppHead";
 
 const AddHub: FC = () => {
   const [stagedImages, setStagedImages] = useState<
@@ -33,26 +35,33 @@ const AddHub: FC = () => {
     setStagedImages(filteredImages);
   };
 
-  return (
-    <AppLayout padding="0">
-      <div className="lg:h-screen lg:overflow-hidden p-4">
-        <ActionBar backButtonText="Cancel" />
+  const { userPermissions } = useUserPermissions();
 
-        <AddHubLayout>
-          <p className="text-3xl font-semibold pb-8">New Hub</p>
-          <div className="flex flex-col gap-4">
-            <HubImagesCard
-              images={stagedImages}
-              handleChange={(file) => {
-                handleAddImage(file);
-              }}
-              handleDelete={handleDeleteImage}
-            />
-            <HubDetailsForm hubImages={stagedImages} />
-          </div>
-        </AddHubLayout>
-      </div>
-    </AppLayout>
+  return (
+    <>
+      <AppHead title="Kabukabu | Hubs" />
+      <AppLayout padding="0">
+        <div className="lg:h-screen lg:overflow-hidden p-4">
+          <ActionBar backButtonText="Cancel" />
+
+          <AddHubLayout>
+            <p className="text-3xl font-semibold pb-8">New Hub</p>
+            {userPermissions && userPermissions.hubs_permissions.write && (
+              <div className="flex flex-col gap-4">
+                <HubImagesCard
+                  images={stagedImages}
+                  handleChange={(file) => {
+                    handleAddImage(file);
+                  }}
+                  handleDelete={handleDeleteImage}
+                />
+                <HubDetailsForm hubImages={stagedImages} />
+              </div>
+            )}
+          </AddHubLayout>
+        </div>
+      </AppLayout>
+    </>
   );
 };
 

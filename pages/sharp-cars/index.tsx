@@ -9,6 +9,7 @@ import SharpCarOptionBar from "@/components/modules/sharp-cars/SharpCarOptionBar
 import { sharpCarsOptionsData } from "@/constants";
 import { useGetAllSharpCarsQuery } from "@/api-services/sharpCarsService";
 import Pagination from "@/components/common/Pagination";
+import AppHead from "@/components/common/AppHead";
 
 const SharpCars: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,33 +40,36 @@ const SharpCars: NextPage = () => {
   );
 
   return (
-    <AppLayout>
-      <CountHeader title="Sharp Cars" count={5000} />
-      <SharpCarOptionBar
-        handleClickOption={(key) => handleClickOption(key)}
-        options={options}
-      />
-      <SearchFilterBar
-        filterOptions={filterOptions}
-        dropDownOptionSelected={selectedFilterOption}
-        handleDropDown={(val) => setSelectedFilterOption(String(val))}
-      />
-      <SharpCarsTable
-        data={data?.data}
-        isLoading={isLoading}
-        isError={isError}
-        refetch={refetch}
-      />
-      {data && (
-        <Pagination
-          className="pagination-bar"
-          currentPage={currentPage}
-          totalCount={data.totalCount}
-          pageSize={pageSize}
-          onPageChange={(page) => setCurrentPage(page)}
+    <>
+      <AppHead title="Kabukabu | Sharp Cars" />
+      <AppLayout>
+        <CountHeader title="Sharp Cars" count={5000} />
+        <SharpCarOptionBar
+          handleClickOption={(key) => handleClickOption(key)}
+          options={options}
         />
-      )}
-    </AppLayout>
+        <SearchFilterBar
+          filterOptions={filterOptions}
+          dropDownOptionSelected={selectedFilterOption}
+          handleDropDown={(val) => setSelectedFilterOption(String(val))}
+        />
+        <SharpCarsTable
+          data={data?.data}
+          isLoading={isLoading}
+          isError={isError}
+          refetch={refetch}
+        />
+        {data && (
+          <Pagination
+            className="pagination-bar"
+            currentPage={currentPage}
+            totalCount={data.totalCount}
+            pageSize={pageSize}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+        )}
+      </AppLayout>
+    </>
   );
 };
 

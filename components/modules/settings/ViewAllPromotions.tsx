@@ -6,6 +6,7 @@ import { useViewAllPromosQuery } from "@/api-services/settingsService";
 import Loader from "@/components/ui/Loader/Loader";
 import Pagination from "@/components/common/Pagination";
 import { useRouter } from "next/router";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 interface Props {
   handleIsCreatePromotion: () => void;
@@ -28,6 +29,8 @@ const ViewAllPromotions: FC<Props> = ({
     { refetchOnReconnect: true }
   );
   const router = useRouter();
+
+  const { userPermissions } = useUserPermissions();
 
   return (
     <div>
@@ -57,12 +60,14 @@ const ViewAllPromotions: FC<Props> = ({
         </div>
 
         <div>
-          <Button
-            title="Create Promotion"
-            onClick={() => {
-              handleIsCreatePromotion();
-            }}
-          />
+          {userPermissions && userPermissions.promotions_permissions.write && (
+            <Button
+              title="Create Promotion"
+              onClick={() => {
+                handleIsCreatePromotion();
+              }}
+            />
+          )}
         </div>
       </div>
       <div className="mt-6 flex flex-col gap-4">
@@ -74,11 +79,9 @@ const ViewAllPromotions: FC<Props> = ({
               <PromotionItem
                 data={item}
                 handleClick={() => {
-                  router.push(
-                    `/settings?promoId=${item.id}`,
-                    undefined,
-                    { shallow: true }
-                  );
+                  router.push(`/settings?promoId=${item.id}`, undefined, {
+                    shallow: true,
+                  });
                   handleViewPromoItem();
                 }}
                 key={idx}

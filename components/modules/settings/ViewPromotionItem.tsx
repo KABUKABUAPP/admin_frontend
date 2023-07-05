@@ -12,6 +12,7 @@ import Pagination from "@/components/common/Pagination";
 import { useDeletePromoMutation } from "@/api-services/settingsService";
 import TrashIcon from "@/components/icons/TrashIcon";
 import { toast } from "react-toastify";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 interface Props {
   handleBack: () => void;
@@ -54,6 +55,8 @@ const ViewPromotionItem: FC<Props> = ({ handleBack }) => {
     }
   }, [promoDeleteError]);
 
+  const { userPermissions } = useUserPermissions()
+
   return (
     <div className="relative">
       <div className="flex justify-between items-center">
@@ -63,16 +66,18 @@ const ViewPromotionItem: FC<Props> = ({ handleBack }) => {
           variant="text"
           startIcon={<ChevronLeft />}
         />
-        {data && (
-          <Button
-            onClick={() => deletePromo({ promoId: String(promoId) })}
-            title="Delete Promotion"
-            color="secondary"
-            startIcon={<TrashIcon />}
-            loading={promoDeleteLoading}
-            disabled={promoDeleteLoading}
-          />
-        )}
+        {data &&
+          userPermissions &&
+          userPermissions.promotions_permissions.write && (
+            <Button
+              onClick={() => deletePromo({ promoId: String(promoId) })}
+              title="Delete Promotion"
+              color="secondary"
+              startIcon={<TrashIcon />}
+              loading={promoDeleteLoading}
+              disabled={promoDeleteLoading}
+            />
+          )}
       </div>
       <span className="absolute top-3 left-0"></span>
       {data && !error && !isLoading && (

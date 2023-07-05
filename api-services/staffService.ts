@@ -12,6 +12,7 @@ import {
   GetAllStaffResponse,
   MappedGetAllStaff,
   MappedViewStaff,
+  ResetStaffPasswordQuery,
   ViewStaffQuery,
   ViewStaffResponse,
 } from "@/models/Staffs";
@@ -31,13 +32,13 @@ export const staffApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['view-staff', 'all-staff'],
+  tagTypes: ["view-staff", "all-staff"],
   endpoints: (build) => ({
     getAllStaff: build.query<MappedGetAllStaff, GetAllStaffQuery>({
       query: ({ limit, order, page, status, search }) => ({
         url: `admin/staff/all?limit=${limit}&page=${page}&order=${order}&status=${status}&search=${search}`,
       }),
-      providesTags: ['all-staff'],
+      providesTags: ["all-staff"],
       transformResponse: (response: GetAllStaffResponse) => {
         if (!response) return <MappedGetAllStaff>{};
         else {
@@ -64,20 +65,20 @@ export const staffApi = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: ['all-staff']
+      invalidatesTags: ["all-staff"],
     }),
     disableStaff: build.mutation<any, DisableStaffQuery>({
       query: ({ staffId }) => ({
         url: `admin/staff/disable-staff/${staffId}`,
         method: "PUT",
       }),
-      invalidatesTags: ['view-staff', 'all-staff']
+      invalidatesTags: ["view-staff", "all-staff"],
     }),
     viewStaff: build.query<MappedViewStaff, ViewStaffQuery>({
       query: ({ staffId }) => ({
         url: `admin/staff/view/${staffId}`,
       }),
-      providesTags: ['view-staff'],
+      providesTags: ["view-staff"],
       transformResponse: (response: ViewStaffResponse) => {
         if (!response) return <MappedViewStaff>{};
         else {
@@ -87,14 +88,20 @@ export const staffApi = createApi({
             phone: response?.data?.phone_number,
             address: response?.data?.address?.city,
             role: response?.data?.role.name,
-            image: response?.data?.profile_image
+            image: response?.data?.profile_image,
           };
 
-          const isBlocked = response?.data?.isBlocked
+          const isBlocked = response?.data?.isBlocked;
 
           return { userInfo: mappedStaff, isBlocked };
         }
       },
+    }),
+    resetStaffPassword: build.mutation<any, ResetStaffPasswordQuery>({
+      query: ({ staffId }) => ({
+        url: `admin/staff/reset-staff-password/${staffId}`,
+        method: "PUT",
+      }),
     }),
   }),
 });
@@ -104,4 +111,5 @@ export const {
   useCreateStaffMutation,
   useDisableStaffMutation,
   useViewStaffQuery,
+  useResetStaffPasswordMutation
 } = staffApi;

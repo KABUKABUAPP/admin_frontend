@@ -24,6 +24,8 @@ import { useGetDriverTripHistoryQuery } from "@/api-services/tripsService";
 import BlockDriverConfirmation from "@/components/modules/drivers/BlockDriverConfirmation";
 import { useModalContext } from "@/contexts/ModalContext";
 import { toast } from "react-toastify";
+import useUserPermissions from "@/hooks/useUserPermissions";
+import AppHead from "@/components/common/AppHead";
 
 const Driver: NextPage = () => {
   const router = useRouter();
@@ -73,111 +75,141 @@ const Driver: NextPage = () => {
     }
   }, [unblockError]);
 
+  const { userPermissions } = useUserPermissions();
+
   return (
-    <AppLayout padding="0">
-      <div className="lg:h-screen lg:overflow-hidden p-4">
-        <ActionBar>
-          <Button title="Call Driver" startIcon={<PhoneIcon />} size="large" />
-          {data && data.driverInfo.isBlocked === false && (
+    <>
+      <AppHead title="Kabukabu | Drivers" />
+      <AppLayout padding="0">
+        <div className="lg:h-screen lg:overflow-hidden p-4">
+          <ActionBar>
             <Button
-              title="Block Driver"
-              startIcon={<BlockIcon />}
+              title="Call Driver"
+              startIcon={<PhoneIcon />}
               size="large"
-              color="secondary"
-              onClick={() => {
-                setModalContent(
-                  <BlockDriverConfirmation driverId={String(id)} />
-                );
-              }}
             />
-          )}
-          {data && data.driverInfo.isBlocked === true && (
-            <Button
-              title="Unblock Driver"
-              startIcon={<BlockIcon />}
-              loading={unblockLoading}
-              disabled={unblockLoading}
-              size="large"
-              color="secondary"
-              className="!bg-[#1FD11B] !text-[#FFFFFF]"
-              onClick={() => {
-                unblockDriver({ driverId: String(id), reason: "" });
-              }}
-            />
-          )}
-        </ActionBar>
+            {userPermissions &&
+              userPermissions.drivers_permissions.write &&
+              data &&
+              data.driverInfo.isBlocked === false && (
+                <Button
+                  title="Block Driver"
+                  startIcon={<BlockIcon />}
+                  size="large"
+                  color="secondary"
+                  onClick={() => {
+                    setModalContent(
+                      <BlockDriverConfirmation driverId={String(id)} />
+                    );
+                  }}
+                />
+              )}
+            {userPermissions &&
+              userPermissions.drivers_permissions.write &&
+              data &&
+              data.driverInfo.isBlocked === true && (
+                <Button
+                  title="Unblock Driver"
+                  startIcon={<BlockIcon />}
+                  loading={unblockLoading}
+                  disabled={unblockLoading}
+                  size="large"
+                  color="secondary"
+                  className="!bg-[#1FD11B] !text-[#FFFFFF]"
+                  onClick={() => {
+                    unblockDriver({ driverId: String(id), reason: "" });
+                  }}
+                />
+              )}
+          </ActionBar>
 
-        {data && !isLoading && !isError && (
-          <ViewDriverLayout
-            secondRow={
-              <>
-                {tripHistory && !tripHistoryLoading && !tripHistoryError && (
-                  <TripHistoryCard
-                    tripHistoryData={tripHistory.data}
-                    totalCount={tripHistory.totalCount}
-                    currentCount={tripHistory.data.length}
-                    handleViewMore={() => {
-                      setPageSize((ps) => ps + 5);
-                    }}
+          {data && !isLoading && !isError && (
+            <ViewDriverLayout
+              secondRow={
+                <>
+                  {userPermissions &&
+                    (userPermissions.trips_permissions.read ||
+                      userPermissions.trips_permissions.write) &&
+                    tripHistory &&
+                    !tripHistoryLoading &&
+                    !tripHistoryError && (
+                      <TripHistoryCard
+                        tripHistoryData={tripHistory.data}
+                        totalCount={tripHistory.totalCount}
+                        currentCount={tripHistory.data.length}
+                        handleViewMore={() => {
+                          setPageSize((ps) => ps + 5);
+                        }}
+                      />
+                    )}
+                  {userPermissions &&
+                    (userPermissions.trips_permissions.read ||
+                      userPermissions.trips_permissions.write) &&
+                    !tripHistoryLoading &&
+                    !tripHistory &&
+                    tripHistoryError && (
+                      <div className="pt-4 flex flex-col gap-2 items-center justify-center">
+                        <ErrorMessage message="Error Fetching Trip History" />
+                        <Button title="Reload" onClick={refetchTripHistory} />
+                      </div>
+                    )}
+                  {userPermissions &&
+                    (userPermissions.trips_permissions.read ||
+                      userPermissions.trips_permissions.write) &&
+                    tripHistoryLoading &&
+                    !tripHistory &&
+                    !tripHistoryError && (
+                      <div className="pt-4 flex items-center justify-center">
+                        <Loader size="medium" />
+                      </div>
+                    )}
+                </>
+              }
+              firstRow={
+                <>
+                  <DriverInfoCard
+                    {...data.driverInfo}
+                    bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
                   />
-                )}
-                {!tripHistoryLoading && !tripHistory && tripHistoryError && (
-                  <div className="pt-4 flex flex-col gap-2 items-center justify-center">
-                    <ErrorMessage message="Error Fetching Trip History" />
-                    <Button title="Reload" onClick={refetchTripHistory} />
-                  </div>
-                )}
-                {tripHistoryLoading && !tripHistory && !tripHistoryError && (
-                  <div className="pt-4 flex items-center justify-center">
-                    <Loader size="medium" />
-                  </div>
-                )}
-              </>
-            }
-            firstRow={
-              <>
-                <DriverInfoCard
-                  {...data.driverInfo}
-                  bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
-                />
 
-                <CarDetailsCard
-                  {...data.carDetails}
-                  bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
-                />
+                  <CarDetailsCard
+                    {...data.carDetails}
+                    bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+                  />
 
-                <FinancialsCard
-                  {...data.financials}
-                  bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
-                />
+                  <FinancialsCard
+                    {...data.financials}
+                    bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+                  />
 
-                <GuarantorDetailsCard
-                  {...data.guarantor}
-                  bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
-                />
+                  <GuarantorDetailsCard
+                    {...data.guarantor}
+                    bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+                  />
 
-                <CarDocuments
-                  {...data.carDocs}
-                  bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
-                />
-              </>
-            }
-          />
-        )}
-        {isLoading && !data && !isError && (
-          <div className="pt-4 flex items-center justify-center">
-            <Loader size="medium" />
-          </div>
-        )}
+                  <CarDocuments
+                    {...data.carDocs}
+                    bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+                  />
+                </>
+              }
+            />
+          )}
+          {isLoading && !data && !isError && (
+            <div className="pt-4 flex items-center justify-center">
+              <Loader size="medium" />
+            </div>
+          )}
 
-        {!isLoading && !data && isError && (
-          <div className="pt-4 flex flex-col gap-2 items-center justify-center">
-            <ErrorMessage message="Error Fetching Data" />
-            <Button title="Reload" onClick={refetch} />
-          </div>
-        )}
-      </div>
-    </AppLayout>
+          {!isLoading && !data && isError && (
+            <div className="pt-4 flex flex-col gap-2 items-center justify-center">
+              <ErrorMessage message="Error Fetching Data" />
+              <Button title="Reload" onClick={refetch} />
+            </div>
+          )}
+        </div>
+      </AppLayout>
+    </>
   );
 };
 

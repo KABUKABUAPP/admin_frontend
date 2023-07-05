@@ -14,6 +14,8 @@ import { useRouter } from "next/router";
 import { useViewDriverQuery } from "@/api-services/driversService";
 import Loader from "@/components/ui/Loader/Loader";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import useUserPermissions from "@/hooks/useUserPermissions";
+import AppHead from "@/components/common/AppHead";
 
 const Driver: NextPage = () => {
   const router = useRouter();
@@ -25,11 +27,21 @@ const Driver: NextPage = () => {
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
+  const { userPermissions } = useUserPermissions();
+
   return (
+    <>
+    <AppHead title="Kabukabu | Drivers" />
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
         <ActionBar>
-          <Button title="Call Driver" startIcon={<PhoneIcon />} size="large" />
+          {userPermissions && userPermissions.drivers_permissions.write && (
+            <Button
+              title="Call Driver"
+              startIcon={<PhoneIcon />}
+              size="large"
+            />
+          )}
           {/* <Button
             title="Block Driver"
             startIcon={<BlockIcon />}
@@ -65,40 +77,9 @@ const Driver: NextPage = () => {
         )}
       </div>
     </AppLayout>
+    </>
   );
 };
 
 export default Driver;
 
-const mockTripHistory = [
-  {
-    originTop: "Kuvuki Land",
-    originBottom: "",
-    destinationTop: "Filmhouse Cinemas IMAX Lekki",
-    destinationBottom: "22, Ozumba Mbadiwe Street, Lekki, Lagos",
-    paymentMethod: "Wallet Payment",
-    date: "20 January, 2023 at 3:30pm",
-    amount: 1300,
-    id: "#12345",
-  },
-  {
-    originTop: "Kuvuki Land",
-    originBottom: "",
-    destinationTop: "Filmhouse Cinemas IMAX Lekki",
-    destinationBottom: "22, Ozumba Mbadiwe Street, Lekki, Lagos",
-    paymentMethod: "Wallet Payment",
-    date: "20 January, 2023 at 3:30pm",
-    amount: 1300,
-    id: "#12345",
-  },
-  {
-    originTop: "Kuvuki Land",
-    originBottom: "",
-    destinationTop: "Filmhouse Cinemas IMAX Lekki",
-    destinationBottom: "22, Ozumba Mbadiwe Street, Lekki, Lagos",
-    paymentMethod: "Wallet Payment",
-    date: "20 January, 2023 at 3:30pm",
-    amount: 1300,
-    id: "#12345",
-  },
-];

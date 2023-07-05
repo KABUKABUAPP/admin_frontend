@@ -20,6 +20,8 @@ import { useGetDriverTripHistoryQuery } from "@/api-services/tripsService";
 import { useModalContext } from "@/contexts/ModalContext";
 import BlockRiderConfirmation from "@/components/modules/riders/BlockRiderConfirmation";
 import { toast } from "react-toastify";
+import useUserPermissions from "@/hooks/useUserPermissions";
+import AppHead from "@/components/common/AppHead";
 
 const Rider: NextPage = () => {
   const router = useRouter();
@@ -67,74 +69,91 @@ const Rider: NextPage = () => {
     }
   }, [unblockError]);
 
-  return (
-    <AppLayout padding="0">
-      <div className="lg:h-screen lg:overflow-hidden p-4">
-        <ActionBar>
-          <Button title="Call Rider" startIcon={<PhoneIcon />} size="large" />
-          {data && data?.driver.isBlocked === false && (
-            <Button
-              title="Block Rider"
-              startIcon={<BlockIcon />}
-              size="large"
-              color="secondary"
-              onClick={() => {
-                setModalContent(
-                  <BlockRiderConfirmation driverId={String(id)} />
-                );
-              }}
-            />
-          )}
-          {data && data?.driver.isBlocked === true && (
-            <Button
-              title="Unblock Rider"
-              startIcon={<BlockIcon />}
-              size="large"
-              color="secondary"
-              loading={unblockLoading}
-              disabled={unblockLoading}
-              className="!bg-[#1FD11B] !text-[#FFFFFF]"
-              onClick={() => {
-                unblockRider({ driverId: String(id), reason: "unblock" });
-              }}
-            />
-          )}
-        </ActionBar>
+  const { userPermissions } = useUserPermissions();
 
-        <ViewRiderLayout
-          firstRow={
-            <>
-              <UserInfoCard
-                {...data?.driver}
-                bg={data?.driver.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+  return (
+    <>
+      <AppHead title="Kabukabu | Riders" />
+      <AppLayout padding="0">
+        <div className="lg:h-screen lg:overflow-hidden p-4">
+          <ActionBar>
+            {userPermissions && userPermissions.riders_permissions.write && (
+              <Button
+                title="Call Rider"
+                startIcon={<PhoneIcon />}
+                size="large"
               />
-              <FinancialsCard
-                {...data?.financials}
-                bg={data?.driver.isBlocked ? "#FEE2E9" : "#FFFFFF"}
-              />
-              <NextOfKinCard
-                {...data?.nextOfKin}
-                bg={data?.driver.isBlocked ? "#FEE2E9" : "#FFFFFF"}
-              />
-            </>
-          }
-          secondRow={
-            <>
-              {tripHistory && (
-                <TripHistoryCard
-                  tripHistoryData={tripHistory.data}
-                  totalCount={tripHistory.totalCount}
-                  currentCount={tripHistory.data.length}
-                  handleViewMore={() => {
-                    setPageSize((ps) => ps + 5);
+            )}
+            {userPermissions &&
+              userPermissions.riders_permissions.write &&
+              data &&
+              data?.driver.isBlocked === false && (
+                <Button
+                  title="Block Rider"
+                  startIcon={<BlockIcon />}
+                  size="large"
+                  color="secondary"
+                  onClick={() => {
+                    setModalContent(
+                      <BlockRiderConfirmation driverId={String(id)} />
+                    );
                   }}
                 />
               )}
-            </>
-          }
-        />
-      </div>
-    </AppLayout>
+            {data && data?.driver.isBlocked === true && (
+              <Button
+                title="Unblock Rider"
+                startIcon={<BlockIcon />}
+                size="large"
+                color="secondary"
+                loading={unblockLoading}
+                disabled={unblockLoading}
+                className="!bg-[#1FD11B] !text-[#FFFFFF]"
+                onClick={() => {
+                  unblockRider({ driverId: String(id), reason: "unblock" });
+                }}
+              />
+            )}
+          </ActionBar>
+
+          <ViewRiderLayout
+            firstRow={
+              <>
+                <UserInfoCard
+                  {...data?.driver}
+                  bg={data?.driver.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+                />
+                <FinancialsCard
+                  {...data?.financials}
+                  bg={data?.driver.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+                />
+                <NextOfKinCard
+                  {...data?.nextOfKin}
+                  bg={data?.driver.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+                />
+              </>
+            }
+            secondRow={
+              <>
+                {userPermissions &&
+                  (userPermissions.trips_permissions.read ||
+                    userPermissions.trips_permissions.write) &&
+                  tripHistory && (
+                    <TripHistoryCard
+                      tripHistoryData={tripHistory.data}
+                      totalCount={tripHistory.totalCount}
+                      currentCount={tripHistory.data.length}
+                      handleViewMore={() => {
+                        setPageSize((ps) => ps + 5);
+                      }}
+                    />
+                  )}
+              </>
+            }
+          />
+        </div>
+      </AppLayout>
+    </>
   );
 };
 

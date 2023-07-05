@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { AUTH_BASE_URL, RIDES_BASE_URL } from "@/constants";
+import { RIDES_BASE_URL } from "@/constants";
 import {
   GetTripInsightsResponse,
   TripInsightsMappedResponse,
@@ -48,26 +48,31 @@ export const dashboardApi = createApi({
             title: "Total trips",
             value: response?.data?.total_trips,
             iconBg: "#FFBF00",
+            
           },
           {
             title: "Active trips",
             value: response?.data?.active_trips,
             iconBg: "#2C3FEF",
+            
           },
           {
             title: "SOS",
             value: response?.data?.sos,
             iconBg: "#EF2C5B",
+            
           },
           {
             title: "Pending trips",
             value: response?.data?.pending_trips,
             iconBg: "#FFBF00",
+            
           },
           {
             title: "Total Earnings",
             value: response?.data?.total_earnings,
             iconBg: "#FFBF00",
+            
           },
         ];
       },

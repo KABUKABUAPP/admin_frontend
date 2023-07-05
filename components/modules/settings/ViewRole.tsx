@@ -11,6 +11,7 @@ import ErrorMessage from "@/components/common/ErrorMessage";
 import { useUpdateRoleMutation } from "@/api-services/settingsService";
 import { CreateRolePayload } from "@/models/Settings";
 import { toast } from "react-toastify";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 interface Props {
   handleBack: () => void;
@@ -37,6 +38,8 @@ const ViewRole: FC<Props> = ({ handleBack }) => {
     if (isChangeMade !== true) setIsChangeMade(true);
   };
 
+  const { userPermissions } = useUserPermissions();
+
   const handleCheckChange = ({
     checked,
     label,
@@ -46,20 +49,22 @@ const ViewRole: FC<Props> = ({ handleBack }) => {
     label: string;
     key: "isChecked" | "read" | "write";
   }) => {
-    const mapped = roleOptions.map((role) => {
-      if (role.label === label) {
-        if (key === "isChecked") return { ...role, isChecked: checked };
-        else if (key === "read")
-          return { ...role, read: checked, write: false };
-        else if (key === "write")
-          return { ...role, write: checked, read: false };
+    if (userPermissions && userPermissions.roles_permissions.write) {
+      const mapped = roleOptions.map((role) => {
+        if (role.label === label) {
+          if (key === "isChecked") return { ...role, isChecked: checked };
+          else if (key === "read")
+            return { ...role, read: checked, write: false };
+          else if (key === "write")
+            return { ...role, write: checked, read: false };
+          return role;
+        }
         return role;
-      }
-      return role;
-    });
+      });
 
-    setRoleOptions(mapped);
-    handleIsChangeMade()
+      setRoleOptions(mapped);
+      handleIsChangeMade();
+    }
   };
 
   const getDefaultRights = (
@@ -156,17 +161,23 @@ const ViewRole: FC<Props> = ({ handleBack }) => {
           </div>
         )}
         <div>
-          {data && isChangeMade && (
-            <Button
-              title="Save changes"
-              loading={updateLoading}
-              disabled={updateLoading}
-              onClick={() => {
-                const payload = generatePayload({ level: 4, name: data.name });
-                updateRole({ payload, roleId: String(roleId) });
-              }}
-            />
-          )}
+          {data &&
+            userPermissions &&
+            userPermissions.roles_permissions.write &&
+            isChangeMade && (
+              <Button
+                title="Save changes"
+                loading={updateLoading}
+                disabled={updateLoading}
+                onClick={() => {
+                  const payload = generatePayload({
+                    level: 4,
+                    name: data.name,
+                  });
+                  updateRole({ payload, roleId: String(roleId) });
+                }}
+              />
+            )}
         </div>
       </div>
 

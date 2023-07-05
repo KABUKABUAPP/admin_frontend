@@ -20,6 +20,8 @@ import { useDisableStaffMutation } from "@/api-services/staffService";
 import { toast } from "react-toastify";
 import Loader from "@/components/ui/Loader/Loader";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import useUserPermissions from "@/hooks/useUserPermissions";
+import AppHead from "@/components/common/AppHead";
 
 const Staff: NextPage = () => {
   const { setModalContent } = useModalContext();
@@ -64,68 +66,81 @@ const Staff: NextPage = () => {
     );
   };
 
-  return (
-    <AppLayout padding="0">
-      <div className="lg:h-screen lg:overflow-hidden p-4">
-        <ActionBar>
-          <Button
-            title="Reset Password"
-            size="large"
-            startIcon={<LockIcon />}
-            onClick={handleResetPassword}
-          />
-          {data && data.isBlocked === false && (
-            <Button
-              title="Disable Staff"
-              color="secondary"
-              size="large"
-              startIcon={<BlockIcon />}
-              onClick={handleDisableStaff}
-            />
-          )}
-          {data && data.isBlocked === true && (
-            <Button
-              title="Enable Staff"
-              color="secondary"
-              size="large"
-              loading={enableStaffLoading}
-              disabled={enableStaffLoading}
-              startIcon={<BlockIcon />}
-              className="!bg-[#1FD11B] !text-[#FFFFFF]"
-              onClick={() => {
-                enableStaff({ staffId: String(id) });
-              }}
-            />
-          )}
-        </ActionBar>
+  const { userPermissions } = useUserPermissions();
 
-        <ViewStaffLayout
-          firstRow={
-            <>
-              {data && !isLoading && !error && (
-                <UserInfoCard
-                  {...data.userInfo}
-                  bg={data.isBlocked === true ? "#FEE2E9" : "#FFFFFF"}
+  return (
+    <>
+      <AppHead title="Kabukabu | Staff" />
+      <AppLayout padding="0">
+        <div className="lg:h-screen lg:overflow-hidden p-4">
+          <ActionBar>
+            {userPermissions && userPermissions.staffs_permissions.write && (
+              <Button
+                title="Reset Password"
+                size="large"
+                startIcon={<LockIcon />}
+                onClick={handleResetPassword}
+              />
+            )}
+            {userPermissions &&
+              userPermissions.staffs_permissions.write &&
+              data &&
+              data.isBlocked === false && (
+                <Button
+                  title="Disable Staff"
+                  color="secondary"
+                  size="large"
+                  startIcon={<BlockIcon />}
+                  onClick={handleDisableStaff}
                 />
               )}
-              {!data && !error && isLoading && (
-                <div className="flex items-center justify-center">
-                  <Loader />
-                </div>
+            {userPermissions &&
+              userPermissions.staffs_permissions.write &&
+              data &&
+              data.isBlocked === true && (
+                <Button
+                  title="Enable Staff"
+                  color="secondary"
+                  size="large"
+                  loading={enableStaffLoading}
+                  disabled={enableStaffLoading}
+                  startIcon={<BlockIcon />}
+                  className="!bg-[#1FD11B] !text-[#FFFFFF]"
+                  onClick={() => {
+                    enableStaff({ staffId: String(id) });
+                  }}
+                />
               )}
-              {!data && error && !isLoading && (
-                <div className="flex items-center justify-center flex-col gap-3">
-                  <ErrorMessage message="Oops! Something went wrong"/>
-                  <Button title="Refetch" onClick={refetch}/>
-                </div>
-              )}
-              {/* <SummaryCard disputesRaised={110} pendingDisputes={0} /> */}
-            </>
-          }
-          secondRow={<>{/* <ActivityLogCard logs={mockLogs} /> */}</>}
-        />
-      </div>
-    </AppLayout>
+          </ActionBar>
+
+          <ViewStaffLayout
+            firstRow={
+              <>
+                {data && !isLoading && !error && (
+                  <UserInfoCard
+                    {...data.userInfo}
+                    bg={data.isBlocked === true ? "#FEE2E9" : "#FFFFFF"}
+                  />
+                )}
+                {!data && !error && isLoading && (
+                  <div className="flex items-center justify-center">
+                    <Loader />
+                  </div>
+                )}
+                {!data && error && !isLoading && (
+                  <div className="flex items-center justify-center flex-col gap-3">
+                    <ErrorMessage message="Oops! Something went wrong" />
+                    <Button title="Refetch" onClick={refetch} />
+                  </div>
+                )}
+                {/* <SummaryCard disputesRaised={110} pendingDisputes={0} /> */}
+              </>
+            }
+            secondRow={<>{/* <ActivityLogCard logs={mockLogs} /> */}</>}
+          />
+        </div>
+      </AppLayout>
+    </>
   );
 };
 

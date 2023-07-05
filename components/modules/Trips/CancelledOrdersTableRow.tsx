@@ -37,7 +37,7 @@ const CancelledOrdersTableRow: FC<Props> = ({
 
   return (
     <div
-      onClick={() => router.push(`/trips/${id}?tab=${tab}`)}
+      onClick={() => router.push(`/trips/${id}?tab=${tab}&reason=${reason}`)}
       className="flex p-3 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
       key={index}
     >
