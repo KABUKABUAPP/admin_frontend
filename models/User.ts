@@ -8,7 +8,7 @@ export interface User {
   hasResetDefaultPassword: boolean;
   created_at: Date | string;
   updated_at: Date | string;
-  permissions: UserPermissions
+  permissions: UserPermissions;
 }
 
 export interface UserPermissions {
@@ -60,7 +60,11 @@ export interface UserPermissions {
     read: boolean;
     write: boolean;
   };
-  settings_permissions: {
+  "": {
+    read: boolean;
+    write: boolean;
+  };
+  roles_permissions: {
     read: boolean;
     write: boolean;
   };

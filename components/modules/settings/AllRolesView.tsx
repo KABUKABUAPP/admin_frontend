@@ -6,10 +6,11 @@ import RoleItem from "./RoleItem";
 import { useGetRolesQuery } from "@/api-services/settingsService";
 import Pagination from "@/components/common/Pagination";
 import Loader from "@/components/ui/Loader/Loader";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 interface Props {
   handleViewRole: () => void;
-  handleCreateRole: ()=>void
+  handleCreateRole: () => void;
 }
 
 const AllRolesView: FC<Props> = ({ handleViewRole, handleCreateRole }) => {
@@ -24,12 +25,16 @@ const AllRolesView: FC<Props> = ({ handleViewRole, handleCreateRole }) => {
   );
   const { push } = useRouter();
 
+  const { userPermissions } = useUserPermissions();
+
   return (
     <>
       <div className="flex justify-between items-center w-full">
         <p className="text-2xl font-medium">Roles</p>
         <div>
-          <Button title="New Role" size="large" onClick={handleCreateRole}/>
+          {userPermissions && userPermissions.roles_permissions.write && (
+            <Button title="New Role" size="large" onClick={handleCreateRole} />
+          )}
         </div>
       </div>
 
@@ -43,7 +48,7 @@ const AllRolesView: FC<Props> = ({ handleViewRole, handleCreateRole }) => {
               key={idx}
               handleClick={(id) => {
                 push(`/settings?roleId=${id}`, undefined, { shallow: true });
-                handleViewRole()
+                handleViewRole();
               }}
             />
           );

@@ -45,11 +45,19 @@ const Settings: NextPage = () => {
       const filteredNav = nav.filter((item) => {
         if (
           item.title === "Promotions" &&
-          (permissions.promotions_permissions.read === false &&
-            permissions.promotions_permissions.write === false)
-        )
+          permissions.promotions_permissions.read === false &&
+          permissions.promotions_permissions.write === false
+        ) {
           return false;
-        else return true;
+        } else if (
+          item.title === "Roles" &&
+          permissions.roles_permissions.read === false &&
+          permissions.roles_permissions.write === false
+        ) {
+          return false;
+        } else {
+          return true;
+        }
       });
 
       return filteredNav;

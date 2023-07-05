@@ -7,6 +7,7 @@ import Transition from "@/components/common/Transition";
 import Cookies from "js-cookie";
 import { USER_TOKEN } from "@/constants";
 import { routePermissionsMapping } from "@/constants";
+import useUserPermissions from "@/hooks/useUserPermissions";
 
 interface Props {
   padding?: string;
@@ -48,19 +49,28 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
 
     return mutatedSidebarItems;
   };
+  const { userPermissions } = useUserPermissions()
 
   const getAccessibleLinks = (sidebarItems: SidebarLink[]) => {
-    const user = Cookies.get(USER_TOKEN);
-    if (user) {
-      const parsedUser = JSON.parse(user);
+   
+    if (userPermissions) {
       const acccessibleLinks = routePermissionsMapping
         .filter((item) => {
-          if (
-            parsedUser.permissions[`${item.permissionLabel}`].read === true ||
-            parsedUser.permissions[`${item.permissionLabel}`].write === true
-          ) {
+          if (item.route === "/settings") {
             return true;
-          } else return false;
+          } else {
+            if (
+              userPermissions[`${item.permissionLabel}`].read === true ||
+              userPermissions[`${item.permissionLabel}`].write === true
+            ) {
+              return true;
+            }
+            if (item.route === "/settings") {
+              return true;
+            } else {
+              return false;
+            }
+          }
         })
         .map((item) => {
           if (item.route === "/drivers") return "/drivers/active";
@@ -72,7 +82,7 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
         else return false;
       });
 
-      return accessibleSidebarLinks;
+      return [...accessibleSidebarLinks];
     } else return [] as SidebarLink[];
   };
 
