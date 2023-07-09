@@ -47,7 +47,7 @@ const sidebarNavLinks: SidebarLink[] = [
     link: "/drivers/active",
     isActive: false,
     icon: <UserSquareIcon />,
-    subLinks: ['drivers/pending', '/drivers/declined']
+    subLinks: ['drivers/pending', '/drivers/declined', '/drivers/deleted']
   },
   {
     title: "Sharp Cars",
