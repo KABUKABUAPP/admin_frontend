@@ -9,6 +9,8 @@ export interface DriversTableBodyData {
   status?: string;
   userId?: string;
   statusRemark?: string;
+  dateDeleted?: string;
+  deletionReason?: string;
 }
 
 export interface DriversMappedResponse {
@@ -23,6 +25,7 @@ export interface Driver {
     full_name: string;
     total_trips: 0;
     profile_image: string;
+    reason_for_delete?: string;
   };
   car_owner: true;
   state: string;
@@ -55,7 +58,8 @@ export interface GetAllDriversQuery {
   search: string;
   order: string;
   status?: string;
-  statusRemark?: string
+  statusRemark?: string;
+  deleted?: string
 }
 
 export interface Document {

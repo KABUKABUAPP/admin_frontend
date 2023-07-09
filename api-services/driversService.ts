@@ -49,10 +49,13 @@ export const driversApi = createApi({
         order,
         status,
         statusRemark,
+        deleted,
       }) => ({
         url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}&search=${search}&order=${order}&is_blocked=${
           status ? status : ""
-        }&status_remark=${statusRemark ? statusRemark : ""}`,
+        }&status_remark=${statusRemark ? statusRemark : ""}${
+          deleted ? `&deleted=${deleted}` : ""
+        }`,
       }),
       providesTags: ["drivers"],
       transformResponse: (response: GetAllDriversResponse) => {
@@ -74,6 +77,8 @@ export const driversApi = createApi({
               status: driver?.approval_status,
               userId: driver?.user._id,
               statusRemark: driver?.status_remark,
+              dateDeleted: "NOT DONE",
+              deletionReason: driver?.user?.reason_for_delete,
             } as DriversTableBodyData;
           });
 

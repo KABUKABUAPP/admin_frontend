@@ -244,6 +244,11 @@ export const driverOptionBarData = [
     isActive: false,
     keyVal: "declined",
   },
+  {
+    title: "Deleted Drivers",
+    isActive: false,
+    keyVal: "deleted",
+  },
 ];
 
 export const driverTypeFilterOptionsData = [
