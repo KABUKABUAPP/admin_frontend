@@ -47,7 +47,7 @@ const CarOccupantDetailsCard: FC<Props> = ({
       <div className="flex gap-3">
         <div style={{ flex: 1 }}>
           <div className="relative overflow-hidden">
-            <Avatar imageUrl={imageUri} fallBack="" />
+            {name && <Avatar imageUrl={imageUri} fallBack={name[0]} />}
           </div>
         </div>
         <div style={{ flex: 4 }}>
