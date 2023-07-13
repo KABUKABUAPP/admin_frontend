@@ -18,6 +18,10 @@ export interface DriversMappedResponse {
   totalCount: number;
 }
 
+export interface ReactivateDriverQuery {
+  driverId: string
+}
+
 export interface Driver {
   _id: string;
   user: {

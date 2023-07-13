@@ -80,10 +80,11 @@ const GuarantorDetailsCard: FC<Props> = ({
     declined: "#FEE2E9",
     approved: "#E3FFE2",
   };
+  const isDeleted = router.pathname.includes('deleted')
 
   return (
     <Card bg={!showGuarantorStatus ? bg : statusBg[`${responseStatus}`]}>
-      <p className="text-lg font-semibold">Guarantor Details</p>
+      <p className={`text-lg font-semibold ${isDeleted ? '!text-[#9A9A9A]' : ''}`}>Guarantor Details</p>
       <div className="flex gap-2 mt-2">
         <div>
           <div className="w-[80px] h-[80px]">
@@ -98,7 +99,7 @@ const GuarantorDetailsCard: FC<Props> = ({
           </div>
         </div>
         <div className="flex flex-col gap-2">
-          <p className="text-lg font-semibold">{fullname}</p>
+          <p className={`text-lg font-semibold ${isDeleted ? '!text-[#9A9A9A]' : ''}`}>{fullname}</p>
           <p className="text-sm text-[#9A9A9A]">{relationship}</p>
           <p className="text-sm text-[#9A9A9A]">{address}</p>
           <p className="text-sm text-[#9A9A9A]">{phone}</p>

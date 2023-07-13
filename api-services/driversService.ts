@@ -20,6 +20,7 @@ import {
   ViewGuarantorResponse,
   DriversTableBodyData,
   BlockDriverQuery,
+  ReactivateDriverQuery,
 } from "@/models/Drivers";
 
 export const driversApi = createApi({
@@ -197,6 +198,13 @@ export const driversApi = createApi({
       }),
       invalidatesTags: ["driver"],
     }),
+    reactivateDriver: build.mutation<any, ReactivateDriverQuery>({
+      query: ({ driverId }) => ({
+        url: `admin/driver/recover-account/${driverId}`,
+        method: "PUT",
+      }),
+      invalidatesTags: ['drivers', 'driver']
+    }),
   }),
 });
 
@@ -208,4 +216,5 @@ export const {
   useViewGuarantorQuery,
   useVerifyGuarantorMutation,
   useToggleBlockDriverMutation,
+  useReactivateDriverMutation,
 } = driversApi;

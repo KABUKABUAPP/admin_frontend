@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { useRouter } from "next/router";
 
 import Card from "@/components/common/Card";
 import Avatar from "@/components/common/Avatar";
@@ -23,9 +24,12 @@ const CarDetailsCard: FC<Props> = ({
   plateNumber,
   bg='#FFFFFF'
 }) => {
+  const router = useRouter();
+  const isDeleted = router.pathname.includes('deleted')
+
   return (
     <Card bg={bg}>
-      <div className="flex flex-col gap-3">
+      <div className={`flex flex-col gap-3 ${isDeleted ? '!text-[#9A9A9A]' : ''}`}>
         <p className="text-lg font-semibold">Car Details</p>
 
         <div className="flex max-w-[300px] overflow-x-auto scrollbar-none gap-2">
@@ -53,7 +57,8 @@ const CarDetailsCard: FC<Props> = ({
           title="View Location History"
           variant="text"
           color="tetiary"
-          className="w-fit"
+          disabled={true}
+          className={`w-fit ${isDeleted ? '!text-[#9A9A9A]' : ''}`}
         />
       </div>
     </Card>

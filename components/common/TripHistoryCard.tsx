@@ -4,6 +4,7 @@ import Card from "@/components/common/Card";
 import DropDown from "@/components/ui/DropDown";
 import TripHistoryItem from "./TripHistoryItem";
 import Button from "../ui/Button/Button";
+import { useRouter } from "next/router";
 
 interface Props {
   tripHistoryData?: {
@@ -28,10 +29,12 @@ const TripHistoryCard: FC<Props> = ({
   handleViewMore,
 }) => {
   const unseenHistory = totalCount - currentCount;
+  const router = useRouter();
+  const isDeleted = router.pathname.includes('deleted')
 
   return (
-    <Card>
-      <div className="flex justify-between mb-6">
+    <Card bg={`${isDeleted ? '#F1F1F1' : '#FFFFFF'}`}>
+      <div className={`flex justify-between mb-6 ${isDeleted ? '!text-[#9A9A9A]' : ''}`}>
         <p className="font-semibold text-lg">Trip History[{totalCount}]</p>
         <div className="flex gap-2 items-center">
           <p className="text-sm">Sort:</p>
