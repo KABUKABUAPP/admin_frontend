@@ -293,10 +293,12 @@ const ViewTrip: NextPage = () => {
                 </div>
                 {tab === "completed" && (
                   <div className="mt-5">
-                    <TripRatingCard
-                      rating={3}
-                      comment="The trip was smooth and awesome"
-                    />
+                    {data && (
+                      <TripRatingCard
+                        rating={data.tripRating}
+                        comment={data.riderComment}
+                      />
+                    )}
                   </div>
                 )}
               </>

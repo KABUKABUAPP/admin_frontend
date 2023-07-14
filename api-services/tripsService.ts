@@ -69,7 +69,9 @@ export const tripsApi = createApi({
           startPoint: response?.data?.start_point,
           endPoint: response?.data?.end_point,
           driverTripRating: response?.data?.driver_rating,
-          riderTripRating: response?.data?.rider_rating
+          riderTripRating: response?.data?.rider_rating,
+          tripRating: response?.data?.trip_rating,
+          riderComment: response?.data?.rider_comment
         } as MappedViewTripResponse;
       },
     }),
