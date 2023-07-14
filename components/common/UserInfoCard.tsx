@@ -41,10 +41,11 @@ const UserInfoCard: FC<Props> = ({
   const showCarsProcessed = router.pathname.includes("inspector");
   const showTripCount = !router.pathname.includes("inspector");
   const showDeclineCount = router.pathname.includes("pending")
+  const isDeleted = router.pathname.includes('deleted')
 
   return (
     <Card bg={bg}>
-      <div className="flex gap-4">
+      <div className={`flex gap-4 ${isDeleted ? '!text-[#9A9A9A]' : ''}`}>
         <div>
           <div className="w-[80px] h-[80px]">
             {(image || fullName) && (
@@ -60,8 +61,8 @@ const UserInfoCard: FC<Props> = ({
           {fullName && <p className="text-3xl font-semibold">{fullName}</p>}
           {role && <p className="text-lg font-semibold">{role}</p>}
           {address && <p className="text-lg font-semibold">{address}</p>}
-          {email && <p className="text-base font-semibold">{email}</p>}
-          {phone && <p className="text-base font-semibold">{phone}</p>}
+          {email && <p className={`text-base font-semibold ${isDeleted ? '!text-[#9A9A9A]' : ''}`}>{email}</p>}
+          {phone && <p className={`text-base font-semibold ${isDeleted ? '!text-[#9A9A9A]' : ''}`}>{phone}</p>}
           {showTripCount && (tripCount === 0 ? (
             <p className="text-sm font-semibold">0 trips</p>
           ) : showTripCount &&(

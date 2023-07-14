@@ -139,6 +139,10 @@ export interface ViewTripResponse {
     payment_type: string;
     rider_rating: number;
     driver_rating: number;
+    trip_rating: number;
+    rider_comment: string;
+    driver_comment: string;
+
     rider_details: {
       average_rating: {
         value: number;
@@ -207,9 +211,11 @@ export interface MappedViewTripResponse {
   driverId: string;
   riderImage: string;
   driverImage: string;
-  driverTripRating: number,
-  riderTripRating: number
+  driverTripRating: number;
+  riderTripRating: number;
   orderId: string;
+  tripRating?: number;
+  riderComment?: string
   endPoint: [number, number];
   startPoint: [number, number];
 }

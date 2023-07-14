@@ -27,6 +27,7 @@ import { io } from "socket.io-client";
 import TimesIcon from "@/components/icons/TimesIcon";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
+import TripRatingCard from "@/components/modules/Trips/TripRatingCard";
 const socket = io("https://rideservice-dev.up.railway.app");
 
 const ViewTrip: NextPage = () => {
@@ -290,6 +291,16 @@ const ViewTrip: NextPage = () => {
                     permissionKey="drivers_permissions"
                   />
                 </div>
+                {tab === "completed" && (
+                  <div className="mt-5">
+                    {data && (
+                      <TripRatingCard
+                        rating={data.tripRating}
+                        comment={data.riderComment}
+                      />
+                    )}
+                  </div>
+                )}
               </>
             }
           />
