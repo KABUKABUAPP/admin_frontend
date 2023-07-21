@@ -6,6 +6,8 @@ export interface RidersTableBodyData {
   walletBalance: number;
   status: string;
   imageUrl: string;
+  deletedReason?: string;
+  dateDeleted?: string;
 }
 
 export interface MappedRider extends RidersTableBodyData {
@@ -21,6 +23,8 @@ export interface Rider {
   created_at: string;
   profile_image: string;
   wallet_balance: number;
+  reason_for_delete: string;
+  date_deleted: "2023-06-07T13:46:38.251Z";
 }
 
 export interface GetAllRidersResponse {
@@ -65,7 +69,7 @@ export interface ViewRiderResponse {
     full_name: string;
     phone_number: string;
     email: string;
-    isBlocked:boolean;
+    isBlocked: boolean;
     total_trips: number;
     total_spent: number;
     profile_image: string;

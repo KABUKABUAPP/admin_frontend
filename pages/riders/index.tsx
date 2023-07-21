@@ -9,6 +9,7 @@ import AppLayout from "@/layouts/AppLayout";
 import Pagination from "@/components/common/Pagination";
 import DropDown from "@/components/ui/DropDown";
 import AppHead from "@/components/common/AppHead";
+import DeletedRidersTable from "@/components/modules/riders/DeletedRidersTable";
 
 const Riders: NextPage = () => {
   const [isFIlteringByBlockedRiders, setIsFilteringByBlockedRiders] =
@@ -23,8 +24,9 @@ const Riders: NextPage = () => {
     { label: "Z-A", value: "z-a", default: false },
   ];
   const statusFilterOptions = [
-    { label: "Active", value: "active", default: true },
-    { label: "Blocked", value: "blocked", default: false },
+    { label: "Active", value: "no", default: true },
+    { label: "Blocked", value: "yes", default: false },
+    { label: "Deleted", value: "deleted", default: false },
   ];
 
   const [selectedTimeFilter, setSelectedTimeFilter] = useState<string>(
@@ -73,13 +75,23 @@ const Riders: NextPage = () => {
             />
           </div>
         </SearchFilterBar>
-        <RidersTable
-          headBg={statusFilter === "blocked" ? "#FEE2E9" : ""}
-          ridersData={data?.data}
-          isLoading={isLoading}
-          isError={isError}
-          refetch={refetch}
-        />
+        {statusFilter === "deleted" ? (
+          <DeletedRidersTable
+            headBg=""
+            ridersData={data?.data}
+            isLoading={isLoading}
+            isError={isError}
+            refetch={refetch}
+          />
+        ) : (
+          <RidersTable
+            headBg={statusFilter === "no" ? "#FEE2E9" : ""}
+            ridersData={data?.data}
+            isLoading={isLoading}
+            isError={isError}
+            refetch={refetch}
+          />
+        )}
         {data && (
           <Pagination
             className="pagination-bar"
