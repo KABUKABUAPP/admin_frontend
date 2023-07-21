@@ -31,18 +31,20 @@ export const ridersApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['riders', 'rider'],
+  tagTypes: ["riders", "rider"],
   endpoints: (build) => ({
     getAllRides: build.query<MappedRidersData, GetAllRidersQuery>({
       query: ({ limit, page, search, order, status }) => ({
-        url: `admin/rider/all?limit=${limit}&page=${page}&search=${search}&order=${order}&status=${status}`,
+        url: `admin/rider/all?limit=${limit}&page=${page}&search=${search}&order=${order}&is_blocked=${
+          status === "deleted" ? "no" : status
+        }${status === "deleted" ? "&deleted=yes" : ""}`,
       }),
-      providesTags: ['riders'],
+      providesTags: ["riders"],
       transformResponse: (response: GetAllRidersResponse) => {
         if (!response) return {} as MappedRidersData;
         else {
-          const mappedReponse: MappedRider[] =
-            response.data.drivers.map((rider) => {
+          const mappedReponse: MappedRider[] = response.data.drivers.map(
+            (rider) => {
               return {
                 fullName: rider?.full_name,
                 imageUrl: rider?.profile_image,
@@ -51,9 +53,14 @@ export const ridersApi = createApi({
                 status: rider?.isBlocked === true ? "Blocked" : "Active",
                 totalTrips: 0,
                 walletBalance: rider?.wallet_balance,
-                isBlocked: rider?.isBlocked
+                isBlocked: rider?.isBlocked,
+                deletedReason: rider?.reason_for_delete,
+                dateDeleted: rider?.date_deleted
+                  ? new Date(rider?.date_deleted).toDateString()
+                  : "",
               };
-            });
+            }
+          );
 
           return {
             data: mappedReponse,
@@ -66,18 +73,18 @@ export const ridersApi = createApi({
       query: ({ id, status }) => ({
         url: `admin/rider/view/${id}?status=${status}`,
       }),
-      providesTags: ['rider'],
+      providesTags: ["rider"],
       transformResponse: (response: ViewRiderResponse) => {
         if (!response) return <MappedViewRider>{};
         return {
           driver: {
             fullName: response?.data?.full_name,
-            address: '',
+            address: "",
             tripCount: response?.data?.total_trips,
             rating: response?.data?.average_rating?.value,
             image: response?.data?.profile_image,
             isBlocked: response?.data?.isBlocked,
-            id: response?.data?._id
+            id: response?.data?._id,
           },
           financials: {
             total: response?.data?.total_spent?.toString(),
@@ -91,7 +98,7 @@ export const ridersApi = createApi({
         };
       },
     }),
-    toggleBlockRider:build.mutation<any, BlockDriverQuery>({
+    toggleBlockRider: build.mutation<any, BlockDriverQuery>({
       query: ({ reason, driverId }) => ({
         url: `admin/rider/block-unblock/${driverId}?reason=${reason}`,
         method: "PUT",
@@ -101,4 +108,8 @@ export const ridersApi = createApi({
   }),
 });
 
-export const { useGetAllRidesQuery, useViewRiderQuery, useToggleBlockRiderMutation } = ridersApi;
+export const {
+  useGetAllRidesQuery,
+  useViewRiderQuery,
+  useToggleBlockRiderMutation,
+} = ridersApi;

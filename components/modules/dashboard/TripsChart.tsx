@@ -67,11 +67,14 @@ interface Props {
 }
 
 const TripsChart: FC<Props> = ({ chartData, labels }) => {
+  
+  const isDay = labels.length === 7
+
   const data = {
     labels,
     datasets: [
       {
-        label: "Trips for month",
+        label: isDay? "Trips for Day" : "Trips for month",
         data: chartData,
         backgroundColor: ["#FFF5D8"],
         hoverBackgroundColor: "#FFBF00",

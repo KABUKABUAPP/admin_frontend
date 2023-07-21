@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
 import RidersTableHeadRow from "./RidersTableHeadRow";
-import RidersTableBodyRow from "./RidersTableBodyRow";
 import { RidersTableBodyData } from "@/models/Riders";
+import DeletedRidersTableBodyRow from "./DeletedRidersTableBodyrow";
 
 interface Props {
   headBg: string;
@@ -17,11 +17,11 @@ const headCellData = [
   { title: "Full Name", flex: 2 },
   { title: "Location", flex: 1 },
   { title: "Total Trips", flex: 1 },
-  { title: "Wallet Balance", flex: 1 },
-  { title: "Status", flex: 1 },
+  { title: "Reason", flex: 2 },
+  { title: "Date Deleted", flex: 1 },
 ];
 
-const RidersTable: FC<Props> = ({
+const DeletedRidersTable: FC<Props> = ({
   headBg,
   ridersData,
   isLoading,
@@ -31,7 +31,7 @@ const RidersTable: FC<Props> = ({
   return (
     <EnhancedTable
       TableHeadComponent={<RidersTableHeadRow headCellData={headCellData} />}
-      rowComponent={(row) => <RidersTableBodyRow data={row} />}
+      rowComponent={(row) => <DeletedRidersTableBodyRow data={row} />}
       rowData={ridersData}
       headBg={headBg}
       maxWidth="100vw"
@@ -43,4 +43,4 @@ const RidersTable: FC<Props> = ({
   );
 };
 
-export default RidersTable;
+export default DeletedRidersTable;
