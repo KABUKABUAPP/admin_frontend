@@ -18,7 +18,7 @@ const ActiveTripsTableRow: FC<Props> = ({ id, ...props }) => {
 
   return (
     <div
-      onClick={() => router.push(`/trips/${id}`)}
+      onClick={() => router.push(`/trips/${id}?tab=active`)}
       className="w-full min-w-[600px] border-b-[#E6E6E6] border-b last:border-none p-3 flex justify-between gap-2 cursor-pointer"
     >
       {Object.entries(props).map(([title, body], idx) => {
