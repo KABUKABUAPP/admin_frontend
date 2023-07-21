@@ -23,7 +23,7 @@ const DeletedRidersTableBodyRow: FC<Props> = ({
 
   return (
     <div
-      onClick={() => router.push(`/riders/${riderId}`)}
+      onClick={() => router.push(`/riders/${riderId}?deleted=true&deletion_reason=${deletedReason}`)}
       className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
     >
       <div style={{ flex: 1 }} className="flex items-center break-all">

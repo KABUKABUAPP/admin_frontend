@@ -85,7 +85,7 @@ const Riders: NextPage = () => {
           />
         ) : (
           <RidersTable
-            headBg={statusFilter === "no" ? "#FEE2E9" : ""}
+            headBg={statusFilter === "yes" ? "#FEE2E9" : ""}
             ridersData={data?.data}
             isLoading={isLoading}
             isError={isError}
