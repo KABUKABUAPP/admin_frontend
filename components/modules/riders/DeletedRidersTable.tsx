@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
 import RidersTableHeadRow from "./RidersTableHeadRow";
 import { RidersTableBodyData } from "@/models/Riders";
-import DeletedRidersTableBodyRow from "./DeletedRidersTableBodyrow";
+import DeletedRidersTableBodyRow from "./DeletedRidersTableBodyRow";
 
 interface Props {
   headBg: string;
