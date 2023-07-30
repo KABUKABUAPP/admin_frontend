@@ -4,7 +4,7 @@ import SosContactItem from "./SosContactItem";
 
 interface Props {
   data: {
-    location: string;
+    title: string;
     subLocation: string;
     phoneNumber: string;
     id: string;

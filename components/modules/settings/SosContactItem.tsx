@@ -4,9 +4,12 @@ import LocationPinIcon from "@/components/icons/LocationPinIcon";
 import PhoneIcon from "@/components/icons/PhoneIcon";
 import UserShieldIcon from "@/components/icons/UserShieldIcon";
 import Button from "@/components/ui/Button/Button";
+import { useModalContext } from "@/contexts/ModalContext";
+import DeleteSOSContactReasonForm from "./DeleteSOSContactReasonForm";
+import UpdateSOSContactForm from "./UpdateSOSContactForm";
 
 interface Props {
-  location: string;
+  title: string;
   subLocation: string;
   phoneNumber: string;
   id: string;
@@ -15,13 +18,15 @@ interface Props {
 }
 
 const SosContactItem: FC<Props> = ({
-  location,
+  title,
   phoneNumber,
   subLocation,
   id,
   isDeleteUpdateButtons = false,
   handleView,
 }) => {
+  const { setModalContent } = useModalContext();
+
   return (
     <div className="bg-[#F1F1F1] p-4 rounded-lg flex items-center gap-3">
       <div>
@@ -30,11 +35,11 @@ const SosContactItem: FC<Props> = ({
       <div className="flex justify-between items-center w-full">
         <div className="flex flex-col gap-1">
           <div>
-            <p className="font-bold text-lg">{subLocation}</p>
+            <p className="font-bold text-lg">{title}</p>
           </div>
           <div>
             <p className="text-sm flex items-center gap-2">
-              <LocationPinIcon /> {location}
+              <LocationPinIcon /> {subLocation}
             </p>
           </div>
           <div className="flex items-center justify-center gap-2">
@@ -61,12 +66,18 @@ const SosContactItem: FC<Props> = ({
                 title="Update SOS"
                 size="medium"
                 className="!text-sm !font-semibold"
+                onClick={() => {
+                  setModalContent(<UpdateSOSContactForm />);
+                }}
               />
               <Button
                 title="Delete SOS"
                 color="secondary"
                 size="medium"
                 className="!text-sm !font-semibold"
+                onClick={() => {
+                  setModalContent(<DeleteSOSContactReasonForm />);
+                }}
               />
             </>
           )}

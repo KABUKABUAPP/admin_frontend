@@ -44,7 +44,7 @@ const ViewSingleSOS: FC<Props> = ({ setIsViewAllSos }) => {
       <div className="my-4">
         <SosContactItem
           id="1"
-          location="lekki"
+          title="lekki"
           phoneNumber="0908887737"
           subLocation="Lekki Phase 2"
           isDeleteUpdateButtons={true}
