@@ -1,10 +1,15 @@
 import React, { FC } from "react";
 
-const UserShieldIcon: FC = () => {
+interface Props {
+  width?: number;
+  height?: number;
+}
+
+const UserShieldIcon: FC<Props> = ({ height = 15, width = 15 }) => {
   return (
     <svg
-      width="15"
-      height="15"
+      width={`${width}`}
+      height={`${height}`}
       viewBox="0 0 24 28"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
