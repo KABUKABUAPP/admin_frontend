@@ -27,18 +27,49 @@ const EditDriverFeeForm: FC<Props> = ({
   currentSharpPayment,
 }) => {
   const { setModalContent } = useModalContext();
-  const ref = useClickOutside<HTMLDivElement>(() => setModalContent(null));
+  const router = useRouter();
+  const {
+    id,
+    monthlyPayment,
+    sharpPayment,
+    baseFare,
+    distance,
+    time,
+    waitingTime,
+    vat,
+    bookingFee,
+    surgeMultiplier,
+    state,
+    country,
+  } = useRouter().query;
+  const ref = useClickOutside<HTMLDivElement>(() => {
+    router.push(`/fare-prices/${id}`, undefined, { shallow: true });
+    setModalContent(null);
+  });
   const [updateDriverFee, { isLoading, isSuccess, error }] =
     useUpdateDriverFeeMutation();
-  const { id } = useRouter().query;
 
   const formik = useFormik({
     initialValues,
     validationSchema: EditDriverFeeValidation,
     onSubmit: (values) => {
       const payload = {
+        state: state,
+        country: country,
+        base_fare: baseFare,
+        distance_per_km: distance,
+        time_per_min: time,
+        state_levy: vat,
+        booking_fee: bookingFee,
+        waiting_time_per_min: waitingTime,
+        surge_multiplier: Number(surgeMultiplier),
         driver_fee_monthly_payment: Number(values.monthlyPayment),
         driver_fee_sharp_payment: Number(values.sharpPayment),
+        payment_types_available: {
+          cash: true,
+          wallet: true,
+          card: true,
+        },
       };
 
       updateDriverFee({ payload, id: String(id) });
@@ -54,10 +85,18 @@ const EditDriverFeeForm: FC<Props> = ({
 
   useEffect(() => {
     if (isSuccess) {
+      router.push(`/fare-prices/${id}`, undefined, { shallow: true });
       toast.success("Driver fee updated succesfully");
-      setModalContent(null)
+      setModalContent(null);
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (router.query) {
+      formik.setFieldValue("monthlyPayment", monthlyPayment);
+      formik.setFieldValue("sharpPayment", sharpPayment);
+    }
+  }, [router.query]);
 
   return (
     <FormikProvider value={formik}>
@@ -90,6 +129,7 @@ const EditDriverFeeForm: FC<Props> = ({
             <div style={{ flex: 1 }}>
               <TextField
                 label="Sharp Payment [per month]"
+                {...formik.getFieldProps("sharpPayment")}
                 error={
                   formik.touched.sharpPayment
                     ? formik.errors.sharpPayment

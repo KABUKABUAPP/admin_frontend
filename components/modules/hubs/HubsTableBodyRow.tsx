@@ -3,6 +3,7 @@ import React, { FC } from "react";
 import Link from "next/link";
 import { HubsTableBodyData } from "@/models/Hubs";
 import { useRouter } from "next/router";
+import { capitalizeAllFirstLetters } from "@/utils";
 
 interface Props {
   data: HubsTableBodyData;
@@ -31,15 +32,15 @@ const HubsTableBodyRow: FC<Props> = ({
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{hubName}</p>
+        <p className="text-xs font-bold">{capitalizeAllFirstLetters(hubName)}</p>
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{stateCountry}</p>
+        <p className="text-xs font-bold">{capitalizeAllFirstLetters(stateCountry)}</p>
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{inspector}</p>
+        <p className="text-xs font-bold">{capitalizeAllFirstLetters(inspector)}</p>
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">

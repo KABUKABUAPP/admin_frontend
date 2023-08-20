@@ -3,6 +3,7 @@ import Avatar from "@/components/common/Avatar";
 import { RidersTableBodyData } from "@/models/Riders";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { capitalizeAllFirstLetters } from "@/utils";
 
 interface Props {
   data: RidersTableBodyData;
@@ -35,10 +36,10 @@ const RidersTableBodyRow: FC<Props> = ({
         <div>
           <Avatar fallBack={fullName[0]} imageUrl={imageUrl} size="sm" allowEnlarge={false}/>
         </div>
-        <p className="text-xs font-bold">{fullName}</p>
+        <p className="text-xs font-bold">{capitalizeAllFirstLetters(fullName)}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{location}</p>
+        <p className="text-xs font-bold">{capitalizeAllFirstLetters(location)}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">{totalTrips}</p>

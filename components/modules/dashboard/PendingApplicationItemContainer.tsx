@@ -8,19 +8,25 @@ import Button from "@/components/ui/Button/Button";
 interface Props {
   data?: PendingApplication[] | undefined;
   route: string;
+  handleViewAll?: () => void;
 }
 
-const PendingApplicationItemContainer: FC<Props> = ({ data, route }) => {
+const PendingApplicationItemContainer: FC<Props> = ({
+  data,
+  route,
+  handleViewAll,
+}) => {
   const [isViewAll, setViewAll] = useState<boolean>(false);
-  const [ allPendingApps, setAllPendingApps ] = useState<PendingApplication[]>()
-  const [ slicedPendingApps, setSlicedPendingApps ] = useState<PendingApplication[]>()
+  const [allPendingApps, setAllPendingApps] = useState<PendingApplication[]>();
+  const [slicedPendingApps, setSlicedPendingApps] =
+    useState<PendingApplication[]>();
 
-  useEffect(()=>{
-    if(data){
-      setAllPendingApps(data)
-      setSlicedPendingApps([...data].slice(0, 3))
+  useEffect(() => {
+    if (data) {
+      setAllPendingApps(data);
+      setSlicedPendingApps([...data].slice(0, 3));
     }
-  },[data])
+  }, [data]);
 
   return (
     <div className="w-full bg-[#FDFDFD] p-3">
@@ -30,21 +36,30 @@ const PendingApplicationItemContainer: FC<Props> = ({ data, route }) => {
             className="max-h-[200px] overflow-y-auto scrollbar-none
       "
           >
-            {data && isViewAll && allPendingApps?.map((item, idx) => {
-              return <PendingApplicationItem  {...item} route={route} key={idx} />;
-            })}
-            {
-              data && !isViewAll && slicedPendingApps?.map((item, idx) => {
-                return <PendingApplicationItem {...item} route={route} key={idx} />;
-            })}
+            {data &&
+              isViewAll &&
+              allPendingApps?.map((item, idx) => {
+                return (
+                  <PendingApplicationItem {...item} route={route} key={idx} />
+                );
+              })}
+            {data &&
+              !isViewAll &&
+              slicedPendingApps?.map((item, idx) => {
+                return (
+                  <PendingApplicationItem {...item} route={route} key={idx} />
+                );
+              })}
           </div>
           <div className="border-t-[#E6E6E6] border-t p-2 pt-4">
             <Button
               variant="text"
-              title={!isViewAll ? "View All" : "View Less"}
+              title={"View All"}
               size="small"
               className="mx-auto"
-              onClick={()=>setViewAll(!isViewAll)}
+              onClick={() => {
+                if (handleViewAll) handleViewAll();
+              }}
             />
           </div>
         </>

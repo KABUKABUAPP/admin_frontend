@@ -1,5 +1,6 @@
 import { NextPage } from "next";
 import React, { useState } from "react";
+import { useRouter } from "next/router";
 
 import AppLayout from "@/layouts/AppLayout";
 import AppHead from "@/components/common/AppHead";
@@ -15,9 +16,6 @@ import {
   useGetPendingSharpApplicationsQuery,
   useGetTripChartDataQuery,
 } from "@/api-services/dashboardService";
-import Cookies from "js-cookie";
-import { USER_TOKEN } from "@/constants";
-import { UserPermissions } from "@/models/User";
 import useUserPermissions from "@/hooks/useUserPermissions";
 
 const Dashboard: NextPage = () => {
@@ -26,6 +24,7 @@ const Dashboard: NextPage = () => {
   const handleFilterChart = (val: string | Number) => {
     setChartFilterVal(val.toString());
   };
+  const router = useRouter()
 
   const {
     data: pendingDriverApplications,
@@ -100,6 +99,9 @@ const Dashboard: NextPage = () => {
                   error={pendingDriverApplicationsError}
                   refetch={reloadPendingDriverApplications}
                   route={"/drivers/pending"}
+                  handleViewAll={()=>{
+                    router.push('/drivers/pending')
+                  }}
                 />
               )}
             {userPermissions &&

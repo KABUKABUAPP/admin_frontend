@@ -23,25 +23,52 @@ const initialValues = {
 
 const EditNormalFeesForm: FC = () => {
   const { setModalContent } = useModalContext();
-  const ref = useClickOutside<HTMLDivElement>(() => setModalContent(null));
+  const router = useRouter();
+  const {
+    id,
+    monthlyPayment,
+    sharpPayment,
+    baseFare,
+    distance,
+    time,
+    vat,
+    bookingFee,
+    waitingTime,
+    surgeMultiplier,
+    state,
+    country
+  } = useRouter().query;
+  const ref = useClickOutside<HTMLDivElement>(() => {
+    router.push(`/fare-prices/${id}`, undefined, { shallow: true });
+    setModalContent(null);
+  });
   const [updateFare, { isLoading, isSuccess, error }] =
-  useUpdateFarePriceMutation();
-  const { id } = useRouter().query;
+    useUpdateFarePriceMutation();
 
   const formik = useFormik({
     initialValues,
     validationSchema: EditNormalFeesValidation,
     onSubmit: (values) => {
       const payload = {
+        state: state,
+        country: country,
         base_fare: Number(values.baseFare),
         distance_per_km: Number(values.distance),
         time_per_min: Number(values.time),
         state_levy: Number(values.lasgLevy),
         booking_fee: Number(values.bookingFee),
         waiting_time_per_min: Number(values.waitingTime),
-      }
+        surge_multiplier: Number(surgeMultiplier),
+        driver_fee_monthly_payment: Number(monthlyPayment),
+        driver_fee_sharp_payment: Number(sharpPayment),
+        payment_types_available: {
+          cash: true,
+          wallet: true,
+          card: true,
+        },
+      };
 
-      updateFare({payload, id: String(id)})
+      updateFare({ payload, id: String(id) });
     },
   });
 
@@ -55,10 +82,21 @@ const EditNormalFeesForm: FC = () => {
   useEffect(() => {
     if (isSuccess) {
       toast.success("Fare price updated succesfully");
-      setModalContent(null)
+      router.push(`/fare-prices/${id}`, undefined, { shallow: true });
+      setModalContent(null);
     }
   }, [isSuccess]);
 
+  useEffect(() => {
+    if (router.query) {
+      formik.setFieldValue("baseFare", baseFare);
+      formik.setFieldValue("time", time);
+      formik.setFieldValue("bookingFee", bookingFee);
+      formik.setFieldValue("distance", distance);
+      formik.setFieldValue("lasgLevy", vat);
+      formik.setFieldValue("waitingTime", waitingTime);
+    }
+  }, [router.query]);
 
   return (
     <FormikProvider value={formik}>
@@ -77,9 +115,7 @@ const EditNormalFeesForm: FC = () => {
                 label="Base Fare"
                 {...formik.getFieldProps("baseFare")}
                 error={
-                  formik.touched.baseFare
-                    ? formik.errors.baseFare
-                    : undefined
+                  formik.touched.baseFare ? formik.errors.baseFare : undefined
                 }
                 onChange={(e) => {
                   if (verifyIsDigit(e.target.value)) {
@@ -92,10 +128,9 @@ const EditNormalFeesForm: FC = () => {
               <TextField
                 label="Distance"
                 error={
-                  formik.touched.distance
-                    ? formik.errors.distance
-                    : undefined
+                  formik.touched.distance ? formik.errors.distance : undefined
                 }
+                {...formik.getFieldProps("distance")}
                 onChange={(e) => {
                   if (verifyIsDigit(e.target.value)) {
                     formik.setFieldValue("distance", e.target.value);
@@ -124,10 +159,9 @@ const EditNormalFeesForm: FC = () => {
             <div style={{ flex: 1 }}>
               <TextField
                 label="VAT"
+                {...formik.getFieldProps("lasgLevy")}
                 error={
-                  formik.touched.lasgLevy
-                    ? formik.errors.lasgLevy
-                    : undefined
+                  formik.touched.lasgLevy ? formik.errors.lasgLevy : undefined
                 }
                 onChange={(e) => {
                   if (verifyIsDigit(e.target.value)) {
@@ -157,6 +191,7 @@ const EditNormalFeesForm: FC = () => {
             <div style={{ flex: 1 }}>
               <TextField
                 label="Waiting time [per min]"
+                {...formik.getFieldProps("waitingTime")}
                 error={
                   formik.touched.waitingTime
                     ? formik.errors.waitingTime
@@ -178,6 +213,9 @@ const EditNormalFeesForm: FC = () => {
                 className="w-full"
                 size="large"
                 onClick={() => {
+                  router.push(`/fare-prices/${id}`, undefined, {
+                    shallow: true,
+                  });
                   setModalContent(null);
                 }}
               />

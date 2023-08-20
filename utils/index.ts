@@ -60,10 +60,13 @@ export const formatFullName = (name: string | undefined) => {
   return { firstName, lastNameInitial };
 };
 
-export const capitalizeAllFirstLetters = (word: string): string => {
-  let splitName = word.split(" ");
-  splitName = splitName.map((name) => capitalizeFirstLetter(name));
-  return splitName.join(" ");
+export const capitalizeAllFirstLetters = (word?: string): string => {
+  if(word){
+    let splitName = word.split(" ");
+    splitName = splitName.map((name) => capitalizeFirstLetter(name));
+    return splitName.join(" ");
+  }
+  else return ''
 };
 
 export const hyphenateString = (val: string): string => {

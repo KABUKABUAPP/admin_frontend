@@ -4,6 +4,7 @@ import Avatar from "@/components/common/Avatar";
 import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
 import { useRouter } from "next/router";
+import { capitalizeAllFirstLetters } from "@/utils";
 
 interface Props {
   data: DriversTableBodyData;
@@ -53,10 +54,10 @@ const DriversTableBodyRow: FC<Props> = ({
             <Skeleton />
           )}
         </div>
-        <p className="text-xs font-bold">{fullName || <Skeleton />}</p>
+        <p className="text-xs font-bold">{capitalizeAllFirstLetters(fullName) || <Skeleton />}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{location || <Skeleton />}</p>
+        <p className="text-xs font-bold">{capitalizeAllFirstLetters(location) || <Skeleton />}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">{totalTrips ?? <Skeleton />}</p>

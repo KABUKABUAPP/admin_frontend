@@ -32,6 +32,7 @@ export const farePricesApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ["fare-prices", "fare-price"],
   endpoints: (build) => ({
     getAllFarePrices: build.query<FarePricesMappedData, GetAllFarePricesQuery>({
       query: ({ search, order }) => ({
@@ -61,6 +62,7 @@ export const farePricesApi = createApi({
       query: ({ id }) => ({
         url: `admin/price/view/${id}`,
       }),
+      providesTags: ["fare-price"],
     }),
     createFarePrice: build.mutation<
       CreateFarePriceResponse,
@@ -71,6 +73,7 @@ export const farePricesApi = createApi({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["fare-prices", "fare-price"],
     }),
     toggleSurge: build.mutation({
       query: () => ({
@@ -84,6 +87,7 @@ export const farePricesApi = createApi({
         method: "PUT",
         body,
       }),
+      invalidatesTags: ['fare-price', 'fare-prices']
     }),
     updateFarePrice: build.mutation<any, UpdateFareQuery>({
       query: ({ id, payload: body }) => ({
@@ -91,6 +95,7 @@ export const farePricesApi = createApi({
         method: "PUT",
         body,
       }),
+      invalidatesTags: ['fare-price', 'fare-prices']
     }),
   }),
 });

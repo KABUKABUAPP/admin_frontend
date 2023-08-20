@@ -10,12 +10,14 @@ import Promotions from "@/components/modules/settings/Promotions";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import { UserPermissions } from "@/models/User";
 import AppHead from "@/components/common/AppHead";
+import SosContactList from "@/components/modules/settings/SosContactList";
 
 const Settings: NextPage = () => {
   const [nav, setNav] = useState([
     { title: "Account Settings", isActive: true },
     { title: "Roles", isActive: false },
     { title: "Promotions", isActive: false },
+    { title: "SOS Contact List", isActive: false },
   ]);
 
   const handleChangeActiveNav = (title: string) => {
@@ -90,6 +92,7 @@ const Settings: NextPage = () => {
               {currentView === "Account Settings" && <AccountSettings />}
               {currentView === "Roles" && <Roles />}
               {currentView === "Promotions" && <Promotions />}
+              {currentView === "SOS Contact List" && <SosContactList />}
             </>
           }
         />

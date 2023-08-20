@@ -1,5 +1,6 @@
 import { NextPage } from "next";
 import React from "react";
+import { useRouter } from "next/router";
 
 import AppLayout from "@/layouts/AppLayout";
 import ActionBar from "@/components/common/ActionBar";
@@ -11,7 +12,6 @@ import FareDetailsCard from "@/components/modules/fare-prices/FareDetailsCard";
 import FarePriceCard from "@/components/modules/fare-prices/FarePriceCard";
 import { useModalContext } from "@/contexts/ModalContext";
 import StartSurgeCard from "@/components/modules/fare-prices/StartSurgeCard";
-import { useRouter } from "next/router";
 import { useViewFarePriceQuery } from "@/api-services/farePricesService";
 import Loader from "@/components/ui/Loader/Loader";
 import EditDriverFeeForm from "@/components/modules/fare-prices/EditDriverFeeForm";
@@ -40,7 +40,7 @@ const FarePrice: NextPage = () => {
       <AppHead title="Kabukabu | Fare Prices" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar>
+          <ActionBar handleBack={() => router.push("/fare-prices")}>
             {data && (
               <Button
                 title={
@@ -89,11 +89,28 @@ const FarePrice: NextPage = () => {
                 <>
                   <FarePriceCard
                     title="Driver Fee"
-                    handleEdit={({ monthlyPayment, sharpPayment }) => {
+                    handleEdit={() => {
+                      const monthlyPayment =
+                        data.data.driver_fee.monthly_payment;
+                      const sharpPayment = data.data.driver_fee.sharp_payment;
+                      const baseFare = data.data.base_fare;
+                      const distance = data.data.distance_per_km;
+                      const time = data.data.time_per_min;
+                      const waitingTime = data.data.waiting_time_per_min
+                      const vat = data.data.state_levy;
+                      const bookingFee = data.data.booking_fee;
+                      const surgeMultiplier = data.data.surge_multiplier;
+                      const state = data.data.state;
+                      const country = data.data.country;
+                      const query = `?monthlyPayment=${monthlyPayment}&sharpPayment=${sharpPayment}&baseFare=${baseFare}&distance=${distance}&time=${time}&vat=${vat}&bookingFee=${bookingFee}&surgeMultiplier=${surgeMultiplier}&state=${state}&country=${country}&waitingTime=${waitingTime}`;
+
+                      router.push(`/fare-prices/${id}${query}`, undefined, {
+                        shallow: true,
+                      });
                       setModalContent(
                         <EditDriverFeeForm
-                          currentMontlyPayment={monthlyPayment}
-                          currentSharpPayment={sharpPayment}
+                          currentMontlyPayment={String(monthlyPayment)}
+                          currentSharpPayment={String(sharpPayment)}
                         />
                       );
                     }}
@@ -111,6 +128,22 @@ const FarePrice: NextPage = () => {
                   <FarePriceCard
                     title="Fares[Normal]"
                     handleEdit={() => {
+                      const monthlyPayment =
+                        data.data.driver_fee.monthly_payment;
+                      const sharpPayment = data.data.driver_fee.sharp_payment;
+                      const baseFare = data.data.base_fare;
+                      const distance = data.data.distance_per_km;
+                      const time = data.data.time_per_min;
+                      const vat = data.data.state_levy;
+                      const bookingFee = data.data.booking_fee;
+                      const surgeMultiplier = data.data.surge_multiplier;
+                      const state = data.data.state;
+                      const country = data.data.country;
+                      const query = `?monthlyPayment=${monthlyPayment}&sharpPayment=${sharpPayment}&baseFare=${baseFare}&distance=${distance}&time=${time}&vat=${vat}&bookingFee=${bookingFee}&surgeMultiplier=${surgeMultiplier}&state=${state}&country=${country}`;
+
+                      router.push(`/fare-prices/${id}${query}`, undefined, {
+                        shallow: true,
+                      });
                       setModalContent(<EditNormalFeesForm />);
                     }}
                     cardData={[
@@ -120,7 +153,7 @@ const FarePrice: NextPage = () => {
                         body: `₦${data.data.distance_per_km}/km`,
                       },
                       { title: "Time", body: `₦${data.data.time_per_min}/min` },
-                      { title: "VAT", body: `${data.data.state_levy}%` },
+                      { title: "VAT", body: `₦${data.data.state_levy}` },
                       {
                         title: "Booking Fee",
                         body: `₦${data.data.booking_fee}`,
