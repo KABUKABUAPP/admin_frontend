@@ -5,9 +5,10 @@ import { useRouter } from "next/router";
 
 interface Props {
   backButtonText?: string
+  handleBack?: ()=>void
 }
 
-const ActionBar: FC<PropsWithChildren<Props>> = ({ children, backButtonText='Back' }) => {
+const ActionBar: FC<PropsWithChildren<Props>> = ({ children, backButtonText='Back', handleBack }) => {
   const router = useRouter();
 
   return (
@@ -17,7 +18,10 @@ const ActionBar: FC<PropsWithChildren<Props>> = ({ children, backButtonText='Bac
           title={backButtonText}
           variant="text"
           startIcon={<ChevronLeft />}
-          onClick={() => router.back()}
+          onClick={() => {
+            if(handleBack) handleBack()
+            else router.back()
+          }}
         />
       </div>
 
