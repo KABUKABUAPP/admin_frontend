@@ -4,6 +4,7 @@ import { InspectorsTableBodyData } from "@/models/Inspectors";
 import Link from "next/link";
 import Avatar from "@/components/common/Avatar";
 import { useRouter } from "next/router";
+import { capitalizeAllFirstLetters } from "@/utils";
 
 interface Props {
   data: InspectorsTableBodyData;
@@ -35,13 +36,13 @@ const InspectorsTableBodyRow: FC<Props> = ({
         <div>
           <Avatar fallBack={fullName[0]} imageUrl={imageUrl} size="sm" allowEnlarge={false}/>
         </div>
-        <p className="text-xs font-bold">{fullName}</p>
+        <p className="text-xs font-bold">{capitalizeAllFirstLetters(fullName)}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{location}</p>
+        <p className="text-xs font-bold">{capitalizeAllFirstLetters(location)}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{hub}</p>
+        <p className="text-xs font-bold">{capitalizeAllFirstLetters(hub)}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">{carsInHub}</p>

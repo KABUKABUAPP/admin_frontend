@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button/Button";
 import { PendingApplication } from "@/models/PendingApplication";
 import Skeleton from "react-loading-skeleton";
 import Avatar from "@/components/common/Avatar";
+import { capitalizeAllFirstLetters } from "@/utils";
 
 const PendingApplicationItem: FC<PendingApplication> = ({
   fullName,
@@ -29,8 +30,8 @@ const PendingApplicationItem: FC<PendingApplication> = ({
         )}
 
         <div className="flex-1">
-          <p className="text-xs font-bold mb-1">{fullName || <Skeleton />}</p>
-          <p className="text-xs">{location || <Skeleton />}</p>
+          <p className="text-xs font-bold mb-1">{capitalizeAllFirstLetters(fullName) || <Skeleton />}</p>
+          <p className="text-xs">{capitalizeAllFirstLetters(location) || <Skeleton />}</p>
         </div>
         <div>
           {fullName ? <Button title="View" size="small" /> : <Skeleton />}

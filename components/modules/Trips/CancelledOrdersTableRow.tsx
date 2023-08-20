@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import OriginDestinationCell from "../../common/OriginDestinationCell";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { capitalizeAllFirstLetters } from "@/utils";
 
 interface Props {
   data: {
@@ -52,20 +53,20 @@ const CancelledOrdersTableRow: FC<Props> = ({
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{rider}</p>
+        <p className="text-xs font-bold">{capitalizeAllFirstLetters(rider)}</p>
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{driver}</p>
+        <p className="text-xs font-bold">{capitalizeAllFirstLetters(driver)}</p>
       </div>
 
       <div style={{ flex: 1 }} className="flex flex-col gap-3 justify-center">
-        <p className="text-xs font-bold">{carModel}</p>
+        <p className="text-xs font-bold">{capitalizeAllFirstLetters(carModel)}</p>
         <p className="text-xs font-bold">{plateNumber}</p>
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{status}</p>
+        <p className="text-xs font-bold">{capitalizeAllFirstLetters(status)}</p>
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">

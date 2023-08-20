@@ -7,6 +7,7 @@ import Avatar from "@/components/common/Avatar";
 import Rating from "react-star-ratings";
 import RatingIcon from "../icons/RatingIcon";
 import Pill from "./Pill";
+import { capitalizeAllFirstLetters } from "@/utils";
 
 interface Props {
   fullName?: string;
@@ -62,11 +63,11 @@ const UserInfoCard: FC<Props> = ({
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3 justify-between">
-            {fullName && <p className="text-3xl font-semibold">{fullName}</p>}
+            {fullName && <p className="text-3xl font-semibold">{capitalizeAllFirstLetters(fullName)}</p>}
             {isDeleted && <Pill title="Deleted" />}
           </div>
-          {role && <p className="text-lg font-semibold">{role}</p>}
-          {address && <p className="text-lg font-semibold">{address}</p>}
+          {role && <p className="text-lg font-semibold">{capitalizeAllFirstLetters(role)}</p>}
+          {address && <p className="text-lg font-semibold">{capitalizeAllFirstLetters(address)}</p>}
           {email && (
             <p
               className={`text-base font-semibold ${
