@@ -13,6 +13,7 @@ interface Props {
   error: boolean;
   refetch: () => void;
   route: string;
+  handleViewAll?: () => void;
 }
 
 const PendingApplicationContainer: FC<Props> = ({
@@ -22,6 +23,7 @@ const PendingApplicationContainer: FC<Props> = ({
   error,
   refetch,
   route,
+  handleViewAll,
 }) => {
   const viewState = data && !loading && !error;
   const loadingtState = !data && loading && !error;
@@ -31,7 +33,13 @@ const PendingApplicationContainer: FC<Props> = ({
     <div className="max-w-[380px] w-full max-sm:max-w-[250px]">
       <PendingApplicationHeader title={title} />
       {viewState && (
-        <PendingApplicationItemContainer route={route} data={data} />
+        <PendingApplicationItemContainer
+          route={route}
+          data={data}
+          handleViewAll={() => {
+            if (handleViewAll) handleViewAll();
+          }}
+        />
       )}
       {loadingtState && (
         <div>
