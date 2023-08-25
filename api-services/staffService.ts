@@ -48,7 +48,13 @@ export const staffApi = createApi({
               fullName: staff?.full_name,
               role: staff?.role?.name,
               location: `${staff?.address?.street}, ${staff?.address?.city} ${staff?.address?.state}`,
-              status: `${staff?.isBlocked === true ? "blocked" : "active"}`,
+              status: `${
+                staff?.isBlocked
+                  ? "blocked"
+                  : staff?.status === true
+                  ? "inactive"
+                  : "active"
+              }`,
             };
           });
 
@@ -111,5 +117,5 @@ export const {
   useCreateStaffMutation,
   useDisableStaffMutation,
   useViewStaffQuery,
-  useResetStaffPasswordMutation
+  useResetStaffPasswordMutation,
 } = staffApi;

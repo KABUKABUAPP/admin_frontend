@@ -14,6 +14,8 @@ import {
   useGetNigerianCityByStateQuery,
   useGetNigerianStatesQuery,
 } from "@/api-services/geoLocationService";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 const initialValues = {
   first_name: "",
@@ -104,20 +106,33 @@ const AddInspectorForm: FC = () => {
                   formik.touched.last_name ? formik.errors.last_name : undefined
                 }
               />
-              <TextField
-                label="Phone Number"
-                placeholder="phone here"
+              <label className="-mb-6 text-sm font-semibold">Phone</label>
+              <PhoneInput
+                // label="Phone"
+                // placeholder="2333333333"
                 {...formik.getFieldProps("phone_number")}
+                // error={
+                //   formik.touched.phone_number
+                //     ? formik.errors.phone_number
+                //     : undefined
+                // }
+                containerClass="bg-[#F1F1F1] rounded-lg"
+                inputStyle={{
+                  background: "#F1F1F1",
+                  border: "none",
+                  width: "100%",
+                }}
+                inputProps={{
+                  name: "Phone",
+                  required: true,
+                }}
                 onChange={(e) => {
-                  if (verifyIsDigit(e.target.value)) {
-                    formik.setFieldValue("phone_number", e.target.value);
+                  if (verifyIsDigit(e)) {
+                    formik.setFieldValue("phone_number", e);
                   }
                 }}
-                error={
-                  formik.touched.phone_number
-                    ? formik.errors.phone_number
-                    : undefined
-                }
+                country={"ng"}
+                defaultErrorMessage="Phone Number is required"
               />
               <TextField
                 label="House Address"

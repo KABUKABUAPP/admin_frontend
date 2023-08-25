@@ -15,6 +15,9 @@ import {
   useGetNigerianCityByStateQuery,
   useGetNigerianStatesQuery,
 } from "@/api-services/geoLocationService";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import ErrorMessage from "@/components/common/ErrorMessage";
 
 const initialValues = {
   first_name: "",
@@ -62,14 +65,16 @@ const AddStaffForm: FC = () => {
     initialValues,
     validationSchema: AddStaffValidation,
     onSubmit: (values) => {
-      const stateName = states?.filter((s)=>s.value==values.state)[0].label as string
-      createStaff({...values, state: stateName});
+      const stateName = states?.filter((s) => s.value == values.state)[0]
+        .label as string;
+      createStaff({ ...values, state: stateName });
     },
   });
 
   useEffect(() => {
     if (formik.values.state && states?.length) {
-      const stateId = states.filter((s) => s.value === formik.values.state)[0]?.value as string;
+      const stateId = states.filter((s) => s.value === formik.values.state)[0]
+        ?.value as string;
       if (stateId) setSelectedStateId(stateId);
     }
   }, [formik.values.state, states]);
@@ -77,7 +82,7 @@ const AddStaffForm: FC = () => {
   useEffect(() => {
     if (isSuccess) {
       toast.success("Staff Successfully Created");
-      router.push("/staffs");
+      // router.push("/staffs");
     }
   }, [isSuccess]);
 
@@ -124,21 +129,36 @@ const AddStaffForm: FC = () => {
                 formik.touched.password ? formik.errors.password : undefined
               }
             />
-            <TextField
-              label="Phone"
-              placeholder="2333333333"
+
+            <label className="-mb-6 text-sm font-semibold">Phone</label>
+            <PhoneInput
+              // label="Phone"
+              // placeholder="2333333333"
               {...formik.getFieldProps("phone_number")}
-              error={
-                formik.touched.phone_number
-                  ? formik.errors.phone_number
-                  : undefined
-              }
+              // error={
+              //   formik.touched.phone_number
+              //     ? formik.errors.phone_number
+              //     : undefined
+              // }
+              containerClass="bg-[#F1F1F1] rounded-lg"
+              inputStyle={{
+                background: "#F1F1F1",
+                border: "none",
+                width: "100%",
+              }}
+              inputProps={{
+                name: "Phone",
+                required: true,
+              }}
               onChange={(e) => {
-                if (verifyIsDigit(e.target.value)) {
-                  formik.setFieldValue("phone_number", e.target.value);
+                if (verifyIsDigit(e)) {
+                  formik.setFieldValue("phone_number", e);
                 }
               }}
+              country={"ng"}
+              defaultErrorMessage="Phone Number is required"
             />
+
             <SelectField
               label="Role"
               disabled={!roles}
