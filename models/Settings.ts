@@ -330,6 +330,10 @@ export interface UpdateRoleQuery {
   payload: CreateRolePayload;
 }
 
+export interface DeleteRoleQuery {
+  roleId: string
+}
+
 export interface GenerateAutomaticPromoPayload {
   name: string;
   audience: string;

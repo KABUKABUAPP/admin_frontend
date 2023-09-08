@@ -133,3 +133,8 @@ export interface MappedViewStaff {
 export interface ViewStaffQuery {
   staffId: string;
 }
+
+
+export interface DeleteStaffQuery {
+  
+}

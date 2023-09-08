@@ -9,6 +9,7 @@ import {
   CreateAdminResponse,
   CreateRolePayload,
   DeletePromoQuery,
+  DeleteRoleQuery,
   GenerateAutomaticPromoPayload,
   GenerateManualPromoPayload,
   GetRolesQuery,
@@ -97,7 +98,8 @@ export const settingsApi = createApi({
             status: response?.data?.promotion?.active_status,
             createdDate: response?.data?.promotion?.createdAt,
             expiryDate: response?.data?.promotion?.expiry_date,
-            totalSubscribers: response?.data?.subscribers?.pagination?.totalCount,
+            totalSubscribers:
+              response?.data?.subscribers?.pagination?.totalCount,
             promotionType: response?.data?.promotion?.auto_or_manual,
             id: response?.data?.promotion?._id,
           };
@@ -112,7 +114,8 @@ export const settingsApi = createApi({
             }
           );
 
-          const totalCount = response?.data?.subscribers?.pagination?.totalCount;
+          const totalCount =
+            response?.data?.subscribers?.pagination?.totalCount;
 
           return {
             promo: mappedPromo,
@@ -143,7 +146,7 @@ export const settingsApi = createApi({
         url: `admin/promotions/delete/${promoId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["all-promos"]
+      invalidatesTags: ["all-promos"],
     }),
     getRoles: build.query<MappedGetRoles, GetRolesQuery>({
       query: ({ limit, page }) => ({
@@ -202,6 +205,13 @@ export const settingsApi = createApi({
       }),
       invalidatesTags: ["roles"],
     }),
+    deleteRole: build.mutation<any, DeleteRoleQuery>({
+      query: ({ roleId }) => ({
+        url: `admin/role/delete/${roleId}`,
+        method: "POST",
+        invalidatesTags: ["roles"],
+      }),
+    }),
   }),
 });
 
@@ -216,5 +226,6 @@ export const {
   useUpdateRoleMutation,
   useCreateAutomaticPromoMutation,
   useCreateManualPromoMutation,
-  useDeletePromoMutation
+  useDeletePromoMutation,
+  useDeleteRoleMutation
 } = settingsApi;
