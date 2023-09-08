@@ -159,35 +159,3 @@ const Rider: NextPage = () => {
 
 export default Rider;
 
-const mockTripHistory = [
-  {
-    originTop: "Kuvuki Land",
-    originBottom: "",
-    destinationTop: "Filmhouse Cinemas IMAX Lekki",
-    destinationBottom: "22, Ozumba Mbadiwe Street, Lekki, Lagos",
-    paymentMethod: "Wallet Payment",
-    date: "20 January, 2023 at 3:30pm",
-    amount: 1300,
-    id: "#12345",
-  },
-  {
-    originTop: "Kuvuki Land",
-    originBottom: "",
-    destinationTop: "Filmhouse Cinemas IMAX Lekki",
-    destinationBottom: "22, Ozumba Mbadiwe Street, Lekki, Lagos",
-    paymentMethod: "Wallet Payment",
-    date: "20 January, 2023 at 3:30pm",
-    amount: 1300,
-    id: "#12345",
-  },
-  {
-    originTop: "Kuvuki Land",
-    originBottom: "",
-    destinationTop: "Filmhouse Cinemas IMAX Lekki",
-    destinationBottom: "22, Ozumba Mbadiwe Street, Lekki, Lagos",
-    paymentMethod: "Wallet Payment",
-    date: "20 January, 2023 at 3:30pm",
-    amount: 1300,
-    id: "#12345",
-  },
-];

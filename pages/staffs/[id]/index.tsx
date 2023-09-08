@@ -22,6 +22,7 @@ import Loader from "@/components/ui/Loader/Loader";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
+import TrashIcon from "@/components/icons/TrashIcon";
 
 const Staff: NextPage = () => {
   const { setModalContent } = useModalContext();
@@ -89,8 +90,10 @@ const Staff: NextPage = () => {
                 <Button
                   title="Disable Staff"
                   color="secondary"
+                  variant="outlined"
                   size="large"
-                  startIcon={<BlockIcon />}
+                  startIcon={<BlockIcon fill="#EF2C5B"/>}
+                  className="!text-[#EF2C5B]"
                   onClick={handleDisableStaff}
                 />
               )}

@@ -4,7 +4,10 @@ import { useRouter } from "next/router";
 import Button from "@/components/ui/Button/Button";
 import ChevronLeft from "@/components/icons/ChevronLeft";
 import RoleBox from "./RoleBox";
-import { useViewRoleQuery } from "@/api-services/settingsService";
+import {
+  useDeleteRoleMutation,
+  useViewRoleQuery,
+} from "@/api-services/settingsService";
 import { rolesOptionsArr } from "@/constants";
 import Loader from "@/components/ui/Loader/Loader";
 import ErrorMessage from "@/components/common/ErrorMessage";
@@ -33,6 +36,15 @@ const ViewRole: FC<Props> = ({ handleBack }) => {
     { roleId: String(roleId) },
     { skip: !roleId, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
+
+  const [
+    deleteRole,
+    {
+      isLoading: deleteRoleLoading,
+      error: deleteRoleError,
+      isSuccess: deleteRoleSuccess,
+    },
+  ] = useDeleteRoleMutation();
 
   const handleIsChangeMade = () => {
     if (isChangeMade !== true) setIsChangeMade(true);
@@ -142,6 +154,20 @@ const ViewRole: FC<Props> = ({ handleBack }) => {
     }
   }, [error]);
 
+  useEffect(() => {
+    if (deleteRoleSuccess) {
+      toast.success("Role Deleted Successfully")
+      handleBack()
+    }
+  }, [deleteRoleSuccess]);
+
+  useEffect(() => {
+    if (deleteRoleError && "data" in deleteRoleError) {
+      const { message }: any = deleteRoleError.data;
+      toast.error(message);
+    }
+  }, [deleteRoleError]);
+
   return (
     <div>
       <Button
@@ -160,7 +186,7 @@ const ViewRole: FC<Props> = ({ handleBack }) => {
             </p>
           </div>
         )}
-        <div>
+        <div className="flex items-center gap-4">
           {data &&
             userPermissions &&
             userPermissions.roles_permissions.write &&
@@ -175,6 +201,19 @@ const ViewRole: FC<Props> = ({ handleBack }) => {
                     name: data.name,
                   });
                   updateRole({ payload, roleId: String(roleId) });
+                }}
+              />
+            )}
+          {data &&
+            userPermissions &&
+            userPermissions.roles_permissions.write && (
+              <Button
+                title="Delete Role"
+                color="secondary"
+                loading={deleteRoleLoading}
+                disabled={deleteRoleLoading}
+                onClick={() => {
+                  deleteRole({ roleId: String(roleId) });
                 }}
               />
             )}

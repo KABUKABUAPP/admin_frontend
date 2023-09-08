@@ -52,8 +52,8 @@ export const staffApi = createApi({
                 staff?.isBlocked
                   ? "blocked"
                   : staff?.status === true
-                  ? "inactive"
-                  : "active"
+                  ? "active"
+                  : "inactive"
               }`,
             };
           });

@@ -157,6 +157,7 @@ export const driversApi = createApi({
         method: "PUT",
         body: { reason, status },
       }),
+      invalidatesTags: ["driver", "drivers"],
     }),
     inspectDocument: build.mutation<any, InspectDocumentQuery>({
       query: ({ docId, status }) => ({
@@ -190,6 +191,7 @@ export const driversApi = createApi({
         method: "PUT",
         body: { ...rest },
       }),
+      invalidatesTags: ['drivers', 'driver']
     }),
     toggleBlockDriver: build.mutation<any, BlockDriverQuery>({
       query: ({ reason, driverId }) => ({

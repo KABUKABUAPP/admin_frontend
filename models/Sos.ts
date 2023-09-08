@@ -66,16 +66,106 @@ export interface GetAllSOSResponse {
 }
 
 export interface GetAllSosQuery {
-    limit: number;
-    date: string;
-    page: number;
-    startDate?: string;
-    endDate?: string;
-    search: string;
-    order: string
+  limit: number;
+  date: string;
+  page: number;
+  startDate?: string;
+  endDate?: string;
+  search: string;
+  order: string;
 }
 
 export interface MappedSosResponse {
-    data: SosTableData[];
-    totalCount: number;
+  data: SosTableData[];
+  totalCount: number;
+}
+
+export interface ViewSOSResponse {
+  status: string;
+  code: number;
+  data: {
+    trip_details: {
+      origin: {
+        country: string;
+        state: string;
+        city: string;
+      };
+      destination: {
+        country: string;
+        state: string;
+        city: string;
+      };
+      estimated_price: number;
+      status: string;
+      payment_type: string;
+      start_time: string;
+      end_time: string;
+    };
+    raised_by: string;
+    reason: string;
+    rider_details: {
+      average_rating: {
+        value: number;
+        count: number;
+      };
+      _id: string;
+      full_name: string;
+      profile_image: string;
+      total_trips: number;
+    };
+    driver_details: {
+      average_rating: {
+        value: number;
+        count: number;
+      };
+      _id: string;
+      full_name: string;
+      driver: {
+        _id: string;
+        house_address: string;
+        city: string;
+        state: string;
+        country: string;
+      };
+      coordinate: [number, number];
+      total_trips: number;
+    };
+  };
+  message: string;
+}
+
+export interface ViewSOSQuery {
+  id: string;
+}
+
+export interface MappedViewSOSResponse {
+  origin: string;
+  destination: string;
+  estimatedPrice: number;
+  paymentType: string;
+  tripStarted: string;
+  tripEnded: string;
+  riderFullName: string;
+  riderLocation: string;
+  riderTripCount: number;
+  riderRating: number;
+  riderId: string;
+  driverFullname: string;
+  driverLocation: string;
+  driverTripCount: number;
+  driverRating: number;
+  carModel: string;
+  plateNumber: string;
+  driverId: string;
+  riderImage: string;
+  driverImage: string;
+  driverTripRating: number;
+  riderTripRating: number;
+  orderId: string;
+  tripRating?: number;
+  riderComment?: string;
+  endPoint: [number, number];
+  startPoint: [number, number];
+  raisedBy: string;
+  reason: string;
 }
