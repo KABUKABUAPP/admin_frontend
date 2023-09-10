@@ -67,7 +67,7 @@ export const ridersApi = createApi({
                 location: "",
                 riderId: rider._id,
                 status: rider?.isBlocked === true ? "Blocked" : "Active",
-                totalTrips: 0,
+                totalTrips: rider?.total_trips,
                 walletBalance: rider?.wallet_balance,
                 isBlocked: rider?.isBlocked,
                 deletedReason: rider?.reason_for_delete,

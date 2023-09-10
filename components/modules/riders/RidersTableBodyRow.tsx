@@ -45,7 +45,7 @@ const RidersTableBodyRow: FC<Props> = ({
         <p className="text-xs font-bold">{totalTrips}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{walletBalance ? `${walletBalance.toLocaleString()}`: `N/A`}</p>
+        <p className="text-xs font-bold">{walletBalance?.toLocaleString()}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">{status}</p>
