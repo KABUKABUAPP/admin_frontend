@@ -1,4 +1,5 @@
 import Avatar from "@/components/common/Avatar";
+import { capitalizeAllFirstLetters } from "@/utils";
 import React, { FC } from "react";
 
 interface Props {
@@ -19,7 +20,7 @@ const UploadDetailsCard: FC<Props> = (props) => {
           <Avatar fallBack={props.fullname[0]} imageUrl={props.image} />
         </div>
         <div className="flex flex-col gap-2">
-          <p className="text-base font-bold">{props.fullname}</p>
+          <p className="text-base font-bold">{capitalizeAllFirstLetters(props.fullname)}</p>
           <p className="text-xs text-[#9A9A9A]">{props.relationship}</p>
           <p className="text-xs text-[#9A9A9A]">{props.address}</p>
           <p className="text-xs text-[#9A9A9A]">{props.phone}</p>

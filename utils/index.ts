@@ -2,14 +2,6 @@ import { ACCESS_TOKEN } from "@/constants";
 import Cookie from "js-cookie";
 
 import { milliSecondToSecondConversionRate } from "@/constants";
-import {
-  BaseQueryApi,
-  BaseQueryFn,
-  FetchArgs,
-  FetchBaseQueryError,
-  FetchBaseQueryMeta,
-  fetchBaseQuery,
-} from "@reduxjs/toolkit/dist/query";
 
 export const getImageUrl = (img: File) => {
   const objectUrl = URL.createObjectURL(img);
