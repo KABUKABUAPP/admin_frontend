@@ -41,7 +41,8 @@ const TripOrdersTable: FC<Props> = ({ setTripCount, tableSearch, order }) => {
       limit: pageSize,
       status: "initiated",
       search: tableSearch,
-      order: order
+      order: order,
+      type: 'trip'
     },
     {
       refetchOnMountOrArgChange: true,

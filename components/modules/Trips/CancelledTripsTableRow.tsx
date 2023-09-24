@@ -10,18 +10,24 @@ interface Props {
     origin: string;
     destination: string;
     rider: string;
+    driver: string;
+    carModel: string;
+    plateNumber: string;
     status: string;
     reason: string;
   };
   index: number;
 }
 
-const CancelledOrdersTableRow: FC<Props> = ({
+const CancelledTripsTableRow: FC<Props> = ({
   data: {
     id,
     origin,
     destination,
     rider,
+    driver,
+    carModel,
+    plateNumber,
     status,
     reason,
   },
@@ -51,6 +57,15 @@ const CancelledOrdersTableRow: FC<Props> = ({
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
+        <p className="text-xs font-bold">{capitalizeAllFirstLetters(driver)}</p>
+      </div>
+
+      <div style={{ flex: 1 }} className="flex flex-col gap-3 justify-center">
+        <p className="text-xs font-bold">{capitalizeAllFirstLetters(carModel)}</p>
+        <p className="text-xs font-bold">{plateNumber}</p>
+      </div>
+
+      <div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">{capitalizeAllFirstLetters(status)}</p>
       </div>
 
@@ -61,4 +76,4 @@ const CancelledOrdersTableRow: FC<Props> = ({
   );
 };
 
-export default CancelledOrdersTableRow;
+export default CancelledTripsTableRow;

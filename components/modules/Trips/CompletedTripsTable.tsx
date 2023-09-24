@@ -33,7 +33,8 @@ const CompletedTripsTable:FC<Props> = ({ setTripCount, tableSearch, order }) => 
       limit: pageSize,
       status: "completed",
       search: tableSearch,
-      order
+      order,
+      type: 'trip'
     },
     {
       refetchOnMountOrArgChange: true,

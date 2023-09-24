@@ -50,8 +50,8 @@ export const tripsApi = createApi({
   baseQuery: baseQueryWithLogoutOnTokenExpiration,
   endpoints: (build) => ({
     getAllTrips: build.query<GetAllTripsResponse, GetAllTripsQuery>({
-      query: ({ limit, page, status, search, order }) => ({
-        url: `/admin/trip/get-all?limit=${limit}&page=${page}&status=${status}&search=${search}&order=${order}`,
+      query: ({ limit, page, status, search, order,type }) => ({
+        url: `/admin/trip/get-all?limit=${limit}&page=${page}&status=${status}&search=${search}&order=${order}&type=${type}`,
       }),
     }),
     viewTrip: build.query<MappedViewTripResponse, ViewTripQuery>({

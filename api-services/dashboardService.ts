@@ -113,8 +113,8 @@ export const dashboardApi = createApi({
       ActiveTripsMappedResponse,
       GetActiveTripsQuery
     >({
-      query: ({ page, limit }) => ({
-        url: `/admin/trip/dashboard/get-active-trips?page=${page}&limit=${limit}`,
+      query: ({ page, limit,type }) => ({
+        url: `/admin/trip/dashboard/get-active-trips?page=${page}&limit=${limit}&type=${type}`,
       }),
       transformResponse: (response: GetActiveTripsResponse) => {
         if (!response.data.data.length) return {} as ActiveTripsMappedResponse;

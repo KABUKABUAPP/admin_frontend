@@ -77,6 +77,7 @@ export interface GetActiveTripsResponse {
 export interface GetActiveTripsQuery {
   page: number;
   limit: number;
+  type: 'trip'
 }
 
 export interface GetPendingApplicationsData {

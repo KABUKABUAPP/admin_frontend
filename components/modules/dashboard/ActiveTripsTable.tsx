@@ -10,7 +10,7 @@ const ActiveTripsTable: FC = () => {
   const [pageSize, setPageSize] = useState(3);
 
   const { data, isLoading, isError, refetch, error } = useGetActiveTripsQuery(
-    { page: currentPage, limit: pageSize },
+    { page: currentPage, limit: pageSize, type: 'trip' },
     { refetchOnReconnect: true }
   );
 

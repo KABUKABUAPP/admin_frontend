@@ -226,16 +226,23 @@ const ViewTrip: NextPage = () => {
                   />
                 )}
                 <div className="w-full h-full max-h-[550px] max-md:pl-0">
-                  {tab !== "completed"
-                    ? liveLocation && (
-                        <AppMap zoom={11} location={liveLocation} />
-                      )
-                    : data && (
-                        <StaticMap
-                          endPoint={data.endPoint}
-                          startPoint={data.startPoint}
-                        />
-                      )}
+                  {
+                    // tab !== "completed"
+                    //   ? liveLocation && (
+                    //       <AppMap zoom={11} location={liveLocation} />
+                    //     )
+                    //   :
+                    data && (
+                      <StaticMap
+                        endPoint={data.endPoint}
+                        startPoint={
+                          liveLocation
+                            ? [liveLocation.lat, liveLocation.lng]
+                            : data.startPoint
+                        }
+                      />
+                    )
+                  }
                 </div>
               </>
             }

@@ -15,11 +15,13 @@ import { transactionsApi } from "@/api-services/transactionsService";
 import { settingsApi } from "@/api-services/settingsService";
 import { staffApi } from "@/api-services/staffService";
 import { geoLocationApi } from "@/api-services/geoLocationService";
+import { ordersApi } from "@/api-services/ordersService";
 
 export const reduxStore = configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
     [tripsApi.reducerPath]: tripsApi.reducer,
+    [ordersApi.reducerPath]: ordersApi.reducer,
     [dashboardApi.reducerPath]: dashboardApi.reducer,
     [driversApi.reducerPath]: driversApi.reducer,
     [inspectorsApi.reducerPath]: inspectorsApi.reducer,
@@ -38,6 +40,7 @@ export const reduxStore = configureStore({
     getDefaultMiddleware().concat([
       authApi.middleware,
       tripsApi.middleware,
+      ordersApi.middleware,
       dashboardApi.middleware,
       driversApi.middleware,
       inspectorsApi.middleware,
