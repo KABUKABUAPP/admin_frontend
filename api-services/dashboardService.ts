@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { BaseQueryFn, FetchArgs, FetchBaseQueryError, createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { RIDES_BASE_URL } from "@/constants";
 import {
@@ -16,26 +16,43 @@ import {
   GetTripChartData,
 } from "@/models/Dashboard";
 
-import { secondsToMilliSeconds } from "@/utils";
+import { logout, secondsToMilliSeconds } from "@/utils";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "@/constants";
 import { ActiveTripsMappedResponse, Trip } from "@/models/Trips";
 
+const baseQuery = fetchBaseQuery({
+  baseUrl: `${RIDES_BASE_URL}`,
+  timeout: secondsToMilliSeconds(30),
+  prepareHeaders(headers) {
+    const token = Cookies.get(ACCESS_TOKEN);
+
+    if (token) {
+      headers.set("authorization", `Bearer ${token}`);
+    }
+
+    return headers;
+  },
+})
+
+const baseQueryWithLogoutOnTokenExpiration: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  let result = await baseQuery(args, api, extraOptions);
+  if (result.error && result.error.status === 401) {
+    logout(()=>{
+      window.location.pathname = '/auth/login'
+    });
+  }
+  return result;
+};
+
+
 export const dashboardApi = createApi({
   reducerPath: "dashboardApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${RIDES_BASE_URL}`,
-    timeout: secondsToMilliSeconds(30),
-    prepareHeaders(headers) {
-      const token = Cookies.get(ACCESS_TOKEN);
-
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
-      }
-
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithLogoutOnTokenExpiration,
   endpoints: (build) => ({
     getInsights: build.query<Omit<TripInsightsMappedResponse, "icon">[], "">({
       query: () => ({
@@ -96,8 +113,8 @@ export const dashboardApi = createApi({
       ActiveTripsMappedResponse,
       GetActiveTripsQuery
     >({
-      query: ({ page, limit }) => ({
-        url: `/admin/trip/dashboard/get-active-trips?page=${page}&limit=${limit}`,
+      query: ({ page, limit,type }) => ({
+        url: `/admin/trip/dashboard/get-active-trips?page=${page}&limit=${limit}&type=${type}`,
       }),
       transformResponse: (response: GetActiveTripsResponse) => {
         if (!response.data.data.length) return {} as ActiveTripsMappedResponse;

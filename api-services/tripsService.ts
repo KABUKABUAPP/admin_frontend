@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { BaseQueryFn, FetchArgs, FetchBaseQueryError, createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { RIDES_BASE_URL } from "@/constants";
 import {
@@ -13,29 +13,45 @@ import {
 } from "@/models/Trips";
 import { GetAllTripsQuery } from "@/models/Trips";
 
-import { secondsToMilliSeconds } from "@/utils";
+import { logout, secondsToMilliSeconds } from "@/utils";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "@/constants";
 
+const baseQuery = fetchBaseQuery({
+  baseUrl: `${RIDES_BASE_URL}`,
+  timeout: secondsToMilliSeconds(30),
+  prepareHeaders(headers) {
+    const token = Cookies.get(ACCESS_TOKEN);
+
+    if (token) {
+      headers.set("authorization", `Bearer ${token}`);
+    }
+
+    return headers;
+  },
+})
+const baseQueryWithLogoutOnTokenExpiration: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  let result = await baseQuery(args, api, extraOptions);
+  if (result.error && result.error.status === 401) {
+    logout(()=>{
+      window.location.pathname = '/auth/login'
+    });
+  }
+  return result;
+};
+
+
 export const tripsApi = createApi({
   reducerPath: "tripsApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${RIDES_BASE_URL}`,
-    timeout: secondsToMilliSeconds(30),
-    prepareHeaders(headers) {
-      const token = Cookies.get(ACCESS_TOKEN);
-
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
-      }
-
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithLogoutOnTokenExpiration,
   endpoints: (build) => ({
     getAllTrips: build.query<GetAllTripsResponse, GetAllTripsQuery>({
-      query: ({ limit, page, status, search, order }) => ({
-        url: `/admin/trip/get-all?limit=${limit}&page=${page}&status=${status}&search=${search}&order=${order}`,
+      query: ({ limit, page, status, search, order,type }) => ({
+        url: `/admin/trip/get-all?limit=${limit}&page=${page}&status=${status}&search=${search}&order=${order}&type=${type}`,
       }),
     }),
     viewTrip: build.query<MappedViewTripResponse, ViewTripQuery>({
@@ -49,11 +65,11 @@ export const tripsApi = createApi({
           destination: `${response?.data?.destination?.city}, ${response?.data?.destination?.state}, ${response?.data?.destination?.country}`,
           driverFullname: `${response?.data?.driver_details?.full_name}`,
           driverId: `${response?.data?.driver_details._id}`,
-          driverLocation: `${response?.data?.driver_details?.driver?.city}, ${response?.data?.driver_details.driver.state}, ${response.data.driver_details.driver.country}`,
+          driverLocation: `${response?.data?.driver_details?.driver?.city}, ${response?.data?.driver_details?.driver?.state}, ${response?.data?.driver_details?.driver?.country}`,
           driverRating: response?.data?.driver_rating,
           driverTripCount: response?.data?.driver_details?.total_trips,
           estimatedPrice: response?.data?.estimated_price,
-          origin: `${response?.data?.origin.city}, ${response?.data?.origin.state}, ${response?.data?.origin.country}`,
+          origin: `${response?.data?.origin.city}, ${response?.data?.origin?.state}, ${response?.data?.origin.country}`,
           paymentType: response?.data?.payment_type,
           plateNumber: response?.data?.car?.plate_number,
           riderFullName: response?.data?.rider_details.full_name,

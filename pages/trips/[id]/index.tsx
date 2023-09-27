@@ -140,10 +140,20 @@ const ViewTrip: NextPage = () => {
         isRating: false,
       },
       {
-        topTitle: tripStarted ? "Trip started" : "",
+        topTitle:
+          new Date(tripStarted).toUTCString() != "Invalid Date"
+            ? tripStarted
+              ? "Trip started"
+              : ""
+            : "",
         topValue: tripStarted ? new Date(tripStarted).toUTCString() : "",
         topIcon: <ClockIcon />,
-        bottomTitle: tripToEnd ? "Trip to end" : "",
+        bottomTitle:
+          new Date(tripToEnd).toUTCString() != "Invalid Date"
+            ? tripToEnd
+              ? "Trip to end"
+              : ""
+            : "",
         bottomValue: tripToEnd ? new Date(tripToEnd).toUTCString() : "",
         bottomIcon: <ClockIcon />,
         isRating: true,
@@ -226,16 +236,23 @@ const ViewTrip: NextPage = () => {
                   />
                 )}
                 <div className="w-full h-full max-h-[550px] max-md:pl-0">
-                  {tab !== "completed"
-                    ? liveLocation && (
-                        <AppMap zoom={11} location={liveLocation} />
-                      )
-                    : data && (
-                        <StaticMap
-                          endPoint={data.endPoint}
-                          startPoint={data.startPoint}
-                        />
-                      )}
+                  {
+                    // tab !== "completed"
+                    //   ? liveLocation && (
+                    //       <AppMap zoom={11} location={liveLocation} />
+                    //     )
+                    //   :
+                    data && (
+                      <StaticMap
+                        endPoint={data.endPoint}
+                        startPoint={
+                          liveLocation
+                            ? [liveLocation.lat, liveLocation.lng]
+                            : data.startPoint
+                        }
+                      />
+                    )
+                  }
                 </div>
               </>
             }
@@ -273,24 +290,26 @@ const ViewTrip: NextPage = () => {
                     permissionKey="riders_permissions"
                   />
                 </div>
-                <div className="mt-5">
-                  <CarOccupantDetailsCard
-                    isRider={false}
-                    name={data?.driverFullname}
-                    location={data?.driverLocation}
-                    tripCount={data?.driverTripCount}
-                    rating={data?.driverRating}
-                    viewProfileLink={
-                      data?.driverId && `/drivers/${data?.driverId}`
-                    }
-                    carModel={data?.carModel}
-                    carPlateNumber={data?.plateNumber}
-                    buttonTitle="View Driver's Profile"
-                    imageUri={data?.driverImage}
-                    isLoading={isLoading}
-                    permissionKey="drivers_permissions"
-                  />
-                </div>
+                {tab !== "pending_orders" && (
+                  <div className="mt-5">
+                    <CarOccupantDetailsCard
+                      isRider={false}
+                      name={data?.driverFullname}
+                      location={data?.driverLocation}
+                      tripCount={data?.driverTripCount}
+                      rating={data?.driverRating}
+                      viewProfileLink={
+                        data?.driverId && `/drivers/${data?.driverId}`
+                      }
+                      carModel={data?.carModel}
+                      carPlateNumber={data?.plateNumber}
+                      buttonTitle="View Driver's Profile"
+                      imageUri={data?.driverImage}
+                      isLoading={isLoading}
+                      permissionKey="drivers_permissions"
+                    />
+                  </div>
+                )}
                 {tab === "completed" && (
                   <div className="mt-5">
                     {data && (

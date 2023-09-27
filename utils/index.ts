@@ -8,7 +8,6 @@ export const getImageUrl = (img: File) => {
   return objectUrl;
 };
 
-
 export function assertIsNode(e: EventTarget | null): asserts e is Node {
   if (!e || !("nodeType" in e)) {
     throw new Error(`Node expected`);
@@ -61,12 +60,11 @@ export const formatFullName = (name: string | undefined) => {
 };
 
 export const capitalizeAllFirstLetters = (word?: string): string => {
-  if(word){
+  if (word) {
     let splitName = word.split(" ");
     splitName = splitName.map((name) => capitalizeFirstLetter(name));
     return splitName.join(" ");
-  }
-  else return ''
+  } else return "";
 };
 
 export const hyphenateString = (val: string): string => {
@@ -107,3 +105,4 @@ export const formatChartLabels = ({
     return splitString[1];
   });
 };
+

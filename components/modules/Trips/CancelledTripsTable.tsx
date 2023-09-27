@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
 import TripsTableHeadRow from "./TripsTableHeadRow";
 import { cancelledTripsRowMockData } from "../../../constants";
-import CancelledOrdersTableRow from "./CancelledOrdersTableRow";
+import CancelledTripsTableRow from "./CancelledTripsTableRow";
 import Pagination from "@/components/common/Pagination";
 import TripsTableRow from "./TripsTableRow";
 import { FormattedTripOrder, TripData } from "@/models/Trips";
@@ -33,7 +33,8 @@ const CancelledTripsTable: FC<Props> = ({ setTripCount, tableSearch, order }) =>
       limit: pageSize,
       status: "cancelled",
       search: tableSearch,
-      order
+      order,
+      type: 'trip'
     },
     {
       refetchOnMountOrArgChange: true,
@@ -80,7 +81,7 @@ const CancelledTripsTable: FC<Props> = ({ setTripCount, tableSearch, order }) =>
           TableHeadComponent={<TripsTableHeadRow headCellData={headCellData} />}
           maxWidth="100vw"
           rowComponent={(row, index) => (
-            <CancelledOrdersTableRow data={row} index={index} />
+            <CancelledTripsTableRow data={row} index={index} />
           )}
           rowData={data ? formatTripData(data?.data.data) : undefined}
           isError={isError}

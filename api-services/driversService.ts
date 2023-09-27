@@ -1,7 +1,13 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {
+  BaseQueryFn,
+  FetchArgs,
+  FetchBaseQueryError,
+  createApi,
+  fetchBaseQuery,
+} from "@reduxjs/toolkit/query/react";
 
 import { RIDES_BASE_URL } from "@/constants";
-import { secondsToMilliSeconds } from "@/utils";
+import { logout, secondsToMilliSeconds } from "@/utils";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "@/constants";
 import {
@@ -23,21 +29,37 @@ import {
   ReactivateDriverQuery,
 } from "@/models/Drivers";
 
+const baseQuery = fetchBaseQuery({
+  baseUrl: `${RIDES_BASE_URL}/`,
+  timeout: secondsToMilliSeconds(30),
+  prepareHeaders(headers) {
+    const token = Cookies.get(ACCESS_TOKEN);
+
+    if (token) {
+      headers.set("authorization", `Bearer ${token}`);
+    }
+
+    return headers;
+  },
+});
+
+const baseQueryWithLogoutOnTokenExpiration: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  let result = await baseQuery(args, api, extraOptions);
+  if (result.error && result.error.status === 401) {
+    logout(()=>{
+      window.location.pathname = '/auth/login'
+    });
+  }
+  return result;
+};
+
 export const driversApi = createApi({
   reducerPath: "driversApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${RIDES_BASE_URL}/`,
-    timeout: secondsToMilliSeconds(30),
-    prepareHeaders(headers) {
-      const token = Cookies.get(ACCESS_TOKEN);
-
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
-      }
-
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithLogoutOnTokenExpiration,
   tagTypes: ["drivers", "driver"],
   endpoints: (build) => ({
     getAllDrivers: build.query<DriversMappedResponse, GetAllDriversQuery>({
@@ -191,7 +213,7 @@ export const driversApi = createApi({
         method: "PUT",
         body: { ...rest },
       }),
-      invalidatesTags: ['drivers', 'driver']
+      invalidatesTags: ["drivers", "driver"],
     }),
     toggleBlockDriver: build.mutation<any, BlockDriverQuery>({
       query: ({ reason, driverId }) => ({
@@ -205,7 +227,7 @@ export const driversApi = createApi({
         url: `admin/driver/recover-account/${driverId}`,
         method: "PUT",
       }),
-      invalidatesTags: ['drivers', 'driver']
+      invalidatesTags: ["drivers", "driver"],
     }),
   }),
 });

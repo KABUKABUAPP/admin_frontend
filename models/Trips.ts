@@ -52,8 +52,8 @@ export interface TripData {
   };
   driver: {
     average_rating: {
-      count: 0;
-      value: 3.5;
+      count: number;
+      value: number;
     };
     _id: string;
     full_name: string;
@@ -104,9 +104,10 @@ export interface GetAllTripsResponse {
 export interface GetAllTripsQuery {
   limit: number;
   page: number;
-  status: "disputed" | "cancelled" | "completed" | "initiated" | "started";
+  status: "disputed" | "cancelled" | "completed" | "initiated" | "started" | "pending";
   search: string;
   order: string;
+  type: 'order' | 'trip'
 }
 
 export interface TripDetail {
