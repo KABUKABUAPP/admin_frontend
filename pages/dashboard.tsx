@@ -24,7 +24,7 @@ const Dashboard: NextPage = () => {
   const handleFilterChart = (val: string | Number) => {
     setChartFilterVal(val.toString());
   };
-  const router = useRouter()
+  const router = useRouter();
 
   const {
     data: pendingDriverApplications,

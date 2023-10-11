@@ -35,6 +35,8 @@ const SummaryCardContainer: FC = () => {
           "SOS",
           "Pending trips",
           "Total Earnings",
+          "Total Riders",
+          "Total Drivers"
         ].map((item, idx) => (
           <SummaryCard loading={loadingState} title={item} key={idx} />
         ))}

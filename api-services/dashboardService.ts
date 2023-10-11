@@ -59,6 +59,7 @@ export const dashboardApi = createApi({
         url: `/admin/trip/trip-insights`,
       }),
       transformResponse: (response: GetTripInsightsResponse) => {
+        console.log('res', response)
         if (!response) return [];
         return [
           {
@@ -88,6 +89,18 @@ export const dashboardApi = createApi({
           {
             title: "Total Earnings",
             value: response?.data?.total_earnings,
+            iconBg: "#FFBF00",
+            
+          },
+          {
+            title: "Total Drivers",
+            value: 0,
+            iconBg: "#FFBF00",
+            
+          },
+          {
+            title: "Total Riders",
+            value: 0,
             iconBg: "#FFBF00",
             
           },
