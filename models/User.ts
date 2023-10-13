@@ -9,6 +9,7 @@ export interface User {
   created_at: Date | string;
   updated_at: Date | string;
   permissions: UserPermissions;
+  referral_code: string | null;
 }
 
 export interface UserPermissions {

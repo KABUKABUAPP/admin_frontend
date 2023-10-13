@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { USER_TOKEN } from "@/constants";
 import { routePermissionsMapping } from "@/constants";
 import useUserPermissions from "@/hooks/useUserPermissions";
+import { useUserContext } from "@/contexts/UserContext";
 
 interface Props {
   padding?: string;
@@ -17,7 +18,11 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
   children,
   padding = "2.5rem 1rem 1rem 1rem",
 }) => {
+  const { user } = useUserContext();
+  
   const router = useRouter();
+  //if ( user ) user!.role = 'executive marketer';
+  //if ( user && user!.role === 'executive marketer') router.push('/marketer');
 
   const getActiveSideNavLink = (
     sidebarItems: SidebarLink[],

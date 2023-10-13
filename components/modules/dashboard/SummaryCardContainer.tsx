@@ -6,6 +6,8 @@ import TripsIcon from "@/components/icons/TripsIcon";
 import SosIcon from "@/components/icons/SosIcon";
 import WithdrawalIcon from "@/components/icons/WithdrawalIcon";
 import Button from "@/components/ui/Button/Button";
+import UserIcon from "@/components/icons/UserIcon";
+import UserSquareIcon from "@/components/icons/UserSquareIcon";
 import Skeleton from "react-loading-skeleton";
 
 const SummaryCardContainer: FC = () => {
@@ -35,6 +37,8 @@ const SummaryCardContainer: FC = () => {
           "SOS",
           "Pending trips",
           "Total Earnings",
+          "Total Riders",
+          "Total Drivers"
         ].map((item, idx) => (
           <SummaryCard loading={loadingState} title={item} key={idx} />
         ))}
@@ -67,4 +71,8 @@ const icons: { [key: string]: ReactNode } = {
   "Pending trips": <TripsIcon />,
 
   "Total Earnings": <WithdrawalIcon />,
+
+  "Total Drivers": <UserSquareIcon />,
+
+  "Total Riders": <UserIcon />,
 };
