@@ -73,11 +73,17 @@ const LoginForm: FC = () => {
         hasResetDefaultPassword: rest.status,
         updated_at: rest.updated_at,
         permissions: permissions,
+        referral_code: data.data.loggedInAdmin.referral_code
       };
       Cookies.set(USER_TOKEN, JSON.stringify(userData));
       setUser({ ...userData });
       toast.success("Login Successful");
-      router.push("/dashboard");
+      if ( userData.role === 'executive marketer') {
+        router.push('/marketer');
+      } else {
+        router.push("/dashboard");
+      }
+      
     }
   }, [data]);
 

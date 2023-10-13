@@ -18,7 +18,6 @@ const OnboardDriversTable: FC = () => {
 
   useEffect(() => {
     if (data) {
-        console.log('d', data);
         setOnboardedData(data);
     }
   }, [data])

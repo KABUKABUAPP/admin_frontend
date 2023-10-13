@@ -10,6 +10,7 @@ import { capitalizeAllFirstLetters } from "@/utils";
 
 const Marketer: NextPage = () => {
     const { user } = useUserContext();
+    console.log(user)
 
     return (
         <>
@@ -18,6 +19,7 @@ const Marketer: NextPage = () => {
                 <MarketerNav />
                 <WelcomeMessage
                     name={user ? capitalizeAllFirstLetters(user.full_name) : ""}
+                    referral_code={user ? user.referral_code : ""}
                 />
                 <MarketerMainView />
             </div>

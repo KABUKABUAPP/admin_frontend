@@ -39,7 +39,6 @@ const MarketerMainView = () => {
 
     useEffect(() => {
         if (marketerData) {
-            console.log(marketerData, chartData)
             setOnboardedDaily(marketerData.total_drivers_onboarded_today);
             setOnboardedWeekly(marketerData.total_drivers_onboarded_this_week);
             setMarketerEarnings(marketerData.total_earnings);

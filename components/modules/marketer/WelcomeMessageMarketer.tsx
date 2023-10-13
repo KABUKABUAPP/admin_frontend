@@ -3,7 +3,8 @@ import { toast } from 'react-toastify';
 import Copy from '@/components/icons/Copy'
 
 interface Props {
-    name: string
+    name: string;
+    referral_code: string | null;
 }
 
 function copyToClipboard(text: string) {
@@ -34,7 +35,7 @@ function copyToClipboard(text: string) {
   document.body.removeChild(textarea);
 }
 
-const WelcomeMessage:FC<Props> = ({name}) => {
+const WelcomeMessage:FC<Props> = ({name, referral_code}) => {
   return (
     <div className="flex justify-between p-4">
       <div>
@@ -45,12 +46,12 @@ const WelcomeMessage:FC<Props> = ({name}) => {
       <div className="ml-auto">
         <p className="flex bg-[#FFF5D8] pr-2 pl-2" style={{borderRadius: '1rem'}}>
           <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
-            <b>#ABC123</b><br />
+            <b>{referral_code}</b><br />
             <small>Your referral code</small>
           </span>
           <span style={{marginLeft: '1vw', marginTop: '3vh', cursor: 'pointer'}}>
             <Copy handleClick={() => {
-              copyToClipboard('#ABC123')
+              copyToClipboard(referral_code ? referral_code : '')
               toast.success("Referral code copied");
             }} />
           </span>
