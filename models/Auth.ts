@@ -17,6 +17,7 @@ export interface LoginResponse {
   code: 200;
   data: {
     loggedInAdmin: {
+      referral_code: string | null;
       _id: string;
       full_name: string;
       phone_number: string;
