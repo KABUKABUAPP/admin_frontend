@@ -8,12 +8,14 @@ import OpenEyeIcon from "@/components/icons/OpenEyeIcon";
 import Button from "@/components/ui/Button/Button";
 import { useLoginMutation } from "@/api-services/authService";
 import LoginValidations from "@/validationschemas/LoginSchema";
-import { setTokenValue } from "@/config/features/auth/authSlice";
-import { setUserInfo } from "@/config/features/user/userSlice";
+import { ACCESS_TOKEN } from "@/constants";
+import { USER_TOKEN } from "@/constants";
+import { useUserContext } from "@/contexts/UserContext";
 
 import { useFormik, Form, FormikProvider } from "formik";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import Cookies from "js-cookie";
+import { User } from "@/models/User";
 
 const initialValues = {
   email: "",
@@ -22,11 +24,12 @@ const initialValues = {
 
 const LoginForm: FC = () => {
   const router = useRouter();
-  const dispatch = useDispatch()
 
   const [hidePassword, setHidePassword] = useState<boolean>(true);
 
   const [login, { data, isLoading, error, isError }] = useLoginMutation();
+
+  const { setUser } = useUserContext();
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -43,31 +46,56 @@ const LoginForm: FC = () => {
       if ("data" in error) {
         const { message } = error.data as { message: string };
         toast.error(message);
-      }
+      } else toast.error("Oops! Something went wrong");
     }
   }, [error]);
 
   useEffect(() => {
     if (data) {
-      const { accessTokens, __v, ...rest } = data.data.loggedInAdmin
-      dispatch(setTokenValue(accessTokens))
-      console.log(rest)
-      dispatch(setUserInfo(rest))
+      const { accessTokens, __v, ...rest } = data.data.loggedInAdmin;
+      Cookies.set(ACCESS_TOKEN, accessTokens);
+      const {
+        _id,
+        name,
+        updated_at,
+        __v: v,
+        level,
+        ...permissions
+      } = rest.role;
+      const userData: User = {
+        _id: rest._id,
+        created_at: rest.created_at,
+        email: rest.email,
+        full_name: rest.full_name,
+        isBlocked: rest.isBlocked,
+        phone_number: rest.phone_number,
+        role: rest.role.name,
+        hasResetDefaultPassword: rest.status,
+        updated_at: rest.updated_at,
+        permissions: permissions,
+        referral_code: data.data.loggedInAdmin.referral_code
+      };
+      Cookies.set(USER_TOKEN, JSON.stringify(userData));
+      setUser({ ...userData });
       toast.success("Login Successful");
-      router.push("/dashboard");
+      if ( userData.role === 'executive marketer') {
+        router.push('/marketer');
+      } else {
+        router.push("/dashboard");
+      }
+      
     }
   }, [data]);
 
-
   return (
-    <div className="w-full max-w-xs mx-auto py-6 px-2">
+    <div className="w-full max-w-[70%] mx-auto py-6 px-2 max-sm:max-w-full">
       <FormikProvider value={formik}>
         <div>
           <div className="relative w-8 h-8 mx-auto mb-6">
             <Image
               src={"/auth/padlock.png"}
               alt="login to kabukabu"
-              fill
+              layout="fill"
               style={{ objectFit: "contain", objectPosition: "50% 50%" }}
             />
           </div>

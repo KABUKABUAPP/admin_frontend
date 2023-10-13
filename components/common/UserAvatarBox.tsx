@@ -1,27 +1,25 @@
 import Image from "next/image";
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 
 import ArrowDown from "../icons/ArrowDown";
-import Button from "../ui/Button/Button";
-import useClickOutside from "@/hooks/useClickOutside";
+import { formatFullName } from "@/utils";
 
 interface Props {
   image: string;
-  firstName: string;
-  lastName: string;
+  fullName: string;
   role: string;
   userId: string;
-  handleClick?: ()=>any
+  handleClick?: () => any;
 }
 
 const UserAvatarBox: FC<Props> = ({
   image,
-  firstName,
-  lastName,
+  fullName,
   role,
   handleClick,
   userId,
 }) => {
+  const { lastNameInitial, firstName } = formatFullName(fullName || "");
 
   return (
     <div
@@ -29,16 +27,24 @@ const UserAvatarBox: FC<Props> = ({
       onClick={handleClick}
     >
       <div className="relative w-10 h-10 rounded-full overflow-hidden">
-        <Image
-          src={image}
-          alt="Kabukabu user image"
-          fill
-          style={{ objectFit: "cover", objectPosition: "50% 50%" }}
-        />
+        {image ? (
+          <Image
+            src={image}
+            alt="Kabukabu user image"
+            layout="fill"
+            style={{ objectFit: "cover", objectPosition: "50% 50%" }}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center rounded-full bg-slate-300">
+            <p className="font-extrabold text-lg">
+              {fullName && fullName[0].toLocaleUpperCase()}
+            </p>
+          </div>
+        )}
       </div>
       <div className="flex-1">
         <p className="mb-2 font-bold">
-          {firstName} {lastName[0]}.
+          {firstName} {lastNameInitial}.
         </p>
         <p className="text-xs">{role}</p>
       </div>

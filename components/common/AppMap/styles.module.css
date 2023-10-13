@@ -1,0 +1,5 @@
+.car-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  transition: top 3s ease, left 3s ease; /* Add transitions for top and left properties */
+}

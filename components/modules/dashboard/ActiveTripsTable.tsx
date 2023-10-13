@@ -1,52 +1,38 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 
 import ActiveTripsTableHead from "./ActiveTripsTableHead";
 import ActiveTripsTableBody from "./ActiveTripsTableBody";
-
-const mockData = [
-  {
-    from: "Lekki",
-    to: "Maryland Mall",
-    rider: "Michael Ofure",
-    driver: "Sam Johnson",
-  },
-  {
-    from: "Lekki",
-    to: "Maryland Mall",
-    rider: "Michael Ofure",
-    driver: "Sam Johnson",
-  },
-  {
-    from: "Lekki",
-    to: "Maryland Mall",
-    rider: "Michael Ofure",
-    driver: "Sam Johnson",
-  },
-  {
-    from: "Lekki",
-    to: "Maryland Mall",
-    rider: "Michael Ofure",
-    driver: "Sam Johnson",
-  },
-  {
-    from: "Lekki",
-    to: "Maryland Mall",
-    rider: "Michael Ofure",
-    driver: "Sam Johnson",
-  },
-  {
-    from: "Lekki",
-    to: "Maryland Mall",
-    rider: "Michael Ofure",
-    driver: "Sam Johnson",
-  },
-];
+import { useGetActiveTripsQuery } from "@/api-services/dashboardService";
+import Pagination from "@/components/common/Pagination";
 
 const ActiveTripsTable: FC = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(3);
+
+  const { data, isLoading, isError, refetch, error } = useGetActiveTripsQuery(
+    { page: currentPage, limit: pageSize, type: 'trip' },
+    { refetchOnReconnect: true }
+  );
+
+
   return (
-    <div className="w-full  max-w-3xl">
+    <div className="w-full ">
       <ActiveTripsTableHead />
-      <ActiveTripsTableBody data={mockData}/>
+      <ActiveTripsTableBody
+        data={data?.data}
+        loading={isLoading}
+        error={isError}
+        refetch={refetch}
+      />
+      {data && (
+        <Pagination
+          className="pagination-bar"
+          currentPage={currentPage}
+          totalCount={data.totalCount}
+          pageSize={pageSize}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
+      )}
     </div>
   );
 };

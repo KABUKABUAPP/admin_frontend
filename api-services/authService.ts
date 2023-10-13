@@ -1,19 +1,29 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { ADMIN_BASE_URL } from "@/constants";
+import {RIDES_BASE_URL } from "@/constants";
 import {
+  CreatePasswordPayload,
   LoginPayload,
   LoginResponse,
-  CreateAdminPayload,
-  CreateAdminResponse,
 } from "@/models/Auth";
 import { secondsToMilliSeconds } from "@/utils";
+import Cookies from "js-cookie";
+import { ACCESS_TOKEN } from "@/constants";
 
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${ADMIN_BASE_URL}/`,
+    baseUrl: `${RIDES_BASE_URL}/`,
     timeout: secondsToMilliSeconds(30),
+    prepareHeaders(headers) {
+      const token = Cookies.get(ACCESS_TOKEN);
+
+      if (token) {
+        headers.set("authorization", `Bearer ${token}`);
+      }
+
+      return headers;
+    },
   }),
   endpoints: (build) => ({
     login: build.mutation<LoginResponse, LoginPayload>({
@@ -23,14 +33,19 @@ export const authApi = createApi({
         body: { ...payload },
       }),
     }),
-    createAdmin: build.mutation<CreateAdminResponse, CreateAdminPayload>({
-      query: (payload) => ({
-        url: "admin/auth/sign-up",
-        method: "POST",
-        body: { ...payload },
-      }),
+    createPassword: build.mutation<any, CreatePasswordPayload>({
+      query: (body)=>({
+        url: 'admin/auth/create-password',
+        method: 'POST',
+        body
+      })
     }),
+    generateOTP: build.mutation({
+      query: ()=>({
+        url: 'admin/auth/generate-otp'
+      })
+    })
   }),
 });
 
-export const { useCreateAdminMutation, useLoginMutation } = authApi;
+export const { useLoginMutation, useCreatePasswordMutation, useGenerateOTPMutation } = authApi;

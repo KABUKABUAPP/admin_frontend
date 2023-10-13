@@ -3,103 +3,91 @@ export interface Trip {
   to: string;
   rider: string;
   driver: string;
+  id: string;
+}
+
+export interface ActiveTripsMappedResponse {
+  totalCount: number;
+  data: Trip[];
+}
+
+export interface FormattedTripOrder {
+  id: string;
+  origin: string;
+  destination: string;
+  rider: string;
+  driver: string;
+  carModel: string;
+  plateNumber: string;
+  status: string;
+}
+
+export interface MappedTripOrderResponse {
+  data: FormattedTripOrder[];
+  totalCount: number;
 }
 
 export interface TripData {
+  cancel_trip_reason: string;
   start_address: {
-    country: " Nigeria";
-    state: " Lagos";
-    city: " Agege Alagbado 102213";
+    country: string;
+    state: string;
+    city: string;
+    street: string;
   };
   end_address: {
-    country: " Nigeria";
-    state: " Ogun State";
-    city: " Ota 112104";
+    country: string;
+    state: string;
+    city: string;
+    street: string;
   };
-  _id: "63fcf8e6a111661eb184e89e";
-  start_point: [6.663326, 3.2496994];
-  end_point: [6.678502, 3.1667424];
-  kabu_type: "sharp";
+  rating: {
+    value: 0;
+    count: 0;
+  };
+  _id: string;
   user: {
-    next_of_kin: {
-      full_name: "johnattan kent";
-      relationship: " father";
-      phone_number: " +2349198765432";
-    };
-    coordinate: [];
-    _id: "63f3403d0d5c1261350bddc2";
-    full_name: "clark kent";
-    phone_number: "08126853755";
-    email: "babafemi.olasunmade@admoni.ng";
-    profile_image: "https://res.cloudinary.com/dv6dky6rb/image/upload/v1676886077/kab_images/askbwwrwhez5x8mwhwyq.webp";
-    type: "rider";
-    isBlocked: false;
-    onboarding_step: 0;
-    is_onboarding_complete: true;
-    created_at: "2023-02-20T09:41:19.926Z";
-    updated_at: "2023-02-20T12:11:02.017Z";
-    __v: 0;
-    total_trips: 2;
+    _id: string;
+    full_name: string;
   };
   driver: {
-    bvn: {
-      number: "1234567890";
-      inputed: true;
+    average_rating: {
+      count: number;
+      value: number;
     };
-    nin: {
-      number: "112233445566";
-      inputed: true;
-    };
-    _id: "63f359eeac1b54abd6a310dd";
-    user: "63f359eeac1b54abd6a310db";
-    house_address: "1, smallville, metropolis, US";
-    isVerified: false;
-    created_at: "2023-02-20T11:31:34.138Z";
-    updated_at: "2023-02-20T17:57:54.751Z";
-    __v: 0;
-    total_trips: 2;
-    monthly_charge: "63f3a38825f86eaaa8bdb140";
+    _id: string;
+    full_name: string;
+    profile_image: string;
   };
-  order: {
-    start_address: {
-      country: " Nigeria";
-      state: " Lagos";
-      city: " Agege Alagbado 102213";
-      street: "Idowu Babafemi St";
-    };
-    end_address: {
-      country: " Nigeria";
-      state: " Ogun State";
-      city: " Ota 112104";
-      street: "Km. 10 Idiroko Rd";
-    };
-    _id: "63fcf897a111661eb184e893";
-    start_point: [6.663326, 3.2496994];
-    end_point: [6.678502, 3.1667424];
-    kabu_type: "sharp";
-    payment_type: "wallet";
-    user: "63f3403d0d5c1261350bddc2";
-    price_range: [2100, 2600];
-    currency: "NGN";
-    status: "accepted";
-    created_at: "2023-02-27T18:38:15.224Z";
-    updated_at: "2023-02-27T18:39:34.381Z";
-    __v: 0;
-    driver: "63f359eeac1b54abd6a310dd";
+  car: {
+    _id: string;
+    brand_name: string;
+    model: string;
+    year: string;
+    color: string;
+    plate_number: string;
   };
-  price: 0;
-  price_range: [2100, 2600];
-  payment_type: "wallet";
-  status: "started";
-  createdAt: "2023-02-27T18:39:34.403Z";
-  updatedAt: "2023-02-27T18:40:33.085Z";
-  __v: 0;
-  start_time: "2023-02-27T18:40:33.000Z";
-  id: "63fcf8e6a111661eb184e89e";
+  price: number;
+  status: string;
+  createdAt: string;
+  end_time: string;
+  price_details: {
+    booking_fee: number;
+    base_fare: number;
+    distace: number;
+    time: number;
+    wait_time: number;
+    driver_earned: number;
+    kabu_split: number;
+    state_levy: number;
+    total_charge: number;
+    price_after_coupon: number;
+  };
+  id: string;
 }
 
 export interface GetAllTripsResponse {
-  status: "success";
+  status: string;
   data: {
     data: TripData[];
     pagination: {
@@ -116,4 +104,174 @@ export interface GetAllTripsResponse {
 export interface GetAllTripsQuery {
   limit: number;
   page: number;
+  status: "disputed" | "cancelled" | "completed" | "initiated" | "started" | "pending";
+  search: string;
+  order: string;
+  type: 'order' | 'trip'
+}
+
+export interface TripDetail {
+  topTitle: string;
+  topValue: string | number;
+  topIcon: React.ReactNode;
+  bottomTitle: string;
+  bottomValue: string | number;
+  bottomIcon: React.ReactNode;
+  isRating?: boolean;
+}
+
+export interface ViewTripResponse {
+  status: string;
+  data: {
+    order_id: string;
+    origin: {
+      country: string;
+      state: string;
+      city: string;
+      street: string;
+    };
+    destination: {
+      country: string;
+      state: string;
+      city: string;
+      street: string;
+    };
+    estimated_price: number;
+    payment_type: string;
+    rider_rating: number;
+    driver_rating: number;
+    trip_rating: number;
+    rider_comment: string;
+    driver_comment: string;
+
+    rider_details: {
+      average_rating: {
+        value: number;
+        count: number;
+      };
+      _id: string;
+      full_name: string;
+      total_trips: number;
+      profile_image: string;
+      state: string;
+    };
+    driver_details: {
+      average_rating: {
+        value: number;
+        count: number;
+      };
+      _id: string;
+      full_name: string;
+      total_trips: number;
+      driver: {
+        _id: string;
+        city: string;
+        state: string;
+        country: string;
+      };
+      profile_image: string;
+    };
+    car: {
+      _id: string;
+      brand_name: string;
+      model: string;
+      year: string;
+      color: string;
+      plate_number: string;
+    };
+    start_time: string;
+    end_point: [number, number];
+    start_point: [number, number];
+    trip_completion_time: string;
+  };
+  message: string;
+}
+
+export interface ViewTripQuery {
+  id: string;
+}
+
+export interface MappedViewTripResponse {
+  origin: string;
+  destination: string;
+  estimatedPrice: number;
+  paymentType: string;
+  tripStarted: string;
+  tripEnded: string;
+  riderFullName: string;
+  riderLocation: string;
+  riderTripCount: number;
+  riderRating: number;
+  riderId: string;
+  driverFullname: string;
+  driverLocation: string;
+  driverTripCount: number;
+  driverRating: number;
+  carModel: string;
+  plateNumber: string;
+  driverId: string;
+  riderImage: string;
+  driverImage: string;
+  driverTripRating: number;
+  riderTripRating: number;
+  orderId: string;
+  tripRating?: number;
+  riderComment?: string
+  endPoint: [number, number];
+  startPoint: [number, number];
+}
+
+export interface GetDriverTripHistoryQuery {
+  driverId: string;
+  limit: number;
+  page: number;
+}
+
+export interface TripHistoryDTO {
+  start_address: {
+    country: string;
+    state: string;
+    city: string;
+  };
+  end_address: {
+    country: string;
+    state: string;
+    city: string;
+  };
+  _id: string;
+  price: number;
+  payment_type: string;
+  status: string;
+  createdAt: string;
+  id: string;
+}
+
+export interface GetDriverTripHistoryResponse {
+  status: string;
+  data: {
+    data: TripHistoryDTO[];
+    pagination: {
+      pageSize: number;
+      totalCount: number;
+      pageCount: number;
+      currentPage: number;
+      hasNext: boolean;
+    };
+  };
+}
+
+export interface DriverTripHistoryModel {
+  originTop?: string;
+  originBottom?: string;
+  destinationTop?: string;
+  destinationBottom?: string;
+  paymentMethod?: string;
+  date?: string;
+  amount?: string | number;
+  id?: string;
+}
+
+export interface DriverTripHistory {
+  data: DriverTripHistoryModel[];
+  totalCount: number;
 }

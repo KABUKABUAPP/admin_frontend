@@ -1,0 +1,16 @@
+
+.root {
+    @apply w-10 h-10 rounded-full flex justify-center items-center
+}
+
+.primary {
+    @apply bg-[#FFBF00]
+}
+
+.secondary {
+    @apply bg-[#EF2C5B]
+}
+
+.tetiary {
+    @apply bg-[#F1F1F1]
+}

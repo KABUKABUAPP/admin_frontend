@@ -1,13 +1,15 @@
 import React, { FC, ReactNode } from "react";
+import Skeleton from "react-loading-skeleton";
 
 interface Props {
-  title: string;
-  value: string | number;
-  icon: ReactNode;
+  title?: string;
+  value?: string | number;
+  icon?: ReactNode;
   iconBg?: string;
+  loading?: boolean
 }
 
-const SummaryCard: FC<Props> = ({ title, value, icon, iconBg = "#FFBF00" }) => {
+const SummaryCard: FC<Props> = ({ title, value, icon, iconBg = "#FFBF00", loading=false }) => {
   return (
     <div className="bg-[#FDFDFD] w-full max-w-[210px] flex gap-5 p-4 rounded-lg items-center">
       <div
@@ -17,7 +19,7 @@ const SummaryCard: FC<Props> = ({ title, value, icon, iconBg = "#FFBF00" }) => {
         {icon}
       </div>
       <div>
-        <p className="font-bold">{value}</p>
+        <p className="font-bold">{loading ? <Skeleton /> : value}</p>
         <p className="text-xs">{title}</p>
       </div>
     </div>

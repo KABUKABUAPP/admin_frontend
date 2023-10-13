@@ -1,8 +1,42 @@
 import ChevronDown from "@/components/icons/ChevronDown";
-import React, { FC, PropsWithChildren } from "react";
+import React, { FC } from "react";
 import TripsChart from "./TripsChart";
+import { getComponentStates } from "@/utils";
+import Loader from "@/components/ui/Loader/Loader";
+import Button from "@/components/ui/Button/Button";
+import ErrorMessage from "@/components/common/ErrorMessage";
+import DropDown from "@/components/ui/DropDown";
+import { formatChartLabels } from "@/utils";
 
-const TripsChartContainer: FC = () => {
+interface Props {
+  chartData?: { day?: string; trips: number; month?: string }[];
+  loading: boolean;
+  error: boolean;
+  refetch: () => void;
+  filterOptions?: {
+    label: string | number;
+    value: string | number;
+    default?: boolean;
+  }[];
+  dropDownOptionSelected?: string;
+  handleDropDown: (val: string | number) => void;
+}
+
+const TripsChartContainer: FC<Props> = ({
+  chartData,
+  loading,
+  error,
+  refetch,
+  filterOptions,
+  dropDownOptionSelected,
+  handleDropDown,
+}) => {
+  const { viewState, loadingState, errorState } = getComponentStates({
+    data: chartData,
+    loading,
+    error,
+  });
+
   return (
     <div>
       <div
@@ -13,12 +47,34 @@ const TripsChartContainer: FC = () => {
     `}
       >
         <p className="font-bold text-xs">Trips Chart</p>
-        <p className="font-bold text-xs flex items-center gap-2 cursor-pointer">
-          Past 12 Months <ChevronDown />
-        </p>
+        <DropDown
+          placeholder="Filter"
+          options={filterOptions}
+          value={dropDownOptionSelected}
+          handleChange={(val) => handleDropDown(val)}
+        />
       </div>
       <div className="h-[300px] bg-[#FFFFFF] p-6">
-        <TripsChart />
+        {viewState && chartData && (
+          <TripsChart
+            chartData={chartData.map((item) => item.trips)}
+            labels={formatChartLabels({
+              query: dropDownOptionSelected,
+              data: chartData.map((item) => item.day || ""),
+            })}
+          />
+        )}
+        {loadingState && (
+          <div className="flex justify-center items-center">
+            <Loader size="medium" />
+          </div>
+        )}
+        {errorState && (
+          <div className="py-2 flex flex-col items-center justify-center">
+            <ErrorMessage message="Error Fetching Chart Data" />
+            <Button title="Reload Chart Data" onClick={refetch} />
+          </div>
+        )}
       </div>
     </div>
   );
