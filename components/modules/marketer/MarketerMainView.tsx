@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PerformanceChartContainer from "@/components/modules/marketer/PerformanceChartContainer";
 import OnboardDriversTable from './OnboardDriversTable';
-import { useGetTripChartDataQuery } from "@/api-services/dashboardService";
+import { useGetMarketerQuery, useGetPerformanceChartDataQuery } from '@/api-services/marketerService';
 import Route from '@/components/icons/Route';
 import RouteBlue from '@/components/icons/RouteBlue';
+import Cookies from "js-cookie";
 
 const MarketerMainView = () => {
+    const [onboardedDaily, setOnboardedDaily] = useState<string>('0')
+    const [onboardedWeekly, setOnboardedWeekly] = useState<string>('0')
+    const [marketerEarnings, setMarketerEarnings] = useState<string>('0')
     const [chartFilterVal, setChartFilterVal] = useState<string>("7_days");;
     const handleFilterChart = (val: string | Number) => {
       setChartFilterVal(val.toString());
@@ -22,10 +26,25 @@ const MarketerMainView = () => {
         isLoading: chartLoading,
         isError: chartError,
         refetch: reloadChart,
-    } = useGetTripChartDataQuery(
-        { range: chartFilterVal },
+    } = useGetPerformanceChartDataQuery(
+        { limit: '10', page: '1' },
         { refetchOnReconnect: true, refetchOnMountOrArgChange: true }
     );
+    const {
+        data: marketerData, isLoading, isError, refetch
+      } = useGetMarketerQuery(
+        {limit: '10', page: '1'},
+        { refetchOnReconnect: true, refetchOnMountOrArgChange: true }
+      );
+
+    useEffect(() => {
+        if (marketerData) {
+            console.log(marketerData, chartData)
+            setOnboardedDaily(marketerData.total_drivers_onboarded_today);
+            setOnboardedWeekly(marketerData.total_drivers_onboarded_this_week);
+            setMarketerEarnings(marketerData.total_earnings);
+        }
+    }, [marketerData])
 
     return (
       <div className="flex flex-col md:flex-row">
@@ -37,7 +56,7 @@ const MarketerMainView = () => {
                         <Route />
                         </span>
                         <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
-                        <b>30</b><br />
+                        <b>{onboardedDaily}</b><br />
                         <small>Drivers Onboarded Today</small>
                         </span>
                     </a>
@@ -48,7 +67,7 @@ const MarketerMainView = () => {
                         <RouteBlue />
                         </span>
                         <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
-                        <b>30</b><br />
+                        <b>{onboardedWeekly}</b><br />
                         <small>Drivers Onboarded This Week</small>
                         </span>
                     </a>
@@ -59,7 +78,7 @@ const MarketerMainView = () => {
                         <RouteBlue />
                         </span>
                         <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
-                        <b>N50,000</b><br />
+                        <b>N{marketerEarnings}</b><br />
                         <small>Your Earnings</small>
                         </span>
                     </a>
@@ -71,7 +90,6 @@ const MarketerMainView = () => {
                 loading={chartLoading}
                 error={chartError}
                 refetch={reloadChart}
-                filterOptions={chartFilterOptions}
                 handleDropDown={(val) => handleFilterChart(val)}
                 dropDownOptionSelected={chartFilterVal}
               />

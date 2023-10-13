@@ -94,13 +94,13 @@ export const dashboardApi = createApi({
           },
           {
             title: "Total Drivers",
-            value: 0,
+            value: response?.data?.total_drivers,
             iconBg: "#FFBF00",
             
           },
           {
             title: "Total Riders",
-            value: 0,
+            value: response?.data?.total_riders,
             iconBg: "#FFBF00",
             
           },

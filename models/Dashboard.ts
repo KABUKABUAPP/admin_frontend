@@ -8,6 +8,8 @@ export interface GetTripInsightsResponse {
     pending_trips: number;
     total_earnings: number;
     sos: number;
+    total_riders: number;
+    total_drivers: number;
   };
   message: string;
 }

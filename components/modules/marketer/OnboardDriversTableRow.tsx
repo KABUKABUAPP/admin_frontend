@@ -1,40 +1,47 @@
-import Button from "@/components/ui/Button/Button";
-import React, { FC } from "react";
+import React, { FC, useState, useEffect } from "react";
 
 import OnboardDriversTableCell from "./OnboardDriversTableCell";
-import Link from "next/link";
-import { useRouter } from "next/router";
+
+import Button from "@/components/ui/Button/Button";
 
 interface Props {
-  from?: string;
-  to?: string;
-  rider?: string;
-  driver?: string;
-  id?: string;
+  data?: {fullName: string; type: string; image: string; id: string;}[] | undefined;
+  handleViewAll?: () => void;
 }
 
-const OnboardDriversTableRow: FC<Props> = ({ id, ...props }) => {
-  const router = useRouter();
+const OnboardDriversTableRow: FC<Props> = ({
+  data,
+  handleViewAll,
+}) => {
+  const [allPendingApps, setAllPendingApps] = useState<{fullName: string; type: string; image: string; id: string;}[]>();
+  const [slicedPendingApps, setSlicedPendingApps] = useState<{fullName: string; type: string; image: string; id: string;}[]>();
+
+  useEffect(() => {
+    if (data) {
+      setAllPendingApps(data);
+      setSlicedPendingApps([...data].slice(0, 3));
+    }
+  }, [data]);
 
   return (
-    <div
-      onClick={() => router.push(`/trips/${id}?tab=active`)}
-      className="w-full min-w-[600px] border-b-[#E6E6E6] border-b last:border-none p-3 flex justify-between gap-2 cursor-pointer"
-    >
-      {Object.entries(props).map(([title, body], idx) => {
-        return <OnboardDriversTableCell key={idx} title={title} body={body} />;
-      })}
-      <div className="flex items-center">
-        <Button
-          title="View Trip"
-          size="small"
-          variant="contained"
-          color="tetiary"
-          onClick={() => {
-            router.push(`/trips/${id}`);
-          }}
-        />
-      </div>
+    <div className="w-full bg-[#FDFDFD] p-3">
+      {data && data.length ? (
+        <>
+          <div
+            className="max-h-[200px] overflow-y-auto scrollbar-none
+      "
+          >
+            {data &&
+              allPendingApps?.map((item, idx) => {
+                return (
+                  <OnboardDriversTableCell {...item} key={idx} />
+                );
+              })}
+          </div>
+        </>
+      ) : (
+        <p className="text-center text-xs">No Data</p>
+      )}
     </div>
   );
 };

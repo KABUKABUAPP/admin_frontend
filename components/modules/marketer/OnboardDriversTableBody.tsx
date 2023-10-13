@@ -7,7 +7,7 @@ import OnboardDriversTableCell from "./OnboardDriversTableCell";
 import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
 
 interface Props {
-  data: Trip[] | undefined | null;
+  data: {fullName: string; type: string; image: string; id: string;}[] | undefined | null;
   loading: boolean;
   error: boolean;
   refetch: () => void;
@@ -29,26 +29,26 @@ const OnboardDriversTableBody: FC<Props> = ({ data, loading, error, refetch }) =
         <>
           {data.length > 0 ? (
             data.map((item, idx) => {
-              return <OnboardDriversTableRow {...item} key={idx} />;
+              return <OnboardDriversTableRow data={data} {...item} key={idx} />;
             })
           ) : (
-            <p className="text-xs text-center py-3">No Active Trips</p>
+            <p className="text-xs text-center py-3">No Onboarded Drivers</p>
           )}
         </>
       )}
       {loadingState && (
         <div className="flex justify-evenly gap-4">
-          <OnboardDriversTableCell />
-          <OnboardDriversTableCell />
-          <OnboardDriversTableCell />
+          <OnboardDriversTableCell fullName={""} type={""} image={""} id={""} />
+          <OnboardDriversTableCell fullName={""} type={""} image={""} id={""} />
+          <OnboardDriversTableCell fullName={""} type={""} image={""} id={""} />
         </div>
       )}
       {errorState && (
         <div className="flex flex-col items-center">
           <p className="text-xs text-rose-700 mb-2">
-            Oops! Error fetching active trips
+            Oops! Error fetching onboarded drivers
           </p>
-          <Button title="Reload Active Trips" onClick={refetch} />
+          <Button title="Reload" onClick={refetch} />
         </div>
       )}
     </div>

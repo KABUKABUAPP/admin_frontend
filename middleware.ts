@@ -17,7 +17,6 @@ export function middleware(req: NextRequest) {
       const parsedUser = JSON.parse(user);
 
       let userAccessibleRoutes = routePermissionsMapping.map((rp) => {
-        console.log(rp)
         if (rp.route === "/settings") {
           return rp.route;
         } else {

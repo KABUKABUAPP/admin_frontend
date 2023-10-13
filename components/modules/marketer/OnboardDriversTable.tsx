@@ -1,25 +1,33 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 
 import OnboardDriversTableHead from "./OnboardDriversTableHead";
 import OnboardDriversTableBody from "./OnboardDriversTableBody";
-import { useGetActiveTripsQuery } from "@/api-services/dashboardService";
+import { useGetOnboardedDriversQuery } from "@/api-services/marketerService";
 import Pagination from "@/components/common/Pagination";
 
 const OnboardDriversTable: FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(3);
+  const [onboardedData, setOnboardedData] = useState([])
 
-  const { data, isLoading, isError, refetch, error } = useGetActiveTripsQuery(
-    { page: currentPage, limit: pageSize, type: 'trip' },
+  const { data, isLoading, isError, refetch, error } = useGetOnboardedDriversQuery(
+    { page: '1', limit: '10' },
     { refetchOnReconnect: true }
   );
 
+
+  useEffect(() => {
+    if (data) {
+        console.log('d', data);
+        setOnboardedData(data);
+    }
+  }, [data])
 
   return (
     <div className="w-full ">
       <OnboardDriversTableHead />
       <OnboardDriversTableBody
-        data={data?.data}
+        data={onboardedData}
         loading={isLoading}
         error={isError}
         refetch={refetch}

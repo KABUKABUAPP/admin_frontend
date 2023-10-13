@@ -9,7 +9,7 @@ import DropDown from "@/components/ui/DropDown";
 import { formatChartLabels } from "@/utils";
 
 interface Props {
-  chartData?: { day?: string; trips: number; month?: string }[];
+  chartData?: { month?: string; drivers: number; }[];
   loading: boolean;
   error: boolean;
   refetch: () => void;
@@ -27,9 +27,7 @@ const PerformanceChartContainer: FC<Props> = ({
   loading,
   error,
   refetch,
-  filterOptions,
-  dropDownOptionSelected,
-  handleDropDown,
+  dropDownOptionSelected
 }) => {
   const { viewState, loadingState, errorState } = getComponentStates({
     data: chartData,
@@ -51,11 +49,8 @@ const PerformanceChartContainer: FC<Props> = ({
       <div className="h-[300px] bg-[#FFFFFF] p-6">
         {viewState && chartData && (
           <PerformanceChart
-            chartData={chartData.map((item) => item.trips)}
-            labels={formatChartLabels({
-              query: dropDownOptionSelected,
-              data: chartData.map((item) => item.day || ""),
-            })}
+            chartData={chartData.map((item) => item.drivers)}
+            labels={chartData.map((item) => item.month || "")}
           />
         )}
         {loadingState && (
