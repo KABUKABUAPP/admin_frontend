@@ -117,7 +117,7 @@ export const config = {
     "/",
     "/dashboard",
     "/auth/login",
-    "/auth/create-password",
+    //"/auth/create-password",
     //"/auth/forgot-password",
     "/drivers/:path*",
     "/fare-prices/:path*",

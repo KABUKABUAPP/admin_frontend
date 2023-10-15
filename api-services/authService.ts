@@ -44,8 +44,22 @@ export const authApi = createApi({
       query: ()=>({
         url: 'admin/auth/generate-otp'
       })
+    }),
+    forgotPassword: build.mutation({
+      query: (payload)=>({
+        url: "admin/auth/forgot-password",
+        method: "POST",
+        body: { ...payload }
+      })
+    }),
+    resetPassword: build.mutation({
+      query: (payload)=>({
+        url: "admin/auth/reset-password",
+        method: "POST",
+        body: { ...payload }
+      })
     })
   }),
 });
 
-export const { useLoginMutation, useCreatePasswordMutation, useGenerateOTPMutation } = authApi;
+export const { useLoginMutation, useCreatePasswordMutation, useGenerateOTPMutation, useForgotPasswordMutation, useResetPasswordMutation } = authApi;
