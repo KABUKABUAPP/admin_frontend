@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button/Button";
 import TextField from "@/components/ui/Input/TextField/TextField";
 import ForgotPasswordSchema from "@/validationschemas/ForgotPasswordSchema";
 import { useFormik, Form, FormikProvider } from "formik";
+import { useForgotPasswordMutation } from "@/api-services/authService";
 
 const initialValues = {
   email: "" as string,
@@ -17,6 +18,7 @@ interface Props {
 
 const ForgotPasswordForm: FC<Props> = ({ handleSubmitFormSuccess }) => {
   const router = useRouter();
+  const [forgotPassword, { data, isLoading, error, isError }] = useForgotPasswordMutation();
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -25,6 +27,7 @@ const ForgotPasswordForm: FC<Props> = ({ handleSubmitFormSuccess }) => {
   });
 
   const handleSubmit = (values: typeof initialValues) => {
+    forgotPassword(values)
     // handle form submit
     handleSubmitFormSuccess()
   };
