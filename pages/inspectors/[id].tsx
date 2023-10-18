@@ -56,20 +56,6 @@ const Inspector: FC = () => {
                     carsInHub={data.carsInHub}
                   />
 
-                  <div className="flex justify-between max-sm:flex-col gap-3">
-                    <Button
-                      title="View Approved Cars"
-                      variant="contained"
-                      color="tetiary"
-                      className="w-full !text-sm"
-                    />
-                    <Button
-                      title="View Declined Cars"
-                      variant="contained"
-                      color="tetiary"
-                      className="w-full !text-sm"
-                    />
-                  </div>
                 </div>
               }
               mainComponents={<InspectionHistory />}
