@@ -8,8 +8,12 @@ import SearchIcon from "@/components/icons/SearchIcon";
 import Image from "next/image";
 import SelectField from "@/components/ui/Input/NoBorderSelect";
 import Avatar from "@/components/common/Avatar";
-import { useGetInspectedCarsQuery } from "@/api-services/inspectorsService";
+import { useGetInspectedCarsPaginationQuery, useGetInspectedCarsQuery } from "@/api-services/inspectorsService";
 import { useRouter } from "next/router";
+import ArrowUpRight from "@/components/icons/ArrowUpRight";
+import ArrowLeft from "@/components/icons/ArrowLeft";
+import Pagination from "@/components/common/Pagination";
+import SearchFilterBar from "@/components/common/SearchFilterBar";
 
 function splitPageUrl() {
     // Get the current page URL
@@ -17,6 +21,19 @@ function splitPageUrl() {
     const urlParts = currentPageUrl.split('/');
     return urlParts;
 }
+
+function filterCarModels(searchString: string, carArray: any) {
+    // Use the filter method to create a new array based on the matching criteria
+    return carArray?.filter((car: { car_model: string; }) => {
+        // Convert both the car model and the search string to lowercase for case-insensitive comparison
+        const lowerCaseCarModel = car?.car_model.toLowerCase();
+        const lowerCaseSearchString = searchString.toLowerCase();
+
+        // Check if the car model contains the search string
+        return lowerCaseCarModel.includes(lowerCaseSearchString);
+    });
+}
+
 
 const searchInitialValues = {
     search_value: ""
@@ -39,6 +56,16 @@ const InspectionHistory: FC = () => {
     const [pageLimit, setPageLimit] = useState(10);
     const [pageNumber, setPageNumber] = useState(1);
     const [inspectionStatusStr, setInspectionStatusStr] = useState('approved');
+    const [search, setSearch] = useState('');
+
+    const filterOptions = [
+        { label: "Newest First", value: "newest_first", default: true },
+        { label: "Oldest First", value: "oldest_first", default: false },
+        { label: "A-Z", value: "a-z", default: false },
+        { label: "Z-A", value: "z-a", default: false },
+    ];
+
+    const [selectedFilterOption, setSelectedFilterOption] = useState<string>(filterOptions.find((opt) => opt.default === true)?.value || "newest_first");
 
     const inspectionBold = `text-sm mx-1 font-semibold cursor-pointer`;
     const inspectionOrdinary = `text-sm mx-1 cursor-pointer`;
@@ -50,11 +77,14 @@ const InspectionHistory: FC = () => {
         { limit: pageLimit, page: pageNumber, id: parts[4], status: inspectionStatusStr }
     );
 
-    useEffect(() => {
-        console.log('d', data);
+    const { data: totalCarsData, isLoading: totalCarsLoading, isError: totalCarsError, refetch: totalCarsRefetch } = useGetInspectedCarsPaginationQuery(
+        { limit: pageLimit, page: pageNumber, id: parts[4], status: inspectionStatusStr }
+    );
 
-        setCarsDetail(data)
-    }, [carsDetail, data])
+    useEffect(() => {
+        const searchResult = filterCarModels(search, data)
+        setCarsDetail(search.length > 0 ? searchResult : data)
+    }, [carsDetail, data, search])
 
     const searchFormik = useFormik({
         initialValues: searchInitialValues,
@@ -95,7 +125,15 @@ const InspectionHistory: FC = () => {
             </div>
 
             <div className="flex flex-wrap p-1">
-                <div className="w-3/5 p-1">
+                
+                <SearchFilterBar
+                    searchValue={search}
+                    handleSearch={(val) => setSearch(val)}
+                    filterOptions={filterOptions}
+                    dropDownOptionSelected={selectedFilterOption}
+                    handleDropDown={(val) => setSelectedFilterOption(String(val))}
+                />
+                {/*<div className="w-3/5 p-1">
                     <FormikProvider value={searchFormik}>
                         <Form>
                             <TextField
@@ -142,7 +180,7 @@ const InspectionHistory: FC = () => {
                             
                         </Form>
                     </FormikProvider>
-                </div>
+                </div>*/}
             </div>
         
 
@@ -150,7 +188,7 @@ const InspectionHistory: FC = () => {
             {carsDetail?.length > 0 && 
                 <>
                     {Array.isArray(carsDetail) && carsDetail.map((detail) => (
-                        <div className="w-full flex bg-[#F1F1F1] rounded-md p-3">
+                        <div className="w-full flex bg-[#F1F1F1] rounded-md p-3 mt-2 mb-2">
                             <div className="w-3/10">
                                 <p className="mt-4 mb-4 text-sm text-[#9A9A9A]">{detail.id}</p>
                                 <Avatar
@@ -167,6 +205,13 @@ const InspectionHistory: FC = () => {
                             </div>
                         </div>
                     ))}
+                    <Pagination
+                        className="pagination-bar"
+                        currentPage={totalCarsData?.currentPage}
+                        totalCount={totalCarsData?.totalCount}
+                        pageSize={totalCarsData?.pageSize}
+                        onPageChange={(page) => setPageNumber(page)}
+                    />
                 </>
             }
 

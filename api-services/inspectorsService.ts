@@ -112,7 +112,10 @@ export const inspectorsApi = createApi({
         method: 'GET'
       }),
       transformResponse: (response: any) => {
-        if (response?.data?.data?.length === 0) return []
+        
+        if (response?.data?.data?.length === 0) return [];
+
+
         return response?.data?.data?.map((resp: any) => {
           return {
             id: resp._id,
@@ -122,8 +125,20 @@ export const inspectorsApi = createApi({
           }
         })
       }
+    }),
+    getInspectedCarsPagination: build.query<any, GetInspectedCarsPayload>({
+      query: ({limit, page, id, status})=>({
+        url: `admin/inspector/view-inspected-cars/${id}?limit=${limit}&page=${page}&status=${status}`,
+        method: 'GET'
+      }),
+      transformResponse: (response: any) => {
+        
+        if (!response) return {};
+        console.log(response?.data?.pagination);
+        return response?.data?.pagination;
+      }
     })
   })
 });
 
-export const { useGetAllInspectorsQuery, useViewInspectorQuery, useAddNewInspectorMutation, useGetInspectedCarsQuery } = inspectorsApi;
+export const { useGetAllInspectorsQuery, useViewInspectorQuery, useAddNewInspectorMutation, useGetInspectedCarsQuery, useGetInspectedCarsPaginationQuery } = inspectorsApi;
