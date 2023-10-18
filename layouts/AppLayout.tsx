@@ -21,8 +21,8 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
   const { user } = useUserContext();
   
   const router = useRouter();
-  //if ( user ) user!.role = 'executive marketer';
-  //if ( user && user!.role === 'executive marketer') router.push('/marketer');
+
+  if ( user && user!.role === 'executive marketer') router.push('/marketer');
 
   const getActiveSideNavLink = (
     sidebarItems: SidebarLink[],

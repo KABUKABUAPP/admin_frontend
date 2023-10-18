@@ -13,8 +13,7 @@ const ForgotPasswordSuccess: FC = () => {
       <div>
         <p className="text-xl font-medium text-center pt-10">Forgot Password</p>
         <p className="text-center font-medium mt-2 text-xs w-56 mx-auto py-6">
-          Your request has been sent to the admin. You’ll get an mail when reset
-          is successful
+          An OTP has been sent to your mail, click the button below to reset your password
         </p>
       </div>
 
@@ -30,7 +29,7 @@ const ForgotPasswordSuccess: FC = () => {
       </div>
 
       <div>
-        <Button title="Okay" className="w-full mt-12" onClick={()=>router.push('/auth/login')}/>
+        <Button title="Proceed" className="w-full mt-12" onClick={()=>router.push('/auth/reset-password')}/>
       </div>
     </div>
   );
