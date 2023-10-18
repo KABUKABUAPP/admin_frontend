@@ -117,7 +117,7 @@ const AddInspectorForm: FC = () => {
                   formik.touched.username ? formik.errors.username : undefined
                 }
               />
-              <label className="-mb-6 text-sm font-semibold">Phone</label>
+              <label className="-mb-6 text-sm font-semibold">Phone(optional)</label>
               <PhoneInput
                 // label="Phone"
                 // placeholder="2333333333"
@@ -184,7 +184,7 @@ const AddInspectorForm: FC = () => {
               </div>
 
               <TextField
-                label="Email Address"
+                label="Email Address(optional)"
                 placeholder="Email address here"
                 {...formik.getFieldProps("email")}
                 error={formik.touched.email ? formik.errors.email : undefined}
