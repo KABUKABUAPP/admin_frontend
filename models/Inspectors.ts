@@ -97,6 +97,8 @@ export interface AddNewInspectorPayload {
   state: string;
   phone_number: string;
   email: string;
+  password: string;
+  username: string;
 }
 
 export interface AddNewInspectorResponse {
@@ -120,4 +122,42 @@ export interface AddNewInspectorResponse {
     __v: 0;
   };
   message: string;
+}
+
+export interface GetInspectedCarsResponse {
+  status: string;
+  data: {
+    data: {
+        _id: string;
+        brand_name: string;
+        user: string;
+        model: string;
+        year: string;
+        color: string;
+        images: string[];
+        plate_number: string;
+      }[];
+    pagination: {
+      pageSize: number;
+      totalCount: number;
+      pageCount: number;
+      currentPage: number;
+      hasNext: boolean;
+    };
+  };
+  message: string;
+}
+
+export interface GetInspectedCarsResponseMapped {
+  image: string;
+  car_model: string;
+  plate_no: string;
+  id: string;
+}[]
+
+export interface GetInspectedCarsPayload {
+  limit: number;
+  page: number;
+  id: string;
+  status: string;
 }

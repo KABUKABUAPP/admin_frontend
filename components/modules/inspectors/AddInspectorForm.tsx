@@ -20,6 +20,8 @@ import "react-phone-input-2/lib/style.css";
 const initialValues = {
   first_name: "",
   last_name: "",
+  username: "",
+  password: "",
   house_address: "",
   city: "",
   state: "",
@@ -40,7 +42,8 @@ const AddInspectorForm: FC = () => {
     onSubmit: (values) => {
       const stateName = states?.filter((s) => s.value == values.state)[0]
         .label as string;
-      addInspector({ ...values, state: stateName });
+
+        addInspector({ ...values, state: stateName });
     },
   });
 
@@ -99,11 +102,19 @@ const AddInspectorForm: FC = () => {
                 }
               />
               <TextField
-                label="Last name"
+                label="Last name(optional)"
                 placeholder="Last name here"
                 {...formik.getFieldProps("last_name")}
                 error={
                   formik.touched.last_name ? formik.errors.last_name : undefined
+                }
+              />
+              <TextField
+                label="Username"
+                placeholder="Username here"
+                {...formik.getFieldProps("username")}
+                error={
+                  formik.touched.username ? formik.errors.username : undefined
                 }
               />
               <label className="-mb-6 text-sm font-semibold">Phone</label>
@@ -145,17 +156,6 @@ const AddInspectorForm: FC = () => {
                 }
               />
               <div className="flex justify-between gap-3 max-sm:flex-col">
-                <div className="w-full">
-                  <SelectField
-                    options={cities ? cities : []}
-                    disabled={!cities?.length}
-                    label="City"
-                    placeholder="City here"
-                    className="w-full"
-                    {...formik.getFieldProps("city")}
-                    error={formik.touched.city ? formik.errors.city : undefined}
-                  />
-                </div>
 
                 <div className="w-full">
                   <SelectField
@@ -170,6 +170,17 @@ const AddInspectorForm: FC = () => {
                     }
                   />
                 </div>
+                <div className="w-full">
+                  <SelectField
+                    options={cities ? cities : []}
+                    disabled={!cities?.length}
+                    label="City"
+                    placeholder="City here"
+                    className="w-full"
+                    {...formik.getFieldProps("city")}
+                    error={formik.touched.city ? formik.errors.city : undefined}
+                  />
+                </div>
               </div>
 
               <TextField
@@ -177,6 +188,15 @@ const AddInspectorForm: FC = () => {
                 placeholder="Email address here"
                 {...formik.getFieldProps("email")}
                 error={formik.touched.email ? formik.errors.email : undefined}
+              />
+              
+              <TextField
+                label="Create Password"
+                placeholder="Create Password"
+                {...formik.getFieldProps("password")}
+                error={
+                  formik.touched.password ? formik.errors.password : undefined
+                }
               />
             </div>
           </Card>

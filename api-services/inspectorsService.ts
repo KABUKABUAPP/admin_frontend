@@ -9,6 +9,9 @@ import {
   AddNewInspectorResponse,
   GetAllInspectorsQuery,
   GetAllInspectorsResponse,
+  GetInspectedCarsPayload,
+  GetInspectedCarsResponse,
+  GetInspectedCarsResponseMapped,
   InspectorsMappedData,
   InspectorsTableBodyData,
   MappedViewInspector,
@@ -102,8 +105,40 @@ export const inspectorsApi = createApi({
         method: 'POST',
         body
       })
+    }),
+    getInspectedCars: build.query<any, GetInspectedCarsPayload>({
+      query: ({limit, page, id, status})=>({
+        url: `admin/inspector/view-inspected-cars/${id}?limit=${limit}&page=${page}&status=${status}`,
+        method: 'GET'
+      }),
+      transformResponse: (response: any) => {
+        
+        if (response?.data?.data?.length === 0) return [];
+
+
+        return response?.data?.data?.map((resp: any) => {
+          return {
+            id: resp._id,
+            car_model: `${resp.brand_name} ${resp.year}, ${resp.color}`,
+            plate_no: resp.plate_number,
+            image: resp.images.length > 0 ? resp.image[0] : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+          }
+        })
+      }
+    }),
+    getInspectedCarsPagination: build.query<any, GetInspectedCarsPayload>({
+      query: ({limit, page, id, status})=>({
+        url: `admin/inspector/view-inspected-cars/${id}?limit=${limit}&page=${page}&status=${status}`,
+        method: 'GET'
+      }),
+      transformResponse: (response: any) => {
+        
+        if (!response) return {};
+        console.log(response?.data?.pagination);
+        return response?.data?.pagination;
+      }
     })
-  }),
+  })
 });
 
-export const { useGetAllInspectorsQuery, useViewInspectorQuery, useAddNewInspectorMutation } = inspectorsApi;
+export const { useGetAllInspectorsQuery, useViewInspectorQuery, useAddNewInspectorMutation, useGetInspectedCarsQuery, useGetInspectedCarsPaginationQuery } = inspectorsApi;
