@@ -17,7 +17,6 @@ const InspectorsTableBodyRow: FC<Props> = ({
     imageUrl,
     location,
     hub,
-    carsInHub,
     totalCarsProcessed,
   },
 }) => {
@@ -43,9 +42,6 @@ const InspectorsTableBodyRow: FC<Props> = ({
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">{capitalizeAllFirstLetters(hub)}</p>
-      </div>
-      <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{carsInHub}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">{totalCarsProcessed}</p>
