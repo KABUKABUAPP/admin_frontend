@@ -58,6 +58,9 @@ export interface GetAllInspectorsQuery {
 export interface ViewInspectorResponse {
   status: string;
   data: {
+    cars_declined: number;
+    cars_approved: number;
+    cars_processed: number;
     _id: string;
     first_name: string;
     last_name: string;
@@ -82,7 +85,6 @@ export interface MappedViewInspector {
   totalCarsProcessed: number;
   approved: number;
   declined: number;
-  carsInHub: number;
 }
 
 export interface ViewInspectorQuery {

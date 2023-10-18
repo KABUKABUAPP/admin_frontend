@@ -53,7 +53,6 @@ const Inspector: FC = () => {
                   <SummaryCard
                     approved={data.approved}
                     declined={data.declined}
-                    carsInHub={data.carsInHub}
                   />
 
                 </div>
