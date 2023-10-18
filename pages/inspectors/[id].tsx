@@ -8,6 +8,7 @@ import ViewInspectorLayout from "@/components/modules/inspectors/ViewInspectorLa
 import UserInfoCard from "@/components/common/UserInfoCard";
 import SummaryCard from "@/components/modules/inspectors/SummaryCard";
 import CarsInHubCard from "@/components/modules/inspectors/CarsInHubCard";
+import InspectionHistory from "@/components/modules/inspectors/InspectionHistory";
 import { useViewInspectorQuery } from "@/api-services/inspectorsService";
 import { useRouter } from "next/router";
 import Loader from "@/components/ui/Loader/Loader";
@@ -71,7 +72,7 @@ const Inspector: FC = () => {
                   </div>
                 </div>
               }
-              mainComponents={<CarsInHubCard carsCount={data.carsInHub} />}
+              mainComponents={<InspectionHistory />}
             />
           )}
 
