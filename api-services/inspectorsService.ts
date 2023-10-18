@@ -61,13 +61,19 @@ export const inspectorsApi = createApi({
           const totalCount = response?.data?.pagination?.totalCount;
           const mappedReponse: InspectorsTableBodyData[] =
             response?.data?.data?.map((inspector) => {
+              let inspectorLocation = ``
+
+              if (inspector?.city) inspectorLocation += inspector?.city + ', ';
+              if (inspector?.state) inspectorLocation += inspector?.state + ', ';
+              if (inspector?.country) inspectorLocation += inspector?.country;
+
               return {
                 carsInHub: 0,
                 fullName: `${inspector?.last_name} ${inspector?.first_name}`,
                 hub: ``,
                 imageUrl: "",
                 inspectorId: inspector?._id,
-                location: `${inspector?.city}, ${inspector?.state}, ${inspector?.country}`,
+                location: inspectorLocation,
                 totalCarsProcessed: 0,
               };
             });
