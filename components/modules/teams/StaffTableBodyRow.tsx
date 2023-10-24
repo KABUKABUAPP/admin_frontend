@@ -4,41 +4,47 @@ import { StaffsTableData } from "@/models/Staffs";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { capitalizeAllFirstLetters } from "@/utils";
+import moment from "moment";
 
 interface Props {
-  data: StaffsTableData;
+  data: any;
 }
 
 const StaffTableBodyRow: FC<Props> = ({
-  data: { staffId, fullName, role, location, status, id },
+  data: { teamId, teamName, totalMembers, audience, users_onboarded, created, id },
 }) => {
   const router = useRouter();
   return (
     <div
-      onClick={() => router.push(`/staffs/${id}`)}
+      onClick={() => router.push(`/staffs/teams/${id}`)}
       className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
     >
       <div style={{ flex: 1 }} className="flex items-center">
-        <Link href={`/staffs/${id}`}>
-          <p className="text-xs font-bold cursor-pointer">{staffId}</p>
+        <Link href={`/staffs/teams/${id}`}>
+          <p className="text-xs font-bold cursor-pointer">{teamId}</p>
         </Link>
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{capitalizeAllFirstLetters(fullName)}</p>
+        <p className="text-xs font-bold">{capitalizeAllFirstLetters(teamName)}</p>
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{capitalizeAllFirstLetters(role)}</p>
+        <p className="text-xs font-bold">{totalMembers}</p>
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{capitalizeAllFirstLetters(location)}</p>
+        <p className="text-xs font-bold">{capitalizeAllFirstLetters(audience)}</p>
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{status}</p>
+        <p className="text-xs font-bold">{users_onboarded}</p>
       </div>
+
+      <div style={{ flex: 1 }} className="flex items-center">
+        <p className="text-xs font-bold">{moment(created).format('DD, MMMM YYYY')}</p>
+      </div>
+
     </div>
   );
 };

@@ -91,7 +91,6 @@ export const inspectorsApi = createApi({
         else {
           const { data } = response
 
-          console.log('d', data)
           const mapped: MappedViewInspector = {
             fullname: `${data?.last_name} ${data?.first_name}`,
             address: `${data?.house_address}`,
