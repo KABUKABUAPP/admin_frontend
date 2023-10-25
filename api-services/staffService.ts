@@ -4,6 +4,7 @@ import { RIDES_BASE_URL } from "@/constants";
 
 import { logout, secondsToMilliSeconds } from "@/utils";
 import Cookies from "js-cookie";
+import moment from 'moment';
 import { ACCESS_TOKEN } from "@/constants";
 import {
   CreateStaffPayload,
@@ -60,7 +61,7 @@ export const staffApi = createApi({
         else {
           const mapped = response.data.data.map((staff) => {
             return {
-              staffId: staff?._id,
+              staffId: staff?.staff_id,
               fullName: staff?.full_name,
               role: staff?.role?.name,
               location: `${staff?.address?.street}, ${staff?.address?.city} ${staff?.address?.state}`,
@@ -71,6 +72,7 @@ export const staffApi = createApi({
                   ? "active"
                   : "inactive"
               }`,
+              id: staff?._id
             };
           });
 
@@ -104,6 +106,7 @@ export const staffApi = createApi({
       transformResponse: (response: ViewStaffResponse) => {
         if (!response) return <MappedViewStaff>{};
         else {
+          console.log('r', response?.data);
           const mappedStaff = {
             fullName: response?.data?.full_name,
             email: response?.data?.email,
@@ -111,11 +114,23 @@ export const staffApi = createApi({
             address: response?.data?.address?.city,
             role: response?.data?.role.name,
             image: response?.data?.profile_image,
+            referral_code: response?.data?.referral_code
           };
 
           const isBlocked = response?.data?.isBlocked;
 
-          return { userInfo: mappedStaff, isBlocked };
+          const activityLogsRaw = response?.data?.activity_logs?.data?.rows;
+
+          const activityLogs = activityLogsRaw.map((log: any) => {
+            return {
+              title: log.description,
+              date: moment(log.createdAt).fromNow()
+            }
+          })
+
+          const disputeData = {total: response?.data?.total_disputes, pending: response?.data?.pending_disputes}
+
+          return { userInfo: mappedStaff, isBlocked, activityLogs, disputeData };
         }
       },
     }),

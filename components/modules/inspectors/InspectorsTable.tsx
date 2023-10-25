@@ -30,10 +30,6 @@ const headCellData = [
     flex: 1,
   },
   {
-    title: "Cars in Hub",
-    flex: 1,
-  },
-  {
     title: "Total Cars Processed",
     flex: 1,
   },

@@ -17,6 +17,7 @@ import { staffApi } from "@/api-services/staffService";
 import { geoLocationApi } from "@/api-services/geoLocationService";
 import { ordersApi } from "@/api-services/ordersService";
 import { marketerApi } from "@/api-services/marketerService";
+import { teamApi } from "@/api-services/teamService";
 
 export const reduxStore = configureStore({
   reducer: {
@@ -36,7 +37,8 @@ export const reduxStore = configureStore({
     [settingsApi.reducerPath]: settingsApi.reducer,
     [staffApi.reducerPath]: staffApi.reducer,
     [geoLocationApi.reducerPath]: geoLocationApi.reducer,
-    [marketerApi.reducerPath]: marketerApi.reducer
+    [marketerApi.reducerPath]: marketerApi.reducer,
+    [teamApi.reducerPath]: teamApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -56,7 +58,8 @@ export const reduxStore = configureStore({
       settingsApi.middleware,
       staffApi.middleware,
       geoLocationApi.middleware,
-      marketerApi.middleware
+      marketerApi.middleware,
+      teamApi.middleware
     ]),
 });
 

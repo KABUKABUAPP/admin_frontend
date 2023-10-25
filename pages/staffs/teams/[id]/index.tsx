@@ -2,19 +2,19 @@ import { NextPage } from "next";
 import React, { useEffect } from "react";
 
 import AppLayout from "@/layouts/AppLayout";
-import ViewStaffLayout from "@/components/modules/staff/ViewStaffLayout";
+import ViewStaffLayout from "@/components/modules/teams/ViewStaffLayout";
 import ActionBar from "@/components/common/ActionBar";
 import Button from "@/components/ui/Button/Button";
 import BlockIcon from "@/components/icons/BlockIcon";
 import LockIcon from "@/components/icons/LockIcon";
 import UserInfoCard from "@/components/common/UserInfoCard";
-import SummaryCard from "@/components/modules/staff/SummaryCard";
-import ActivityLogCard from "@/components/modules/staff/ActivityLogCard";
+import SummaryCard from "@/components/modules/teams/SummaryCard";
+import ActivityLogCard from "@/components/modules/teams/ActivityLogCard";
 import { useModalContext } from "@/contexts/ModalContext";
-import ResetPasswordCard from "@/components/modules/staff/ResetPasswordCard";
-import ResetPasswordNotification from "@/components/modules/staff/ResetPasswordNotification";
-import DisabledStaffCard from "@/components/modules/staff/DisabledStaffCard";
-import { useViewStaffQuery } from "@/api-services/staffService";
+import ResetPasswordCard from "@/components/modules/teams/ResetPasswordCard";
+import ResetPasswordNotification from "@/components/modules/teams/ResetPasswordNotification";
+import DisabledStaffCard from "@/components/modules/teams/DisabledStaffCard";
+import { useViewTeamQuery } from "@/api-services/teamService";
 import { useRouter } from "next/router";
 import { useDisableStaffMutation } from "@/api-services/staffService";
 import { toast } from "react-toastify";
@@ -27,8 +27,8 @@ import TrashIcon from "@/components/icons/TrashIcon";
 const Staff: NextPage = () => {
   const { setModalContent } = useModalContext();
   const { id } = useRouter().query;
-  const { data, isLoading, error, refetch } = useViewStaffQuery(
-    { staffId: String(id) },
+  const { data, isLoading, error, refetch } = useViewTeamQuery(
+    { teamId: String(id) },
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
@@ -74,7 +74,7 @@ const Staff: NextPage = () => {
       <AppHead title="Kabukabu | Staff" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar>
+          {/*<ActionBar>
             {userPermissions && userPermissions.staffs_permissions.write && (
               <Button
                 title="Reset Password"
@@ -140,7 +140,7 @@ const Staff: NextPage = () => {
               </>
             }
             secondRow={data && <>{ <ActivityLogCard logs={data.activityLogs} />}</>}
-          />
+          />*/}
         </div>
       </AppLayout>
     </>
