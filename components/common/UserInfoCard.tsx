@@ -100,26 +100,30 @@ const UserInfoCard: FC<Props> = ({
           </div>
           {role && <p className="text-lg font-semibold">{capitalizeAllFirstLetters(role)}</p>}
           {address && <p className="text-lg font-semibold">{capitalizeAllFirstLetters(address)}</p>}
-          {email && (
-            <p
-              className={`text-base font-semibold ${
-                isDeleted ? "!text-[#9A9A9A]" : ""
-              }`}
-            >
-              {email}
-            </p>
-          )}
-          <div className="flex flex-col gap-2">
-            {phone && (
-              <span
-                className={`text-base font-semibold ${
-                  isDeleted ? "!text-[#9A9A9A]" : ""
-                }`}
-              >
-                {phone}
-              </span>
-            )}
-            <span>
+          <div className="flex">
+            <div>
+              {email && (
+                <span
+                  className={`text-base font-semibold ${
+                    isDeleted ? "!text-[#9A9A9A]" : ""
+                  }`}
+                >
+                  {email}
+                </span>
+              )}
+              <br />
+              {phone && (
+                <span
+                  className={`text-base font-semibold ${
+                    isDeleted ? "!text-[#9A9A9A]" : ""
+                  }`}
+                >
+                  {phone}
+                </span>
+              )}
+            </div>
+
+            <div className="mx-1">
               <span className="flex bg-[#FFF5D8] pr-2 pl-2" style={{borderRadius: '1rem'}}>
                 <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
                   <b>{referral_code}</b><br />
@@ -132,7 +136,7 @@ const UserInfoCard: FC<Props> = ({
                   }} />
                 </span>
               </span>
-            </span>
+            </div>
           </div>
           
           {showTripCount &&

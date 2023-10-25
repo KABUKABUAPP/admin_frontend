@@ -57,7 +57,7 @@ const Driver: NextPage = () => {
               }
               firstRow={
                 <>
-                  <DriverInfoCard {...data.driverInfo} />
+                  <DriverInfoCard referral_code={""} {...data.driverInfo} />
 
                   <CarDetailsCard {...data.carDetails} />
 

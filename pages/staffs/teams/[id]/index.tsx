@@ -23,6 +23,8 @@ import ErrorMessage from "@/components/common/ErrorMessage";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
 import TrashIcon from "@/components/icons/TrashIcon";
+import TeamInfoCard from "@/components/common/TeamInfoCard";
+import AudienceOnboarded from "@/components/common/AudeinceOnboarded";
 
 const Staff: NextPage = () => {
   const { setModalContent } = useModalContext();
@@ -74,73 +76,40 @@ const Staff: NextPage = () => {
       <AppHead title="Kabukabu | Staff" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          {/*<ActionBar>
-            {userPermissions && userPermissions.staffs_permissions.write && (
-              <Button
-                title="Reset Password"
-                size="large"
-                startIcon={<LockIcon />}
-                onClick={handleResetPassword}
-              />
-            )}
-            {userPermissions &&
-              userPermissions.staffs_permissions.write &&
-              data &&
-              data.isBlocked === false && (
-                <Button
-                  title="Disable Staff"
-                  color="secondary"
-                  variant="outlined"
-                  size="large"
-                  startIcon={<BlockIcon fill="#EF2C5B"/>}
-                  className="!text-[#EF2C5B]"
-                  onClick={handleDisableStaff}
-                />
-              )}
-            {userPermissions &&
-              userPermissions.staffs_permissions.write &&
-              data &&
-              data.isBlocked === true && (
-                <Button
-                  title="Enable Staff"
-                  color="secondary"
-                  size="large"
-                  loading={enableStaffLoading}
-                  disabled={enableStaffLoading}
-                  startIcon={<BlockIcon />}
-                  className="!bg-[#1FD11B] !text-[#FFFFFF]"
-                  onClick={() => {
-                    enableStaff({ staffId: String(id) });
-                  }}
-                />
-              )}
+          <ActionBar>            
+            <Button
+              title="Delete Team"
+              color="secondary"
+              variant="outlined"
+              size="large"
+              startIcon={<TrashIcon fill="#FFF"/>}
+              className="!text-[#FFF] bg-[#EF2C5B]"
+              //onClick={handleDisableStaff}
+            />              
           </ActionBar>
 
           <ViewStaffLayout
             firstRow={
               <>
                 {data && !isLoading && !error && (
-                  <UserInfoCard
-                    {...data.userInfo}
-                    bg={data.isBlocked === true ? "#FEE2E9" : "#FFFFFF"}
-                  />
+                  <TeamInfoCard />
                 )}
                 {!data && !error && isLoading && (
                   <div className="flex items-center justify-center">
                     <Loader />
                   </div>
                 )}
-                {!data && error && !isLoading && (
+                {/*{!data && error && !isLoading && (
                   <div className="flex items-center justify-center flex-col gap-3">
                     <ErrorMessage message="Oops! Something went wrong" />
                     <Button title="Refetch" onClick={refetch} />
                   </div>
-                )}
-                {data && <SummaryCard disputesRaised={data.disputeData.total} pendingDisputes={data.disputeData.pending} /> }
+                )}*/}
+                {<AudienceOnboarded /> }
               </>
             }
-            secondRow={data && <>{ <ActivityLogCard logs={data.activityLogs} />}</>}
-          />*/}
+            /*{secondRow={data && <>{ <ActivityLogCard logs={data.activityLogs} />}</>}}*/
+          />
         </div>
       </AppLayout>
     </>
