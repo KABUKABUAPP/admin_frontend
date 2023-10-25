@@ -4,6 +4,7 @@ export interface StaffsTableData {
   role: string;
   location: string;
   status: string;
+  id: string;
 }
 
 export interface MappedGetAllStaff {
@@ -20,6 +21,7 @@ export interface GetAllStaffQuery {
 }
 
 export interface Staff {
+  staff_id: any;
   _id: string;
   full_name: string;
   phone_number: string;
@@ -93,6 +95,10 @@ export interface ViewStaffResponse {
   status: string;
   code: number;
   data: {
+    referral_code: any;
+    pending_disputes: any;
+    total_disputes: any;
+    activity_logs: any;
     _id: string;
     full_name: string;
     phone_number: string;
@@ -119,6 +125,8 @@ export interface ViewStaffResponse {
 }
 
 export interface MappedViewStaff {
+  disputeData: any;
+  activityLogs: { date: string; title: string; }[] | undefined;
   userInfo: {
     fullName: string;
     email: string;
@@ -126,6 +134,7 @@ export interface MappedViewStaff {
     address: string;
     role: string;
     image: string;
+    referral_code: string;
   };
   isBlocked: boolean;
 }
