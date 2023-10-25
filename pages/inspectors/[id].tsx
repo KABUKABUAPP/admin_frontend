@@ -48,8 +48,8 @@ const Inspector: FC = () => {
                     address={data.address}
                     email={data.email}
                     phone={data.phone}
-                    totalCarsProcessed={data.totalCarsProcessed}
-                  />
+                    totalCarsProcessed={data.totalCarsProcessed} 
+                    referral_code={""}                  />
                   <SummaryCard
                     approved={data.approved}
                     declined={data.declined}

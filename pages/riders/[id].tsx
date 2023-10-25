@@ -120,9 +120,9 @@ const Rider: NextPage = () => {
             firstRow={
               <>
                 <UserInfoCard
-                  {...data?.driver}
-                  bg={data?.driver.isBlocked ? "#FEE2E9" : "#FFFFFF"}
-                />
+                referral_code={""} 
+                {...data?.driver}
+                bg={data?.driver.isBlocked ? "#FEE2E9" : "#FFFFFF"} />
                 <FinancialsCard
                   {...data?.financials}
                   bg={data?.driver.isBlocked ? "#FEE2E9" : "#FFFFFF"}
