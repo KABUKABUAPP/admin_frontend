@@ -86,20 +86,6 @@ const InspectionHistory: FC = () => {
         setCarsDetail(search.length > 0 ? searchResult : data)
     }, [carsDetail, data, search])
 
-    const searchFormik = useFormik({
-        initialValues: searchInitialValues,
-        onSubmit: (values) => {
-            console.log(values)
-        },
-    });
-
-    const sortFormik = useFormik({
-        initialValues: sortInitialValues,
-        onSubmit: (values) => {
-            console.log(values)
-        },
-    });
-
     const handleInspectionStatus = () => {
         setInspectionStatus(!inspectionStatus)
         if (inspectionStatusStr === 'approved') {
@@ -107,7 +93,6 @@ const InspectionHistory: FC = () => {
         } else {
             setInspectionStatusStr('approved')
         }
-        console.log(inspectionStatus, inspectionStatusStr)
     }
 
     return (

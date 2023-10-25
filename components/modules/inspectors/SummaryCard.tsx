@@ -4,10 +4,9 @@ import React, { FC } from "react";
 interface Props {
   approved: number;
   declined: number;
-  carsInHub: number;
 }
 
-const SummaryCard: FC<Props> = ({ approved, declined, carsInHub }) => {
+const SummaryCard: FC<Props> = ({ approved, declined }) => {
   return <Card>
   <div className="flex flex-col gap-4">
     <div className="flex items-center justify-between">
@@ -24,11 +23,6 @@ const SummaryCard: FC<Props> = ({ approved, declined, carsInHub }) => {
         <p className="text-2xl font-semibold">{declined}</p>
         <p className="text-lg text-[#9A9A9A]">Total declined cars</p>
       </div>
-    </div>
-
-    <div>
-      <p className="text-2xl font-semibold">{carsInHub}</p>
-      <p className="text-lg text-[#9A9A9A]">Cars in hub</p>
     </div>
   </div>
 </Card>

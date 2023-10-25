@@ -1,0 +1,30 @@
+import React, { FC } from "react";
+
+import AppLayout from "@/layouts/AppLayout";
+import AddStaffLayout from "@/components/modules/teams/AddStaffLayout";
+import ActionBar from "@/components/common/ActionBar";
+import AddStaffForm from "@/components/modules/teams/AddStaffForm";
+import useUserPermissions from "@/hooks/useUserPermissions";
+import AppHead from "@/components/common/AppHead";
+
+const AddStaff: FC = () => {
+  const { userPermissions } = useUserPermissions();
+  return (
+    <>
+      <AppHead title="Kabukabu | Staff" />
+      <AppLayout padding="0">
+        <div className="lg:h-screen lg:overflow-hidden p-4">
+          <ActionBar backButtonText="Cancel" />
+
+          <AddStaffLayout>
+            {userPermissions && userPermissions.staffs_permissions.write && (
+              <AddStaffForm />
+            )}
+          </AddStaffLayout>
+        </div>
+      </AppLayout>
+    </>
+  );
+};
+
+export default AddStaff;

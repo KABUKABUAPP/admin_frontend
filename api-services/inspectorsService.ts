@@ -90,15 +90,15 @@ export const inspectorsApi = createApi({
         if (!response) return <MappedViewInspector>{};
         else {
           const { data } = response
+
           const mapped: MappedViewInspector = {
             fullname: `${data?.last_name} ${data?.first_name}`,
             address: `${data?.house_address}`,
             email: data?.email,
             phone: data?.phone_number,
-            totalCarsProcessed: 0,
-            approved: 0,
-            declined: 0,
-            carsInHub: 0,
+            totalCarsProcessed: data?.cars_processed,
+            approved: data?.cars_approved,
+            declined: data?.cars_declined
           };
 
           return mapped;
@@ -140,7 +140,6 @@ export const inspectorsApi = createApi({
       transformResponse: (response: any) => {
         
         if (!response) return {};
-        console.log(response?.data?.pagination);
         return response?.data?.pagination;
       }
     })
