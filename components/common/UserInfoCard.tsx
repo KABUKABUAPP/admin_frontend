@@ -127,7 +127,7 @@ const UserInfoCard: FC<Props> = ({
               <span className="flex bg-[#FFF5D8] pr-2 pl-2" style={{borderRadius: '1rem'}}>
                 <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
                   <b>{referral_code}</b><br />
-                  <small>Your referral code</small>
+                  <small>Referral code</small>
                 </span>
                 <span style={{marginLeft: '1vw', marginTop: '3vh', cursor: 'pointer'}}>
                   <Copy handleClick={() => {
