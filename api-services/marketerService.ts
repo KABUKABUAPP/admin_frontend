@@ -43,7 +43,7 @@ export const marketerApi = createApi({
   reducerPath: "marketerApi",
   baseQuery: baseQueryWithLogoutOnTokenExpiration,
   endpoints: (build) => ({
-    getMarketer: build.query<any, GetMarketerQuery>({
+    getMarketer: build.query<any, any>({
       query: ({ limit, page }) => ({
         url: `/admin/staff/get-my-referrals-data?limit=${limit}&page=${page}`
       }),
@@ -53,7 +53,7 @@ export const marketerApi = createApi({
       }
     }),
     
-    getPerformanceChartData: build.query<any, GetMarketerQuery>({
+    getPerformanceChartData: build.query<any, any>({
       query: ({ limit, page }) => ({
         url: `/admin/staff/get-my-referrals-data?limit=${limit}&page=${page}`
       }),
@@ -68,7 +68,7 @@ export const marketerApi = createApi({
       }
     }),
 
-    getOnboardedDrivers: build.query<any, GetMarketerQuery>({
+    getOnboardedDrivers: build.query<any, any>({
       query: ({ limit, page }) => ({
         url: `/admin/staff/get-my-referrals-data?limit=${limit}&page=${page}`
       }),
