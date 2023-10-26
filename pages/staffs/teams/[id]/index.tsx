@@ -5,69 +5,43 @@ import AppLayout from "@/layouts/AppLayout";
 import ViewStaffLayout from "@/components/modules/teams/ViewStaffLayout";
 import ActionBar from "@/components/common/ActionBar";
 import Button from "@/components/ui/Button/Button";
-import BlockIcon from "@/components/icons/BlockIcon";
-import LockIcon from "@/components/icons/LockIcon";
-import UserInfoCard from "@/components/common/UserInfoCard";
-import SummaryCard from "@/components/modules/teams/SummaryCard";
 import ActivityLogCard from "@/components/modules/teams/ActivityLogCard";
 import { useModalContext } from "@/contexts/ModalContext";
-import ResetPasswordCard from "@/components/modules/teams/ResetPasswordCard";
-import ResetPasswordNotification from "@/components/modules/teams/ResetPasswordNotification";
-import DisabledStaffCard from "@/components/modules/teams/DisabledStaffCard";
-import { useViewTeamQuery } from "@/api-services/teamService";
+import { useViewTeamQuery, useDeleteTeamMutation } from "@/api-services/teamService";
 import { useRouter } from "next/router";
-import { useDisableStaffMutation } from "@/api-services/staffService";
-import { toast } from "react-toastify";
 import Loader from "@/components/ui/Loader/Loader";
-import ErrorMessage from "@/components/common/ErrorMessage";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
 import TrashIcon from "@/components/icons/TrashIcon";
 import TeamInfoCard from "@/components/common/TeamInfoCard";
 import AudienceOnboarded from "@/components/common/AudeinceOnboarded";
+import { toast } from "react-toastify";
 
 const Staff: NextPage = () => {
   const { setModalContent } = useModalContext();
+  const router = useRouter();
   const { id } = useRouter().query;
   const { data, isLoading, error, refetch } = useViewTeamQuery(
     { teamId: String(id) },
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
-  const [
-    enableStaff,
-    {
-      isLoading: enableStaffLoading,
-      error: enableStaffError,
-      isSuccess: enableStaffSuccess,
-    },
-  ] = useDisableStaffMutation();
+  const [deleteTeam, { isSuccess, isLoading: teamDeleteLoading, error: teamDeleteError }] = useDeleteTeamMutation();
+
+  const handleTeamDelete = () => {
+    deleteTeam({staffId: String(id)})
+  }
 
   useEffect(() => {
-    if (enableStaffSuccess) {
-      toast.success("Staff Successfully Enabled");
+    if (isSuccess) {
+      toast.success('Team Deleted Successfully');
+      router.push('/staffs/teams')
+    };
+
+    if (teamDeleteError) {
+      toast.error('Error Encountered, Please Try Again')
     }
-  }, [enableStaffSuccess]);
-
-  useEffect(() => {
-    if (enableStaffError && "data" in enableStaffError) {
-      const { message, status }: any = enableStaffError;
-      if (message) toast.error(message);
-      if (status) toast.error(status);
-    }
-  }, [enableStaffError]);
-
-  const handleResetPassword = () => {
-    setModalContent(
-      <ResetPasswordCard handleClose={() => setModalContent(null)} />
-    );
-  };
-
-  const handleDisableStaff = () => {
-    setModalContent(
-      <DisabledStaffCard handleClose={() => setModalContent(null)} />
-    );
-  };
+  }, [isSuccess, teamDeleteError])
 
   const { userPermissions } = useUserPermissions();
 
@@ -84,7 +58,7 @@ const Staff: NextPage = () => {
               size="large"
               startIcon={<TrashIcon fill="#FFF"/>}
               className="!text-[#FFF] bg-[#EF2C5B]"
-              //onClick={handleDisableStaff}
+              onClick={handleTeamDelete}
             />              
           </ActionBar>
 
@@ -108,7 +82,7 @@ const Staff: NextPage = () => {
                 {<AudienceOnboarded /> }
               </>
             }
-            /*{secondRow={data && <>{ <ActivityLogCard logs={data.activityLogs} />}</>}}*/
+            secondRow={<ActivityLogCard />}
           />
         </div>
       </AppLayout>
