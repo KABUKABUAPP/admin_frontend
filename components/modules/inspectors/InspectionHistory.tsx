@@ -72,7 +72,7 @@ const InspectionHistory: FC = () => {
     const parts = splitPageUrl();
     
     const { data, isLoading, isError, refetch } = useGetInspectedCarsQuery(
-        { limit: pageLimit, page: pageNumber, id: parts[4], status: inspectionStatusStr, order: selectedFilterOption }
+        { limit: pageLimit, page: pageNumber, id: parts[4], status: inspectionStatusStr }
     );
 
     const { data: totalCarsData, isLoading: totalCarsLoading, isError: totalCarsError, refetch: totalCarsRefetch } = useGetInspectedCarsPaginationQuery(
