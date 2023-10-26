@@ -74,8 +74,8 @@ export const marketerApi = createApi({
       }),
       transformResponse: (response: GetMarketerResponse) => {
         if (!response) return [];
-        
-        return response.data.data.map((d) => {
+        console.log(response)
+        const mappedData = response.data.data.map((d) => {
           return {
             fullName: d.full_name,
             type: d.type,
@@ -83,6 +83,10 @@ export const marketerApi = createApi({
             id: d._id
           };
         });
+
+        const totalCount =  response.data.pagination.totalCount
+
+        return { data: mappedData, totalCount }
       }
     }),
   }),

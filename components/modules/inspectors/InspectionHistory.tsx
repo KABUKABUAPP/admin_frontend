@@ -60,12 +60,10 @@ const InspectionHistory: FC = () => {
 
     const filterOptions = [
         { label: "Newest First", value: "newest_first", default: true },
-        { label: "Oldest First", value: "oldest_first", default: false },
-        { label: "A-Z", value: "a-z", default: false },
-        { label: "Z-A", value: "z-a", default: false },
+        { label: "Oldest First", value: "oldest_first", default: false }
     ];
 
-    const [selectedFilterOption, setSelectedFilterOption] = useState<string>(filterOptions.find((opt) => opt.default === true)?.value || "newest_first");
+    const [selectedFilterOption, setSelectedFilterOption] = useState<string>("newest_first");
 
     const inspectionBold = `text-sm mx-1 font-semibold cursor-pointer`;
     const inspectionOrdinary = `text-sm mx-1 cursor-pointer`;
@@ -74,7 +72,7 @@ const InspectionHistory: FC = () => {
     const parts = splitPageUrl();
     
     const { data, isLoading, isError, refetch } = useGetInspectedCarsQuery(
-        { limit: pageLimit, page: pageNumber, id: parts[4], status: inspectionStatusStr }
+        { limit: pageLimit, page: pageNumber, id: parts[4], status: inspectionStatusStr, order: selectedFilterOption }
     );
 
     const { data: totalCarsData, isLoading: totalCarsLoading, isError: totalCarsError, refetch: totalCarsRefetch } = useGetInspectedCarsPaginationQuery(

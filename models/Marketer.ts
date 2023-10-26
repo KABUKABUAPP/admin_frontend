@@ -39,6 +39,6 @@ export interface DriverData {
 }
 
 export interface GetMarketerQuery {
-    limit: string;
-    page: string;
+    limit: number;
+    page: number;
 }

@@ -11,14 +11,15 @@ const OnboardDriversTable: FC = () => {
   const [onboardedData, setOnboardedData] = useState([])
 
   const { data, isLoading, isError, refetch, error } = useGetOnboardedDriversQuery(
-    { page: '1', limit: '10' },
+    { page: currentPage, limit: pageSize },
     { refetchOnReconnect: true }
   );
 
 
   useEffect(() => {
     if (data) {
-        setOnboardedData(data);
+        console.log(data)
+        //setOnboardedData(data);
     }
   }, [data])
 
@@ -26,7 +27,7 @@ const OnboardDriversTable: FC = () => {
     <div className="w-full ">
       <OnboardDriversTableHead />
       <OnboardDriversTableBody
-        data={onboardedData}
+        data={data?.data}
         loading={isLoading}
         error={isError}
         refetch={refetch}

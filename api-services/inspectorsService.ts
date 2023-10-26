@@ -112,9 +112,9 @@ export const inspectorsApi = createApi({
         body
       })
     }),
-    getInspectedCars: build.query<any, GetInspectedCarsPayload>({
-      query: ({limit, page, id, status})=>({
-        url: `admin/inspector/view-inspected-cars/${id}?limit=${limit}&page=${page}&status=${status}`,
+    getInspectedCars: build.query<any, any>({
+      query: ({limit, page, id, status, order})=>({
+        url: `admin/inspector/view-inspected-cars/${id}?limit=${limit}&page=${page}&status=${status}&order=${order}`,
         method: 'GET'
       }),
       transformResponse: (response: any) => {
