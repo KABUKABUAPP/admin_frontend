@@ -12,7 +12,7 @@ const Staffs: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [search, setSearch] = useState<string>("");
-  const [selectedStatus, setSelectedStatus] = useState<string>("active");
+  const [selectedStatus, setSelectedStatus] = useState<string>("");
   const [selectedSortFilter, setSelectedSortFilter] =
     useState<string>("newest_first");
 
@@ -20,8 +20,8 @@ const Staffs: NextPage = () => {
     limit: pageSize,
     page: currentPage,
     order: selectedSortFilter,
-    status: selectedStatus,
-    audience: search,
+    audience: selectedStatus,
+    search: search
   });
 
   return (

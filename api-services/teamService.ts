@@ -62,8 +62,8 @@ export const teamApi = createApi({
   baseQuery: baseQueryWithLogoutOnTokenExpiration,
   endpoints: (build) => ({
     getAllTeam: build.query<any, any>({
-      query: ({ limit, order, page, status, audience }) => ({
-        url: `admin/team/all?limit=${limit}&page=${page}&order=${order}&status=${status}&audience=${audience}`,
+      query: ({ limit, order, page, status, audience, search }) => ({
+        url: `admin/team/all?limit=${limit}&page=${page}&order=${order}&status=${status}&audience=${audience}&search=${search}`
       }),
       transformResponse: (response: any) => {
         if (!response) return <any>{};

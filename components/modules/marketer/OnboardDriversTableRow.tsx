@@ -28,8 +28,7 @@ const OnboardDriversTableRow: FC<Props> = ({
       {data && data.length ? (
         <>
           <div
-            className="max-h-[200px] overflow-y-auto scrollbar-none
-      "
+            className="max-h-[200px] overflow-y-auto scrollbar-none"
           >
             {data &&
               allPendingApps?.map((item, idx) => {
