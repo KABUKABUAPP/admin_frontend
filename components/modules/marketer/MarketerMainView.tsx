@@ -27,13 +27,13 @@ const MarketerMainView = () => {
         isError: chartError,
         refetch: reloadChart,
     } = useGetPerformanceChartDataQuery(
-        { limit: '10', page: '1' },
+        { limit: 10, page: 1 },
         { refetchOnReconnect: true, refetchOnMountOrArgChange: true }
     );
     const {
         data: marketerData, isLoading, isError, refetch
       } = useGetMarketerQuery(
-        {limit: '10', page: '1'},
+        {limit: 10, page: 1},
         { refetchOnReconnect: true, refetchOnMountOrArgChange: true }
       );
 
