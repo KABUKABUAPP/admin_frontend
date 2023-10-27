@@ -209,7 +209,6 @@ const AddInspectorForm: FC = () => {
             loading={isLoading}
             disabled={isLoading}
             onClick={() => {
-              console.log("clicked");
               if (formik.isValid) formik.submitForm();
             }}
           />

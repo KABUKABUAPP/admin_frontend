@@ -46,9 +46,8 @@ function copyToClipboard(text: string) {
   // Execute the copy command using the Clipboard API
   try {
     document.execCommand('copy');
-    console.log('Text copied to clipboard:', text);
   } catch (err) {
-    console.error('Unable to copy to clipboard:', err);
+    toast.error('Unable to copy to clipboard:');
   }
 
   // Remove the temporary textarea from the DOM
@@ -123,7 +122,7 @@ const UserInfoCard: FC<Props> = ({
               )}
             </div>
 
-            {!window.location.href.includes('inspectors') && <div className="mx-1">
+            {referral_code && <div className="mx-1">
               <span className="flex bg-[#FFF5D8] pr-2 pl-2" style={{borderRadius: '1rem'}}>
                 <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
                   <b>{referral_code}</b><br />
