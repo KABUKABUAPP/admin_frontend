@@ -67,7 +67,6 @@ const AddStaffForm: FC = () => {
     initialValues,
     validationSchema: AddStaffValidation,
     onSubmit: (values) => {
-      console.log(values, tags);
       let member_ids: any[] = [];
       tags.forEach((tg: any) => {
         member_ids.push(tg.value)
@@ -78,7 +77,6 @@ const AddStaffForm: FC = () => {
   });
 
   useEffect(() => {
-    console.log('x', allStaff?.data)
     if (isSuccess) {
       toast.success("Team Successfully Created");
       router.push("/staffs/teams");

@@ -25,11 +25,7 @@ const ActivityLogCard: FC = () => {
     { teamId: String(id) },
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
-
-  useEffect(() => {
-    console.log(data);
-  }, [data])
-
+  
   return (
     <Card maxHeight="500px">
       <div className="flex justify-between items-center">

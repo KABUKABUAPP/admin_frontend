@@ -15,14 +15,6 @@ const OnboardDriversTable: FC = () => {
     { refetchOnReconnect: true }
   );
 
-
-  useEffect(() => {
-    if (data) {
-        console.log(data)
-        //setOnboardedData(data);
-    }
-  }, [data])
-
   return (
     <div className="w-full ">
       <OnboardDriversTableHead />
