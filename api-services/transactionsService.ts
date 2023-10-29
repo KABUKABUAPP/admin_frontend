@@ -55,6 +55,7 @@ export const transactionsApi = createApi({
         transformResponse: (response: GetAllTransactions) => {
           if (!response) return response as TransactionsModel;
           else {
+            console.log('response', response)
             const mappedData = response.data.data.rows.map((tx) => {
               return {
                 date: tx?.createdAt,
@@ -66,6 +67,7 @@ export const transactionsApi = createApi({
                 amountRemaining: "",
                 tripId: tx?.narration_id,
                 userType: tx?.user_type,
+                name: tx?.full_name
               } as TransactionsDataModel;
             });
 

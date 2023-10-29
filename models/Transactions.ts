@@ -8,6 +8,7 @@ export interface TransactionsDataModel {
   amountRemaining: string;
   userType: string;
   tripId: string;
+  name: string;
 }
 
 export interface TransactionsModel {
