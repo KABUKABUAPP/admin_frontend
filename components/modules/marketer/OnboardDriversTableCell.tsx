@@ -33,9 +33,9 @@ const OnboardDriversTableCell: FC<{fullName: string; type: string; image: string
           <p className="text-xs font-bold mb-1">{capitalizeAllFirstLetters(fullName) || <Skeleton />}</p>
           <p className="text-xs">{capitalizeAllFirstLetters(type) || <Skeleton />}</p>
         </div>
-        <div>
+        {/*<div>
           {fullName ? <Button title="View" size="small" /> : <Skeleton />}
-        </div>
+        </div>*/}
       </div>
     </Link>
   );
