@@ -244,11 +244,11 @@ const ViewTrip: NextPage = () => {
                     //   :
                     data && (
                       <StaticMap
-                        endPoint={data.endPoint}
+                        endPoint={data?.endPoint}
                         startPoint={
                           liveLocation
                             ? [liveLocation.lat, liveLocation.lng]
-                            : data.startPoint
+                            : data?.startPoint
                         }
                       />
                     )

@@ -4,6 +4,7 @@ import {
   GoogleMap,
   DirectionsService,
   DirectionsRenderer,
+  useLoadScript
 } from "@react-google-maps/api";
 
 interface Props {
@@ -13,6 +14,12 @@ interface Props {
 
 const StaticMap: FC<Props> = ({ startPoint, endPoint }) => {
   const [directions, setDirections] = useState<any>(null);
+  
+  /*const { isLoaded } = useLoadScript({
+    googleMapsApiKey: 'process.env.REACT_APP_GOOGLE_API_KEY',
+  });*/
+
+  const isLoaded = true;
 
   const containerStyle = {
     width: "100%",
@@ -49,7 +56,40 @@ const StaticMap: FC<Props> = ({ startPoint, endPoint }) => {
 
   return (
     <div className="w-full h-full rounded-lg overflow-hidden" id="map">
-      <GoogleMap mapContainerStyle={containerStyle} zoom={10} center={center}>
+      {!isLoaded ? (
+        <h1>Loading...</h1>
+      ) : (
+          <GoogleMap mapContainerStyle={containerStyle} zoom={10} center={center}>
+          {directions && (
+            <DirectionsRenderer
+              directions={directions}
+              options={{
+                polylineOptions: {
+                  strokeColor: "#000000",
+                  strokeOpacity: 0.8,
+                  strokeWeight: 4,
+                },
+              }}
+            />
+          )}
+
+          <DirectionsService
+            options={{
+              destination: { lat: startPoint[0], lng: startPoint[1] },
+              origin: { lat: startPoint[0], lng: startPoint[1] },
+              travelMode: window.google.maps.TravelMode.DRIVING,
+            }}
+            callback={(result) => {
+              if (result !== null) {
+                // console.log(result)
+                // setDirections(result);
+              }
+            }}
+          />
+        </GoogleMap>
+      )}
+      
+      {/*<GoogleMap mapContainerStyle={containerStyle} zoom={10} center={center}>
         {directions && (
           <DirectionsRenderer
             directions={directions}
@@ -76,7 +116,7 @@ const StaticMap: FC<Props> = ({ startPoint, endPoint }) => {
             }
           }}
         />
-      </GoogleMap>
+        </GoogleMap>*/}
     </div>
   );
 };

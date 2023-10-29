@@ -29,7 +29,7 @@ const OnboardDriversTableBody: FC<Props> = ({ data, loading, error, refetch }) =
         <>
           {data.length > 0 ? (
             data.map((item, idx) => {
-              return <OnboardDriversTableRow data={data} {...item} key={idx} />;
+              return <OnboardDriversTableCell {...item} key={idx} />
             })
           ) : (
             <p className="text-xs text-center py-3">No Onboarded Drivers</p>
@@ -38,8 +38,6 @@ const OnboardDriversTableBody: FC<Props> = ({ data, loading, error, refetch }) =
       )}
       {loadingState && (
         <div className="flex justify-evenly gap-4">
-          <OnboardDriversTableCell fullName={""} type={""} image={""} id={""} />
-          <OnboardDriversTableCell fullName={""} type={""} image={""} id={""} />
           <OnboardDriversTableCell fullName={""} type={""} image={""} id={""} />
         </div>
       )}

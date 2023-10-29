@@ -39,8 +39,6 @@ const LoginForm: FC = () => {
 
   const handleFormSubmit = (values: typeof initialValues) => {
     login(values);
-
-    if (isError) console.log('e', error)
   };
 
   useEffect(() => {
