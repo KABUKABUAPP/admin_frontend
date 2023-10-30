@@ -35,7 +35,7 @@ const Staff: NextPage = () => {
   useEffect(() => {
     if (isSuccess) {
       toast.success('Team Deleted Successfully');
-      router.push('/staffs/teams')
+      window.location.href = "/staffs/teams"
     };
 
     if (teamDeleteError) {

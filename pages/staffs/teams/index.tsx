@@ -7,6 +7,7 @@ import StaffSearchFilterBar from "@/components/modules/teams/StaffSearchFilterBa
 import { useGetAllTeamQuery } from "@/api-services/teamService";
 import Pagination from "@/components/common/Pagination";
 import AppHead from "@/components/common/AppHead";
+import Loader from "@/components/ui/Loader/Loader";
 
 const Staffs: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,13 +39,16 @@ const Staffs: NextPage = () => {
           }}
           statusFilter={selectedStatus}
         />
-        <StaffTable
+
+        {isLoading && <Loader />}
+
+        {data && <StaffTable
           data={data?.data}
           isError={isError}
           isLoading={isLoading}
           refetch={refetch}
           headBg={selectedStatus === "blocked" ? "#FEE2E9" : "#FFF5D8"}
-        />
+        />}
         {data && (
           <Pagination
             className="pagination-bar"
