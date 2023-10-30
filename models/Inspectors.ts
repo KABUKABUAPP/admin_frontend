@@ -162,4 +162,5 @@ export interface GetInspectedCarsPayload {
   page: number;
   id: string;
   status: string;
+  search: string;
 }

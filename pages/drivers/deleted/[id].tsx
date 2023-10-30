@@ -137,7 +137,7 @@ const DeletedDriver: NextPage = () => {
               }
               firstRow={
                 <>
-                  <DriverInfoCard {...data.driverInfo} bg="#F1F1F1" />
+                  <DriverInfoCard referral_code={""} {...data.driverInfo} bg="#F1F1F1" />
 
                   <CarDetailsCard {...data.carDetails} bg="#F1F1F1" />
 

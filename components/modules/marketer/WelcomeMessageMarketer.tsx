@@ -26,9 +26,8 @@ function copyToClipboard(text: string) {
   // Execute the copy command using the Clipboard API
   try {
     document.execCommand('copy');
-    console.log('Text copied to clipboard:', text);
   } catch (err) {
-    console.error('Unable to copy to clipboard:', err);
+    toast.error('Unable to copy to clipboard:');
   }
 
   // Remove the temporary textarea from the DOM

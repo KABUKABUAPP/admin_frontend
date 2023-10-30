@@ -9,10 +9,10 @@ const headCellData = [
   { title: "Transaction ID", flex: 1 },
   { title: "User", flex: 2 },
   { title: "Type", flex: 1 },
-  { title: "Narration", flex: 1 },
+  { title: "Narration", flex: 2 },
   { title: "Price", flex: 1 },
   { title: "Date", flex: 1 },
-  { title: "", flex: 2 },
+  { title: "Name", flex: 2 },
 ];
 
 interface Props {

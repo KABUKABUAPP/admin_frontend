@@ -96,7 +96,7 @@ const Driver: NextPage = () => {
             <ViewDriverLayout
               firstRow={
                 <>
-                  <DriverInfoCard {...data.driverInfo} />
+                  <DriverInfoCard referral_code={""} {...data.driverInfo} />
 
                   <GuarantorDetailsCard {...data.guarantor} />
 

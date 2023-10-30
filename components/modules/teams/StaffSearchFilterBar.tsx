@@ -33,8 +33,8 @@ const StaffSearchFilterBar: FC<Props> = ({
   ];
 
   const statusFilterOptions = [
-    //{ label: "Active", value: "active" },
-    //{ label: "Blocked", value: "blocked" },
+    { label: "Rider", value: "rider" },
+    { label: "Driver", value: "driver" },
     { label: "All", value: "", default: true },
   ];
 

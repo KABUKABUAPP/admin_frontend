@@ -2,11 +2,6 @@ import Card from "@/components/common/Card";
 import CarIcon from "@/components/icons/CarIcon";
 import Button from "@/components/ui/Button/Button";
 import React, { FC, useState, useEffect } from "react";
-import { useFormik, Form, FormikProvider } from "formik";
-import TextField from "@/components/ui/Input/TextField/TextField";
-import SearchIcon from "@/components/icons/SearchIcon";
-import Image from "next/image";
-import SelectField from "@/components/ui/Input/NoBorderSelect";
 import Avatar from "@/components/common/Avatar";
 import { useGetInspectedCarsPaginationQuery, useGetInspectedCarsQuery } from "@/api-services/inspectorsService";
 import { useRouter } from "next/router";
@@ -60,12 +55,10 @@ const InspectionHistory: FC = () => {
 
     const filterOptions = [
         { label: "Newest First", value: "newest_first", default: true },
-        { label: "Oldest First", value: "oldest_first", default: false },
-        { label: "A-Z", value: "a-z", default: false },
-        { label: "Z-A", value: "z-a", default: false },
+        { label: "Oldest First", value: "oldest_first", default: false }
     ];
 
-    const [selectedFilterOption, setSelectedFilterOption] = useState<string>(filterOptions.find((opt) => opt.default === true)?.value || "newest_first");
+    const [selectedFilterOption, setSelectedFilterOption] = useState<string>("newest_first");
 
     const inspectionBold = `text-sm mx-1 font-semibold cursor-pointer`;
     const inspectionOrdinary = `text-sm mx-1 cursor-pointer`;
@@ -74,17 +67,17 @@ const InspectionHistory: FC = () => {
     const parts = splitPageUrl();
     
     const { data, isLoading, isError, refetch } = useGetInspectedCarsQuery(
-        { limit: pageLimit, page: pageNumber, id: parts[4], status: inspectionStatusStr }
+        { limit: pageLimit, page: pageNumber, id: parts[4], status: inspectionStatusStr, search }
     );
 
     const { data: totalCarsData, isLoading: totalCarsLoading, isError: totalCarsError, refetch: totalCarsRefetch } = useGetInspectedCarsPaginationQuery(
-        { limit: pageLimit, page: pageNumber, id: parts[4], status: inspectionStatusStr }
+        { limit: pageLimit, page: pageNumber, id: parts[4], status: inspectionStatusStr, search }
     );
 
     useEffect(() => {
         const searchResult = filterCarModels(search, data)
         setCarsDetail(search.length > 0 ? searchResult : data)
-    }, [carsDetail, data, search])
+    }, [carsDetail, data, search, totalCarsData])
 
     const handleInspectionStatus = () => {
         setInspectionStatus(!inspectionStatus)
@@ -114,7 +107,7 @@ const InspectionHistory: FC = () => {
                 <SearchFilterBar
                     searchValue={search}
                     handleSearch={(val) => setSearch(val)}
-                    filterOptions={filterOptions}
+                    //filterOptions={filterOptions}
                     dropDownOptionSelected={selectedFilterOption}
                     handleDropDown={(val) => setSelectedFilterOption(String(val))}
                 />
@@ -122,35 +115,40 @@ const InspectionHistory: FC = () => {
         
 
         <div>
-            {carsDetail?.length > 0 && 
-                <>
-                    {Array.isArray(carsDetail) && carsDetail.map((detail) => (
-                        <div className="w-full flex bg-[#F1F1F1] rounded-md p-3 mt-2 mb-2">
-                            <div className="w-3/10">
-                                <p className="mt-4 mb-4 text-sm text-[#9A9A9A]">{detail.id}</p>
-                                <Avatar
-                                    imageUrl={detail.image}
-                                    fallBack={detail.car_model[0]}
-                                    shape="square"
-                                    size="md"
-                                />
-                            </div>
+            <>
+                {carsDetail?.length > 0 && 
+                    <>
+                        {Array.isArray(carsDetail) && carsDetail.map((detail) => (
+                            <div className="w-full flex bg-[#F1F1F1] rounded-md p-3 mt-2 mb-2">
+                                <div className="w-3/10">
+                                    <p className="mt-4 mb-4 text-sm text-[#9A9A9A]">{detail.id}</p>
+                                    <Avatar
+                                        imageUrl={detail.image}
+                                        fallBack={detail.car_model[0]}
+                                        shape="square"
+                                        size="md"
+                                    />
+                                </div>
 
-                            <div className="w-7/10">
-                                <p className="mt-4 mb-4 text-md"><b>{detail.car_model}</b></p>
-                                <p className="rounded-md bg-[#FFF5D8] p-3 mx-3"><b>{detail.plate_no}</b></p>
+                                <div className="w-7/10">
+                                    <p className="mt-4 mb-4 text-md"><b>{detail.car_model}</b></p>
+                                    <p className="rounded-md bg-[#FFF5D8] p-3 mx-3"><b>{detail.plate_no}</b></p>
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                    <Pagination
-                        className="pagination-bar"
-                        currentPage={totalCarsData?.currentPage}
-                        totalCount={totalCarsData?.totalCount}
-                        pageSize={totalCarsData?.pageSize}
-                        onPageChange={(page) => setPageNumber(page)}
-                    />
-                </>
-            }
+                        ))}
+                    </>
+                }
+                <Pagination
+                    className="pagination-bar"
+                    currentPage={totalCarsData?.currentPage}
+                    totalCount={totalCarsData?.totalCount}
+                    pageSize={totalCarsData?.pageSize}
+                    onPageChange={(page) => {
+                        setPageNumber(page)
+                    }}
+                />
+            </>
+            
 
             {
                 carsDetail?.length === 0 && 

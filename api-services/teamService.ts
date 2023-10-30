@@ -62,8 +62,8 @@ export const teamApi = createApi({
   baseQuery: baseQueryWithLogoutOnTokenExpiration,
   endpoints: (build) => ({
     getAllTeam: build.query<any, any>({
-      query: ({ limit, order, page, status, audience }) => ({
-        url: `admin/team/all?limit=${limit}&page=${page}&order=${order}&status=${status}&audience=${audience}`,
+      query: ({ limit, order, page, status, audience, search }) => ({
+        url: `admin/team/all?limit=${limit}&page=${page}&order=${order}&status=${status}&audience=${audience}&search=${search}`
       }),
       transformResponse: (response: any) => {
         if (!response) return <any>{};
@@ -95,9 +95,9 @@ export const teamApi = createApi({
       }),
       //invalidatesTags: ["all-staff"],
     }),
-    disableStaff: build.mutation<any, DisableStaffQuery>({
+    deleteTeam: build.mutation<any, any>({
       query: ({ staffId }) => ({
-        url: `admin/staff/disable-staff/${staffId}`,
+        url: `admin/team/delete/${staffId}`,
         method: "PUT",
       }),
     }),
@@ -111,20 +111,13 @@ export const teamApi = createApi({
           return response?.data
         }
       }
-    }),
-    resetStaffPassword: build.mutation<any, ResetStaffPasswordQuery>({
-      query: ({ staffId }) => ({
-        url: `admin/staff/reset-staff-password/${staffId}`,
-        method: "PUT",
-      }),
-    }),
+    })
   }),
 });
 
 export const {
   useGetAllTeamQuery,
   useCreateTeamMutation,
-  useDisableStaffMutation,
-  useViewTeamQuery,
-  useResetStaffPasswordMutation,
+  useDeleteTeamMutation,
+  useViewTeamQuery
 } = teamApi;

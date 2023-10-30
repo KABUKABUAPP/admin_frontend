@@ -48,8 +48,8 @@ const SharpCar: NextPage = () => {
                   email="jdoe@gmail.com"
                   phone="+234 909 888 7655"
                   tripCount={14}
-                  rating={3.6}
-                />
+                  rating={3.6} 
+                  referral_code={""} />
 
                 <CarDetailsCard
                   carImages={[
