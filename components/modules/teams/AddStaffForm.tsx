@@ -79,7 +79,8 @@ const AddStaffForm: FC = () => {
   useEffect(() => {
     if (isSuccess) {
       toast.success("Team Successfully Created");
-      router.push("/staffs/teams");
+      //router.replace("/staffs/teams");
+      window.location.href = "/staffs/teams"
     }
   }, [isSuccess]);
 
