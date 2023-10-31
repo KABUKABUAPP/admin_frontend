@@ -29,6 +29,15 @@ const initialValues = {
   email: "",
 };
 
+function removeEmptyProperties(obj: any) {
+  for (const key in obj) {
+    if (obj[key] === null || obj[key] === undefined || obj[key] === '') {
+      delete obj[key];
+    }
+  }
+  return obj;
+}
+
 const AddInspectorForm: FC = () => {
   const [selectedStateName, setSelectedStateName] = useState<string>("");
   const [addInspector, { isLoading, isError, isSuccess }] =
@@ -42,8 +51,11 @@ const AddInspectorForm: FC = () => {
     onSubmit: (values) => {
       const stateName = states?.filter((s) => s.value == values.state)[0]
         .label as string;
+        let reqObj = {}
 
-        addInspector({ ...values, state: stateName });
+        //console.log({ ...removeEmptyProperties(values), state: stateName })
+
+        addInspector({ ...removeEmptyProperties(values), state: stateName });
     },
   });
 
@@ -102,7 +114,7 @@ const AddInspectorForm: FC = () => {
                 }
               />
               <TextField
-                label="Last name(optional)"
+                label="Last name"
                 placeholder="Last name here"
                 {...formik.getFieldProps("last_name")}
                 error={
