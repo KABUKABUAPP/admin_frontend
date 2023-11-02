@@ -68,7 +68,7 @@ const NewPromotionForm: FC<Props> = ({ handleBack }) => {
 
   const promoAudienceOptions = [
     { label: "Riders", value: "rider" },
-    { label: "Drivers", value: "driver" },
+    //{ label: "Drivers", value: "driver" },
   ];
 
   const promoTypeOptions = [
@@ -79,6 +79,7 @@ const NewPromotionForm: FC<Props> = ({ handleBack }) => {
   const conditionOptions = [
     { label: "Ride is equals to", value: "number_of_trips" },
     { label: "5 star rating is equal to", value: "rider_ratings" },
+    { label: "Welcome Bonus", value: "new_users" },
   ];
 
   const amountTypeOptions = [

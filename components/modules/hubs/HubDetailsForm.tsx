@@ -14,6 +14,7 @@ import SelectField from "@/components/ui/Input/SelectField";
 import { toast } from "react-toastify";
 import { useGetAllInspectorsQuery } from "@/api-services/inspectorsService";
 import { useAddHubMutation } from "@/api-services/hubService";
+import Select from 'react-select'
 
 const initialValues: Record<string, string> = {
   name: "",
@@ -29,6 +30,8 @@ interface Props {
 
 const HubDetailsForm: FC<Props> = ({ hubImages }) => {
   const [selectedStateName, setSelectedStateName] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
+  const [inspectorVal, setInspectorVal] =  useState<any>();
   const router = useRouter();
   const [addHub, { isSuccess, error, data, isLoading }] = useAddHubMutation();
   const formik = useFormik({
@@ -36,6 +39,7 @@ const HubDetailsForm: FC<Props> = ({ hubImages }) => {
     validationSchema: AddHubValidation,
     onSubmit: (values) => {
       values.state = selectedStateName;
+      values.inspector = inspectorVal.value;
       if (!hubImages.length) {
         toast.error("Please upload at least one hub image");
       } else {
@@ -92,7 +96,7 @@ const HubDetailsForm: FC<Props> = ({ hubImages }) => {
   } = useGetAllInspectorsQuery({
     limit: 1000,
     page: 1,
-    search: "",
+    search: search,
     order: "a-z",
   });
 
@@ -142,7 +146,7 @@ const HubDetailsForm: FC<Props> = ({ hubImages }) => {
               />
             </div>
 
-            <SelectField
+            {/*<SelectField
               label="Select Inspector"
               placeholder="Select Inspector here"
               options={
@@ -158,6 +162,24 @@ const HubDetailsForm: FC<Props> = ({ hubImages }) => {
               error={
                 formik.touched.inspector ? formik.errors.inspector : undefined
               }
+            />*/}
+
+            
+
+            <Select
+              placeholder="Select Inspector"
+              options={inspectors?.data ? inspectors?.data.map((i) => {
+                return {
+                  value: i.inspectorId,
+                  label: i.fullName
+                }
+              }) : []}
+              onKeyDown={(e: any) => {
+                setSearch(e.target.value)
+              }}
+              onChange={(optX: any) => {
+                setInspectorVal(optX)
+              }}
             />
           </div>
         </Card>
