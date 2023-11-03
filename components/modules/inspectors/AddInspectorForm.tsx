@@ -186,7 +186,7 @@ const AddInspectorForm: FC = () => {
                 <div className="w-full">
                   {
                     citiesLoading ?
-                    <div className="mt-4"> 
+                    <div className="mt-5"> 
                       <Loader />
                     </div> :
                     <SelectField
