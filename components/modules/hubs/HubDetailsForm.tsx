@@ -15,13 +15,13 @@ import { toast } from "react-toastify";
 import { useGetAllInspectorsQuery } from "@/api-services/inspectorsService";
 import { useAddHubMutation } from "@/api-services/hubService";
 import Select from 'react-select'
+import Loader from "@/components/ui/Loader/Loader";
 
 const initialValues: Record<string, string> = {
   name: "",
   address: "",
   city: "",
   state: "",
-  inspector: "",
 };
 
 interface Props {
@@ -38,6 +38,7 @@ const HubDetailsForm: FC<Props> = ({ hubImages }) => {
     initialValues,
     validationSchema: AddHubValidation,
     onSubmit: (values) => {
+      console.log('Add hub clicked')
       values.state = selectedStateName;
       values.inspector = inspectorVal.value;
       if (!hubImages.length) {
@@ -59,7 +60,8 @@ const HubDetailsForm: FC<Props> = ({ hubImages }) => {
   useEffect(() => {
     if (isSuccess) {
       toast.success("Hub added successful");
-      router.push("/hubs");
+      //router.push("/hubs");
+      window.location.href = "/hubs"
     }
   }, [isSuccess]);
 
@@ -127,15 +129,6 @@ const HubDetailsForm: FC<Props> = ({ hubImages }) => {
             />
             <div className="flex justify-between gap-3 max-sm:flex-col">
               <SelectField
-                options={cities?.length ? cities : []}
-                disabled={!cities?.length}
-                label="City"
-                placeholder="City here"
-                className="w-full"
-                {...formik.getFieldProps("city")}
-                error={formik.touched.city ? formik.errors.city : undefined}
-              />
-              <SelectField
                 options={states?.length ? states : []}
                 disabled={!states?.length}
                 label="State"
@@ -144,6 +137,21 @@ const HubDetailsForm: FC<Props> = ({ hubImages }) => {
                 {...formik.getFieldProps("state")}
                 error={formik.touched.state ? formik.errors.state : undefined}
               />
+              {
+                citiesLoading ?
+                <div className="mt-5">
+                  <Loader />
+                </div> :
+                <SelectField
+                  options={cities?.length ? cities : []}
+                  disabled={!cities?.length}
+                  label="City"
+                  placeholder="City here"
+                  className="w-full"
+                  {...formik.getFieldProps("city")}
+                  error={formik.touched.city ? formik.errors.city : undefined}
+                />
+              }
             </div>
 
             {/*<SelectField
