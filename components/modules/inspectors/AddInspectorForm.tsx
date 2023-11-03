@@ -10,6 +10,7 @@ import NewInspectorValidations from "@/validationschemas/AddInspectorSchema";
 import SelectField from "@/components/ui/Input/SelectField";
 import { useAddNewInspectorMutation } from "@/api-services/inspectorsService";
 import { verifyIsDigit } from "@/utils";
+import Loader from "@/components/ui/Loader/Loader";
 import {
   useGetNigerianCityByStateQuery,
   useGetNigerianStatesQuery,
@@ -183,7 +184,10 @@ const AddInspectorForm: FC = () => {
                   />
                 </div>
                 <div className="w-full">
-                  <SelectField
+                  {
+                    citiesLoading ? 
+                    <Loader /> :
+                    <SelectField
                     options={cities ? cities : []}
                     disabled={!cities?.length}
                     label="City"
@@ -192,6 +196,8 @@ const AddInspectorForm: FC = () => {
                     {...formik.getFieldProps("city")}
                     error={formik.touched.city ? formik.errors.city : undefined}
                   />
+                  }
+                  
                 </div>
               </div>
 
