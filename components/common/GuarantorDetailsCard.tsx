@@ -105,50 +105,44 @@ const GuarantorDetailsCard: FC<Props> = ({
           <p className="text-sm text-[#9A9A9A]">{phone}</p>
         </div>
       </div>
-      {responseStatus === "pending" && showGuarantorStatus ? (
-        responded === false ? (
-          <p className="text-base font-semibold mt-3">
-            Guarantor has not responded
-          </p>
-        ) : (
-          <>
-            <div className="flex items-center gap-3 mt-3 mb-1">
-              <InfoIcon />
-              <p className="text-base font-semibold">Guarantor has responded</p>
-            </div>
-            {data && !isError && !guarantorLoading && (
-              <Button
-                title={"Click to view"}
-                variant="text"
-                onClick={() => {
-                  setModalContent(
-                    <ViewGuarantorCard
-                      driverUpload={{
-                        title: "Driver's",
-                        address: `${address}`,
-                        fullname: `${fullname}`,
-                        relationship: `${relationship}`,
-                        phone: `${phone}`,
-                        image: `${image}`
-                      }}
-                      guarantorUpload={{ ...data, title: "Guarantor's" }}
-                    />
-                  );
-                }}
-              />
-            )}
-            {guarantorLoading && !isError && !data && <Loader size="small" />}
-            {!data && !guarantorLoading && isError && (
-              <Button
-                variant="text"
-                title="Reload Guarantor's info"
-                size="small"
-                onClick={refetch}
-              />
-            )}
-          </>
-        )
-      ) : null}
+      {responseStatus === "pending" && showGuarantorStatus ? 
+        <>
+          <div className="flex items-center gap-3 mt-3 mb-1">
+            <InfoIcon />
+            <p className="text-base font-semibold">Confirm Guarantor Details</p>
+          </div>
+          {data && !isError && !guarantorLoading && (
+            <Button
+              title={"Click to view"}
+              variant="text"
+              onClick={() => {
+                setModalContent(
+                  <ViewGuarantorCard
+                    driverUpload={{
+                      title: "Driver's",
+                      address: `${address}`,
+                      fullname: `${fullname}`,
+                      relationship: `${relationship}`,
+                      phone: `${phone}`,
+                      image: `${image}`
+                    }}
+                    //guarantorUpload={{ ...data, title: "Guarantor's" }}
+                  />
+                );
+              }}
+            />
+          )}
+          {guarantorLoading && !isError && !data && <Loader size="small" />}
+          {!data && !guarantorLoading && isError && (
+            <Button
+              variant="text"
+              title="Reload Guarantor's info"
+              size="small"
+              onClick={refetch}
+            />
+          )}
+        </>
+        : null}
       {responseStatus === "approved" && showGuarantorStatus ? (
         <div className="flex items-center gap-3 mt-3">
           <CheckIcon fill="#1FD11B" />
