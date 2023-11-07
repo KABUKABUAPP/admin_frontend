@@ -15,11 +15,9 @@ interface Props {
 const StaticMap: FC<Props> = ({ startPoint, endPoint }) => {
   const [directions, setDirections] = useState<any>(null);
   
-  /*const { isLoaded } = useLoadScript({
-    googleMapsApiKey: 'process.env.REACT_APP_GOOGLE_API_KEY',
-  });*/
-
-  const isLoaded = true;
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: 'AIzaSyAsBegv3npV0vvqFzyeYYEtWDGYGyEu3TI',
+  });
 
   const containerStyle = {
     width: "100%",
