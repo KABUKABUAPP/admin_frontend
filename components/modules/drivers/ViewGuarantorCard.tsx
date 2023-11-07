@@ -19,17 +19,17 @@ interface Props {
     phone: string;
     image: string;
   };
-  /*guarantorUpload: {
+  guarantorUpload: {
     title: string;
     fullname: string;
     relationship: string;
     address: string;
     phone: string;
     image: string;
-  };*/
+  };
 }
 
-const ViewGuarantorCard: FC<Props> = ({ driverUpload/*, guarantorUpload*/ }) => {
+const ViewGuarantorCard: FC<Props> = ({ driverUpload, guarantorUpload }) => {
   const { setModalContent } = useModalContext();
   const { userPermissions } = useUserPermissions();
 
@@ -55,9 +55,9 @@ const ViewGuarantorCard: FC<Props> = ({ driverUpload/*, guarantorUpload*/ }) => 
         <div className="w-full">
           <UploadDetailsCard {...driverUpload} />
         </div>
-        {/*<div className="w-full">
+        <div className="w-full">
           <UploadDetailsCard {...guarantorUpload} />
-        </div>*/}
+        </div>
       </div>
       <div className="flex justify-between gap-6 max-sm:flex-col">
         {userPermissions && userPermissions.drivers_permissions.write && (
