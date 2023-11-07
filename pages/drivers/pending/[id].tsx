@@ -98,7 +98,7 @@ const Driver: NextPage = () => {
                 <>
                   <DriverInfoCard referral_code={""} {...data.driverInfo} />
 
-                  <GuarantorDetailsCard {...data.guarantor} />
+                  {/*<GuarantorDetailsCard {...data.guarantor} />*/}
 
                   <CarDocuments {...data.carDocs} />
                 </>
