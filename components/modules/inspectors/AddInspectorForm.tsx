@@ -94,8 +94,13 @@ const AddInspectorForm: FC = () => {
 
   useEffect(() => {
     if (isError) {
-      console.log(error)
-      toast.error(error?.data?.message);
+      if (error && 'data' in error && error.data) {
+        // Use type assertion to tell TypeScript that 'data' is not unknown anymore
+        const errorData = error.data as {status: string; message: string;};
+        // Now TypeScript recognizes 'data' as a property
+        toast.error(errorData.message);
+      }
+      
     }
   }, [isError]);
 
