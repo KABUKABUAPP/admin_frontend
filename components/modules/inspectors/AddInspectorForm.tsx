@@ -41,7 +41,7 @@ function removeEmptyProperties(obj: any) {
 
 const AddInspectorForm: FC = () => {
   const [selectedStateName, setSelectedStateName] = useState<string>("");
-  const [addInspector, { isLoading, isError, isSuccess }] =
+  const [addInspector, { isLoading, isError, isSuccess, error }] =
     useAddNewInspectorMutation();
 
   const router = useRouter();
@@ -94,7 +94,8 @@ const AddInspectorForm: FC = () => {
 
   useEffect(() => {
     if (isError) {
-      toast.error("Oops! Lets try that again!");
+      console.log(error)
+      toast.error(error?.data?.message);
     }
   }, [isError]);
 
