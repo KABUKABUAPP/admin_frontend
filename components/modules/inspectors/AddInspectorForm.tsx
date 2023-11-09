@@ -41,7 +41,7 @@ function removeEmptyProperties(obj: any) {
 
 const AddInspectorForm: FC = () => {
   const [selectedStateName, setSelectedStateName] = useState<string>("");
-  const [addInspector, { isLoading, isError, isSuccess }] =
+  const [addInspector, { isLoading, isError, isSuccess, error }] =
     useAddNewInspectorMutation();
 
   const router = useRouter();
@@ -94,7 +94,13 @@ const AddInspectorForm: FC = () => {
 
   useEffect(() => {
     if (isError) {
-      toast.error("Oops! Lets try that again!");
+      if (error && 'data' in error && error.data) {
+        // Use type assertion to tell TypeScript that 'data' is not unknown anymore
+        const errorData = error.data as {status: string; message: string;};
+        // Now TypeScript recognizes 'data' as a property
+        toast.error(errorData.message);
+      }
+      
     }
   }, [isError]);
 
