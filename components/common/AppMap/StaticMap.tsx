@@ -6,6 +6,7 @@ import {
   DirectionsRenderer,
   useLoadScript
 } from "@react-google-maps/api";
+import { GOOGLE_MAPS_API_KEY } from "@/constants";
 
 interface Props {
   startPoint: [number, number];
