@@ -9,6 +9,7 @@ interface Props {
 }
 
 const ActivityLogCard: FC<Props> = ({ logs }) => {
+  console.log('logger', logs)
   return (
     <Card maxHeight="500px">
       <div className="flex justify-between items-center">
@@ -20,9 +21,14 @@ const ActivityLogCard: FC<Props> = ({ logs }) => {
       </div>
 
       <div className="pt-4 flex flex-col gap-2">
-        {logs?.map((log, idx) => (
+        {logs && logs?.length > 0 && logs?.map((log, idx) => (
           <ActivityLogItem {...log} key={idx} />
         ))}
+
+        {
+          logs?.length === 0 && 
+          <p className="text-center">Staff has not performed any activity</p>
+        }
       </div>
     </Card>
   );
