@@ -23,6 +23,7 @@ const DriversTableBodyRow: FC<Props> = ({
     walletBalance,
     userId,
     statusRemark,
+    inspectionCode
   },
   subPath,
 }) => {
@@ -32,7 +33,7 @@ const DriversTableBodyRow: FC<Props> = ({
   return (
     <div
       className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
-      onClick={() => router.push(`/drivers/${subPath}/${userId}`)}
+      onClick={() => router.push(`/drivers/${subPath}/${userId}?inspection_code=${inspectionCode}`)}
     >
       <div style={{ flex: 2 }} className="flex items-center">
         <Link href={`/drivers/${driverId}`}>

@@ -14,6 +14,7 @@ const InspectorsTableBodyRow: FC<Props> = ({
   data: {
     inspectorId,
     fullName,
+    username,
     imageUrl,
     location,
     hub,
@@ -36,6 +37,9 @@ const InspectorsTableBodyRow: FC<Props> = ({
           <Avatar fallBack={fullName[0]} imageUrl={imageUrl} size="sm" allowEnlarge={false}/>
         </div>
         <p className="text-xs font-bold">{capitalizeAllFirstLetters(fullName)}</p>
+      </div>
+      <div style={{ flex: 1 }} className="flex items-center">
+        <p className="text-xs font-bold">{username}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">{capitalizeAllFirstLetters(location)}</p>
