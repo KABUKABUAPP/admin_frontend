@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Card from "@/components/common/Card";
 import TextField from "@/components/ui/Input/TextField/TextField";
 import Button from "@/components/ui/Button/Button";
-import { AddStaffValidation } from "@/validationschemas/AddStaffValidationSchema";
+import { AddTeamValidation } from "@/validationschemas/AddTeamValidationSchema";
 import { useFormik, Form, FormikProvider } from "formik";
 import { useCreateTeamMutation } from "@/api-services/teamService";
 import SelectField from "@/components/ui/Input/SelectField";
@@ -65,7 +65,7 @@ const AddStaffForm: FC = () => {
 
   const formik = useFormik({
     initialValues,
-    validationSchema: AddStaffValidation,
+    validationSchema: AddTeamValidation,
     onSubmit: (values) => {
       let member_ids: any[] = [];
       tags.forEach((tg: any) => {
