@@ -121,18 +121,21 @@ export const staffApi = createApi({
 
           const activityLogsRaw = response?.data?.activity_logs?.data?.rows;
 
-          const activityLogs = activityLogsRaw.map((log: any) => {
-            return {
-              title: log.description,
-              date: moment(log.createdAt).fromNow()
-            }
-          })
+          let activityLogs: { title: any; date: string; }[] = []
 
+          if (activityLogsRaw.length > 0) {
+            activityLogs = activityLogsRaw.map((log: any) => {
+              return {
+                title: log.description,
+                date: moment(log.createdAt).fromNow()
+              }
+            })
+          }
           const disputeData = {total: response?.data?.total_disputes, pending: response?.data?.pending_disputes}
 
           return { userInfo: mappedStaff, isBlocked, activityLogs, disputeData };
         }
-      },
+      }
     }),
     resetStaffPassword: build.mutation<any, ResetStaffPasswordQuery>({
       query: ({ staffId }) => ({
