@@ -74,7 +74,8 @@ export const inspectorsApi = createApi({
                 imageUrl: "",
                 inspectorId: inspector?._id,
                 location: inspectorLocation,
-                totalCarsProcessed: 0,
+                totalCarsProcessed: inspector?.cars_processed,
+                username: inspector?.username
               };
             });
 

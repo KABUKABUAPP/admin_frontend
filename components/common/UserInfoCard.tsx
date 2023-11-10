@@ -24,7 +24,8 @@ interface Props {
   role?: string;
   bg?: string;
   declineCount?: number;
-  referral_code: string;
+  referral_code?: string;
+  inspectionCode?: any;
 }
 
 function copyToClipboard(text: string) {
@@ -67,7 +68,8 @@ const UserInfoCard: FC<Props> = ({
   role,
   declineCount,
   bg = "#FFFFFF",
-  referral_code
+  referral_code,
+  inspectionCode
 }) => {
   const router = useRouter();
   const showCarsProcessed = router.pathname.includes("inspector");
@@ -118,6 +120,16 @@ const UserInfoCard: FC<Props> = ({
                   }`}
                 >
                   {phone}
+                </span>
+              )}
+              <br />
+              {inspectionCode && inspectionCode.length > 0 && (
+                <span
+                  className={`text-base font-semibold ${
+                    isDeleted ? "!text-[#9A9A9A]" : ""
+                  }`}
+                >
+                  <b>Inspection Code</b>: {inspectionCode}
                 </span>
               )}
             </div>

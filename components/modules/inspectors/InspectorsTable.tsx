@@ -22,6 +22,10 @@ const headCellData = [
     flex: 2,
   },
   {
+    title: "Username",
+    flex: 1,
+  },
+  {
     title: "Location",
     flex: 1,
   },
