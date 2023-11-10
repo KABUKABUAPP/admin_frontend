@@ -25,8 +25,7 @@ const ActivityLogCard: FC<Props> = ({ logs }) => {
           <ActivityLogItem {...log} key={idx} />
         ))}
 
-        {
-          logs?.length === 0 && 
+        {logs && logs?.length === 0 && 
           <p className="text-center">Staff has not performed any activity</p>
         }
       </div>
