@@ -67,8 +67,10 @@ const AddStaffForm: FC = () => {
     onSubmit: (values) => {
       const stateName = states?.filter((s) => s.value == values.state)[0]
         .label as string;
+
+      console.log({ ...values, state: stateName })
       createStaff({ ...values, state: stateName });
-    },
+    }
   });
 
   useEffect(() => {
@@ -82,7 +84,7 @@ const AddStaffForm: FC = () => {
   useEffect(() => {
     if (isSuccess) {
       toast.success("Staff Successfully Created");
-      // router.push("/staffs");
+      router.push("/staffs");
     }
   }, [isSuccess]);
 

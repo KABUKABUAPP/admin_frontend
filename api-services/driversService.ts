@@ -102,6 +102,7 @@ export const driversApi = createApi({
               statusRemark: driver?.status_remark,
               dateDeleted: "NOT DONE",
               deletionReason: driver?.user?.reason_for_delete,
+              inspectionCode: driver?.inspection_code ? driver?.inspection_code : ''
             } as DriversTableBodyData;
           });
 

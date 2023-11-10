@@ -11,6 +11,7 @@ export interface DriversTableBodyData {
   statusRemark?: string;
   dateDeleted?: string;
   deletionReason?: string;
+  inspectionCode?: string;
 }
 
 export interface DriversMappedResponse {
@@ -23,6 +24,7 @@ export interface ReactivateDriverQuery {
 }
 
 export interface Driver {
+  inspection_code: any;
   _id: string;
   user: {
     _id: string;

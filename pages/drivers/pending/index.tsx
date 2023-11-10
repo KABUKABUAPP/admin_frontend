@@ -90,7 +90,7 @@ const Drivers: NextPage = () => {
   useEffect(() => {
     handleActiveDriverOption("pending");
   }, []);
-
+  
   const carOwnerObj: { [key: string]: boolean } = {
     "all-drivers": true,
     "sharp-drivers": false,
