@@ -7,9 +7,11 @@ import StaffSearchFilterBar from "@/components/modules/staff/StaffSearchFilterBa
 import { useGetAllStaffQuery } from "@/api-services/staffService";
 import Pagination from "@/components/common/Pagination";
 import AppHead from "@/components/common/AppHead";
+import { useRouter } from "next/router";
 
 const Staffs: NextPage = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(router.query.currentPage ? parseInt(router.query.currentPage as string) : 1);
   const [pageSize, setPageSize] = useState(10);
   const [search, setSearch] = useState<string>("");
   const [selectedStatus, setSelectedStatus] = useState<string>("active");
@@ -44,6 +46,7 @@ const Staffs: NextPage = () => {
           isLoading={isLoading}
           refetch={refetch}
           headBg={selectedStatus === "blocked" ? "#FEE2E9" : "#FFF5D8"}
+          currentPage={currentPage}
         />
         {data && (
           <Pagination

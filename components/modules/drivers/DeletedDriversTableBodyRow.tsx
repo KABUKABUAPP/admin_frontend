@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 interface Props {
   data: DriversTableBodyData;
   subPath: string;
+  currentPage?: number;
 }
 
 const DeletedDriversTableBodyRow: FC<Props> = ({
@@ -26,13 +27,14 @@ const DeletedDriversTableBodyRow: FC<Props> = ({
     dateDeleted
   },
   subPath,
+  currentPage
 }) => {
   const router = useRouter();
 
   return (
     <div
       className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
-      onClick={() => router.push(`/drivers/${subPath}/${userId}?deletion_reason=${deletionReason}`)}
+      onClick={() => router.push(`/drivers/${subPath}/${userId}?deletion_reason=${deletionReason}&current_page=${currentPage}`)}
     >
       <div style={{ flex: 2 }} className="flex items-center">
         <Link href={`/drivers/${driverId}`}>

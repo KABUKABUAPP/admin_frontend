@@ -8,15 +8,17 @@ import moment from "moment";
 
 interface Props {
   data: any;
+  currentPage?: any;
 }
 
 const StaffTableBodyRow: FC<Props> = ({
   data: { teamId, teamName, totalMembers, audience, users_onboarded, created, id },
+  currentPage
 }) => {
   const router = useRouter();
   return (
     <div
-      onClick={() => router.push(`/staffs/teams/${id}`)}
+      onClick={() => router.push(`/staffs/teams/${id}?current_page=${currentPage}`)}
       className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
     >
       <div style={{ flex: 1 }} className="flex items-center">

@@ -7,15 +7,17 @@ import { capitalizeAllFirstLetters } from "@/utils";
 
 interface Props {
   data: StaffsTableData;
+  currentPage: any;
 }
 
 const StaffTableBodyRow: FC<Props> = ({
   data: { staffId, fullName, role, location, status, id },
+  currentPage
 }) => {
   const router = useRouter();
   return (
     <div
-      onClick={() => router.push(`/staffs/${id}`)}
+      onClick={() => router.push(`/staffs/${id}?current_page=${currentPage}`)}
       className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
     >
       <div style={{ flex: 1 }} className="flex items-center">

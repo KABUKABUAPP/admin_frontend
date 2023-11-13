@@ -13,7 +13,8 @@ import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
 
 const Hubs: NextPage = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(router.query.currentPage ? parseInt(router.query.currentPage as string) : 1);
   const [pageSize, setPageSize] = useState(10);
   const [search, setSearch] = useState<string>("");
 
@@ -32,8 +33,6 @@ const Hubs: NextPage = () => {
     { limit: pageSize, page: currentPage, order: selectedFilterOption, search },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
-
-  const router = useRouter();
 
   const { userPermissions } = useUserPermissions();
 
@@ -66,6 +65,7 @@ const Hubs: NextPage = () => {
           isLoading={isLoading}
           isError={isError}
           refetch={refetch}
+          currentPage={currentPage}
         />
         {data && (
           <Pagination

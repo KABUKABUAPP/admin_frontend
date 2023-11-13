@@ -1,5 +1,6 @@
 import { NextPage } from "next";
 import React from "react";
+import { useRouter } from "next/router";
 
 import AppLayout from "@/layouts/AppLayout";
 import ViewSharpCarLayout from "@/components/modules/sharp-cars/ViewSharpCarLayout";
@@ -16,12 +17,14 @@ import FinancialsCard from "@/components/common/FinancialsCard";
 import AppHead from "@/components/common/AppHead";
 
 const SharpCar: NextPage = () => {
+  const router = useRouter();
+  
   return (
     <>
     <AppHead title="Kabukabu | Sharp Cars" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar>
+          <ActionBar handleBack={() => router.push(`/sharp-cars?currentPage=${router.query.current_page}`)}>
             <Button
               title="Call Driver"
               startIcon={<PhoneIcon />}

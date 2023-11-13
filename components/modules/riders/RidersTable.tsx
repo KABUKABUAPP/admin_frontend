@@ -10,6 +10,7 @@ interface Props {
   isLoading?: boolean;
   isError?: boolean;
   refetch?: () => void;
+  currentPage?: any;
 }
 
 const headCellData = [
@@ -27,11 +28,12 @@ const RidersTable: FC<Props> = ({
   isLoading,
   isError,
   refetch,
+  currentPage
 }) => {
   return (
     <EnhancedTable
       TableHeadComponent={<RidersTableHeadRow headCellData={headCellData} />}
-      rowComponent={(row) => <RidersTableBodyRow data={row} />}
+      rowComponent={(row) => <RidersTableBodyRow data={row} currentPage={currentPage} />}
       rowData={ridersData}
       headBg={headBg}
       maxWidth="100vw"

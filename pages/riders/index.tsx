@@ -10,11 +10,13 @@ import Pagination from "@/components/common/Pagination";
 import DropDown from "@/components/ui/DropDown";
 import AppHead from "@/components/common/AppHead";
 import DeletedRidersTable from "@/components/modules/riders/DeletedRidersTable";
+import { useRouter } from "next/router";
 
 const Riders: NextPage = () => {
+  const router = useRouter();
   const [isFIlteringByBlockedRiders, setIsFilteringByBlockedRiders] =
     useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(router.query.currentPage ? parseInt(router.query.currentPage as string) : 1);
   const [pageSize, setPageSize] = useState(5);
   const [searchRider, setSearchRider] = useState<string>("");
   const timeFilterOptions = [
@@ -90,6 +92,7 @@ const Riders: NextPage = () => {
             isLoading={isLoading}
             isError={isError}
             refetch={refetch}
+            currentPage={currentPage}
           />
         )}
         {data && (

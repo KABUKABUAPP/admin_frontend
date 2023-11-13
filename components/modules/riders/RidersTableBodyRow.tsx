@@ -7,6 +7,7 @@ import { capitalizeAllFirstLetters } from "@/utils";
 
 interface Props {
   data: RidersTableBodyData;
+  currentPage: number;
 }
 
 const RidersTableBodyRow: FC<Props> = ({
@@ -19,12 +20,13 @@ const RidersTableBodyRow: FC<Props> = ({
     status,
     imageUrl,
   },
+  currentPage
 }) => {
   const router = useRouter();
 
   return (
     <div
-      onClick={() => router.push(`/riders/${riderId}`)}
+      onClick={() => router.push(`/riders/${riderId}?current_page=${currentPage}`)}
       className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
     >
       <div style={{ flex: 1 }} className="flex items-center break-all">
