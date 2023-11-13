@@ -40,7 +40,7 @@ const FarePrice: NextPage = () => {
       <AppHead title="Kabukabu | Fare Prices" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar handleBack={() => router.push("/fare-prices")}>
+          <ActionBar handleBack={() => router.push(`/fare-prices`)}>
             {data && (
               <Button
                 title={

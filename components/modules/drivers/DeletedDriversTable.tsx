@@ -12,6 +12,7 @@ interface Props {
   refetch?: () => void;
   subPath: string;
   headBg?: string;
+  currentPage?: number;
 }
 
 const headCellData = [
@@ -24,12 +25,12 @@ const headCellData = [
     { title: "Date Deleted", flex: 1 },
   ];
 
-const DeletedDriversTable: FC<Props> = ({ tableData, isLoading, isError, refetch, subPath, headBg }) => {
+const DeletedDriversTable: FC<Props> = ({ tableData, isLoading, isError, refetch, subPath, headBg, currentPage }) => {
   return (
     <EnhancedTable
       headBg={headBg}
       TableHeadComponent={<DriversTableHeadRow headCellData={headCellData}/>}
-      rowComponent={(rows) => <DeletedDriversTableBodyRow data={rows} subPath={subPath}/>}
+      rowComponent={(rows) => <DeletedDriversTableBodyRow data={rows} subPath={subPath} currentPage={currentPage} />}
       rowData={tableData}
       maxWidth="100vw"
       isLoading={isLoading}

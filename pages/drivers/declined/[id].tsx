@@ -34,7 +34,7 @@ const Driver: NextPage = () => {
     <AppHead title="Kabukabu | Drivers" />
     <AppLayout padding="0">
       <div className="lg:h-screen lg:overflow-hidden p-4">
-        <ActionBar>
+        <ActionBar handleBack={() => router.push(`/drivers/declined?currentPage=${router.query.current_page}`)}>
           {userPermissions && userPermissions.drivers_permissions.write && (
             <Button
               title="Call Driver"

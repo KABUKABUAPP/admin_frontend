@@ -21,15 +21,16 @@ interface Props {
   isLoading?: boolean;
   isError?: boolean;
   refetch?: () => void;
+  currentPage?: number;
 }
 
-const SosTable: FC<Props> = ({ data, isLoading, isError, refetch }) => {
+const SosTable: FC<Props> = ({ data, isLoading, isError, refetch, currentPage }) => {
   return (
     <EnhancedTable
       headBg="#FEE2E9"
       TableHeadComponent={<SosTableHeadRow headCellData={headCellData} />}
       maxWidth="100vw"
-      rowComponent={(row, index) => <SosTableRow data={row} index={index} />}
+      rowComponent={(row, index) => <SosTableRow data={row} index={index} currentPage={currentPage} />}
       rowData={data}
       isError={isError}
       isLoading={isLoading}

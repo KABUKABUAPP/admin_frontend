@@ -82,7 +82,7 @@ const Driver: NextPage = () => {
       <AppHead title="Kabukabu | Drivers" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar>
+          <ActionBar handleBack={() => router.push(`/drivers/active?currentPage=${router.query.current_page}`)}>
             <Button
               title="Call Driver"
               startIcon={<PhoneIcon />}

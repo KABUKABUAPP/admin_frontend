@@ -27,7 +27,8 @@ import AppMap from "@/components/common/AppMap/AppMap";
 const socket = io("https://rideservice-dev.up.railway.app");
 
 const ViewSOS: NextPage = () => {
-  const { id } = useRouter().query;
+  const router = useRouter();
+  const { id } = router.query;
   const { data, isLoading, isError, refetch } = useViewSosQuery(
     { id: String(id) },
     { skip: !id }
@@ -143,7 +144,7 @@ const ViewSOS: NextPage = () => {
       <AppHead title="Kabukabu | SOS" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar>
+          <ActionBar handleBack={() => router.push(`/sos?currentPage=${router.query.current_page}`)}>
             {isFeed ? (
               <Button
                 title="Close Feed"

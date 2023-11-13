@@ -20,9 +20,10 @@ const Drivers: NextPage = () => {
     driverTypeFilterOptionsData
   );
   const [carOwner, setCarOwner] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [searchDriver, setSearchDriver] = useState<string>("");
+   
+  const [currentPage, setCurrentPage] = useState(router.query.currentPage ? parseInt(router.query.currentPage as string) : 1);
 
   const filterOptions = [
     { label: "Newest First", value: "newest_first", default: true },
@@ -123,6 +124,7 @@ const Drivers: NextPage = () => {
             refetch={reloadDrivers}
             subPath="declined"
             headBg="#FEE2E9"
+            currentPage={currentPage}
           />
           {drivers && (
             <Pagination

@@ -7,6 +7,7 @@ import Pagination from "@/components/common/Pagination";
 import TripsTableRow from "./TripsTableRow";
 import { FormattedTripOrder, TripData } from "@/models/Trips";
 import { useGetAllTripsQuery } from "@/api-services/tripsService";
+import { useRouter } from "next/router";
 
 const headCellData = [
   { title: "ID", flex: 1 },
@@ -25,7 +26,8 @@ interface Props {
 }
 
 const CancelledTripsTable: FC<Props> = ({ setTripCount, tableSearch, order }) => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(router.query.currentPage ? parseInt(router.query.currentPage as string) : 1);
   const [pageSize, setPageSize] = useState(5);
   const { data, isLoading, isError, refetch } = useGetAllTripsQuery(
     {
@@ -81,7 +83,7 @@ const CancelledTripsTable: FC<Props> = ({ setTripCount, tableSearch, order }) =>
           TableHeadComponent={<TripsTableHeadRow headCellData={headCellData} />}
           maxWidth="100vw"
           rowComponent={(row, index) => (
-            <CancelledTripsTableRow data={row} index={index} />
+            <CancelledTripsTableRow data={row} index={index} currentPage={currentPage} />
           )}
           rowData={data ? formatTripData(data?.data.data) : undefined}
           isError={isError}
