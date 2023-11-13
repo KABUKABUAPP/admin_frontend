@@ -11,6 +11,7 @@ interface Props {
     isLoading: boolean;
     refetch: ()=>void;
     headBg: string;
+    currentPage?: number;
 }
 
 const headCellData = [
@@ -40,11 +41,11 @@ const headCellData = [
   }
 ];
 
-const StaffTable:FC<Props> = ({ data, isError, isLoading, refetch, headBg }) => {
+const StaffTable:FC<Props> = ({ data, isError, isLoading, refetch, headBg, currentPage }) => {
   return (
     <EnhancedTable
       TableHeadComponent={<StaffTableHeadRow headCellData={headCellData} />}
-      rowComponent={(row)=><StaffTableBodyRow data={row}/>}
+      rowComponent={(row)=><StaffTableBodyRow data={row} currentPage={currentPage} />}
       rowData={data}
       maxWidth="100vw"
       isError={isError}

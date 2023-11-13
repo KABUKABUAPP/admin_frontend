@@ -17,6 +17,7 @@ interface Props {
     reason: string;
   };
   index: number;
+  currentPage: number;
 }
 
 const CancelledTripsTableRow: FC<Props> = ({
@@ -32,13 +33,14 @@ const CancelledTripsTableRow: FC<Props> = ({
     reason,
   },
   index,
+  currentPage
 }) => {
   const router = useRouter();
   const { tab } = useRouter().query
 
   return (
     <div
-      onClick={() => router.push(`/trips/${id}?tab=${tab}&reason=${reason}`)}
+      onClick={() => router.push(`/trips/${id}?tab=${tab}&reason=${reason}&current_page=${currentPage}`)}
       className="flex p-3 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
       key={index}
     >

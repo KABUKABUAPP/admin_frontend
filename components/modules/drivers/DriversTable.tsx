@@ -11,6 +11,7 @@ interface Props {
   refetch?: () => void;
   subPath: string;
   headBg?: string;
+  currentPage?: number;
 }
 
 const headCellData = [
@@ -23,12 +24,12 @@ const headCellData = [
     { title: "Status", flex: 1 },
   ];
 
-const DriversTable: FC<Props> = ({ tableData, isLoading, isError, refetch, subPath, headBg }) => {
+const DriversTable: FC<Props> = ({ tableData, isLoading, isError, refetch, subPath, headBg, currentPage }) => {
   return (
     <EnhancedTable
       headBg={headBg}
       TableHeadComponent={<DriversTableHeadRow headCellData={headCellData}/>}
-      rowComponent={(rows) => <DriversTableBodyRow data={rows} subPath={subPath}/>}
+      rowComponent={(rows) => <DriversTableBodyRow data={rows} subPath={subPath} currentPage={currentPage} />}
       rowData={tableData}
       maxWidth="100vw"
       isLoading={isLoading}

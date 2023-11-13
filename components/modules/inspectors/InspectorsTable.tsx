@@ -10,6 +10,7 @@ interface Props {
   isLoading?: boolean;
   isError?: boolean;
   refetch?: () => void;
+  currentPage?: number;
 }
 
 const headCellData = [
@@ -39,13 +40,13 @@ const headCellData = [
   },
 ];
 
-const InspectorsTable: FC<Props> = ({ data, isError, isLoading, refetch }) => {
+const InspectorsTable: FC<Props> = ({ data, isError, isLoading, refetch, currentPage }) => {
   return (
     <EnhancedTable
       TableHeadComponent={
         <InspectorsTableHeadRow headCellData={headCellData} />
       }
-      rowComponent={(rows) => <InspectorsTableBodyRow data={rows} />}
+      rowComponent={(rows) => <InspectorsTableBodyRow data={rows} currentPage={currentPage} />}
       maxWidth="100vw"
       rowData={data}
       isLoading={isLoading}

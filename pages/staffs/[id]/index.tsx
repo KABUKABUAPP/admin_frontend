@@ -26,7 +26,8 @@ import TrashIcon from "@/components/icons/TrashIcon";
 
 const Staff: NextPage = () => {
   const { setModalContent } = useModalContext();
-  const { id } = useRouter().query;
+  const router = useRouter();
+  const { id } = router.query;
   const { data, isLoading, error, refetch } = useViewStaffQuery(
     { staffId: String(id) },
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
@@ -74,7 +75,7 @@ const Staff: NextPage = () => {
       <AppHead title="Kabukabu | Staff" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar>
+          <ActionBar handleBack={() => router.push(`/staffs?currentPage=${router.query.current_page}`)}>
             {userPermissions && userPermissions.staffs_permissions.write && (
               <Button
                 title="Reset Password"

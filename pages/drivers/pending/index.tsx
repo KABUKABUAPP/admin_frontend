@@ -21,7 +21,7 @@ const Drivers: NextPage = () => {
     driverTypeFilterOptionsData
   );
   const [carOwner, setCarOwner] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(router.query.currentPage ? parseInt(router.query.currentPage as string) : 1);
   const [pageSize, setPageSize] = useState(5);
   const [searchDriver, setSearchDriver] = useState<string>("");
 
@@ -159,6 +159,7 @@ const Drivers: NextPage = () => {
             isLoading={driversLoading}
             refetch={reloadDrivers}
             subPath="pending"
+            currentPage={currentPage}
           />
           {drivers && (
             <Pagination

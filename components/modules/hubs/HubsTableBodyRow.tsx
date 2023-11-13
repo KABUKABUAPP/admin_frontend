@@ -7,6 +7,7 @@ import { capitalizeAllFirstLetters } from "@/utils";
 
 interface Props {
   data: HubsTableBodyData;
+  currentPage?: number;
 }
 
 const HubsTableBodyRow: FC<Props> = ({
@@ -18,11 +19,12 @@ const HubsTableBodyRow: FC<Props> = ({
     totalCarsProcessed,
     dateCreated,
   },
+  currentPage
 }) => {
   const router = useRouter();
   return (
     <div
-      onClick={() => router.push(`/hubs/${hubId}`)}
+      onClick={() => router.push(`/hubs/${hubId}?current_page=${currentPage}`)}
       className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
     >
       <div style={{ flex: 1 }} className="flex items-center break-all">
