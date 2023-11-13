@@ -16,6 +16,7 @@ interface Props {
     status: string;
   };
   index: number;
+  currentPage: number;
 }
 
 const TripsTableRow: FC<Props> = ({
@@ -30,11 +31,12 @@ const TripsTableRow: FC<Props> = ({
     status,
   },
   index,
+  currentPage
 }) => {
   const router = useRouter()
   const { tab } = router.query
   return (
-    <div onClick={()=>router.push(`/trips/${id}?tab=${tab ? tab : ''}`)} className="flex p-3 gap-6 border-b border-b[#E6E6E6] cursor-pointer" key={index}>
+    <div onClick={()=>router.push(`/trips/${id}?tab=${tab ? tab : ''}&current_page=${currentPage}`)} className="flex p-3 gap-6 border-b border-b[#E6E6E6] cursor-pointer" key={index}>
       <div style={{ flex: 1 }} className="flex items-center">
         <Link href={`/trips/${id}`}>
           <p className="text-xs font-bold cursor-pointer">{id}</p>

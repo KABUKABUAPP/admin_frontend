@@ -68,7 +68,7 @@ const Hub: NextPage = () => {
       <AppHead title="Kabukabu | Hubs" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar>
+          <ActionBar handleBack={() => router.push(`/hubs?currentPage=${router.query.current_page}`)}>
             <Button
               title="Delete Hub"
               size="large"

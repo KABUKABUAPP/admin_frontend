@@ -8,6 +8,7 @@ import { capitalizeAllFirstLetters } from "@/utils";
 
 interface Props {
   data: InspectorsTableBodyData;
+  currentPage?: number;
 }
 
 const InspectorsTableBodyRow: FC<Props> = ({
@@ -20,11 +21,12 @@ const InspectorsTableBodyRow: FC<Props> = ({
     hub,
     totalCarsProcessed,
   },
+  currentPage
 }) => {
   const router = useRouter();
   return (
     <div
-      onClick={() => router.push(`/inspectors/${inspectorId}`)}
+      onClick={() => router.push(`/inspectors/${inspectorId}?current_page=${currentPage}`)}
       className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
     >
       <div style={{ flex: 1 }} className="flex items-center">

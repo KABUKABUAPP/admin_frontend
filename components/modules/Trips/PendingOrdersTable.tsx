@@ -7,6 +7,7 @@ import { TripData } from "@/models/Trips";
 import Pagination from "@/components/common/Pagination";
 import { useGetAllOrdersQueryQuery } from "@/api-services/ordersService";
 import PendingOrderTableRow from "./PendingOrderTableRow";
+import { useRouter } from "next/router";
 
 const headCellData = [
   { title: "ID", flex: 1 },
@@ -35,7 +36,8 @@ interface Props {
 }
 
 const PendingOrdersTable: FC<Props> = ({ setTripCount, tableSearch, order }) => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(router.query.currentPage ? parseInt(router.query.currentPage as string) : 1);
   const [pageSize, setPageSize] = useState(5);
   const { data, isLoading, isError, refetch } =  useGetAllTripsQuery(
     {
@@ -90,7 +92,7 @@ const PendingOrdersTable: FC<Props> = ({ setTripCount, tableSearch, order }) => 
           TableHeadComponent={<TripsTableHeadRow headCellData={headCellData} />}
           maxWidth="100vw"
           rowComponent={(row, index) => (
-            <PendingOrderTableRow data={row} index={index} />
+            <PendingOrderTableRow data={row} index={index} currentPage={currentPage} />
           )}
           rowData={data ? formatTripData(data?.data.data) : undefined}
           isError={isError}

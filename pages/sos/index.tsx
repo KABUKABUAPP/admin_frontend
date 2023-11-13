@@ -11,10 +11,12 @@ import DropDown from "@/components/ui/DropDown";
 import DateRangeFilter from "@/components/modules/Sos/DateRangeFilter";
 import { useModalContext } from "@/contexts/ModalContext";
 import AppHead from "@/components/common/AppHead";
+import { useRouter } from "next/router";
 
 const SOS: NextPage = () => {
+  const router = useRouter();
   const { setModalContent } = useModalContext();
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(router.query.currentPage ? parseInt(router.query.currentPage as string) : 1);
   const [pageSize, setPageSize] = useState(2);
   const [search, setSearch] = useState<string>("");
   const timeFilterOptions = [
@@ -116,6 +118,7 @@ const SOS: NextPage = () => {
           isError={isError}
           isLoading={isLoading}
           refetch={refetch}
+          currentPage={currentPage}
         />
         {data && (
           <Pagination

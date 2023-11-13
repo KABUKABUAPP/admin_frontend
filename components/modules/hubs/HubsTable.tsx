@@ -37,13 +37,14 @@ interface Props {
   isLoading?: boolean;
   isError?: boolean;
   refetch?: () => void;
+  currentPage?: number;
 }
 
-const HubsTable: FC<Props> = ({ data, isLoading, isError, refetch }) => {
+const HubsTable: FC<Props> = ({ data, isLoading, isError, refetch, currentPage }) => {
   return (
     <EnhancedTable
       TableHeadComponent={<HubsTableHeadRow headCellData={headCellData} />}
-      rowComponent={(row) => <HubsTableBodyRow data={row} />}
+      rowComponent={(row) => <HubsTableBodyRow data={row} currentPage={currentPage} />}
       rowData={data}
       maxWidth="100vw"
       headCellData={headCellData}

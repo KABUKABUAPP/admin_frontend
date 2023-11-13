@@ -17,7 +17,8 @@ import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
 
 const Inspector: FC = () => {
-  const { id } = useRouter().query;
+  const router = useRouter();
+  const { id } = router.query;
 
   const { data, isError, isLoading, refetch } = useViewInspectorQuery(
     { inspectorId: String(id) },
@@ -31,7 +32,7 @@ const Inspector: FC = () => {
       <AppHead title="Kabukabu | Inspectors" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar>
+          <ActionBar handleBack={() => router.push(`/inspectors?currentPage=${router.query.current_page}`)}>
             {userPermissions &&
               (userPermissions.inspectors_permissions.read ||
                 userPermissions.inspectors_permissions.write) && (

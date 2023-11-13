@@ -186,7 +186,7 @@ const ViewTrip: NextPage = () => {
       <AppHead title="Kabukabu | Trips" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar>
+          <ActionBar handleBack={() => router.push(`/trips?tab=${router.query.tab}&currentPage=${router.query.current_page}`)}>
             {isFeed ? (
               <Button
                 title="Close Feed"

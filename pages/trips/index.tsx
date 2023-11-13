@@ -12,9 +12,9 @@ import PendingTripsTable from "@/components/modules/Trips/PendingTripsTable";
 import ActiveTripsTable from "@/components/modules/Trips/ActiveTripsTable";
 import CompletedTripsTable from "@/components/modules/Trips/CompletedTripsTable";
 import CancelledTripsTable from "@/components/modules/Trips/CancelledTripsTable";
-import AppHead from "@/components/common/AppHead";
 import PendingOrdersTable from "@/components/modules/Trips/PendingOrdersTable";
 import CancelledOrdersTable from "@/components/modules/Trips/CancelledOrdersTable";
+import AppHead from "@/components/common/AppHead";
 
 const Trips: NextPage = () => {
   const [optionsList, setOptionsList] = useState([...TripsOptionsBarData]);

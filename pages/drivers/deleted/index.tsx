@@ -21,7 +21,9 @@ const DeletedDrivers: NextPage = () => {
     driverTypeFilterOptionsData
   );
   const [carOwner, setCarOwner] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  
+  const [currentPage, setCurrentPage] = useState(router.query.currentPage ? parseInt(router.query.currentPage as string) : 1);
+
   const [pageSize, setPageSize] = useState(5);
   const [searchDriver, setSearchDriver] = useState<string>("");
 
@@ -125,6 +127,7 @@ const DeletedDrivers: NextPage = () => {
             refetch={reloadDrivers}
             subPath="deleted"
             headBg="#FEE2E9"
+            currentPage={currentPage}
           />
           {drivers && (
             <Pagination

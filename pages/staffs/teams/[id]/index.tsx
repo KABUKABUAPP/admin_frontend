@@ -50,7 +50,7 @@ const Staff: NextPage = () => {
       <AppHead title="Kabukabu | Staff" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar>            
+          <ActionBar handleBack={() => router.push(`/staffs/teams?currentPage=${router.query.current_page}`)}>            
             <Button
               title="Delete Team"
               color="secondary"

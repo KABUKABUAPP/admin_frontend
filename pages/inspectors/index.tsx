@@ -13,8 +13,9 @@ import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
 
 const Inspectors: NextPage = () => {
+  const router = useRouter();
   const [carOwner, setCarOwner] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(router.query.currentPage ? parseInt(router.query.currentPage as string) : 1);
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState<string>("");
 
@@ -44,7 +45,6 @@ const Inspectors: NextPage = () => {
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
-  const router = useRouter();
 
   const { userPermissions } = useUserPermissions();
 
@@ -76,6 +76,7 @@ const Inspectors: NextPage = () => {
         isLoading={inspectorsLoading}
         isError={inspectorsError}
         refetch={reloadInspectors}
+        currentPage={currentPage}
       />
       {inspectors && (
         <Pagination
