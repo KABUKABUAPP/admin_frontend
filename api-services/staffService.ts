@@ -119,9 +119,9 @@ export const staffApi = createApi({
 
           const isBlocked = response?.data?.isBlocked;
 
-          const activityLogsRaw = response?.data?.activity_logs?.data?.rows;
+          const activityLogs = response?.data?.activity_logs?.data?.rows;
 
-          let activityLogs: { title: any; date: string; }[] = []
+          /*let activityLogs: { title: any; date: string; }[] = []
 
           if (activityLogsRaw.length > 0) {
             activityLogs = activityLogsRaw.map((log: any) => {
@@ -130,7 +130,7 @@ export const staffApi = createApi({
                 date: moment(log.createdAt).fromNow()
               }
             })
-          }
+          }*/
           const disputeData = {total: response?.data?.total_disputes, pending: response?.data?.pending_disputes}
 
           return { userInfo: mappedStaff, isBlocked, activityLogs, disputeData };

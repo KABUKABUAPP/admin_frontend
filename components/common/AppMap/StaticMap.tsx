@@ -87,35 +87,6 @@ const StaticMap: FC<Props> = ({ startPoint, endPoint }) => {
           />
         </GoogleMap>
       )}
-      
-      {/*<GoogleMap mapContainerStyle={containerStyle} zoom={10} center={center}>
-        {directions && (
-          <DirectionsRenderer
-            directions={directions}
-            options={{
-              polylineOptions: {
-                strokeColor: "#000000",
-                strokeOpacity: 0.8,
-                strokeWeight: 4,
-              },
-            }}
-          />
-        )}
-
-        <DirectionsService
-          options={{
-            destination: { lat: startPoint[0], lng: startPoint[1] },
-            origin: { lat: startPoint[0], lng: startPoint[1] },
-            travelMode: window.google.maps.TravelMode.DRIVING,
-          }}
-          callback={(result) => {
-            if (result !== null) {
-              // console.log(result)
-              // setDirections(result);
-            }
-          }}
-        />
-        </GoogleMap>*/}
     </div>
   );
 };
