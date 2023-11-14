@@ -95,6 +95,10 @@ export interface ViewStaffResponse {
   status: string;
   code: number;
   data: {
+    total_drivers_onboarded: any;
+    total_onboarded_this_month: any;
+    total_onboarded_this_week: any;
+    total_onboarded_today: any;
     referral_code: any;
     pending_disputes: any;
     total_disputes: any;
@@ -126,7 +130,7 @@ export interface ViewStaffResponse {
 
 export interface MappedViewStaff {
   disputeData: any;
-  activityLogs: { date: string; title: string; }[] | undefined;
+  activityLogs: any[] | undefined;
   userInfo: {
     fullName: string;
     email: string;
@@ -137,6 +141,7 @@ export interface MappedViewStaff {
     referral_code: string;
   };
   isBlocked: boolean;
+  onboardData: any;
 }
 
 export interface ViewStaffQuery {

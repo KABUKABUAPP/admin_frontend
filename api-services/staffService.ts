@@ -132,8 +132,9 @@ export const staffApi = createApi({
             })
           }*/
           const disputeData = {total: response?.data?.total_disputes, pending: response?.data?.pending_disputes}
+          const onboardData = {total_drivers_onboarded: response?.data?.total_drivers_onboarded, total_onboarded_this_month: response?.data?.total_onboarded_this_month, total_onboarded_this_week: response?.data?.total_onboarded_this_week, total_onboarded_today: response?.data?.total_onboarded_today}
 
-          return { userInfo: mappedStaff, isBlocked, activityLogs, disputeData };
+          return { userInfo: mappedStaff, isBlocked, activityLogs, disputeData, onboardData };
         }
       }
     }),
