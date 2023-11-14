@@ -137,7 +137,7 @@ const Staff: NextPage = () => {
                     <Button title="Refetch" onClick={refetch} />
                   </div>
                 )}
-                {data && <SummaryCard disputesRaised={data.disputeData.total} pendingDisputes={data.disputeData.pending} /> }
+                {data && <SummaryCard disputesRaised={data.disputeData.total} pendingDisputes={data.disputeData.pending} totalOnboarded={data.onboardData.total_drivers_onboarded}  totalOnboardToday={data.onboardData.total_onboarded_today} totalOnboardWeek={data.onboardData.total_onboarded_this_week} totalOnboardMonth={data.onboardData.total_onboarded_this_month} userRole={data.userInfo.role} /> }
               </>
             }
             secondRow={data && <>{ <ActivityLogCard logs={data.activityLogs} userRole={data.userInfo.role} />}</>}
