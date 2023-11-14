@@ -3,21 +3,24 @@ import React, { FC } from "react";
 import Card from "@/components/common/Card";
 import DropDown from "@/components/ui/DropDown";
 import ActivityLogItem from "./ActivityLogItem";
+import { useUserContext } from "@/contexts/UserContext";
 
 interface Props {
-  logs?: { date: string; title: string }[];
+  //logs?: { description: string; createdAt: string }[];
+  logs?: any[];
+  userRole?: string;
 }
 
-const ActivityLogCard: FC<Props> = ({ logs }) => {
-  console.log('logger', logs)
+const ActivityLogCard: FC<Props> = ({ logs, userRole }) => {
+  console.log('logger', userRole)
   return (
     <Card maxHeight="500px">
       <div className="flex justify-between items-center">
-        <p className="text-lg font-semibold">Activity logs</p>
-        <div className="flex items-center gap-2">
+        <p className="text-lg font-semibold">{userRole === 'executive marketer' ? 'Drivers onboarded' : 'Activity logs'}</p>
+        {/*<div className="flex items-center gap-2">
           <p className="text-xs font-semibold">Show: </p>
           <DropDown placeholder="Today"/>
-        </div>
+        </div>*/}
       </div>
 
       <div className="pt-4 flex flex-col gap-2">
