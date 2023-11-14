@@ -140,7 +140,7 @@ const Staff: NextPage = () => {
                 {data && <SummaryCard disputesRaised={data.disputeData.total} pendingDisputes={data.disputeData.pending} /> }
               </>
             }
-            secondRow={data && <>{ <ActivityLogCard logs={data.activityLogs} />}</>}
+            secondRow={data && <>{ <ActivityLogCard logs={data.activityLogs} userRole={data.userInfo.role} />}</>}
           />
         </div>
       </AppLayout>
