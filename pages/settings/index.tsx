@@ -11,13 +11,25 @@ import useUserPermissions from "@/hooks/useUserPermissions";
 import { UserPermissions } from "@/models/User";
 import AppHead from "@/components/common/AppHead";
 import SosContactList from "@/components/modules/settings/SosContactList";
+import DriverWithdrawalSettings from "@/components/modules/settings/DriverWithdrawalSettings";
+import DriverReferralSettings from "@/components/modules/settings/DriverReferralSettings";
+import { useUserContext } from "@/contexts/UserContext";
 
 const Settings: NextPage = () => {
-  const [nav, setNav] = useState([
+  const userContext = useUserContext();
+
+  const [nav, setNav] = useState(userContext?.user?.role === "super" ? [
     { title: "Account Settings", isActive: true },
     { title: "Roles", isActive: false },
     { title: "Promotions", isActive: false },
     { title: "SOS Contact List", isActive: false },
+    { title: "Driver Withdrawal Settings", isActive: false },
+    { title: "Driver Referral Settings", isActive: false },
+  ] : [
+    { title: "Account Settings", isActive: true },
+    { title: "Roles", isActive: false },
+    { title: "Promotions", isActive: false },
+    { title: "SOS Contact List", isActive: false }
   ]);
 
   const handleChangeActiveNav = (title: string) => {
@@ -93,6 +105,8 @@ const Settings: NextPage = () => {
               {currentView === "Roles" && <Roles />}
               {currentView === "Promotions" && <Promotions />}
               {currentView === "SOS Contact List" && <SosContactList />}
+              {currentView === "Driver Withdrawal Settings" && <DriverWithdrawalSettings />}
+              {currentView === "Driver Referral Settings" && <DriverReferralSettings />}
             </>
           }
         />
