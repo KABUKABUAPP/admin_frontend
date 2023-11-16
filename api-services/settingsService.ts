@@ -228,7 +228,31 @@ export const settingsApi = createApi({
         invalidatesTags: ["roles"],
       }),
     }),
-  }),
+    getDriverSettings: build.query<any, any>({
+      query: () => ({
+        url: `admin/settings/view`
+      }),
+      transformResponse: (response: any) => {
+        if (!response) return {}
+        else {
+          return response?.data
+        }
+      }
+    }),
+    updateDriverSettings: build.mutation<any, any>({
+      query: (body) => ({
+        url: `admin/settings/update`,
+        body,
+        method: "PUT"
+      }),
+      transformResponse: (response: any) => {
+        if (!response) return {}
+        else {
+          console.log(response?.data)
+        }
+      }
+    })
+  })
 });
 
 export const {
@@ -243,5 +267,7 @@ export const {
   useCreateAutomaticPromoMutation,
   useCreateManualPromoMutation,
   useDeletePromoMutation,
-  useDeleteRoleMutation
+  useDeleteRoleMutation,
+  useGetDriverSettingsQuery,
+  useUpdateDriverSettingsMutation
 } = settingsApi;
