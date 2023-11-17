@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState, useRef, useLayoutEffect } from "react";
 import { useFormik, Form, FormikProvider } from "formik";
 import Button from "@/components/ui/Button/Button";
 import TextField from "@/components/ui/Input/TextField/TextField";
@@ -7,20 +7,19 @@ import { useGetDriverSettingsQuery, useUpdateDriverSettingsMutation } from "@/ap
 import Loader from "@/components/ui/Loader/Loader";
 import { toast } from "react-toastify";
 
-const initialValues = {
-    no_of_trips: "",
-    amount_per_referral: ""
-};
+interface Props {
+    frequency: string;
+    amount: string;
+}
 
-const DriverReferralSettings: FC = () => {
+const DriverReferralSettings: FC<Props> = ({frequency, amount}) => {
     const [showSaveChanges, setShowSaveChanges] = useState(false)
 
-    const {
-        data: driversSettings,
-        isLoading: settingsLoading,
-        isError: settingsError,
-        refetch: reloadSettings,
-      } = useGetDriverSettingsQuery({})
+    const initialValues = {
+        no_of_trips: frequency,
+        amount_per_referral: amount
+    };
+
 
     const [updateDriverSettings, { isLoading, isError, isSuccess, error }] =
     useUpdateDriverSettingsMutation();
@@ -42,17 +41,23 @@ const DriverReferralSettings: FC = () => {
         },
     });
 
-    useEffect(() => {
+    const firstUpdate = useRef(true);
+    useLayoutEffect(() => {
+        if (firstUpdate.current) {
+          firstUpdate.current = false;
+          return;
+        }
+    
         if (formik.values.no_of_trips.length > 0 && formik.values.amount_per_referral.length > 0) setShowSaveChanges(true);
         if (formik.values.no_of_trips.length === 0 || formik.values.amount_per_referral.length === 0) setShowSaveChanges(false)
     }, [formik.values])
 
     useEffect(() => {
-        if (isSuccess) toast.success('Withdrawal Settings Updated Successfully')
+        if (isSuccess) toast.success('Referral Settings Updated Successfully')
     }, [isSuccess])
 
     useEffect(() => {
-        if (isError) toast.error('Error While Updating Withdrawal Settings')
+        if (isError) toast.error('Error While Updating Referral Settings')
     }, [isError])
 
     return (
@@ -119,6 +124,7 @@ const DriverReferralSettings: FC = () => {
                     </>
                 </Form>
             </FormikProvider>
+
         </>
     )
 }

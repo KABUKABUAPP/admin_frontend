@@ -175,6 +175,7 @@ export interface MappedViewDriver {
     id: string;
     isBlocked: boolean;
     declineCount: number;
+    declineReason: string;
   };
   carDetails: {
     carImages: string[];
