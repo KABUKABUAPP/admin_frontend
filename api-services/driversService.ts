@@ -119,6 +119,7 @@ export const driversApi = createApi({
         if (!response) return <MappedViewDriver>{};
         else {
           const { data } = response;
+          
           const mapped: MappedViewDriver = {
             driverInfo: {
               image: data?.driver?.user?.profile_image,
@@ -131,6 +132,7 @@ export const driversApi = createApi({
               id: data?.driver?._id,
               isBlocked: data?.driver?.user?.isBlocked,
               declineCount: data?.driver?.admin_decline_count,
+              declineReason: data?.driver?.admin_approval_remark
             },
             carDetails: {
               carImages: data?.car_details?.images,

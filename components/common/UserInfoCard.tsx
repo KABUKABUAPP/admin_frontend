@@ -24,6 +24,7 @@ interface Props {
   role?: string;
   bg?: string;
   declineCount?: number;
+  declineReason?: string;
   referral_code?: string;
   inspectionCode?: any;
 }
@@ -67,6 +68,7 @@ const UserInfoCard: FC<Props> = ({
   totalCarsProcessed,
   role,
   declineCount,
+  declineReason,
   bg = "#FFFFFF",
   referral_code,
   inspectionCode
@@ -75,6 +77,7 @@ const UserInfoCard: FC<Props> = ({
   const showCarsProcessed = router.pathname.includes("inspector");
   const showTripCount = !router.pathname.includes("inspector");
   const showDeclineCount = router.pathname.includes("pending");
+  const showDeclineReason = router.pathname.includes("pending") && (declineCount ? declineCount > 0 : false);
   const isDeleted =
     router.pathname.includes("deleted") || router.query.deleted == "true";
 
@@ -182,8 +185,16 @@ const UserInfoCard: FC<Props> = ({
           )}
 
           {showDeclineCount && (
+            <>
+              <p className="text-lg font-semibold">
+                Declined {declineCount} time(s)
+              </p>
+            </>
+          )}
+
+          {showDeclineReason && (
             <p className="text-lg font-semibold">
-              Declined {declineCount} time(s)
+              Reason: {declineReason}
             </p>
           )}
 

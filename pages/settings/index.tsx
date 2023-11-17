@@ -14,18 +14,13 @@ import SosContactList from "@/components/modules/settings/SosContactList";
 import DriverWithdrawalSettings from "@/components/modules/settings/DriverWithdrawalSettings";
 import DriverReferralSettings from "@/components/modules/settings/DriverReferralSettings";
 import { useUserContext } from "@/contexts/UserContext";
+import { useGetDriverSettingsQuery } from "@/api-services/settingsService";
+import Loader from "@/components/ui/Loader/Loader";
 
 const Settings: NextPage = () => {
-  const userContext = useUserContext();
+  const { user } = useUserContext();
 
-  const [nav, setNav] = useState(userContext?.user?.role === "super" ? [
-    { title: "Account Settings", isActive: true },
-    { title: "Roles", isActive: false },
-    { title: "Promotions", isActive: false },
-    { title: "SOS Contact List", isActive: false },
-    { title: "Driver Withdrawal Settings", isActive: false },
-    { title: "Driver Referral Settings", isActive: false },
-  ] : [
+  const [nav, setNav] = useState([
     { title: "Account Settings", isActive: true },
     { title: "Roles", isActive: false },
     { title: "Promotions", isActive: false },
@@ -41,7 +36,29 @@ const Settings: NextPage = () => {
     setNav(mappedNav);
   };
 
+  
+  const {
+    data: driversSettings,
+    isLoading: settingsLoading,
+    isError: settingsError,
+    refetch: reloadSettings,
+  } = useGetDriverSettingsQuery({})
+
+
   const [currentView, setCurrentView] = useState("Account Settings");
+
+  useEffect(() => {
+    if (user && user!.role === 'super') {
+      setNav([
+        { title: "Account Settings", isActive: true },
+        { title: "Roles", isActive: false },
+        { title: "Promotions", isActive: false },
+        { title: "SOS Contact List", isActive: false },
+        { title: "Driver Withdrawal Settings", isActive: false },
+        { title: "Driver Referral Settings", isActive: false },
+      ])
+    }
+  }, [user])
 
   useEffect(() => {
     setCurrentView(nav.filter((i) => i.isActive === true)[0].title);
@@ -100,13 +117,15 @@ const Settings: NextPage = () => {
             />
           }
           main={
+            settingsLoading ?
+            <Loader /> :
             <>
               {currentView === "Account Settings" && <AccountSettings />}
               {currentView === "Roles" && <Roles />}
               {currentView === "Promotions" && <Promotions />}
               {currentView === "SOS Contact List" && <SosContactList />}
-              {currentView === "Driver Withdrawal Settings" && <DriverWithdrawalSettings />}
-              {currentView === "Driver Referral Settings" && <DriverReferralSettings />}
+              {currentView === "Driver Withdrawal Settings" && <DriverWithdrawalSettings frequency={driversSettings.withdrawal.frequency.toString()} type={driversSettings.withdrawal.type.toString()} />}
+              {currentView === "Driver Referral Settings" && <DriverReferralSettings frequency={driversSettings.referral_reward.frequency.toString()} amount={driversSettings.referral_reward.amount.toString()} />}
             </>
           }
         />

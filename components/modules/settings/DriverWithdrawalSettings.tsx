@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useLayoutEffect, useState, useRef } from "react";
 import { useFormik, Form, FormikProvider } from "formik";
 import Button from "@/components/ui/Button/Button";
 import TextField from "@/components/ui/Input/TextField/TextField";
@@ -8,10 +8,10 @@ import { useGetDriverSettingsQuery, useUpdateDriverSettingsMutation } from "@/ap
 import Loader from "@/components/ui/Loader/Loader";
 import { toast } from "react-toastify";
 
-const initialValues = {
-    withdrawal_type: "",
-    withdrawal_frequency: ""
-};
+interface Props {
+    frequency: string;
+    type: string;
+}
 
 const withdrawalTypes = [
     {
@@ -24,15 +24,14 @@ const withdrawalTypes = [
     }
 ]
 
-const DriverWithdrawalSettings: FC = () => {
+const DriverWithdrawalSettings: FC<Props> = ({frequency, type}) => {
     const [showSaveChanges, setShowSaveChanges] = useState(false)
 
-    const {
-        data: driversSettings,
-        isLoading: settingsLoading,
-        isError: settingsError,
-        refetch: reloadSettings,
-      } = useGetDriverSettingsQuery({})
+      
+    const initialValues = {
+        withdrawal_type: type,
+        withdrawal_frequency: frequency 
+    };
 
     const [updateDriverSettings, { isLoading, isError, isSuccess, error }] =
     useUpdateDriverSettingsMutation();
@@ -48,7 +47,13 @@ const DriverWithdrawalSettings: FC = () => {
         },
     });
     
-    useEffect(() => {
+    const firstUpdate = useRef(true);
+    useLayoutEffect(() => {
+        if (firstUpdate.current) {
+          firstUpdate.current = false;
+          return;
+        }
+    
         if (formik.values.withdrawal_frequency.length > 0 && formik.values.withdrawal_type.length > 0) setShowSaveChanges(true);
         if (formik.values.withdrawal_frequency.length === 0 || formik.values.withdrawal_type.length === 0) setShowSaveChanges(false)
     }, [formik.values])
