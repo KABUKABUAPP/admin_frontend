@@ -96,7 +96,7 @@ export const tripsApi = createApi({
       GetDriverTripHistoryQuery
     >({
       query: ({ driverId, limit, page }) => ({
-        url: `admin/trip/for-a-driver/${driverId}?limit=${limit}&page=${page}`,
+        url: `admin/trip/for-a-driver/${driverId}?limit=${limit}&page=${page}&type=trip`,
         method: "GET",
       }),
       transformResponse: (response: GetDriverTripHistoryResponse) => {
