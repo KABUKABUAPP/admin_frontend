@@ -75,6 +75,10 @@ const Driver: NextPage = () => {
     }
   }, [unblockError]);
 
+  useEffect(() => {
+    if (tripHistory) console.log('Phunsukh Wangdu', tripHistory)
+  }, [tripHistory])
+
   const { userPermissions } = useUserPermissions();
 
   return (
