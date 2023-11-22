@@ -136,8 +136,11 @@ const UserInfoCard: FC<Props> = ({
                 </span>
               )}
             </div>
+          </div>
 
-            {referral_code && role === 'executive marketer' && <div className="mx-1">
+          <div className="flex">
+            {referral_code && role === 'executive marketer' && 
+            <div className="mx-1">
               <span className="flex bg-[#FFF5D8] pr-2 pl-2" style={{borderRadius: '1rem'}}>
                 <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
                   <b>{referral_code}</b><br />
