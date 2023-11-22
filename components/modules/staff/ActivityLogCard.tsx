@@ -12,7 +12,6 @@ interface Props {
 }
 
 const ActivityLogCard: FC<Props> = ({ logs, userRole }) => {
-  console.log('logger', userRole)
   return (
     <Card maxHeight="500px">
       <div className="flex justify-between items-center">

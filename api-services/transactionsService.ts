@@ -2,7 +2,7 @@ import { BaseQueryFn, FetchArgs, FetchBaseQueryError, createApi, fetchBaseQuery 
 
 import { RIDES_BASE_URL } from "@/constants";
 
-import { logout, secondsToMilliSeconds } from "@/utils";
+import { capitalizeAllFirstLetters, logout, secondsToMilliSeconds } from "@/utils";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "@/constants";
 import {
@@ -50,12 +50,11 @@ export const transactionsApi = createApi({
     getAllTransactions: build.query<TransactionsModel, GetAllTransactionsQuery>(
       {
         query: ({ limit, page, search, filter, order }) => ({
-          url: `/admin/transaction/all?limit=${limit}&page=${page}&search=${search}&filter=${filter}&order=${order}`,
+          url: `/admin/transaction/all?limit=${limit}&page=${page}&search=${search}&filter=${filter.toUpperCase()}&order=${order}`
         }),
         transformResponse: (response: GetAllTransactions) => {
           if (!response) return response as TransactionsModel;
           else {
-            console.log('response', response)
             const mappedData = response.data.data.rows.map((tx) => {
               return {
                 date: tx?.createdAt,
@@ -113,8 +112,21 @@ export const transactionsApi = createApi({
         }
       },
     }),
+    getSingleTransaction: build.query<any, any>(
+      {
+        query: ({ narration, narration_id, id }) => ({
+          url: `admin/transaction/view/${id}?narration=${narration}&narration_id=${narration_id}`
+        }),
+        transformResponse: (response: any) => {
+          if (!response) return {};
+          else {
+            return response?.data
+          }
+        },
+      }
+    )
   }),
 });
 
-export const { useGetAllTransactionsQuery, useGetTransactionsCardQuery } =
+export const { useGetAllTransactionsQuery, useGetTransactionsCardQuery, useGetSingleTransactionQuery } =
   transactionsApi;
