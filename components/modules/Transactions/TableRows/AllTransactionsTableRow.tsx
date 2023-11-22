@@ -4,6 +4,7 @@ import { TransactionsDataModel } from "@/models/Transactions";
 import Receipt from "../Receipt";
 import { useModalContext } from "@/contexts/ModalContext";
 import { capitalizeAllFirstLetters } from "@/utils";
+import TransactionCard from "../TransactionCard";
 
 interface Props {
   data?: TransactionsDataModel;
@@ -13,7 +14,11 @@ const AllTransactionsTableRow: FC<Props> = ({ data }) => {
   const { setModalContent } = useModalContext();
 
   return (
-    <div className="flex p-3 py-6 gap-6 border-b border-b[#E6E6E6]">
+    <div className="flex p-3 py-6 gap-6 border-b border-b[#E6E6E6] cursor-pointer" onClick={() => {
+      setModalContent(
+        data?.narration === 'TRIP_PAYMENT' ? <Receipt narrationId={data?.tripId} narration={data?.narration} id={data?.transactionId} handleClose={() => setModalContent(null)} /> : <TransactionCard narrationId={data?.tripId} narration={data?.narration} id={data?.transactionId} theModalData={data} handleClose={() => setModalContent(null)} />
+      );
+    }}>
       <div style={{ flex: 1 }} className="flex cursor-pointer">
         <p className="text-xs font-bold">{data?.transactionId}</p>
       </div>

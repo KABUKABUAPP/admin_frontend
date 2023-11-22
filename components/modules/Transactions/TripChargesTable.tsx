@@ -27,7 +27,7 @@ const TripChargesTable: FC<Props> = ({order}) => {
       limit: pageSize,
       page: currentPage,
       search: search,
-      filter: "trip_charges",
+      filter: "trip_charges_to_kabukabu",
       order
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }

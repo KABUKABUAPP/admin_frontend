@@ -28,7 +28,7 @@ const SubscriptionsTable: FC<Props> = ({order}) => {
       limit: pageSize,
       page: currentPage,
       search: search,
-      filter: "driver_subscription",
+      filter: "driver_trip_charges",
       order
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }

@@ -177,7 +177,7 @@ const Transactions: NextPage = () => {
           <TripPaymentsTable order={selectedDropDown} />
         )}
 
-        {String(tab) === Tab.withdrawals && <WithdrawalsTable />}
+        {String(tab) === Tab.withdrawals && <WithdrawalsTable order={selectedDropDown} />}
         {/* <TransactionsTable
         isError={isError}
         isLoading={isLoading}
