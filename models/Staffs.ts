@@ -96,9 +96,13 @@ export interface ViewStaffResponse {
   code: number;
   data: {
     total_drivers_onboarded: any;
-    total_onboarded_this_month: any;
-    total_onboarded_this_week: any;
-    total_onboarded_today: any;
+    total_drivers_onboarded_this_month: any;
+    total_drivers_onboarded_this_week: any;
+    total_drivers_onboarded_today: any;
+    total_riders_onboarded: any;
+    total_riders_onboarded_this_month: any;
+    total_riders_onboarded_this_week: any;
+    total_riders_onboarded_today: any;
     referral_code: any;
     pending_disputes: any;
     total_disputes: any;

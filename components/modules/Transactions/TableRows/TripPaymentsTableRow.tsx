@@ -12,7 +12,11 @@ const TripPaymentsTableRow: FC<Props> = ({ data }) => {
   const { setModalContent } = useModalContext();
 
   return (
-    <div className="flex p-3 py-6 items-center gap-6 border-b border-b[#E6E6E6]">
+    <div className="flex p-3 py-6 items-center gap-6 border-b border-b[#E6E6E6] cursor-pointer" onClick={() => {
+      setModalContent(
+        <Receipt narrationId={data?.tripId} narration={data?.narration} id={data?.transactionId} theModalData={data} handleClose={() => setModalContent(null)} />
+      );
+    }}>
       <div style={{ flex: 1 }} className="flex items-center cursor-pointer">
         <p className="text-xs font-bold">{data?.transactionId}</p>
       </div>

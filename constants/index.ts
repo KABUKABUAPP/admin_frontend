@@ -325,7 +325,7 @@ export const transactionsOptionsBar = [
     keyVal: "withdrawals",
   },
   {
-    title: "Subsciptions",
+    title: "Subscriptions",
     isActive: false,
     keyVal: "subscriptions",
   },

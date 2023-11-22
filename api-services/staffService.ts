@@ -121,18 +121,17 @@ export const staffApi = createApi({
 
           const activityLogs = response?.data?.activity_logs?.data?.rows;
 
-          /*let activityLogs: { title: any; date: string; }[] = []
-
-          if (activityLogsRaw.length > 0) {
-            activityLogs = activityLogsRaw.map((log: any) => {
-              return {
-                title: log.description,
-                date: moment(log.createdAt).fromNow()
-              }
-            })
-          }*/
           const disputeData = {total: response?.data?.total_disputes, pending: response?.data?.pending_disputes}
-          const onboardData = {total_drivers_onboarded: response?.data?.total_drivers_onboarded, total_onboarded_this_month: response?.data?.total_onboarded_this_month, total_onboarded_this_week: response?.data?.total_onboarded_this_week, total_onboarded_today: response?.data?.total_onboarded_today}
+          const onboardData = {
+            total_drivers_onboarded: response?.data?.total_drivers_onboarded, 
+            total_onboarded_this_month: response?.data?.total_drivers_onboarded_this_month, 
+            total_onboarded_this_week: response?.data?.total_drivers_onboarded_this_week, 
+            total_onboarded_today: response?.data?.total_drivers_onboarded_today, 
+            total_riders_onboarded: response?.data?.total_riders_onboarded, 
+            total_riders_onboarded_this_month: response?.data?.total_riders_onboarded_this_month,
+            total_riders_onboarded_this_week: response?.data?.total_riders_onboarded_this_week, 
+            total_riders_onboarded_today: response?.data?.total_riders_onboarded_today
+          }
 
           return { userInfo: mappedStaff, isBlocked, activityLogs, disputeData, onboardData };
         }
