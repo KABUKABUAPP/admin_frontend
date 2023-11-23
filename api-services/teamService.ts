@@ -111,13 +111,25 @@ export const teamApi = createApi({
           return response?.data
         }
       }
+    }),
+    viewTeamOnboardedDrivers: build.query<any, any>({
+      query: ({ teamId, limit, page, timeline, userType }) => ({
+        url: `/admin/team/view-onboarded-drivers/${teamId}?limit=${limit}&page=${page}&time_line=${timeline}&user_type=${userType}`,
+      }),
+      transformResponse: (response: any) => {
+        if (!response) return <any>{};
+        else {
+          return response?.data
+        }
+      }
     })
-  }),
+  })
 });
 
 export const {
   useGetAllTeamQuery,
   useCreateTeamMutation,
   useDeleteTeamMutation,
-  useViewTeamQuery
+  useViewTeamQuery,
+  useViewTeamOnboardedDriversQuery
 } = teamApi;
