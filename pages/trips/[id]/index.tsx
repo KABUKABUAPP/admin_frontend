@@ -20,7 +20,7 @@ import RaiseSosCard from "@/components/modules/Trips/RaiseSosCard";
 import ViewFeed from "@/components/modules/Trips/ViewFeed";
 import { useViewTripQuery } from "@/api-services/tripsService";
 import { useRouter } from "next/router";
-import StaticMap from "@/components/common/AppMap/StaticMap";
+//import StaticMap from "@/components/common/AppMap/StaticMap";
 import RatingIcon from "@/components/icons/RatingIcon";
 
 import { io } from "socket.io-client";
@@ -28,6 +28,7 @@ import TimesIcon from "@/components/icons/TimesIcon";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
 import TripRatingCard from "@/components/modules/Trips/TripRatingCard";
+import StaticMap from "@/components/common/AppMap/TestMap";
 const socket = io("https://rideservice-dev.up.railway.app");
 
 const ViewTrip: NextPage = () => {
@@ -180,13 +181,14 @@ const ViewTrip: NextPage = () => {
   };
 
   const { userPermissions } = useUserPermissions();
+  const tabUrl = router.query.tab ? `tab=${router.query.tab}` : '';
 
   return (
     <>
       <AppHead title="Kabukabu | Trips" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar handleBack={() => router.push(`/trips?tab=${router.query.tab}&currentPage=${router.query.current_page}`)}>
+          <ActionBar handleBack={() => router.push(`/trips?${tabUrl}&currentPage=${router.query.current_page}`)}>
             {isFeed ? (
               <Button
                 title="Close Feed"
@@ -252,6 +254,11 @@ const ViewTrip: NextPage = () => {
                         }
                       />
                     )
+
+                    /*<MapWithADirectionsRenderer directionsProp={{
+                      origin: liveLocation ? {lat: liveLocation.lat, lng: liveLocation.lng} : data?.startPoint,
+                      destination: data?.endPoint
+                    }} />*/
                   }
                 </div>
               </>
