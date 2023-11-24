@@ -35,8 +35,10 @@ const TripsTableRow: FC<Props> = ({
 }) => {
   const router = useRouter()
   const { tab } = router.query
+  const tabUrl = tab ? `tab=${tab}` : '';
+
   return (
-    <div onClick={()=>router.push(`/trips/${id}?tab=${tab ? tab : ''}&current_page=${currentPage}`)} className="flex p-3 gap-6 border-b border-b[#E6E6E6] cursor-pointer" key={index}>
+    <div onClick={()=>router.push(`/trips/${id}?${tabUrl}&current_page=${currentPage}`)} className="flex p-3 gap-6 border-b border-b[#E6E6E6] cursor-pointer" key={index}>
       <div style={{ flex: 1 }} className="flex items-center">
         <Link href={`/trips/${id}`}>
           <p className="text-xs font-bold cursor-pointer">{id}</p>
