@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 
 import AppLayout from "@/layouts/AppLayout";
@@ -34,6 +34,10 @@ const FarePrice: NextPage = () => {
       <StartSurgeCard handleClose={() => setModalContent(null)} />
     );
   };
+
+  useEffect(() => {
+    if (data) console.log(data)
+  }, [data])
 
   return (
     <>
@@ -139,7 +143,8 @@ const FarePrice: NextPage = () => {
                       const surgeMultiplier = data.data.surge_multiplier;
                       const state = data.data.state;
                       const country = data.data.country;
-                      const query = `?monthlyPayment=${monthlyPayment}&sharpPayment=${sharpPayment}&baseFare=${baseFare}&distance=${distance}&time=${time}&vat=${vat}&bookingFee=${bookingFee}&surgeMultiplier=${surgeMultiplier}&state=${state}&country=${country}`;
+                      const waitingTimePerMin = data.data.waiting_time_per_min
+                      const query = `?monthlyPayment=${monthlyPayment}&sharpPayment=${sharpPayment}&baseFare=${baseFare}&distance=${distance}&time=${time}&vat=${vat}&bookingFee=${bookingFee}&surgeMultiplier=${surgeMultiplier}&state=${state}&country=${country}&waitingTime=${waitingTimePerMin}`;
 
                       router.push(`/fare-prices/${id}${query}`, undefined, {
                         shallow: true,
@@ -162,6 +167,10 @@ const FarePrice: NextPage = () => {
                         title: "Surge Multiplier",
                         body: `${data.data.surge_multiplier}`,
                       },
+                      {
+                        title: "Waiting Time Per Minute",
+                        body: `${data.data.waiting_time_per_min}`,
+                      }
                     ]}
                   />
                 </>

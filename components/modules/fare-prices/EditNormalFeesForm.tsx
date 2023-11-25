@@ -65,7 +65,7 @@ const EditNormalFeesForm: FC = () => {
           cash: true,
           wallet: true,
           card: true,
-        },
+        }
       };
 
       updateFare({ payload, id: String(id) });
