@@ -15,6 +15,7 @@ interface Props {
 
 const StaticMap: FC<Props> = ({ startPoint, endPoint }) => {
   const [directions, setDirections] = useState<any>(null);
+  const [map, setMap] = React.useState(null)
   
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: 'AIzaSyAsBegv3npV0vvqFzyeYYEtWDGYGyEu3TI',
@@ -22,7 +23,7 @@ const StaticMap: FC<Props> = ({ startPoint, endPoint }) => {
 
   const containerStyle = {
     width: "100%",
-    height: "100%",
+    height: "90%",
   };
 
   const center = {
@@ -30,7 +31,19 @@ const StaticMap: FC<Props> = ({ startPoint, endPoint }) => {
     lng: -38.523,
   };
 
+  
+
+  const onLoad = React.useCallback(function callback(map: any) {
+    const origin = { lat: startPoint[0], lng: startPoint[1] };
+    // This is just an example of getting and using the map instance!!! don't just blindly copy!
+    const bounds = new window.google.maps.LatLngBounds(origin);
+    map.fitBounds(bounds);
+
+    setMap(map)
+  }, [])
+
   useEffect(() => {
+    console.log('coords', startPoint, endPoint)
     if (startPoint && endPoint) {
       const origin = { lat: startPoint[0], lng: startPoint[1] };
       const destination = { lat: endPoint[0], lng: endPoint[1] };
@@ -58,20 +71,20 @@ const StaticMap: FC<Props> = ({ startPoint, endPoint }) => {
       {!isLoaded ? (
         <h1>Loading...</h1>
       ) : (
-          <GoogleMap mapContainerStyle={containerStyle} zoom={10} center={center}>
-          {directions && (
-            <DirectionsRenderer
-              directions={directions}
-              options={{
-                polylineOptions: {
-                  strokeColor: "#000000",
-                  strokeOpacity: 0.8,
-                  strokeWeight: 4,
-                },
-              }}
-            />
-          )}
-        </GoogleMap>
+          <GoogleMap mapContainerStyle={containerStyle} zoom={10} center={{ lat: startPoint[0], lng: startPoint[1] }} onLoad={onLoad}>
+            {directions && (
+              <DirectionsRenderer
+                directions={directions}
+                options={{
+                  polylineOptions: {
+                    strokeColor: "#000000",
+                    strokeOpacity: 0.8,
+                    strokeWeight: 4,
+                  },
+                }}
+              />
+            )}
+          </GoogleMap>
       )}
     </div>
   );
