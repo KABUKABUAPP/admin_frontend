@@ -4,7 +4,6 @@ import { NextPage } from "next";
 import ActionBar from "@/components/common/ActionBar";
 import Button from "@/components/ui/Button/Button";
 import ViewTripLayout from "@/components/modules/Trips/ViewTripLayout";
-import AppMap from "@/components/common/AppMap/AppMap";
 import TripDetailsCard from "@/components/modules/Trips/TripDetailsCard";
 import { TripDetail } from "@/models/Trips";
 import OriginIcon from "@/components/icons/OriginIcon";
@@ -20,7 +19,6 @@ import RaiseSosCard from "@/components/modules/Trips/RaiseSosCard";
 import ViewFeed from "@/components/modules/Trips/ViewFeed";
 import { useViewTripQuery } from "@/api-services/tripsService";
 import { useRouter } from "next/router";
-//import StaticMap from "@/components/common/AppMap/StaticMap";
 import RatingIcon from "@/components/icons/RatingIcon";
 
 import { io } from "socket.io-client";
@@ -182,13 +180,14 @@ const ViewTrip: NextPage = () => {
 
   const { userPermissions } = useUserPermissions();
   const tabUrl = router.query.tab ? `tab=${router.query.tab}` : '';
+  const currentPageUrl = router.query.current_page ? `currentPage=${router.query.current_page}` : '';
 
   return (
     <>
       <AppHead title="Kabukabu | Trips" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar handleBack={() => router.push(`/trips?${tabUrl}&currentPage=${router.query.current_page}`)}>
+          <ActionBar handleBack={() => router.push(`/trips?${tabUrl}&${currentPageUrl}`)}>
             {isFeed ? (
               <Button
                 title="Close Feed"
@@ -238,13 +237,7 @@ const ViewTrip: NextPage = () => {
                   />
                 )}
                 <div className="w-full h-full max-h-[550px] max-md:pl-0">
-                  {
-                    // tab !== "completed"
-                    //   ? liveLocation && (
-                    //       <AppMap zoom={11} location={liveLocation} />
-                    //     )
-                    //   :
-                    data && (
+                  {data?.startPoint && data?.endPoint && (
                       <StaticMap
                         endPoint={data?.endPoint}
                         startPoint={
@@ -253,13 +246,7 @@ const ViewTrip: NextPage = () => {
                             : data?.startPoint
                         }
                       />
-                    )
-
-                    /*<MapWithADirectionsRenderer directionsProp={{
-                      origin: liveLocation ? {lat: liveLocation.lat, lng: liveLocation.lng} : data?.startPoint,
-                      destination: data?.endPoint
-                    }} />*/
-                  }
+                    )}
                 </div>
               </>
             }
@@ -289,7 +276,7 @@ const ViewTrip: NextPage = () => {
                     tripCount={data?.riderTripCount}
                     rating={data?.riderRating}
                     viewProfileLink={
-                      data?.riderId && `/riders/${data?.riderId}`
+                      data?.riderId && `/riders/${data?.riderId}?fallbackUrl=${router.asPath}`
                     }
                     buttonTitle="View Rider's Profile"
                     imageUri={data?.riderImage}
@@ -306,7 +293,7 @@ const ViewTrip: NextPage = () => {
                       tripCount={data?.driverTripCount}
                       rating={data?.driverRating}
                       viewProfileLink={
-                        data?.driverId && `/drivers/${data?.driverId}`
+                        data?.driverId && `/drivers/active/${data?.driverId}?fallbackUrl=${router.asPath}`
                       }
                       carModel={data?.carModel}
                       carPlateNumber={data?.plateNumber}

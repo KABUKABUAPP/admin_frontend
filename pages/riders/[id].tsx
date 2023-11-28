@@ -71,12 +71,15 @@ const Rider: NextPage = () => {
 
   const { userPermissions } = useUserPermissions();
 
+  const currentPageUrl = router.query.current_page ? `currentPage=${router.query.current_page}` : '';
+  const handleBackUrl = router.query.fallbackUrl ? router.query.fallbackUrl : `/riders?${currentPageUrl}`;
+
   return (
     <>
       <AppHead title="Kabukabu | Riders" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar handleBack={() => router.push(`/riders?currentPage=${router.query.current_page}`)}>
+          <ActionBar handleBack={() => router.push(`${handleBackUrl}`)}>
             {userPermissions && userPermissions.riders_permissions.write && (
               <Button
                 title="Call Rider"
