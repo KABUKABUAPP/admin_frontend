@@ -24,7 +24,11 @@ const ActivityLogCard: FC = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [timeline, setTimeline] = useState('past_one_year');
   const [userType, setUserType] = useState('driver');
+  const [userTypeText, setUserTypeText] = useState('Drivers');
   const [sideHeaderText, setSideHeaderText] = useState('');
+  const [summaryView, setSummaryView] = useState(true)
+  const driverBold = summaryView ? 'font-bold' : '';
+  const riderBold = !summaryView ? 'font-bold' : '';
 
   const closeSidebar = () => {
     setIsOpen(false);
@@ -53,18 +57,34 @@ const ActivityLogCard: FC = () => {
 
   const populateSidebar = (newTimeline: string) => {
     setTimeline(newTimeline)
-    console.log('Down the aisle we go')
   }
 
   useEffect(() => {
-    if(onboardedUserData) console.log('time flies', timeline, onboardedUserData)
+    if(onboardedUserData) console.log('time flies', timeline, userType, onboardedUserData)
   }, [onboardedUserData])
+
+  useEffect(() => {
+    if(data) console.log('time flies data', data)
+  }, [data])
   
   return (
     <div className="flex">
       <Card maxHeight="500px">
+        <div className="text-md flex">
+          <p className={`cursor-pointer mx-5 ${driverBold}`} onClick={() => {
+            setSummaryView(true);
+            setUserTypeText('Drivers')
+            setUserType('driver')
+          }}>Driver</p>
+          <p>|</p>
+          <p className={`cursor-pointer mx-5 ${riderBold}`} onClick={() => {
+            setSummaryView(false);
+            setUserTypeText('Riders')
+            setUserType('rider')
+          }}>Rider</p>
+        </div>
         <div className="flex justify-between items-center">
-          <p className="text-lg font-semibold">Drivers Onboarded</p>
+          <p className="text-lg font-semibold">{userTypeText} Onboarded</p>
           <div className="flex items-center gap-2">
             <p className="text-xs font-semibold">Show: </p>
             <DropDown placeholder="Newest First"/>
@@ -108,8 +128,26 @@ const ActivityLogCard: FC = () => {
             <Card bg={'#F8F8F8'}>
               <div className="flex p-1">
                 <div className="w-4/5">    
+                  <p className="text-[#9A9A9A]"><small>Today</small></p>
+                  <p className="text-[#000]"><b>{userType === 'driver' ? data?.total_drivers_onboarded_today : data?.total_riders_onboarded_today}</b></p>
+                </div>
+                <div className="w-1/5 mt-2">
+                  <p className="text-[#000] cursor-pointer" onClick={() => {
+                    toggleSidebar();
+                    populateSidebar("today");
+                    setSideHeaderText('today');
+                  }}><b>View</b></p>
+                </div>
+              </div>
+            </Card>
+          </div>
+
+          <div className="bg-[#F8F8F8] rounded-md mt-2 mb-2">
+            <Card bg={'#F8F8F8'}>
+              <div className="flex p-1">
+                <div className="w-4/5">    
                   <p className="text-[#9A9A9A]"><small>This Week</small></p>
-                  <p className="text-[#000]"><b>{data?.total_drivers_onboarded_this_week}</b></p>
+                  <p className="text-[#000]"><b>{userType === 'driver' ? data?.total_drivers_onboarded_this_week : data?.total_riders_onboarded_this_week}</b></p>
                 </div>
                 <div className="w-1/5 mt-2">
                   <p className="text-[#000] cursor-pointer" onClick={() => {
@@ -127,7 +165,7 @@ const ActivityLogCard: FC = () => {
               <div className="flex p-1">
                 <div className="w-4/5">    
                   <p className="text-[#9A9A9A]"><small>This Month</small></p>
-                  <p className="text-[#000]"><b>{data?.total_drivers_onboarded_this_month}</b></p>
+                  <p className="text-[#000]"><b>{userType === 'driver' ? data?.total_drivers_onboarded_this_month : data?.total_riders_onboarded_this_month}</b></p>
                 </div>
                 <div className="w-1/5 mt-2">
                   <p className="text-[#000] cursor-pointer" onClick={() => {
@@ -145,7 +183,7 @@ const ActivityLogCard: FC = () => {
               <div className="flex p-1">
                 <div className="w-4/5">    
                   <p className="text-[#9A9A9A]"><small>Past 6 Months</small></p>
-                  <p className="text-[#000]"><b>{data?.total_drivers_onboarded_past_six_months}</b></p>
+                  <p className="text-[#000]"><b>{userType === 'driver' ? data?.total_drivers_onboarded_past_six_months : data?.total_riders_onboarded_past_six_months}</b></p>
                 </div>
                 <div className="w-1/5 mt-2">
                   <p className="text-[#000] cursor-pointer" onClick={() => {
@@ -163,7 +201,7 @@ const ActivityLogCard: FC = () => {
               <div className="flex p-1">
                 <div className="w-4/5">    
                   <p className="text-[#9A9A9A]"><small>Past 1 year</small></p>
-                  <p className="text-[#000]"><b>{data?.total_drivers_onboarded_past_one_year}</b></p>
+                  <p className="text-[#000]"><b>{userType === 'driver' ? data?.total_drivers_onboarded_past_one_year :  data?.total_riders_onboarded_past_one_year}</b></p>
                 </div>
                 <div className="w-1/5 mt-2">
                   <p className="text-[#000] cursor-pointer" onClick={() => {
@@ -186,7 +224,7 @@ const ActivityLogCard: FC = () => {
             <>
               <div className="flex justify-end mt-3 mb-5">
                 <div className="font-bold mx-2">
-                  Drivers onboarded {sideHeaderText}
+                  {userTypeText} onboarded {sideHeaderText}
                 </div>
                 <div className="cursor-pointer mx-2" onClick={() => setIsOpen(false)}><TimesIconRed /></div>
               </div>
