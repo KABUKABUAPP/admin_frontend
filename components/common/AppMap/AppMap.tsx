@@ -41,17 +41,6 @@ const AppMap: FC<Props> = ({ location }) => {
         defaultCenter={location}
         layerTypes={["TrafficLayer", "TransitLayer"]}
         defaultZoom={11}
-        // onGoogleApiLoaded={({ map, maps }) => {
-        //   const directionsService = new maps.DirectionsService();
-
-        //   directionsService.route(directionReqObj, (res: any, stat: any) => {
-        //     console.log(res);
-
-        //     if (stat == "OK") {
-        //       console.log(res);
-        //     }
-        //   });
-        // }}
       >
         <StartMarker
           lat={location.lat}
