@@ -54,9 +54,9 @@ export const dashboardApi = createApi({
   reducerPath: "dashboardApi",
   baseQuery: baseQueryWithLogoutOnTokenExpiration,
   endpoints: (build) => ({
-    getInsights: build.query<Omit<TripInsightsMappedResponse, "icon">[], "">({
-      query: () => ({
-        url: `/admin/trip/trip-insights`,
+    getInsights: build.query<Omit<TripInsightsMappedResponse, "icon">[], any>({
+      query: ({ filter }) => ({
+        url: `/admin/trip/trip-insights?filter=${filter.toUpperCase()}`,
       }),
       transformResponse: (response: GetTripInsightsResponse) => {
         console.log('res', response)

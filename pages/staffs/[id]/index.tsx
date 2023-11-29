@@ -23,6 +23,7 @@ import ErrorMessage from "@/components/common/ErrorMessage";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
 import TrashIcon from "@/components/icons/TrashIcon";
+import EditIcon from "@/components/icons/EditIcon";
 
 const Staff: NextPage = () => {
   const { setModalContent } = useModalContext();
@@ -76,6 +77,14 @@ const Staff: NextPage = () => {
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
           <ActionBar handleBack={() => router.push(`/staffs?currentPage=${router.query.current_page}`)}>
+            {userPermissions && userPermissions.staffs_permissions.write && (
+              <Button
+                title="Edit Account"
+                size="large"
+                startIcon={<EditIcon />}
+                onClick={() => {console.log('edit account')}}
+              />
+            )}
             {userPermissions && userPermissions.staffs_permissions.write && (
               <Button
                 title="Reset Password"
