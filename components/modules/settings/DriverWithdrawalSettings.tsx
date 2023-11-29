@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 interface Props {
     frequency: string;
     type: string;
+    limit: string;
 }
 
 const withdrawalTypes = [
@@ -24,13 +25,14 @@ const withdrawalTypes = [
     }
 ]
 
-const DriverWithdrawalSettings: FC<Props> = ({frequency, type}) => {
+const DriverWithdrawalSettings: FC<Props> = ({frequency, type, limit}) => {
     const [showSaveChanges, setShowSaveChanges] = useState(false)
 
       
     const initialValues = {
         withdrawal_type: type,
-        withdrawal_frequency: frequency 
+        withdrawal_frequency: frequency,
+        limit: limit
     };
 
     const [updateDriverSettings, { isLoading, isError, isSuccess, error }] =
@@ -40,7 +42,7 @@ const DriverWithdrawalSettings: FC<Props> = ({frequency, type}) => {
         initialValues: initialValues,
         onSubmit: (values) => {
             const driversSettingsData = {
-                withdrawal: {type: values.withdrawal_type, frequency: values.withdrawal_frequency}
+                withdrawal: {type: values.withdrawal_type, frequency: values.withdrawal_frequency, limit: values.limit}
             }
 
             updateDriverSettings(driversSettingsData)
@@ -65,7 +67,7 @@ const DriverWithdrawalSettings: FC<Props> = ({frequency, type}) => {
     useEffect(() => {
         if (isError) toast.error('Error While Updating Withdrawal Settings')
     }, [isError])
-
+    
     return (
         <>
             <h1 className="text-3xl font-bold">Driver Withdrawal Settings</h1>
@@ -111,6 +113,25 @@ const DriverWithdrawalSettings: FC<Props> = ({frequency, type}) => {
                                     
                                 </div>
                             </div>
+
+                            <div className="flex">
+                                <div className="w-2/4">
+                                    
+                                    <TextField
+                                        label="Minimum Amount In Account"
+                                        placeholder="Minimum Amount In Account"
+                                        {...formik.getFieldProps("limit")}
+                                        error={
+                                        formik.touched.limit ? formik.errors.limit : undefined
+                                        }
+                                    />
+                                    <div className="flex mt-2">
+                                        <p><InfoIcon /></p> 
+                                        <p className="ml-2 text-[#9A9A9A]"><small>The minimum amount a driver should have in their account to enable them operate</small></p>
+                                    </div>
+                                    
+                                </div>
+                            </div>
                         </div>
 
                         {
@@ -124,7 +145,7 @@ const DriverWithdrawalSettings: FC<Props> = ({frequency, type}) => {
                                     loading={isLoading}
                                     disabled={isLoading}
                                     onClick={() => {
-                                    if (formik.isValid) formik.submitForm();
+                                        if (formik.isValid) formik.submitForm();
                                     }}
                                 />
                             </div>

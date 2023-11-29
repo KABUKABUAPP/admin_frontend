@@ -72,7 +72,7 @@ const Dashboard: NextPage = () => {
           name={user ? capitalizeAllFirstLetters(user.full_name) : ""}
         />
 
-        <div className="pt-12 flex max-md:flex-col gap-7">
+        <div className="flex max-md:flex-col gap-7">
           <div className="w-[72%] max-md:w-full flex flex-col gap-12">
             <SummaryCardContainer />
             {userPermissions &&
