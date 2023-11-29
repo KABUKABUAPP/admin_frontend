@@ -64,6 +64,10 @@ const Settings: NextPage = () => {
     setCurrentView(nav.filter((i) => i.isActive === true)[0].title);
   }, [JSON.stringify(nav)]);
 
+  useEffect(() => {
+    if(driversSettings) console.log(driversSettings)
+  }, [driversSettings]);
+
   const { userPermissions } = useUserPermissions();
 
   const handleShowNavItemsBasedOnPermission = (
@@ -124,7 +128,7 @@ const Settings: NextPage = () => {
               {currentView === "Roles" && <Roles />}
               {currentView === "Promotions" && <Promotions />}
               {currentView === "SOS Contact List" && <SosContactList />}
-              {currentView === "Driver Withdrawal Settings" && <DriverWithdrawalSettings frequency={driversSettings.withdrawal.frequency.toString()} type={driversSettings.withdrawal.type.toString()} />}
+              {currentView === "Driver Withdrawal Settings" && <DriverWithdrawalSettings frequency={driversSettings.withdrawal.frequency.toString()} type={driversSettings.withdrawal.type.toString()} limit={driversSettings.withdrawal.limit.toString()} />}
               {currentView === "Driver Referral Settings" && <DriverReferralSettings frequency={driversSettings.referral_reward.frequency.toString()} amount={driversSettings.referral_reward.amount.toString()} />}
             </>
           }
