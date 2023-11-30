@@ -72,6 +72,7 @@ const ActionDocumentCard: FC<Props> = ({
                 className="!bg-transparent border !border-[#161616]"
                 startIcon={<CheckIcon fill="#161616" />}
                 onClick={() => {
+                  console.log('approve', docId)
                   if (docId) {
                     inspectDocument({ docId: id, status: "APPROVED" });
                   }

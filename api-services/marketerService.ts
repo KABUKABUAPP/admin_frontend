@@ -44,8 +44,8 @@ export const marketerApi = createApi({
   baseQuery: baseQueryWithLogoutOnTokenExpiration,
   endpoints: (build) => ({
     getMarketer: build.query<any, any>({
-      query: ({ limit, page }) => ({
-        url: `/admin/staff/get-my-referrals-data?limit=${limit}&page=${page}`
+      query: ({ limit, page, user_type }) => ({
+        url: `/admin/staff/get-my-referrals-data?limit=${limit}&page=${page}&user_type=${user_type}`
       }),
       transformResponse: (response: GetMarketerResponse) => {
         if (!response) return [];
@@ -54,8 +54,8 @@ export const marketerApi = createApi({
     }),
     
     getPerformanceChartData: build.query<any, any>({
-      query: ({ limit, page }) => ({
-        url: `/admin/staff/get-my-referrals-data?limit=${limit}&page=${page}`
+      query: ({ limit, page, user_type }) => ({
+        url: `/admin/staff/get-my-referrals-data?limit=${limit}&page=${page}&user_type=${user_type}`
       }),
       transformResponse: (response: GetMarketerResponse) => {
         if (!response) return [];
@@ -69,8 +69,8 @@ export const marketerApi = createApi({
     }),
 
     getOnboardedDrivers: build.query<any, any>({
-      query: ({ limit, page }) => ({
-        url: `/admin/staff/get-my-referrals-data?limit=${limit}&page=${page}`
+      query: ({ limit, page, user_type }) => ({
+        url: `/admin/staff/get-my-referrals-data?limit=${limit}&page=${page}&user_type=${user_type}`
       }),
       transformResponse: (response: GetMarketerResponse) => {
         if (!response) return [];
