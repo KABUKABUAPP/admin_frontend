@@ -10,7 +10,13 @@ const MarketerMainView = () => {
     const [onboardedDaily, setOnboardedDaily] = useState<string>('0')
     const [onboardedWeekly, setOnboardedWeekly] = useState<string>('0')
     const [marketerEarnings, setMarketerEarnings] = useState<string>('0')
-    const [chartFilterVal, setChartFilterVal] = useState<string>("7_days");;
+    const [chartFilterVal, setChartFilterVal] = useState<string>("7_days");
+    const [userType, setUserType] = useState('driver');
+    const [userTypeText, setUserTypeText] = useState('Drivers');
+    const [summaryView, setSummaryView] = useState(true)
+    const driverBold = summaryView ? 'font-bold' : '';
+    const riderBold = !summaryView ? 'font-bold' : '';
+    
     const handleFilterChart = (val: string | Number) => {
       setChartFilterVal(val.toString());
     };
@@ -27,13 +33,13 @@ const MarketerMainView = () => {
         isError: chartError,
         refetch: reloadChart,
     } = useGetPerformanceChartDataQuery(
-        { limit: 10, page: 1 },
+        { limit: 10, page: 1, user_type: userType },
         { refetchOnReconnect: true, refetchOnMountOrArgChange: true }
     );
     const {
         data: marketerData, isLoading, isError, refetch
       } = useGetMarketerQuery(
-        {limit: 10, page: 1},
+        {limit: 10, page: 1, user_type: userType},
         { refetchOnReconnect: true, refetchOnMountOrArgChange: true }
       );
 
@@ -48,6 +54,21 @@ const MarketerMainView = () => {
     return (
       <div className="flex flex-col md:flex-row">
         <div className="md:w-3/4 w-full p-4">
+            
+            <div className="text-md flex">
+            <p className={`cursor-pointer mx-5 ${driverBold}`} onClick={() => {
+                setSummaryView(true);
+                setUserTypeText('Drivers')
+                setUserType('driver')
+            }}>Driver</p>
+            <p>|</p>
+            <p className={`cursor-pointer mx-5 ${riderBold}`} onClick={() => {
+                setSummaryView(false);
+                setUserTypeText('Riders')
+                setUserType('rider')
+            }}>Rider</p>
+            </div>
+
             <div className="flex flex-col md:flex-row">
                 <div className="md:w-2/6 w-full p-4">
                     <a href="#" className="text-black bg-white" style={{display: 'flex', borderRadius: '1rem'}}>
@@ -56,7 +77,7 @@ const MarketerMainView = () => {
                         </span>
                         <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
                         <b>{onboardedDaily}</b><br />
-                        <small>Drivers Onboarded Today</small>
+                        <small>{userTypeText} Onboarded Today</small>
                         </span>
                     </a>
                 </div>
@@ -67,7 +88,7 @@ const MarketerMainView = () => {
                         </span>
                         <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
                         <b>{onboardedWeekly}</b><br />
-                        <small>Drivers Onboarded This Week</small>
+                        <small>{userTypeText} Onboarded This Week</small>
                         </span>
                     </a>
                 </div>
@@ -95,7 +116,7 @@ const MarketerMainView = () => {
         </div>
   
         <div className="md:w-1/4 w-full p-4">
-          <OnboardDriversTable />
+          <OnboardDriversTable type={userTypeText} />
         </div>
       </div>
     );

@@ -11,12 +11,15 @@ interface Props {
   loading: boolean;
   error: boolean;
   refetch: () => void;
+  type?: string;
 }
 
-const OnboardDriversTableBody: FC<Props> = ({ data, loading, error, refetch }) => {
+const OnboardDriversTableBody: FC<Props> = ({ data, loading, error, refetch, type }) => {
   const viewState = !loading && !error && data;
   const loadingState = loading && !data && !error;
   const errorState = !loading && !data && error;
+
+  console.log('type in body', type)
 
   return (
     <div

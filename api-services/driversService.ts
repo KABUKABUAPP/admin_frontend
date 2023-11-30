@@ -120,6 +120,7 @@ export const driversApi = createApi({
         else {
           const { data } = response;
           
+          console.log('data', data)
           const mapped: MappedViewDriver = {
             driverInfo: {
               image: data?.driver?.user?.profile_image,
@@ -161,7 +162,7 @@ export const driversApi = createApi({
                 return {
                   title: doc?.title,
                   docImage: doc?.url,
-                  docId: doc?.doc_number,
+                  docId: doc?._id,
                   status: doc?.status,
                   id: doc?._id,
                 };

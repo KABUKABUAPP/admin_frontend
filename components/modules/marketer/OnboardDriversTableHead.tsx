@@ -3,7 +3,12 @@ import Link from "next/link";
 
 import ArrowUpRight from "@/components/icons/ArrowUpRight";
 
-const OnboardDriversTableHead: FC = () => {
+interface Props {
+  type?: string;
+}
+
+
+const OnboardDriversTableHead: FC<Props> = ({ type }) => {
 
   return (
     <div
@@ -13,7 +18,7 @@ const OnboardDriversTableHead: FC = () => {
     px-3 py-4
     `}
     >
-      <p className="font-bold text-xs">Drivers Onboarded</p>
+      <p className="font-bold text-xs">{type} Onboarded</p>
     </div>
   );
 };
