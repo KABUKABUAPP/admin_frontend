@@ -26,7 +26,6 @@ const Driver: NextPage = () => {
   const { setModalContent } = useModalContext();
 
   const { id } = router.query;
-  console.log('router', router.query.inspection_code)
   const inspectionCode = router.query.inspection_code;
 
   const { data, isLoading, isError, refetch } = useViewDriverQuery(
