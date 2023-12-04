@@ -1,17 +1,18 @@
-import React, { FC } from "react";
+import React, { FC, useState, useEffect } from "react";
 
 import { StaffsTableData } from "@/models/Staffs";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { capitalizeAllFirstLetters } from "@/utils";
+import { useGetNigerianCityByStateQuery, useGetNigerianStatesQuery } from "@/api-services/geoLocationService";
 
 interface Props {
-  data: StaffsTableData;
+  data: any;
   currentPage: any;
 }
 
 const StaffTableBodyRow: FC<Props> = ({
-  data: { staffId, fullName, role, location, status, id },
+  data: { staffId, fullName, role, location, status, id, street, city, state },
   currentPage
 }) => {
   const router = useRouter();
