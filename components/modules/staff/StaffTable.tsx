@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 
 import StaffTableBodyRow from "./StaffTableBodyRow";
 import StaffTableHeadRow from "./StaffTableHeadRow";
@@ -38,6 +38,7 @@ const headCellData = [
 ];
 
 const StaffTable:FC<Props> = ({ data, isError, isLoading, refetch, headBg, currentPage }) => {
+
   return (
     <EnhancedTable
       TableHeadComponent={<StaffTableHeadRow headCellData={headCellData} />}

@@ -24,6 +24,8 @@ import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
 import TrashIcon from "@/components/icons/TrashIcon";
 import EditIcon from "@/components/icons/EditIcon";
+import Card from "@/components/common/Card";
+import EditStaffModal from "@/components/modules/staff/EditStaffModal";
 
 const Staff: NextPage = () => {
   const { setModalContent } = useModalContext();
@@ -77,12 +79,16 @@ const Staff: NextPage = () => {
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
           <ActionBar handleBack={() => router.push(`/staffs?currentPage=${router.query.current_page}`)}>
-            {userPermissions && userPermissions.staffs_permissions.write && (
+            {data && userPermissions && userPermissions.staffs_permissions.write && (
               <Button
                 title="Edit Account"
                 size="large"
                 startIcon={<EditIcon />}
-                onClick={() => {console.log('edit account')}}
+                variant="outlined"
+                className="!text-[#000] border-[#FFBF00]"
+                onClick={() => {
+                  setModalContent(<EditStaffModal currentData={data?.userInfo} handleClose={() => setModalContent(null)} />)
+                }}
               />
             )}
             {userPermissions && userPermissions.staffs_permissions.write && (
