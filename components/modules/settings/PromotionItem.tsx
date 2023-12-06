@@ -1,8 +1,9 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 
 interface Props {
   handleClick?: () => void;
   data: {
+    amount_type?: string;
     promoCode?: string;
     amount?: number;
     status?: boolean;
@@ -10,7 +11,8 @@ interface Props {
     expiryDate?: string;
     totalSubscribers: number;
     promotionType?: string;
-    id: string;
+    id?: string;
+    name?: string;
   };
 }
 
@@ -26,10 +28,13 @@ const PromotionItem: FC<Props> = ({ handleClick, data }) => {
         style={{ flex: 1 }}
         className="border-r border-r-[#1FD11B] flex flex-col gap-1"
       >
+        {data.name && (
+          <p className="text-2xl font-semibold">{data.name}</p>
+        )}
         {data.promoCode && (
           <p className="text-2xl font-semibold">{data.promoCode}</p>
         )}
-        {data.amount && <p className="text-base font-medium">₦{data.amount}</p>}
+        {data.amount && <p className="text-base font-medium">{data.amount_type === 'fixed' && '₦'}{data.amount}{data.amount_type === 'percentage' && '%'}</p>}
         {data.status && <p className="text-sm font-medium">{data.status}</p>}
         {data.expiryDate && data.createdDate && (
           <p className="text-sm break-words text-[#9A9A9A]">

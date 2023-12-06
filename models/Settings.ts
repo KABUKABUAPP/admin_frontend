@@ -116,6 +116,8 @@ export interface ViewPromotionResponse {
   status: string;
   data: {
     promotion: {
+      amount: any;
+      amount_type: any;
       _id: string;
       name: string;
       audience: string;

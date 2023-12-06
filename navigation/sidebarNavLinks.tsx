@@ -10,6 +10,7 @@ import UserGroupIcon from "@/components/icons/UserGroupIcon";
 import WithdrawalIcon from "@/components/icons/WithdrawalIcon";
 import BuildingIcon from "@/components/icons/BuildingIcon";
 import SettingsIcon from "@/components/icons/SettingsIcon";
+import MessageIcon from "@/components/icons/MessageIcon";
 
 const sidebarNavLinks: SidebarLink[] = [
   {
@@ -78,6 +79,12 @@ const sidebarNavLinks: SidebarLink[] = [
     link: "/staffs",
     isActive: false,
     icon: <UserGroupIcon />,
+  },
+  {
+    title: "Messages",
+    link: "/messages",
+    isActive: false,
+    icon: <MessageIcon />,
   },
   {
     title: "Settings",

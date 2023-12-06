@@ -157,6 +157,10 @@ export const routePermissionsMapping: {
     permissionLabel: 'staffs_permissions'
   },
   {
+    route: '/messages',
+    permissionLabel: ''
+  },
+  {
     route: '/settings',
     permissionLabel: ''
   },
