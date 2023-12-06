@@ -64,10 +64,6 @@ const Settings: NextPage = () => {
     setCurrentView(nav.filter((i) => i.isActive === true)[0].title);
   }, [JSON.stringify(nav)]);
 
-  useEffect(() => {
-    if(driversSettings) console.log(driversSettings)
-  }, [driversSettings]);
-
   const { userPermissions } = useUserPermissions();
 
   const handleShowNavItemsBasedOnPermission = (

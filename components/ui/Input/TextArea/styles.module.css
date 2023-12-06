@@ -1,0 +1,20 @@
+
+.root {
+    @apply w-full bg-[#F1F1F1] border-0 outline-0 p-2.5 rounded-lg text-xs
+}
+
+.root::placeholder{
+    @apply text-[#9A9A9A] text-xs
+}
+
+.error {
+    @apply border border-[#dc3545]
+}
+
+.startIconPadding {
+    @apply !pl-10
+}
+
+.endIconPadding {
+    @apply !pr-10
+}

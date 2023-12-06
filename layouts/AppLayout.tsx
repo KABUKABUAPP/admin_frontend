@@ -62,7 +62,7 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
     if (userPermissions) {
       const acccessibleLinks = routePermissionsMapping
         .filter((item) => {
-          if (item.route === "/settings") {
+          if (item.route === "/settings" || item.route === "/messages") {
             return true;
           } else {
             if (
@@ -71,7 +71,7 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
             ) {
               return true;
             }
-            if (item.route === "/settings") {
+            if (item.route === "/settings" || item.route === "/messages") {
               return true;
             } else {
               return false;
