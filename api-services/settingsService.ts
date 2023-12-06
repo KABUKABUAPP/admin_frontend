@@ -92,6 +92,7 @@ export const settingsApi = createApi({
               expiryDate: res.expiry_date,
               totalSubscribers: res.total_subscribers,
               id: res._id,
+              name: res.name
             };
           });
 
@@ -118,6 +119,9 @@ export const settingsApi = createApi({
               response?.data?.subscribers?.pagination?.totalCount,
             promotionType: response?.data?.promotion?.auto_or_manual,
             id: response?.data?.promotion?._id,
+            name: response?.data?.promotion?.name,
+            amount_type: response?.data?.promotion?.amount_type,
+            amount: response?.data?.promotion?.value
           };
 
           const mappedSubscribers = response.data.subscribers.data.map(

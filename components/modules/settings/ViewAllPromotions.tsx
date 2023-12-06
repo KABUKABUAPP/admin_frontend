@@ -1,6 +1,6 @@
 import Divider from "@/components/common/Divider";
 import Button from "@/components/ui/Button/Button";
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import PromotionItem from "./PromotionItem";
 import { useViewAllPromosQuery } from "@/api-services/settingsService";
 import Loader from "@/components/ui/Loader/Loader";
