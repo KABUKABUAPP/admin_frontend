@@ -72,7 +72,10 @@ export const staffApi = createApi({
                   ? "active"
                   : "inactive"
               }`,
-              id: staff?._id
+              id: staff?._id,
+              street: staff?.address?.street,
+              city: staff?.address?.city,
+              state: staff?.address?.state
             };
           });
 
@@ -114,7 +117,9 @@ export const staffApi = createApi({
             address: response?.data?.address?.city,
             role: response?.data?.role.name,
             image: response?.data?.profile_image,
-            referral_code: response?.data?.referral_code
+            referral_code: response?.data?.referral_code,
+            addressObj: response?.data?.address,
+            roleId: response?.data?.role._id
           };
 
           const isBlocked = response?.data?.isBlocked;
@@ -143,6 +148,13 @@ export const staffApi = createApi({
         method: "PUT",
       }),
     }),
+    editStaff: build.mutation<any, any>({
+      query: ({staffId, body}) => ({
+        url: `admin/staff/edit/${staffId}`,
+        method: "PUT",
+        body
+      })
+    })
   }),
 });
 
@@ -152,4 +164,5 @@ export const {
   useDisableStaffMutation,
   useViewStaffQuery,
   useResetStaffPasswordMutation,
+  useEditStaffMutation
 } = staffApi;
