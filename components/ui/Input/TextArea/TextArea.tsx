@@ -1,8 +1,9 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 
 import s from "./styles.module.css";
 
 import cn from "classnames";
+import { toast } from "react-toastify";
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
@@ -13,6 +14,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const TextArea: React.FC<Props> = (props) => {
+    const [messageBody, setMessageBody] = useState('')
   const { label, error, className, startIcon, endIcon, ...rest } = props;
 
   const rootClassName = cn(
@@ -32,7 +34,20 @@ const TextArea: React.FC<Props> = (props) => {
       )}
       <div className="w-full relative">
         {/*<input {...rest} className={rootClassName} />*/}
-        <textarea name="" id="" cols={85} rows={5}></textarea>
+        <textarea 
+            name="" 
+            id="" 
+            cols={85} 
+            rows={5} 
+            placeholder="Content here" 
+            className="text-sm pt-2 pl-2 bg-[#F1F1F1] w-[100%]"
+            value={messageBody}
+            onChange={(e) => {
+                if (messageBody.length < 500) setMessageBody(e.target.value);
+                if (messageBody.length >= 500) toast.error('Maximum allowed message body')
+            }}>
+        </textarea>
+        <p className="text-sm font-bold">Word Count: {messageBody.length}/500</p>
         {startIcon && !endIcon && (
           <span className="absolute top-2/4 -translate-y-1/2 left-2 cursor-pointer">
             {startIcon}

@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import AppLayout from "@/layouts/AppLayout";
 import { useRouter } from "next/router";
@@ -13,6 +13,7 @@ import SelectField from "@/components/ui/Input/SelectField";
 import Button from "@/components/ui/Button/Button";
 import { toast } from "react-toastify";
 import TextArea from "@/components/ui/Input/TextArea/TextArea";
+import { useBroadcastMessageMutation } from "@/api-services/messageService";
 
 const initialValues = {
     message_type: "",
@@ -22,18 +23,62 @@ const initialValues = {
     body: ""
 };
 
+const getFormattedTimeDate = (utcDate: any) => {
+    const theDate = new Date(utcDate);
+    const year = theDate.getFullYear();
+    const month = String(theDate.getMonth() + 1).padStart(2, '0');
+    const day = String(theDate.getDate()).padStart(2, '0');
+    
+    const formattedDate = `${year}-${month}-${day}`;
+    const formattedTime = `${String(theDate.getHours()).padStart(2, '0')}:${String(theDate.getMinutes()).padStart(2, '0')}`; //:${String(theDate.getSeconds()).padStart(2, '0')}`;
+  
+    return { formattedDate, formattedTime }
+}
+
 const Messages: NextPage = () => {
   const router = useRouter();
   const [messageBody, setMessageBody] = useState('')
 
   const { userPermissions } = useUserPermissions();
+  
+  const [broadcastMessage, { isLoading, isError, isSuccess, error }] =
+    useBroadcastMessageMutation();
 
   const formik = useFormik({
     initialValues,
     onSubmit: (values) => {
-        console.log(values)
+        values.body = messageBody
+
+        const theDateTime = new Date()
+
+        const theMessage = {
+            subject: values.subject,
+            content: values.body,
+            audience: values.audience,
+            type: values.message_type,
+            medium: values.medium,
+            scheduled_day: getFormattedTimeDate(theDateTime.toISOString()).formattedDate,
+            scheduled_time: getFormattedTimeDate(theDateTime.toISOString()).formattedTime
+        }
+        broadcastMessage(theMessage)
     }
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Messages broadcasted successfully");
+      router.push("/messages");
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    if (isError) {
+      if (error) {
+        toast.error('Error encountered');
+      }
+      
+    }
+  }, [isError]);
 
   const messageType = [
     {
@@ -57,6 +102,17 @@ const Messages: NextPage = () => {
     }
   ]
 
+  const messageMedium = [
+    {
+        label: 'Email',
+        value: 'email'
+    },
+    {
+        label: 'Push Notification',
+        value: 'push_notification'
+    }
+  ]
+
 
   return (
     <>
@@ -72,6 +128,7 @@ const Messages: NextPage = () => {
                 <div className="flex mt-6 w-[100%]">
                     <div className="w-2/5 mr-3">
                         <Card bg="#FFF" rounded="rounded-md" height="60vh">
+                            <div className="mt-3">
                             <SelectField
                                 label="Message Type"
                                 disabled={!messageType}
@@ -87,7 +144,9 @@ const Messages: NextPage = () => {
                                 {...formik.getFieldProps("message_type")}
                                 error={formik.touched.message_type ? formik.errors.message_type : undefined}
                             />
+                            </div>
                             
+                            <div className="mt-3">
                             <SelectField
                                 label="Audience"
                                 disabled={!messageAudience}
@@ -103,20 +162,30 @@ const Messages: NextPage = () => {
                                 {...formik.getFieldProps("audience")}
                                 error={formik.touched.audience ? formik.errors.audience : undefined}
                             />
-
-                            <TextField
+                            </div>
+                            
+                            <div className="mt-3">
+                            <SelectField
                                 label="Medium"
-                                placeholder="Medium"
-                                {...formik.getFieldProps("medium")}
-                                error={
-                                formik.touched.medium ? formik.errors.medium : undefined
+                                disabled={!messageMedium}
+                                options={
+                                !messageMedium
+                                    ? []
+                                    : messageMedium.map((i) => ({
+                                        label: i.label,
+                                        value: i.value,
+                                    }))
                                 }
-                                disabled={true}
+                                placeholder="Message Medium"
+                                {...formik.getFieldProps("medium")}
+                                error={formik.touched.medium ? formik.errors.medium : undefined}
                             />
+                            </div>
                         </Card>
                     </div>
                     <div className="w-3/5 ml-3">
                         <Card bg="#FFF" rounded="rounded-md" height="60vh">
+                            <div className="mt-3">
                             <TextField
                                 label="Subject"
                                 placeholder="Subject here"
@@ -125,20 +194,26 @@ const Messages: NextPage = () => {
                                 formik.touched.subject ? formik.errors.subject : undefined
                                 }
                             />
+                            </div>
 
-                            <TextArea
-                                label="Message"
-                                placeholder="Message here"
+                            <div className="mt-3">
+                            <textarea  
+                                id="" 
+                                cols={85} 
+                                rows={5} 
+                                placeholder="Content here" 
+                                className="text-sm pt-2 pl-2 bg-[#F1F1F1] w-[100%]"
                                 {...formik.getFieldProps("body")}
-                                error={
-                                formik.touched.body ? formik.errors.body : undefined
-                                }
+                                //error={
+                                //formik.touched.body ? formik.errors.body : undefined
+                                //}
+                                maxLength={500}
                                 value={messageBody}
                                 onChange={(e) => {
-                                    if (messageBody.length < 500) setMessageBody(e.target.value);
-                                    if (messageBody.length >= 500) toast.error('Maximum allowed message body')
-                                }}
-                            />
+                                    setMessageBody(e.target.value);
+                                }}>
+                            </textarea>
+                            </div>
                             <p className="text-sm font-bold">Word Count: {messageBody.length}/500</p>
 
                             <div className="flex justify-end">
@@ -147,8 +222,8 @@ const Messages: NextPage = () => {
                                     className="!text-[16px] mt-6"
                                     size="large"
                                     type="submit"
-                                    disabled={false}
-                                    loading={false}
+                                    disabled={isLoading}
+                                    loading={isLoading}
                                 />
                             </div>
                             
