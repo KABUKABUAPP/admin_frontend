@@ -102,6 +102,10 @@ const Drivers: NextPage = () => {
     if (activeOption) setCarOwner(carOwnerObj[activeOption]);
   }, [JSON.stringify(driverTypeOptions)]);
 
+  useEffect(() => {
+    if (drivers) console.log('Phunsukh Wangdu', drivers)
+  }, [drivers])
+
   return (
     <>
       <AppHead title="Kabukabu | Drivers" />

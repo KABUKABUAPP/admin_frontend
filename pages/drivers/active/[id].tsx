@@ -29,6 +29,37 @@ import AppHead from "@/components/common/AppHead";
 import { capitalizeAllFirstLetters } from "@/utils";
 import Card from "@/components/common/Card";
 
+function timeAgo(timeString: any) {
+  const currentDate = new Date();
+  const pastDate = new Date(timeString);
+  
+  const timeDifference = currentDate.getTime() - pastDate.getTime();
+  const seconds = Math.floor(timeDifference / 1000);
+  
+  if (seconds < 60) {
+    return `${seconds} seconds ago`;
+  } else if (seconds < 3600) {
+    const minutes = Math.floor(seconds / 60);
+    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+  } else if (seconds < 86400) {
+    const hours = Math.floor(seconds / 3600);
+    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  } else if (seconds < 604800) {
+    const days = Math.floor(seconds / 86400);
+    return `${days} day${days > 1 ? 's' : ''} ago`;
+  } else if (seconds < 2629746) {
+    const weeks = Math.floor(seconds / 604800);
+    return `${weeks} week${weeks > 1 ? 's' : ''} ago`;
+  } else if (seconds < 31556952) {
+    const months = Math.floor(seconds / 2629746);
+    return `${months} month${months > 1 ? 's' : ''} ago`;
+  } else {
+    const years = Math.floor(seconds / 31556952);
+    return `${years} year${years > 1 ? 's' : ''} ago`;
+  }
+}
+
+
 const Driver: NextPage = () => {
   const router = useRouter();
 
@@ -76,10 +107,6 @@ const Driver: NextPage = () => {
       if (status) toast.error(status);
     }
   }, [unblockError]);
-
-  useEffect(() => {
-    if (data) console.log('Phunsukh Wangdu', data)
-  }, [data])
 
   const { userPermissions } = useUserPermissions();
   const currentPageUrl = router.query.current_page ? `currentPage=${router.query.current_page}` : '';
@@ -138,10 +165,13 @@ const Driver: NextPage = () => {
                   {
                     <div className="my-3">
                     <Card>
-                    <div className="flex justify-end py-2">
-                      <p><b>User Status: </b>{capitalizeAllFirstLetters(data.onlineStatus)}</p>
-                      {data.onlineStatus === 'online' ? <div className="mt-1 mx-2" style={{backgroundColor: '#6BBE66', border: '1px solid #6BBE66', borderRadius: '50%', height: '2vh', width: '1vw'}}></div> : <div className="mt-1 mx-2" style={{backgroundColor: '#9A9A9A', border: '1px solid #9A9A9A', borderRadius: '50%', height: '2vh', width: '1vw'}}></div>}
-                    </div>
+                      <div className="flex justify-end py-2">
+                        <p><b>User Status: </b>{capitalizeAllFirstLetters(data.onlineStatus)}</p>
+                        {data.onlineStatus === 'online' ? <div className="mt-1 mx-2" style={{backgroundColor: '#6BBE66', border: '1px solid #6BBE66', borderRadius: '50%', height: '2vh', width: '1vw'}}></div> : <div className="mt-1 mx-2" style={{backgroundColor: '#9A9A9A', border: '1px solid #9A9A9A', borderRadius: '50%', height: '2vh', width: '1vw'}}></div>}
+                      </div>
+                      <div className="flex justify-end py-2">
+                        {data.onlineStatus === 'online' ?  `Active since ${timeAgo(data.onlineSwitch)}` : `Last active ${timeAgo(data.offlineSwitch)}`}
+                      </div>
                     </Card>
                     </div>
                   }

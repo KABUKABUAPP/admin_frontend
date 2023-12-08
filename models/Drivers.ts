@@ -12,6 +12,7 @@ export interface DriversTableBodyData {
   dateDeleted?: string;
   deletionReason?: string;
   inspectionCode?: string;
+  onlineStatus: any;
 }
 
 export interface DriversMappedResponse {
@@ -27,6 +28,7 @@ export interface Driver {
   inspection_code: any;
   _id: string;
   user: {
+    online_status: any;
     _id: string;
     full_name: string;
     total_trips: 0;
@@ -88,6 +90,8 @@ export interface ViewDriverResponse {
     driver: {
       _id: string;
       user: {
+        offline_switch_date: any;
+        online_switch_date: any;
         online_status: any;
         guarantor: {
           name: string;
@@ -204,6 +208,8 @@ export interface MappedViewDriver {
     documents: MappedDocument[];
   };
   onlineStatus: any;
+  onlineSwitch: any;
+  offlineSwitch: any;
 }
 
 export interface ApproveDeclineDriverQuery {
