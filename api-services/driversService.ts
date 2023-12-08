@@ -120,7 +120,6 @@ export const driversApi = createApi({
         else {
           const { data } = response;
           
-          console.log('data', data)
           const mapped: MappedViewDriver = {
             driverInfo: {
               image: data?.driver?.user?.profile_image,
@@ -168,6 +167,7 @@ export const driversApi = createApi({
                 };
               }),
             },
+            onlineStatus: data?.driver?.user?.online_status
           };
 
           return mapped;

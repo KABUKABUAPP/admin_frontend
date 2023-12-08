@@ -88,6 +88,7 @@ export interface ViewDriverResponse {
     driver: {
       _id: string;
       user: {
+        online_status: any;
         guarantor: {
           name: string;
           relationship: string;
@@ -202,6 +203,7 @@ export interface MappedViewDriver {
     totalDocs: number;
     documents: MappedDocument[];
   };
+  onlineStatus: any;
 }
 
 export interface ApproveDeclineDriverQuery {
