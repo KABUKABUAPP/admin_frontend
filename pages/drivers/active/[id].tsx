@@ -26,6 +26,8 @@ import { useModalContext } from "@/contexts/ModalContext";
 import { toast } from "react-toastify";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
+import { capitalizeAllFirstLetters } from "@/utils";
+import Card from "@/components/common/Card";
 
 const Driver: NextPage = () => {
   const router = useRouter();
@@ -76,8 +78,8 @@ const Driver: NextPage = () => {
   }, [unblockError]);
 
   useEffect(() => {
-    if (tripHistory) console.log('Phunsukh Wangdu', tripHistory)
-  }, [tripHistory])
+    if (data) console.log('Phunsukh Wangdu', data)
+  }, [data])
 
   const { userPermissions } = useUserPermissions();
   const currentPageUrl = router.query.current_page ? `currentPage=${router.query.current_page}` : '';
@@ -133,6 +135,16 @@ const Driver: NextPage = () => {
             <ViewDriverLayout
               secondRow={
                 <>
+                  {
+                    <div className="my-3">
+                    <Card>
+                    <div className="flex justify-end py-2">
+                      <p><b>User Status: </b>{capitalizeAllFirstLetters(data.onlineStatus)}</p>
+                      {data.onlineStatus === 'online' ? <div className="mt-1 mx-2" style={{backgroundColor: '#6BBE66', border: '1px solid #6BBE66', borderRadius: '50%', height: '2vh', width: '1vw'}}></div> : <div className="mt-1 mx-2" style={{backgroundColor: '#9A9A9A', border: '1px solid #9A9A9A', borderRadius: '50%', height: '2vh', width: '1vw'}}></div>}
+                    </div>
+                    </Card>
+                    </div>
+                  }
                   {userPermissions &&
                     (userPermissions.trips_permissions.read ||
                       userPermissions.trips_permissions.write) &&

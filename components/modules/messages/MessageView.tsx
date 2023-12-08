@@ -43,10 +43,6 @@ const MessageView: FC = () => {
     { limit: pageLimit, page: pageNumber, type: messageType }
   );
 
-  useEffect(() => {
-    if(messages) console.log('wagyu', messages)
-  }, [messages])
-
   const handleSearch = async (a: string) => {
     setSearchValue(a);
     console.log(a);
