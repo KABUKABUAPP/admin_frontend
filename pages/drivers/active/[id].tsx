@@ -169,9 +169,10 @@ const Driver: NextPage = () => {
                         <p><b>User Status: </b>{capitalizeAllFirstLetters(data.onlineStatus)}</p>
                         {data.onlineStatus === 'online' ? <div className="mt-1 mx-2" style={{backgroundColor: '#6BBE66', border: '1px solid #6BBE66', borderRadius: '50%', height: '2vh', width: '1vw'}}></div> : <div className="mt-1 mx-2" style={{backgroundColor: '#9A9A9A', border: '1px solid #9A9A9A', borderRadius: '50%', height: '2vh', width: '1vw'}}></div>}
                       </div>
+                      {(data.onlineSwitch || data.offlineSwitch) && 
                       <div className="flex justify-end py-2">
                         {data.onlineStatus === 'online' ?  `Active since ${timeAgo(data.onlineSwitch)}` : `Last active ${timeAgo(data.offlineSwitch)}`}
-                      </div>
+                      </div>}
                     </Card>
                     </div>
                   }
