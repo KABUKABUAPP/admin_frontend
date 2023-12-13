@@ -15,12 +15,22 @@ import { toast } from "react-toastify";
 import TextArea from "@/components/ui/Input/TextArea/TextArea";
 import { useBroadcastMessageMutation } from "@/api-services/messageService";
 
+function countWords(sentence: string) {
+    // Using regex to split the sentence by spaces and count the number of elements in the resulting array
+    const wordsArray = sentence.trim().split(/\s+/);
+    return wordsArray.length;
+}
+
 const initialValues = {
     message_type: "",
     audience: "",
-    medium: "Push Notification",
+    medium: "",
     subject: "",
-    body: ""
+    body: "",
+    hours: "",
+    minutes: "",
+    scheduledDate: "",
+    timePeriod: ""
 };
 
 const getFormattedTimeDate = (utcDate: any) => {
@@ -38,6 +48,8 @@ const getFormattedTimeDate = (utcDate: any) => {
 const Messages: NextPage = () => {
   const router = useRouter();
   const [messageBody, setMessageBody] = useState('')
+  const [messageTypeState, setMessageTypeState] = useState('instant')
+  const [dateTimeValue, setDateTimeValue] = useState(new Date());
 
   const { userPermissions } = useUserPermissions();
   
@@ -47,7 +59,12 @@ const Messages: NextPage = () => {
   const formik = useFormik({
     initialValues,
     onSubmit: (values) => {
-        values.body = messageBody
+        values.body = messageBody;
+        values.message_type = messageTypeState;
+
+        if (values.timePeriod === 'pm') {
+            values.hours = (parseInt(values.hours) + 12).toString();
+        }
 
         const theDateTime = new Date()
 
@@ -57,9 +74,10 @@ const Messages: NextPage = () => {
             audience: values.audience,
             type: values.message_type,
             medium: values.medium,
-            scheduled_day: getFormattedTimeDate(theDateTime.toISOString()).formattedDate,
-            scheduled_time: getFormattedTimeDate(theDateTime.toISOString()).formattedTime
+            scheduled_day: values.message_type === 'instant' ? getFormattedTimeDate(theDateTime.toISOString()).formattedDate : values.scheduledDate,
+            scheduled_time: values.message_type === 'instant' ? getFormattedTimeDate(theDateTime.toISOString()).formattedTime : `${values.hours}:${values.minutes}`
         }
+
         broadcastMessage(theMessage)
     }
   });
@@ -67,7 +85,7 @@ const Messages: NextPage = () => {
   useEffect(() => {
     if (isSuccess) {
       toast.success("Messages broadcasted successfully");
-      router.push("/messages");
+      window.location.href = "/messages";
     }
   }, [isSuccess]);
 
@@ -103,10 +121,10 @@ const Messages: NextPage = () => {
   ]
 
   const messageMedium = [
-    {
+    /*{
         label: 'Email',
         value: 'email'
-    },
+    },*/
     {
         label: 'Push Notification',
         value: 'push_notification'
@@ -143,9 +161,68 @@ const Messages: NextPage = () => {
                                 placeholder="Message Type"
                                 {...formik.getFieldProps("message_type")}
                                 error={formik.touched.message_type ? formik.errors.message_type : undefined}
+                                value={messageTypeState}
+                                onChange={(e) => {
+                                    setMessageTypeState(e.target.value)
+                                }}
                             />
                             </div>
                             
+                            {
+                                messageTypeState === 'scheduled' &&
+                                <div className="mt-3 flex">
+                                    <div className="w-3/6 px-2">
+                                        <TextField
+                                            label="Scheduled Date"
+                                            type="date"
+                                            {...formik.getFieldProps("scheduledDate")}
+                                            error={
+                                            formik.touched.scheduledDate ? formik.errors.scheduledDate : undefined
+                                            }
+                                        />
+                                    </div>
+                                    <div className="w-1/6 px-2">
+                                        <TextField
+                                            label="Hours"
+                                            placeholder="Hours here"
+                                            {...formik.getFieldProps("hours")}
+                                            error={
+                                            formik.touched.hours ? formik.errors.hours : undefined
+                                            }
+                                        />
+                                    </div>
+                                    <div className="w-1/6 px-2">
+                                        <TextField
+                                            label="Minutes"
+                                            placeholder="Minutes here"
+                                            {...formik.getFieldProps("minutes")}
+                                            error={
+                                            formik.touched.minutes ? formik.errors.minutes : undefined
+                                            }
+                                        />
+                                    </div>
+                                    <div className="w-1/6 px-2">
+                                        <SelectField
+                                            label="AM/PM"
+                                            disabled={false}
+                                            options={[
+                                                {
+                                                    label: 'AM',
+                                                    value: 'am',
+                                                },
+                                                {
+                                                    label: 'PM',
+                                                    value: 'pm',
+                                                }
+                                            ]}
+                                            placeholder="AM/PM"
+                                            {...formik.getFieldProps("timePeriod")}
+                                            error={formik.touched.timePeriod ? formik.errors.timePeriod : undefined}
+                                        />
+                                    </div>
+                                </div>
+                            }
+
                             <div className="mt-3">
                             <SelectField
                                 label="Audience"
@@ -207,14 +284,14 @@ const Messages: NextPage = () => {
                                 //error={
                                 //formik.touched.body ? formik.errors.body : undefined
                                 //}
-                                maxLength={500}
+                                maxLength={100}
                                 value={messageBody}
                                 onChange={(e) => {
                                     setMessageBody(e.target.value);
                                 }}>
                             </textarea>
                             </div>
-                            <p className="text-sm font-bold">Word Count: {messageBody.length}/500</p>
+                            <p className="text-sm font-bold">Word Count: {messageBody.length}/100</p>
 
                             <div className="flex justify-end">
                                 <Button
