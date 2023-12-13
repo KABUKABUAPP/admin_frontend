@@ -37,8 +37,17 @@ const Drivers: NextPage = () => {
     { label: "Blocked", value: "blocked", default: false },
   ];
 
+  const onlineStatusOptions = [
+    { label: "Offline", value: "offline", default: false },
+    { label: "Online", value: "online", default: true }
+  ];
+
   const [statusFilter, setStatusFilter] = useState<string>(
     statusFilterOptions.find((opt) => opt.default === true)?.value || "active"
+  );
+
+  const [onlineStatusOption, setOnlineStatusOption] = useState<string>(
+    onlineStatusOptions.find((opt) => opt.default === true)?.value || "online"
   );
 
   const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
@@ -139,6 +148,17 @@ const Drivers: NextPage = () => {
                 value={statusFilter}
                 handleChange={(val) => {
                   setStatusFilter(String(val));
+                }}
+              />
+            </div>
+            <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
+              <span>Online Status:</span>
+              <DropDown
+                placeholder="Online Status"
+                options={onlineStatusOptions}
+                value={onlineStatusOption}
+                handleChange={(val) => {
+                  setOnlineStatusOption(String(val));
                 }}
               />
             </div>

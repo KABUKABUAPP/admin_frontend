@@ -36,6 +36,7 @@ export interface ViewAllPromosQuery {
 }
 
 export interface Promo {
+  amount_type: any;
   total_subscribers: number;
   _id: string;
   name: string;
