@@ -48,6 +48,9 @@ const MessageView: FC = () => {
     console.log(a);
   }
 
+  useEffect(() => {
+    if (messages) console.log(messages)
+  }, [messages])
   return (
     <>
         <div className="w-2/5 mr-3">

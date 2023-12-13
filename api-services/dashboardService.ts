@@ -54,57 +54,56 @@ export const dashboardApi = createApi({
   reducerPath: "dashboardApi",
   baseQuery: baseQueryWithLogoutOnTokenExpiration,
   endpoints: (build) => ({
-    getInsights: build.query<Omit<TripInsightsMappedResponse, "icon">[], any>({
+    getInsights: build.query<any, any>({
       query: ({ filter }) => ({
         url: `/admin/trip/trip-insights?filter=${filter.toUpperCase()}`,
       }),
-      transformResponse: (response: GetTripInsightsResponse) => {
+      transformResponse: (response: any) => {
         console.log('res', response)
         if (!response) return [];
-        return [
-          {
-            title: "Total trips",
-            value: response?.data?.total_trips,
-            iconBg: "#FFBF00",
-            
-          },
-          {
-            title: "Active trips",
-            value: response?.data?.active_trips,
-            iconBg: "#2C3FEF",
-            
-          },
-          {
-            title: "SOS",
-            value: response?.data?.sos,
-            iconBg: "#EF2C5B",
-            
-          },
-          {
-            title: "Pending trips",
-            value: response?.data?.pending_trips,
-            iconBg: "#FFBF00",
-            
-          },
-          {
-            title: "Total Earnings",
-            value: response?.data?.total_earnings,
-            iconBg: "#FFBF00",
-            
-          },
-          {
-            title: "Total Drivers",
-            value: response?.data?.total_drivers,
-            iconBg: "#FFBF00",
-            
-          },
-          {
-            title: "Total Riders",
-            value: response?.data?.total_riders,
-            iconBg: "#FFBF00",
-            
-          },
-        ];
+        else {
+          const headerCard = [
+            {
+              title: "SOS",
+              value: response?.data?.sos,
+              iconBg: "#EF2C5B",
+              
+            },
+            {
+              title: "Total Earnings",
+              value: response?.data?.total_earnings,
+              iconBg: "#FFBF00",
+              
+            },
+            {
+              title: "Total Riders",
+              value: response?.data?.total_riders,
+              iconBg: "#FFBF00",
+              
+            }
+          ]
+
+          const driversChart = {
+            pendingDrivers: response?.data?.pending_drivers,
+            onboardedDrivers: response?.data?.onboarded_drivers,
+            onlineDrivers: response?.data?.online_drivers,
+            totalDrivers: response?.data?.total_drivers
+          }
+
+          const tripsChart = {
+            activeTrips: response?.data?.active_trips,
+            completedTrips: response?.data?.completed_trips,
+            totalTrips: response?.data?.total_trips
+          }
+
+          const onlineStatusChart = {
+            online: response?.data?.online_drivers,
+            offline: response?.data?.offline_drivers
+          }
+
+          return { headerCard, driversChart, tripsChart, onlineStatusChart }
+        }
+        
       },
     }),
 

@@ -92,7 +92,8 @@ export const settingsApi = createApi({
               expiryDate: res.expiry_date,
               totalSubscribers: res.total_subscribers,
               id: res._id,
-              name: res.name
+              name: res.name,
+              amount_type: res.amount_type
             };
           });
 
