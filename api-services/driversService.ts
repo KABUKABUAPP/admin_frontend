@@ -102,7 +102,8 @@ export const driversApi = createApi({
               statusRemark: driver?.status_remark,
               dateDeleted: "NOT DONE",
               deletionReason: driver?.user?.reason_for_delete,
-              inspectionCode: driver?.inspection_code ? driver?.inspection_code : ''
+              inspectionCode: driver?.inspection_code ? driver?.inspection_code : '',
+              onlineStatus: driver?.user?.online_status
             } as DriversTableBodyData;
           });
 
@@ -167,7 +168,9 @@ export const driversApi = createApi({
                 };
               }),
             },
-            onlineStatus: data?.driver?.user?.online_status
+            onlineStatus: data?.driver?.user?.online_status,
+            onlineSwitch: data?.driver?.user?.online_switch_date ? data?.driver?.user?.online_switch_date : '',
+            offlineSwitch: data?.driver?.user?.offline_switch_date ? data?.driver?.user?.offline_switch_date : '',
           };
 
           return mapped;

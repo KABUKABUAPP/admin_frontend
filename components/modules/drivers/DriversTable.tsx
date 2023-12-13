@@ -22,6 +22,7 @@ const headCellData = [
     { title: "Wallet Balance", flex: 1 },
     { title: "Driver Type", flex: 1 },
     { title: "Status", flex: 1 },
+    { title: "Online Status", flex: 1 },
   ];
 
 const DriversTable: FC<Props> = ({ tableData, isLoading, isError, refetch, subPath, headBg, currentPage }) => {

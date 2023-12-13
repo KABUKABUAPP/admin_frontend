@@ -24,7 +24,8 @@ const DriversTableBodyRow: FC<Props> = ({
     walletBalance,
     userId,
     statusRemark,
-    inspectionCode
+    inspectionCode,
+    onlineStatus
   },
   subPath,
   currentPage
@@ -74,6 +75,11 @@ const DriversTableBodyRow: FC<Props> = ({
       <div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">
           {isStatusRemark ? statusRemark : status || <Skeleton />}
+        </p>
+      </div>
+      <div style={{ flex: 1 }} className="flex items-center">
+        <p className="text-xs font-bold">
+          {onlineStatus ? onlineStatus : <Skeleton />}
         </p>
       </div>
     </div>
