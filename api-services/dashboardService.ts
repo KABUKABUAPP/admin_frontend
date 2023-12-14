@@ -16,7 +16,7 @@ import {
   GetTripChartData,
 } from "@/models/Dashboard";
 
-import { logout, secondsToMilliSeconds } from "@/utils";
+import { capitalizeAllFirstLetters, logout, secondsToMilliSeconds } from "@/utils";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "@/constants";
 import { ActiveTripsMappedResponse, Trip } from "@/models/Trips";
@@ -59,7 +59,6 @@ export const dashboardApi = createApi({
         url: `/admin/trip/trip-insights?filter=${filter.toUpperCase()}`,
       }),
       transformResponse: (response: any) => {
-        console.log('res', response)
         if (!response) return [];
         else {
           const headerCard = [
@@ -193,6 +192,66 @@ export const dashboardApi = createApi({
         }
       },
     }),
+
+    getConcentratedOrders: build.query<any, any>({
+      query: () => ({
+        url: `/admin/order/dashboard/concentrated-orders`,
+      }),
+      transformResponse: (response: any) => {
+        if (!response?.data) return {}
+        else {
+          const areas = response?.data.map((one: any) => {
+            return capitalizeAllFirstLetters(one._id)
+          })
+
+          const orders = response?.data.map((one: any) => {
+            return one.orders
+          })
+          return {areas, orders}
+        }
+      }
+    }),
+
+    getConcentratedDrivers: build.query<any, any>({
+      query: () => ({
+        url: `/admin/driver/dashboard/concentrated-drivers`,
+      }),
+      transformResponse: (response: any) => {
+        if (!response?.data) return {}
+        else {
+          const areas = response?.data.map((one: any) => {
+            return capitalizeAllFirstLetters(one._id)
+          })
+
+          const drivers = response?.data.map((one: any) => {
+            return one.drivers
+          })
+          return {areas, drivers}
+        }
+      }
+    }),
+
+    getOnboardData: build.query<any, any>({
+      query: ({range, type}) => ({
+        url: `/admin/driver/dashboard/onboard-data?range=${range}&type=${type}`,
+      }),
+      transformResponse: (response: any) => {
+        if (!response?.data) return {}
+        else {
+          console.log(response?.data)
+          const thePeriod = response?.data.map((one: any) => {
+            if (one.day) return one.day;
+            if (one.month) return one.month;
+          })
+
+          const theData = response?.data.map((one: any) => {
+            return one.drivers
+          })
+          return {thePeriod, theData}
+        }
+      }
+    })
+
   }),
 });
 
@@ -200,6 +259,9 @@ export const {
   useGetInsightsQuery,
   useGetTripChartDataQuery,
   useGetActiveTripsQuery,
+  useGetConcentratedOrdersQuery,
+  useGetConcentratedDriversQuery,
+  useGetOnboardDataQuery
 } = dashboardApi;
 
 export const pendingTripsApi = createApi({

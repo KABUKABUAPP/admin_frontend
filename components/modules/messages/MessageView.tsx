@@ -81,8 +81,8 @@ const MessageView: FC = () => {
                 <Loader />
             }
             {messages && messages?.data.map((message: any) => (
-                <div className="mt-3 mb-3 cursor-pointer" onClick={() => setOneMessage(message)}>
-                    <Card rounded="rounded-md" bg="#F8F8F8">
+                <div className={`mt-3 mb-3 cursor-pointer`} onClick={() => setOneMessage(message)}>
+                    <Card rounded="rounded-md" bg="#F8F8F8" border={oneMessage === message ? 'border border-solid border-customYellow' : ''}>
                         <div className="flex justify-between">
                             <p className="font-bold text-sm">{message.subject}</p>
                             <p className="text-[#9A9A9A] text-sm">{getFormattedTimeDate(message.createdAt).formattedDate} at {getFormattedTimeDate(message.createdAt).formattedTime}</p>
