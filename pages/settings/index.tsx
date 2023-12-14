@@ -16,6 +16,7 @@ import DriverReferralSettings from "@/components/modules/settings/DriverReferral
 import { useUserContext } from "@/contexts/UserContext";
 import { useGetDriverSettingsQuery } from "@/api-services/settingsService";
 import Loader from "@/components/ui/Loader/Loader";
+import FarePriceSettings from "@/components/modules/settings/FarePriceSettings";
 
 const Settings: NextPage = () => {
   const { user } = useUserContext();
@@ -56,6 +57,7 @@ const Settings: NextPage = () => {
         { title: "SOS Contact List", isActive: false },
         { title: "Driver Withdrawal Settings", isActive: false },
         { title: "Driver Referral Settings", isActive: false },
+        { title: "Fare Price Settings", isActive: false }
       ])
     }
   }, [user])
@@ -126,6 +128,7 @@ const Settings: NextPage = () => {
               {currentView === "SOS Contact List" && <SosContactList />}
               {currentView === "Driver Withdrawal Settings" && <DriverWithdrawalSettings frequency={driversSettings.withdrawal.frequency.toString()} type={driversSettings.withdrawal.type.toString()} limit={driversSettings.withdrawal.limit.toString()} />}
               {currentView === "Driver Referral Settings" && <DriverReferralSettings frequency={driversSettings.referral_reward.frequency.toString()} amount={driversSettings.referral_reward.amount.toString()} />}
+              {currentView === "Fare Price Settings" && <FarePriceSettings upper_bound={driversSettings.pricing_boundary.upper_bound.toString()} lower_bound={driversSettings.pricing_boundary.lower_bound.toString()} />}
             </>
           }
         />

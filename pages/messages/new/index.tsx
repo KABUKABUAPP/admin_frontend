@@ -170,57 +170,62 @@ const Messages: NextPage = () => {
                             
                             {
                                 messageTypeState === 'scheduled' &&
-                                <div className="mt-3 flex">
-                                    <div className="w-3/6 px-2">
-                                        <TextField
-                                            label="Scheduled Date"
-                                            type="date"
-                                            {...formik.getFieldProps("scheduledDate")}
-                                            error={
-                                            formik.touched.scheduledDate ? formik.errors.scheduledDate : undefined
-                                            }
-                                        />
-                                    </div>
-                                    <div className="w-1/6 px-2">
-                                        <TextField
-                                            label="Hours"
-                                            placeholder="Hours here"
-                                            {...formik.getFieldProps("hours")}
-                                            error={
-                                            formik.touched.hours ? formik.errors.hours : undefined
-                                            }
-                                        />
-                                    </div>
-                                    <div className="w-1/6 px-2">
-                                        <TextField
-                                            label="Minutes"
-                                            placeholder="Minutes here"
-                                            {...formik.getFieldProps("minutes")}
-                                            error={
-                                            formik.touched.minutes ? formik.errors.minutes : undefined
-                                            }
-                                        />
-                                    </div>
-                                    <div className="w-1/6 px-2">
-                                        <SelectField
-                                            label="AM/PM"
-                                            disabled={false}
-                                            options={[
-                                                {
-                                                    label: 'AM',
-                                                    value: 'am',
-                                                },
-                                                {
-                                                    label: 'PM',
-                                                    value: 'pm',
+                                <>
+                                    <div className="mt-3 flex">
+                                        <div className="w-3/6 px-2">
+                                            <TextField
+                                                label="Scheduled Date"
+                                                type="date"
+                                                {...formik.getFieldProps("scheduledDate")}
+                                                error={
+                                                formik.touched.scheduledDate ? formik.errors.scheduledDate : undefined
                                                 }
-                                            ]}
-                                            placeholder="AM/PM"
-                                            {...formik.getFieldProps("timePeriod")}
-                                            error={formik.touched.timePeriod ? formik.errors.timePeriod : undefined}
-                                        />
+                                            />
+                                        </div>
+                                        <div className="w-1/6 px-2">
+                                            <TextField
+                                                label="Hours"
+                                                placeholder="Hours here"
+                                                {...formik.getFieldProps("hours")}
+                                                error={
+                                                formik.touched.hours ? formik.errors.hours : undefined
+                                                }
+                                            />
+                                        </div>
+                                        <div className="w-1/6 px-2">
+                                            <TextField
+                                                label="Minutes"
+                                                placeholder="Minutes here"
+                                                {...formik.getFieldProps("minutes")}
+                                                error={
+                                                formik.touched.minutes ? formik.errors.minutes : undefined
+                                                }
+                                            />
+                                        </div>
+                                        <div className="w-1/6 px-2">
+                                            <SelectField
+                                                label="AM/PM"
+                                                disabled={false}
+                                                options={[
+                                                    {
+                                                        label: 'AM',
+                                                        value: 'am',
+                                                    },
+                                                    {
+                                                        label: 'PM',
+                                                        value: 'pm',
+                                                    }
+                                                ]}
+                                                placeholder="AM/PM"
+                                                {...formik.getFieldProps("timePeriod")}
+                                                error={formik.touched.timePeriod ? formik.errors.timePeriod : undefined}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
+                                    <div className="mt-1 flex justify-end">
+                                        <p className="text-xs"><small>Time should be entered in 12hr format</small></p>
+                                    </div>
+                                </>
                             }
 
                             <div className="mt-3">
