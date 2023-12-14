@@ -53,43 +53,40 @@ const OnlineStatusChartCard: FC<Props> = ({ title, value, icon, iconBg = "#FFBF0
         responsive: true,
         aspectRatio: 1, // Set the width and height ratio (1:1 in this case for a square chart)
     };
-    useEffect(() => {
-        if (tripsInsight) console.log('i jailer', onlineStatusChart)
-    }, [tripsInsight])
 
-  return (
-    <div className="bg-[#FDFDFD] w-full max-w-[210px] gap-5 p-4 rounded-lg items-center">
-        <div className="flex">
-            <div className="w-1/2">
-                <div
-                    className={`flex items-center justify-center w-8 h-8 rounded-lg mb-5 mt-4`}
-                    style={{ backgroundColor: iconBg }}
-                >
-                    {icon}
+    return (
+        <div className="bg-[#FDFDFD] w-full max-w-[210px] gap-5 p-4 rounded-lg items-center">
+            <div className="flex">
+                <div className="w-1/2">
+                    <div
+                        className={`flex items-center justify-center w-8 h-8 rounded-lg mb-5 mt-4`}
+                        style={{ backgroundColor: iconBg }}
+                    >
+                        {icon}
+                    </div>
+                    <div>
+                        <p className="font-bold">{loading ? <Skeleton /> : onlineStatusChart?.online}</p>
+                        <p className="text-xs">{title}</p>
+                    </div>    
                 </div>
-                <div>
-                    <p className="font-bold">{loading ? <Skeleton /> : onlineStatusChart?.online}</p>
-                    <p className="text-xs">{title}</p>
-                </div>    
+                <div className="w-1/2">
+                    <Doughnut data={dataSets} options={options} />
+                </div>
             </div>
-            <div className="w-1/2">
-                <Doughnut data={dataSets} options={options} />
+            <div className="flex">
+                <div className="w-full">
+                    <div className="flex my-3">
+                        <p className="w-[1.25vw] h-3vh bg-[#1FD11B] mx-3"></p>
+                        <p className="w-4/5 text-xs">{onlineStatusChart?.online} Drivers Online</p>
+                    </div>
+                    <div className="flex my-3">
+                        <p className="w-[1.25vw] h-3vh bg-[#9A9A9A] mx-3"></p>
+                        <p className="w-4/5 text-xs">{onlineStatusChart?.offline} Drivers Offline</p>
+                    </div>
+                </div>
             </div>
         </div>
-        <div className="flex">
-            <div className="w-full">
-                <div className="flex my-3">
-                    <p className="w-[1.25vw] h-3vh bg-[#1FD11B] mx-3"></p>
-                    <p className="w-4/5 text-xs">{onlineStatusChart?.online} Drivers Online</p>
-                </div>
-                <div className="flex my-3">
-                    <p className="w-[1.25vw] h-3vh bg-[#9A9A9A] mx-3"></p>
-                    <p className="w-4/5 text-xs">{onlineStatusChart?.offline} Drivers Offline</p>
-                </div>
-            </div>
-        </div>
-    </div>
-  );
+    );
 };
 
 export default OnlineStatusChartCard;

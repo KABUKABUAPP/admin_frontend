@@ -45,7 +45,7 @@ const DriverWithdrawalSettings: FC<Props> = ({frequency, type, limit}) => {
                 withdrawal: {type: values.withdrawal_type, frequency: values.withdrawal_frequency, limit: values.limit}
             }
 
-            updateDriverSettings(driversSettingsData)
+            updateDriverSettings(driversSettingsData);
         },
     });
     

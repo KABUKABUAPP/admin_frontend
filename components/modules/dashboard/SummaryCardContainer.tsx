@@ -13,6 +13,10 @@ import DropDownTwo from "@/components/ui/DropDownTwo";
 import DriversChartCard from "./DriversChartCard";
 import TripsChartCard from "./TripsChartCard";
 import OnlineStatusChartCard from "./OnlineStatusChartCard";
+import AreasDriversContainer from "./AreasDriversContainer";
+import AreasOrdersContainer from "./AreasOrdersContainer";
+import DriverOnboardingContainer from "./DriverOnboardingContainer";
+import RiderOnboardingContainer from "./RiderOnboardingContainer";
 
 const SummaryCardContainer: FC = () => {
   const [periodFilter, setPeriodFilter] = useState('today');
@@ -89,6 +93,22 @@ const SummaryCardContainer: FC = () => {
         </div>
         <div className="w-1/3">
           <OnlineStatusChartCard title="Drivers Online" icon={icons["Total Drivers"]} periodFilter={periodFilter} onlineStatusChart={tripsInsight?.onlineStatusChart} />
+        </div>
+      </div>
+      <div className="flex gap-4">
+        <div className="w-1/2">
+          <AreasOrdersContainer />
+        </div>
+        <div className="w-1/2">
+          <AreasDriversContainer />
+        </div>
+      </div>
+      <div className="flex gap-4">
+        <div className="w-1/2">
+          <DriverOnboardingContainer />
+        </div>
+        <div className="w-1/2">
+          <RiderOnboardingContainer />
         </div>
       </div>
       

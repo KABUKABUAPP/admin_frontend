@@ -8,6 +8,7 @@ interface Props {
   bg?: string;
   rounded?: string;
   width?: string;
+  border?: string;
 }
 
 const Card: FC<PropsWithChildren<Props>> = ({
@@ -18,12 +19,13 @@ const Card: FC<PropsWithChildren<Props>> = ({
   elevation,
   children,
   rounded,
-  width=""
+  width="",
+  border
 }) => {
   
   return (
     <div
-      className={`${rounded ? rounded : 'rounded-lg'} w-full p-4 ${elevation ? 'shadow-md' : ''} ${maxHeight ? 'overflow-y-auto scrollbar-none':''} transition-all ease-in-out duration-500`}
+      className={`${rounded ? rounded : 'rounded-lg'} w-full p-4 ${elevation ? 'shadow-md' : ''} ${maxHeight ? 'overflow-y-auto scrollbar-none':''} transition-all ease-in-out duration-500 ${border ? border :''}`}
       style={{ maxWidth, height, maxHeight, backgroundColor: bg, width}}
     >
       {children}
