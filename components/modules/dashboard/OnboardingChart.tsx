@@ -70,16 +70,17 @@ export const options: any = {
 interface Props {
     chartData: any;
     chartDataLoading: boolean;
+    type: string;
 }
 
 
-const OnboardingChart: FC<Props> = ({chartData, chartDataLoading}) => {
+const OnboardingChart: FC<Props> = ({chartData, chartDataLoading, type}) => {
     
     const data = {
         labels: chartData?.thePeriod,
         datasets: [
         {
-            label: "Drivers Onboarding",
+            label: `${type} Onboarding`,
             data:  chartData?.theData,
             backgroundColor: ["#FFBF00"],
             hoverBackgroundColor: "#9747FF",

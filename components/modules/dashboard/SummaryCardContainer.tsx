@@ -61,12 +61,12 @@ const SummaryCardContainer: FC = () => {
           }}
         />
       </div>
-      <div className="flex flex-wrap gap-6 max-sm:justify-center">
-        {viewState &&
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {viewState &&
           tripsInsight?.headerCard?.map((item: any, idx: any) => {
             return <SummaryCard {...item} icon={icons[item.title]} key={idx} />;
           })}
-        {loadingState &&
+          {loadingState &&
           [
             "SOS",
             "Total Earnings",
@@ -82,21 +82,25 @@ const SummaryCardContainer: FC = () => {
         <div>
           <p className="text-sm text-rose-600 mb-2">Oops! Error getting insights</p>
           <Button title="Reload Insights" onClick={reloadTrips} />
-          </div>}
+        </div>}
       </div>
-      <div className="flex flex-wrap gap-6 max-sm:justify-center">
+
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <DriversChartCard title="Total Drivers" icon={icons["Total Drivers"]} periodFilter={periodFilter} driversChart={tripsInsight?.driversChart} />
         
         <TripsChartCard title="Total Trips" icon={icons["Total trips"]} periodFilter={periodFilter} tripsChart={tripsInsight?.tripsChart} />
         
         <OnlineStatusChartCard title="Drivers Online" icon={icons["Total Drivers"]} periodFilter={periodFilter} onlineStatusChart={tripsInsight?.onlineStatusChart} />
       </div>
-      <div className="flex flex-wrap gap-6 max-sm:justify-center">
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
         <AreasOrdersContainer />
         
         <AreasDriversContainer />
       </div>
-      <div className="flex flex-wrap gap-6 max-sm:justify-center">
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
         <DriverOnboardingContainer />
         
         <RiderOnboardingContainer />
