@@ -84,34 +84,23 @@ const SummaryCardContainer: FC = () => {
           <Button title="Reload Insights" onClick={reloadTrips} />
           </div>}
       </div>
-      <div className="flex">
-        <div className="w-1/3">
-          <DriversChartCard title="Total Drivers" icon={icons["Total Drivers"]} periodFilter={periodFilter} driversChart={tripsInsight?.driversChart} />
-        </div>
-        <div className="w-1/3">
-          <TripsChartCard title="Total Trips" icon={icons["Total trips"]} periodFilter={periodFilter} tripsChart={tripsInsight?.tripsChart} />
-        </div>
-        <div className="w-1/3">
-          <OnlineStatusChartCard title="Drivers Online" icon={icons["Total Drivers"]} periodFilter={periodFilter} onlineStatusChart={tripsInsight?.onlineStatusChart} />
-        </div>
+      <div className="flex flex-wrap gap-6 max-sm:justify-center">
+        <DriversChartCard title="Total Drivers" icon={icons["Total Drivers"]} periodFilter={periodFilter} driversChart={tripsInsight?.driversChart} />
+        
+        <TripsChartCard title="Total Trips" icon={icons["Total trips"]} periodFilter={periodFilter} tripsChart={tripsInsight?.tripsChart} />
+        
+        <OnlineStatusChartCard title="Drivers Online" icon={icons["Total Drivers"]} periodFilter={periodFilter} onlineStatusChart={tripsInsight?.onlineStatusChart} />
       </div>
-      <div className="flex gap-4">
-        <div className="w-1/2">
-          <AreasOrdersContainer />
-        </div>
-        <div className="w-1/2">
-          <AreasDriversContainer />
-        </div>
+      <div className="flex flex-wrap gap-6 max-sm:justify-center">
+        <AreasOrdersContainer />
+        
+        <AreasDriversContainer />
       </div>
-      <div className="flex gap-4">
-        <div className="w-1/2">
-          <DriverOnboardingContainer />
-        </div>
-        <div className="w-1/2">
-          <RiderOnboardingContainer />
-        </div>
+      <div className="flex flex-wrap gap-6 max-sm:justify-center">
+        <DriverOnboardingContainer />
+        
+        <RiderOnboardingContainer />
       </div>
-      
     </>
   );
 };

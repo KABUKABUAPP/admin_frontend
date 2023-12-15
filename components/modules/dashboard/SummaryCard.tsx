@@ -11,7 +11,7 @@ interface Props {
 
 const SummaryCard: FC<Props> = ({ title, value, icon, iconBg = "#FFBF00", loading=false }) => {
   return (
-    <div className="bg-[#FDFDFD] w-full max-w-[210px] flex gap-5 p-4 rounded-lg items-center">
+    <div className="bg-[#FDFDFD] w-full max-w-[245px] flex gap-5 p-4 rounded-lg items-center">
       <div
         className={`flex items-center justify-center w-8 h-8 rounded-lg`}
         style={{ backgroundColor: iconBg }}
