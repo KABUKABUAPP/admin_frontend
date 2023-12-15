@@ -3,6 +3,7 @@ import Skeleton from "react-loading-skeleton";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { useGetInsightsQuery } from "@/api-services/dashboardService";
+import { useRouter } from "next/router";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -18,7 +19,7 @@ interface Props {
 
 const DriversChartCard: FC<Props> = ({ title, value, icon, iconBg = "#FFBF00", loading=false, periodFilter, driversChart }) => {
     
-
+    const router = useRouter();
     const {
       data: tripsInsight,
       isLoading: tripsInsightsLoading,
@@ -55,7 +56,7 @@ const DriversChartCard: FC<Props> = ({ title, value, icon, iconBg = "#FFBF00", l
     };
 
   return (
-    <div className="bg-[#FDFDFD] w-full max-w-[245px] gap-5 p-4 rounded-lg items-center">
+    <div className="bg-[#FDFDFD] w-full gap-5 p-4 rounded-lg items-center">
         <div className="flex">
             <div className="w-1/2">
                 <div
@@ -77,11 +78,11 @@ const DriversChartCard: FC<Props> = ({ title, value, icon, iconBg = "#FFBF00", l
             <div className="w-full">
                 <div className="flex my-3">
                     <p className="w-[1.25vw] h-3vh bg-[#FFBF00] mx-3"></p>
-                    <p className="w-4/5 text-xs">{driversChart?.onboardedDrivers} Onboarded</p>
+                    <p className="w-4/5 text-xs cursor-pointer" onClick={() => router.push('/drivers/active')}>{driversChart?.onboardedDrivers} Onboarded</p>
                 </div>
                 <div className="flex my-3">
                     <p className="w-[1.25vw] h-3vh bg-[#2C3FEF] mx-3"></p>
-                    <p className="w-4/5 text-xs">{driversChart?.pendingDrivers} Pending</p>
+                    <p className="w-4/5 text-xs cursor-pointer" onClick={() => router.push('/drivers/pending')}>{driversChart?.pendingDrivers} Pending</p>
                 </div>
             </div>
         </div>

@@ -32,7 +32,7 @@ const RiderOnboardingContainer: FC = () => {
   }
 
   return (
-    <div className="w-full max-w-[380px] gap-5 rounded-lg items-center">
+    <div className="w-full gap-5 rounded-lg items-center">
       <div className={`bg-[#FFF5D8] flex justify-between items-center rounded-tr-lg rounded-tl-lg px-3 py-4`}>
         <p className="font-bold text-xs">Rider Onboarding</p>
         
@@ -44,7 +44,7 @@ const RiderOnboardingContainer: FC = () => {
         />
       </div>
       <div className="h-[300px] bg-[#FFFFFF] p-6">
-        <OnboardingChart chartDataLoading={chartDataLoading} chartData={chartDataRiders} />
+        <OnboardingChart chartDataLoading={chartDataLoading} chartData={chartDataRiders} type={'Riders'} />
       </div>
     </div>
   );
