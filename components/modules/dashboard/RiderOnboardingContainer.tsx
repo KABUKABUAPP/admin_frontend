@@ -32,7 +32,7 @@ const RiderOnboardingContainer: FC = () => {
   }
 
   return (
-    <div>
+    <div className="w-full max-w-[380px] gap-5 rounded-lg items-center">
       <div className={`bg-[#FFF5D8] flex justify-between items-center rounded-tr-lg rounded-tl-lg px-3 py-4`}>
         <p className="font-bold text-xs">Rider Onboarding</p>
         
