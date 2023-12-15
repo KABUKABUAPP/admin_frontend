@@ -31,16 +31,14 @@ const DriversChartCard: FC<Props> = ({ title, value, icon, iconBg = "#FFBF00", l
         datasets: [
         {
             label: 'Drivers',
-            data: [driversChart?.onboardedDrivers, driversChart?.pendingDrivers, driversChart?.onlineDrivers],
+            data: [driversChart?.onboardedDrivers, driversChart?.pendingDrivers],
             backgroundColor: [
             '#FFBF00',
-            '#2C3FEF',
-            '#1FD11B'
+            '#2C3FEF'
             ],
             borderColor: [
             '#FFBF00',
-            '#2C3FEF',
-            '#1FD11B'
+            '#2C3FEF'
             ],
             borderWidth: 1,
         },
@@ -57,7 +55,7 @@ const DriversChartCard: FC<Props> = ({ title, value, icon, iconBg = "#FFBF00", l
     };
 
   return (
-    <div className="bg-[#FDFDFD] w-full max-w-[210px] gap-5 p-4 rounded-lg items-center">
+    <div className="bg-[#FDFDFD] w-full max-w-[245px] gap-5 p-4 rounded-lg items-center">
         <div className="flex">
             <div className="w-1/2">
                 <div
@@ -84,10 +82,6 @@ const DriversChartCard: FC<Props> = ({ title, value, icon, iconBg = "#FFBF00", l
                 <div className="flex my-3">
                     <p className="w-[1.25vw] h-3vh bg-[#2C3FEF] mx-3"></p>
                     <p className="w-4/5 text-xs">{driversChart?.pendingDrivers} Pending</p>
-                </div>
-                <div className="flex my-3">
-                    <p className="w-[1.25vw] h-3vh bg-[#1FD11B] mx-3"></p>
-                    <p className="w-4/5 text-xs">{driversChart?.onlineDrivers} Online</p>
                 </div>
             </div>
         </div>
