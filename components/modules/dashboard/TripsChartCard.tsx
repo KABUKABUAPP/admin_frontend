@@ -53,7 +53,7 @@ const TripsChartCard: FC<Props> = ({ title, value, icon, iconBg = "#FFBF00", loa
     };
 
     return (
-        <div className="bg-[#FDFDFD] w-full max-w-[210px] gap-5 p-4 rounded-lg items-center">
+        <div className="bg-[#FDFDFD] w-full max-w-[245px] gap-5 p-4 rounded-lg items-center">
             <div className="flex">
                 <div className="w-1/2">
                     <div
