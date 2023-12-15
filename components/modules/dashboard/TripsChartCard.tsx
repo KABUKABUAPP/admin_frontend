@@ -3,6 +3,7 @@ import Skeleton from "react-loading-skeleton";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { useGetInsightsQuery } from "@/api-services/dashboardService";
+import { useRouter } from "next/router";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -17,6 +18,7 @@ interface Props {
 }
 
 const TripsChartCard: FC<Props> = ({ title, value, icon, iconBg = "#FFBF00", loading=false, periodFilter, tripsChart }) => {
+    const router = useRouter();
     const {
       data: tripsInsight,
       isLoading: tripsInsightsLoading,
@@ -53,7 +55,7 @@ const TripsChartCard: FC<Props> = ({ title, value, icon, iconBg = "#FFBF00", loa
     };
 
     return (
-        <div className="bg-[#FDFDFD] w-full max-w-[245px] gap-5 p-4 rounded-lg items-center">
+        <div className="bg-[#FDFDFD] w-full gap-5 p-4 rounded-lg items-center">
             <div className="flex">
                 <div className="w-1/2">
                     <div
@@ -75,11 +77,11 @@ const TripsChartCard: FC<Props> = ({ title, value, icon, iconBg = "#FFBF00", loa
                 <div className="w-full">
                     <div className="flex my-3">
                         <p className="w-[1.25vw] h-3vh bg-[#1FD11B] mx-3"></p>
-                        <p className="w-4/5 text-xs">{tripsChart?.activeTrips} Active Trips</p>
+                        <p className="w-4/5 text-xs cursor-pointer" onClick={() => router.push('/trips?tab=active')}>{tripsChart?.activeTrips} Active Trips</p>
                     </div>
                     <div className="flex my-3">
                         <p className="w-[1.25vw] h-3vh bg-[#5000B6] mx-3"></p>
-                        <p className="w-4/5 text-xs">{tripsChart?.completedTrips} Completed Trips</p>
+                        <p className="w-4/5 text-xs cursor-pointer" onClick={() => router.push('/trips?tab=completed')}>{tripsChart?.completedTrips} Completed Trips</p>
                     </div>
                 </div>
             </div>
