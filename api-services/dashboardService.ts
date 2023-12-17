@@ -238,7 +238,6 @@ export const dashboardApi = createApi({
       transformResponse: (response: any) => {
         if (!response?.data) return {}
         else {
-          console.log(response?.data)
           const thePeriod = response?.data.map((one: any) => {
             if (one.day) return one.day;
             if (one.month) return one.month;
