@@ -16,6 +16,8 @@ import AppHead from "@/components/common/AppHead";
 
 const Drivers: NextPage = () => {
   const router = useRouter();
+  const online_status = router.query.online_status;
+
   const [driverOptions, setDriverOptions] = useState(driverOptionBarData);
   const [driverTypeOptions, setDriverTypeOptions] = useState(
     driverTypeFilterOptionsData
@@ -38,9 +40,9 @@ const Drivers: NextPage = () => {
   ];
 
   const onlineStatusOptions = [
-    { label: "All", value: "", default: true },
-    { label: "Offline", value: "offline", default: false },
-    { label: "Online", value: "online", default: false }
+    { label: "All", value: "", default: String(online_status) !== 'offline' && String(online_status) !== 'online' ? true : false },
+    { label: "Offline", value: "offline", default: String(online_status) === 'offline' ? true : false },
+    { label: "Online", value: "online", default: String(online_status) === 'online' ? true : false }
   ];
 
   const [statusFilter, setStatusFilter] = useState<string>(
@@ -48,7 +50,7 @@ const Drivers: NextPage = () => {
   );
 
   const [onlineStatusOption, setOnlineStatusOption] = useState<string>(
-    onlineStatusOptions.find((opt) => opt.default === true)?.value || ""
+    onlineStatusOptions.find((opt) => opt.default == true)?.value || ""
   );
 
   const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
@@ -113,10 +115,6 @@ const Drivers: NextPage = () => {
     if (activeOption) setCarOwner(carOwnerObj[activeOption]);
   }, [JSON.stringify(driverTypeOptions)]);
 
-  useEffect(() => {
-    if (drivers) console.log('Phunsukh Wangdu', drivers)
-  }, [drivers])
-
   return (
     <>
       <AppHead title="Kabukabu | Drivers" />
@@ -161,6 +159,7 @@ const Drivers: NextPage = () => {
                 value={onlineStatusOption}
                 handleChange={(val) => {
                   setOnlineStatusOption(String(val));
+                  router.push(`${router.pathname}?online_status=${String(val)}`);
                 }}
               />
             </div>
