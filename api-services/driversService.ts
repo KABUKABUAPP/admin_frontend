@@ -73,12 +73,13 @@ export const driversApi = createApi({
         status,
         statusRemark,
         deleted,
+        onlineStatus
       }) => ({
         url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}&search=${search}&order=${order}&is_blocked=${
           status ? status : ""
         }&status_remark=${statusRemark ? statusRemark : ""}${
           deleted ? `&deleted=${deleted}` : ""
-        }`,
+        }${onlineStatus ? `&online_status=${onlineStatus}` : ''}`,
       }),
       providesTags: ["drivers"],
       transformResponse: (response: GetAllDriversResponse) => {

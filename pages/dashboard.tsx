@@ -17,6 +17,7 @@ import {
   useGetTripChartDataQuery,
 } from "@/api-services/dashboardService";
 import useUserPermissions from "@/hooks/useUserPermissions";
+import TopMarketerContainer from "@/components/modules/dashboard/TopMarketerContainer";
 
 const Dashboard: NextPage = () => {
   const { user } = useUserContext();
@@ -103,7 +104,7 @@ const Dashboard: NextPage = () => {
                     router.push('/drivers/pending')
                   }}
                 />
-              )}
+            )}
             {userPermissions &&
               (userPermissions.sharp_program_permissions.read ||
                 userPermissions.sharp_program_permissions.write) && (
@@ -115,7 +116,18 @@ const Dashboard: NextPage = () => {
                   refetch={reloadPendingSharpApplications}
                   route={"/sharp-cars"}
                 />
-              )}
+            )}
+            {/*<TopMarketerContainer
+              data={pendingDriverApplications}
+              title="Top Marketers"
+              loading={pendingDriverApplicationsLoading}
+              error={pendingDriverApplicationsError}
+              refetch={reloadPendingDriverApplications}
+              route={"/drivers/pending"}
+              handleViewAll={()=>{
+                router.push('/staffs')
+              }}
+            />*/}
           </div>
         </div>
 

@@ -38,8 +38,9 @@ const Drivers: NextPage = () => {
   ];
 
   const onlineStatusOptions = [
+    { label: "All", value: "", default: true },
     { label: "Offline", value: "offline", default: false },
-    { label: "Online", value: "online", default: true }
+    { label: "Online", value: "online", default: false }
   ];
 
   const [statusFilter, setStatusFilter] = useState<string>(
@@ -47,7 +48,7 @@ const Drivers: NextPage = () => {
   );
 
   const [onlineStatusOption, setOnlineStatusOption] = useState<string>(
-    onlineStatusOptions.find((opt) => opt.default === true)?.value || "online"
+    onlineStatusOptions.find((opt) => opt.default === true)?.value || ""
   );
 
   const [selectedFilterOption, setSelectedFilterOption] = useState<string>(
@@ -69,6 +70,7 @@ const Drivers: NextPage = () => {
       search: searchDriver,
       order: selectedFilterOption,
       status: statusFilter,
+      onlineStatus: onlineStatusOption
     },
     {
       refetchOnMountOrArgChange: true,
