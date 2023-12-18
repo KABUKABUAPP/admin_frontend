@@ -67,7 +67,8 @@ export interface GetAllDriversQuery {
   order: string;
   status?: string;
   statusRemark?: string;
-  deleted?: string
+  deleted?: string;
+  onlineStatus?: string;
 }
 
 export interface Document {

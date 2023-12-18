@@ -88,7 +88,7 @@ export const settingsApi = createApi({
               promoCode: res?.code,
               amount: res.value,
               status: res.active_status,
-              createdDate: res.createdAt,
+              createdDate: res.activation_date,
               expiryDate: res.expiry_date,
               totalSubscribers: res.total_subscribers,
               id: res._id,
@@ -101,6 +101,18 @@ export const settingsApi = createApi({
             totalCount: response.data.pagination.totalCount,
             data: mapped,
           };
+        }
+      },
+    }),
+    viewAllPromosNew: build.query<any, any>({
+      query: ({ limit, page, status }) => ({
+        url: `admin/promotions/all-promos/${status}?limit=${limit}&page=${page}`,
+      }),
+      providesTags: ["all-promos"],
+      transformResponse: (response: any) => {
+        if (!response) return <any>{};
+        else {
+          return response.data;
         }
       },
     }),
@@ -264,6 +276,7 @@ export const {
   useCreateAdminMutation,
   useUpdatePasswordMutation,
   useViewAllPromosQuery,
+  useViewAllPromosNewQuery,
   useViewPromoQuery,
   useGetRolesQuery,
   useViewRoleQuery,

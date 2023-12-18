@@ -26,7 +26,7 @@ const SummaryCard: FC<Props> = ({ title, value, icon, iconBg = "#FFBF00", loadin
         {icon}
       </div>
       <div>
-        <p className="font-bold">{loading ? <Skeleton /> : value}</p>
+        <p className="font-bold">{loading ? <Skeleton /> : value?.toLocaleString()}</p>
         <p className="text-xs">{title}</p>
       </div>
     </div>
