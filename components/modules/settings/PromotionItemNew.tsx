@@ -4,16 +4,13 @@ import React, { FC, useEffect } from "react";
 interface Props {
   handleClick?: () => void;
   data: {
-    amount_type?: string;
-    promoCode?: string;
-    amount?: number;
-    promo_type?: boolean;
-    createdAt?: string;
-    expiry_date?: string;
-    totalSubscribers: number;
-    promotionType?: string;
-    id?: string;
-    name?: string;
+    value: number;
+    condition_value: number;
+    active_status: boolean;
+    createdAt: string;
+    expiry_date: string;
+    user_count: number;
+    audience: string;
   };
 }
 
@@ -30,33 +27,31 @@ const PromotionItem: FC<Props> = ({ handleClick, data }) => {
         style={{ flex: 1 }}
         className="border-r border-r-[#1FD11B] flex flex-col gap-1"
       >
-        {data.name && (
-          <p className="text-2xl font-semibold">{capitalizeAllFirstLetters(data.name)}</p>
+        {data.value && (
+          <p className="text-2xl font-semibold">{'₦'}{data.value}</p>
         )}
         {/*data.promoCode && (
           <p className="text-2xl font-semibold">{data.promoCode}</p>
         )*/}
-        {data.amount && <p className="text-base font-medium">{data.amount_type === 'fixed' && '₦'}{data.amount}{data.amount_type === 'percentage' && '%'}</p>}
-        {data.promo_type && <p className="text-sm font-medium">{data.promo_type}</p>}
+        {data.condition_value && <p className="text-base font-medium">If ride equals {data.condition_value}</p>}
+        {data.active_status && <p className="text-sm font-medium">{'Active'}</p>}
+        {!data.active_status && <p className="text-sm font-medium">{'Closed'}</p>}
         {data.expiry_date && data.createdAt && (
           <p className="text-sm break-words text-[#9A9A9A]">
             Created {new Date(data.createdAt).toLocaleDateString()} | Expires{" "}
             {new Date(data.expiry_date).toLocaleDateString()}
           </p>
         )}
-        {data.promotionType && (
-          <p className="text-sm break-words text-[#9A9A9A]">
-            {data.promotionType} promotion
-          </p>
-        )}
+        <p className="text-sm break-words text-[#9A9A9A]">Automatic Promotion</p>
       </div>
       <div style={{ flex: 1 }}>
         {
           <p className="text-2xl font-semibold text-right">
-            {data.totalSubscribers}
+            {data.user_count}
           </p>
         }
         <p className="text-sm font-medium text-right">Total Subscribers</p>
+        <p className="text-sm font-medium text-right">Audience: {data.audience}</p>
       </div>
       </div>
       </>

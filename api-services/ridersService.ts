@@ -92,15 +92,18 @@ export const ridersApi = createApi({
       providesTags: ["rider"],
       transformResponse: (response: ViewRiderResponse) => {
         if (!response) return <MappedViewRider>{};
+        console.log('moonshine', response)
         return {
           driver: {
             fullName: response?.data?.full_name,
-            address: "",
+            address: response?.data?.state,
             tripCount: response?.data?.total_trips,
             rating: response?.data?.average_rating?.value,
             image: response?.data?.profile_image,
             isBlocked: response?.data?.isBlocked,
             id: response?.data?._id,
+            email: response?.data?.email,
+            phone: response?.data?.phone_number
           },
           financials: {
             total: response?.data?.total_spent?.toString(),
