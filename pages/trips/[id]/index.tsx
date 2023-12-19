@@ -27,6 +27,7 @@ import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
 import TripRatingCard from "@/components/modules/Trips/TripRatingCard";
 import StaticMap from "@/components/common/AppMap/TestMap";
+import { capitalizeAllFirstLetters } from "@/utils";
 const socket = io("https://rideservice-dev.up.railway.app");
 
 const ViewTrip: NextPage = () => {
@@ -67,7 +68,7 @@ const ViewTrip: NextPage = () => {
       setCurrentCardSubTitle(cardSubTitleMap[`${tab}`]);
     }
   }, [tab]);
-
+  
   useEffect(() => {
     if (data) {
       socket.on("connect", () => {
@@ -119,6 +120,7 @@ const ViewTrip: NextPage = () => {
     driverRating,
     riderRating,
   }: Record<string, string | number>) => {
+    const tripToEndStr = tab === 'completed' ? 'Trip Ended' : 'Trip To End'
     return [
       {
         topTitle: "Origin",
@@ -150,7 +152,7 @@ const ViewTrip: NextPage = () => {
         bottomTitle:
           new Date(tripToEnd).toUTCString() != "Invalid Date"
             ? tripToEnd
-              ? "Trip to end"
+              ? tripToEndStr
               : ""
             : "",
         bottomValue: tripToEnd ? new Date(tripToEnd).toUTCString() : "",
@@ -295,7 +297,7 @@ const ViewTrip: NextPage = () => {
                       viewProfileLink={
                         data?.driverId && `/drivers/active/${data?.driverId}?fallbackUrl=${router.asPath}`
                       }
-                      carModel={data?.carModel}
+                      carModel={capitalizeAllFirstLetters(data?.carModel)}
                       carPlateNumber={data?.plateNumber}
                       buttonTitle="View Driver's Profile"
                       imageUri={data?.driverImage}

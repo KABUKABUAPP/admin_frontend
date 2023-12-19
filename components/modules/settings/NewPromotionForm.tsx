@@ -67,8 +67,7 @@ const NewPromotionForm: FC<Props> = ({ handleBack }) => {
   }, [automaticPromo.error]);
 
   const promoAudienceOptions = [
-    { label: "Riders", value: "rider" },
-    { label: "Drivers", value: "driver" },
+    { label: "Riders", value: "rider" }
   ];
 
   const promoTypeOptions = [
@@ -93,9 +92,6 @@ const NewPromotionForm: FC<Props> = ({ handleBack }) => {
       ? ManualPromotionValidationSchema
       : AutomaticPromotionValidationSchema,
     onSubmit: (values) => {
-      const gebdu = {"name": "fast lane","audience": "driver","description": "Complete 10 trips Today And Be rewarded with N3000","reward_type": "cash","value": 3000,"condition_value": 10,"reset_type": "daily","start_date": "2023-12-11","end_date": "2023-12-31"}
-
-
       if (isManualPromo) {
         const payload = getManualPromoPayload(values);
         createManualPromo({
@@ -178,16 +174,7 @@ const NewPromotionForm: FC<Props> = ({ handleBack }) => {
             />
             <SelectField
               label="Promo Audience"
-              options={
-                formik.values.promo_type === 'manual' ?
-                [
-                  { label: "Riders", value: "rider" }
-                ] :
-                [
-                  { label: "Riders", value: "rider" },
-                  { label: "Drivers", value: "driver" },
-                ]
-              }
+              options={promoAudienceOptions}
               {...formik.getFieldProps("audience")}
               error={
                 formik.touched.audience ? formik.errors.audience : undefined
