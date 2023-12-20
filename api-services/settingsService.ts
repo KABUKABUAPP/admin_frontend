@@ -162,8 +162,8 @@ export const settingsApi = createApi({
       },
     }),
     getPromoSubscribers: build.query<any, any>({
-      query: ({ limit, page, promoId, promoStatus, redemptionType }) => ({
-        url: `admin/promotions/for-user-promotions?limit=${limit}&page=${page}&promotion=${promoId}`,
+      query: ({ limit, page, promoId, promoStatus, redemptionType, periodFilter }) => ({
+        url: `admin/promotions/for-user-promotions?limit=${limit}&page=${page}&status=${promoStatus}&redemption_type=${redemptionType}&start_date=&end_date=&time_line=${periodFilter}&promotion=${promoId}`,
       }),
       transformResponse: (response: any) => {
         if (!response) return <any>{};
@@ -171,6 +171,13 @@ export const settingsApi = createApi({
           return response?.data;
         }
       },
+    }),
+    rewardPromoSubscribers: build.mutation<any, any>({
+      query: (body) => ({
+        url: "admin/promotions/reward-drivers",
+        body,
+        method: "PUT",
+      }),
     }),
     createManualPromo: build.mutation<any, GenerateManualPromoPayload>({
       query: (body) => ({
@@ -308,5 +315,6 @@ export const {
   useGetDriverSettingsQuery,
   useUpdateDriverSettingsMutation,
   useCreateGeneralPromoMutation,
-  useGetPromoSubscribersQuery
+  useGetPromoSubscribersQuery,
+  useRewardPromoSubscribersMutation
 } = settingsApi;
