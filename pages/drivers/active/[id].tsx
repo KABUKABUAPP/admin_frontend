@@ -217,8 +217,9 @@ const Driver: NextPage = () => {
               firstRow={
                 <>
                   <DriverInfoCard
-                  referral_code={""} {...data.driverInfo}
-                  bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}                  />
+                    referral_code={""} {...data.driverInfo}
+                    bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+                  />
 
                   <CarDetailsCard
                     {...data.carDetails}

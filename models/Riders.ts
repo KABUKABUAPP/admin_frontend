@@ -56,6 +56,7 @@ export interface MappedRidersData {
 
 export interface ViewRiderResponse {
   data: {
+    state: string;
     _id: string;
     next_of_kin: {
       full_name: string;

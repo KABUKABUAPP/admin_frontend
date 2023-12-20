@@ -69,6 +69,12 @@ const Rider: NextPage = () => {
     }
   }, [unblockError]);
 
+  useEffect(() => {
+    if (data) {
+      console.log("Rider Successfully Unblocked", data);
+    }
+  }, [data]);
+
   const { userPermissions } = useUserPermissions();
 
   const currentPageUrl = router.query.current_page ? `currentPage=${router.query.current_page}` : '';
@@ -123,9 +129,10 @@ const Rider: NextPage = () => {
             firstRow={
               <>
                 <UserInfoCard
-                referral_code={""} 
-                {...data?.driver}
-                bg={data?.driver.isBlocked ? "#FEE2E9" : "#FFFFFF"} />
+                  referral_code={""} 
+                  {...data?.driver}
+                  bg={data?.driver.isBlocked ? "#FEE2E9" : "#FFFFFF"} 
+                />
                 <FinancialsCard
                   {...data?.financials}
                   bg={data?.driver.isBlocked ? "#FEE2E9" : "#FFFFFF"}

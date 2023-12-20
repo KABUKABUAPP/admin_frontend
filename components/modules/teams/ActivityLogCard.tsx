@@ -58,14 +58,6 @@ const ActivityLogCard: FC = () => {
   const populateSidebar = (newTimeline: string) => {
     setTimeline(newTimeline)
   }
-
-  useEffect(() => {
-    if(onboardedUserData) console.log('time flies', timeline, userType, onboardedUserData)
-  }, [onboardedUserData])
-
-  useEffect(() => {
-    if(data) console.log('time flies data', data)
-  }, [data])
   
   return (
     <div className="flex">

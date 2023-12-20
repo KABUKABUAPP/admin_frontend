@@ -43,7 +43,6 @@ const StaticMap: FC<Props> = ({ startPoint, endPoint }) => {
   }, [])
 
   useEffect(() => {
-    console.log('coords', startPoint, endPoint)
     if (startPoint && endPoint) {
       const origin = { lat: startPoint[0], lng: startPoint[1] };
       const destination = { lat: endPoint[0], lng: endPoint[1] };

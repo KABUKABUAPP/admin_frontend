@@ -1,6 +1,6 @@
 import React, { FC, PropsWithChildren, useState } from 'react'
 import ViewPromotions from './ViewPromotions'
-import NewPromotionForm from './NewPromotionForm'
+import NewerPromotionForm from './NewerPromotionForm'
 
 const Promotions:FC<PropsWithChildren> = ({children}) => {
     
@@ -9,7 +9,7 @@ const Promotions:FC<PropsWithChildren> = ({children}) => {
   return (
     <div className='rounded-lg bg-[#FFFFFF] h-full overflow-auto scrollbar-none p-6'>
        {!isCreatePromotions && <ViewPromotions handleIsCreatePromotion={()=>{setIsCreatePromotions(true)}}/>}
-       {isCreatePromotions && <NewPromotionForm handleBack={()=>{setIsCreatePromotions(false)}} />}
+       {isCreatePromotions && <NewerPromotionForm handleBack={()=>{setIsCreatePromotions(false)}} />}
     </div>
   )
 }
