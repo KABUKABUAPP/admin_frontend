@@ -27,6 +27,7 @@ import {
   ViewRoleQuery,
   ViewRoleResponse,
 } from "@/models/Settings";
+import { AnyAction } from "@reduxjs/toolkit";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: `${RIDES_BASE_URL}/`,
@@ -160,6 +161,24 @@ export const settingsApi = createApi({
         }
       },
     }),
+    getPromoSubscribers: build.query<any, any>({
+      query: ({ limit, page, promoId, promoStatus, redemptionType, periodFilter }) => ({
+        url: `admin/promotions/for-user-promotions?limit=${limit}&page=${page}&status=${promoStatus}&redemption_type=${redemptionType}&start_date=&end_date=&time_line=${periodFilter}&promotion=${promoId}`,
+      }),
+      transformResponse: (response: any) => {
+        if (!response) return <any>{};
+        else {
+          return response?.data;
+        }
+      },
+    }),
+    rewardPromoSubscribers: build.mutation<any, any>({
+      query: (body) => ({
+        url: "admin/promotions/reward-drivers",
+        body,
+        method: "PUT",
+      }),
+    }),
     createManualPromo: build.mutation<any, GenerateManualPromoPayload>({
       query: (body) => ({
         url: "admin/promotions/create-general",
@@ -170,6 +189,13 @@ export const settingsApi = createApi({
     createAutomaticPromo: build.mutation<any, GenerateAutomaticPromoPayload>({
       query: (body) => ({
         url: "admin/promotions/create-general",
+        body,
+        method: "POST",
+      }),
+    }),
+    createGeneralPromo: build.mutation<any, any>({
+      query: (body) => ({
+        url: "admin/promotions/create-general-promo",
         body,
         method: "POST",
       }),
@@ -287,5 +313,8 @@ export const {
   useDeletePromoMutation,
   useDeleteRoleMutation,
   useGetDriverSettingsQuery,
-  useUpdateDriverSettingsMutation
+  useUpdateDriverSettingsMutation,
+  useCreateGeneralPromoMutation,
+  useGetPromoSubscribersQuery,
+  useRewardPromoSubscribersMutation
 } = settingsApi;
