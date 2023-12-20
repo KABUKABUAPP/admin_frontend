@@ -11,6 +11,7 @@ interface Props {
     expiry_date: string;
     user_count: number;
     audience: string;
+    name: string;
   };
 }
 
@@ -27,12 +28,12 @@ const PromotionItem: FC<Props> = ({ handleClick, data }) => {
         style={{ flex: 1 }}
         className="border-r border-r-[#1FD11B] flex flex-col gap-1"
       >
+        {data.name && (
+          <p className="text-2xl font-semibold">{data.name}</p>
+        )}
         {data.value && (
           <p className="text-2xl font-semibold">{'₦'}{data.value}</p>
         )}
-        {/*data.promoCode && (
-          <p className="text-2xl font-semibold">{data.promoCode}</p>
-        )*/}
         {data.condition_value && <p className="text-base font-medium">If ride equals {data.condition_value}</p>}
         {data.active_status && <p className="text-sm font-medium">{'Active'}</p>}
         {!data.active_status && <p className="text-sm font-medium">{'Closed'}</p>}
