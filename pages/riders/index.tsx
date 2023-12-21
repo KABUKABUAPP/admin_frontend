@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CountHeader from "@/components/common/CountHeader";
 import SearchFilterBar from "@/components/common/SearchFilterBar";
 import RidersTable from "@/components/modules/riders/RidersTable";

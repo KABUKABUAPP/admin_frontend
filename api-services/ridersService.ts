@@ -64,7 +64,7 @@ export const ridersApi = createApi({
               return {
                 fullName: rider?.full_name,
                 imageUrl: rider?.profile_image,
-                location: "",
+                location: rider?.state !== 'undefined' ? rider?.state : 'No state provided',
                 riderId: rider._id,
                 status: rider?.isBlocked === true ? "Blocked" : "Active",
                 totalTrips: rider?.total_trips,
