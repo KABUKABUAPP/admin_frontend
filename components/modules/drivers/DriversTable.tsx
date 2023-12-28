@@ -22,14 +22,14 @@ const headCellData = [
     { title: "Wallet Balance", flex: 1 },
     { title: "Driver Type", flex: 1 },
     { title: "Status", flex: 1 },
-    { title: "Online Status", flex: 1 },
+    { title: "Online Status", flex: 1 }
   ];
 
 const DriversTable: FC<Props> = ({ tableData, isLoading, isError, refetch, subPath, headBg, currentPage }) => {
   return (
     <EnhancedTable
       headBg={headBg}
-      TableHeadComponent={<DriversTableHeadRow headCellData={headCellData}/>}
+      TableHeadComponent={<DriversTableHeadRow headCellData={subPath !== 'pending' ? headCellData : headCellData.concat({ title: "Onboard Step", flex: 1 })}/>}
       rowComponent={(rows) => <DriversTableBodyRow data={rows} subPath={subPath} currentPage={currentPage} />}
       rowData={tableData}
       maxWidth="100vw"

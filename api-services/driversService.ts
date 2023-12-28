@@ -73,18 +73,16 @@ export const driversApi = createApi({
         status,
         statusRemark,
         deleted,
-        onlineStatus
+        onlineStatus,
+        onboardStatus
       }) => ({
-        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}&search=${search}&order=${order}&is_blocked=${
-          status ? status : ""
-        }&status_remark=${statusRemark ? statusRemark : ""}${
-          deleted ? `&deleted=${deleted}` : ""
-        }${onlineStatus ? `&online_status=${onlineStatus}` : ''}`,
+        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}&search=${search}&order=${order}&is_blocked=${status ? status : ""}&status_remark=${statusRemark ? statusRemark : ""}${deleted ? `&deleted=${deleted}` : ""}${onlineStatus ? `&online_status=${onlineStatus}` : ''}${onboardStatus ? `&is_onboarding=${onboardStatus}` : ''}`,
       }),
       providesTags: ["drivers"],
       transformResponse: (response: GetAllDriversResponse) => {
         if (!response) return {} as DriversMappedResponse;
         else {
+          console.log('responsia', response)
           const totalCount = response?.data?.pagination?.totalCount;
           const mappedReponse = response?.data?.drivers?.map((driver) => {
             return {
@@ -104,7 +102,8 @@ export const driversApi = createApi({
               dateDeleted: "NOT DONE",
               deletionReason: driver?.user?.reason_for_delete,
               inspectionCode: driver?.inspection_code ? driver?.inspection_code : '',
-              onlineStatus: driver?.user?.online_status
+              onlineStatus: driver?.user?.online_status,
+              onboardStep: driver?.user?.onboarding_step
             } as DriversTableBodyData;
           });
 

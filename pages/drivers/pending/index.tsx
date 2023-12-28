@@ -53,8 +53,18 @@ const Drivers: NextPage = () => {
     { label: "Declined", value: "declined", default: false },
   ];
 
+  const onboardStatusOptions = [
+    { label: "Ongoing", value: "ongoing", default: false },
+    { label: "Complete", value: "complete", default: false },
+    { label: "All", value: "", default: true },
+  ]
+
   const [selectedStatusRemark, setSelectedStatusRemark] = useState<string>(
     statusRemarkOptions.find((opt) => opt.default === true)?.value || ""
+  );
+
+  const [onboardStatusRemark, setOnboardStatusRemark] = useState<string>(
+    onboardStatusOptions.find((opt) => opt.default === true)?.value || ""
   );
 
   const {
@@ -71,6 +81,7 @@ const Drivers: NextPage = () => {
       search: searchDriver,
       order: selectedFilterOption,
       statusRemark: selectedStatusRemark,
+      onboardStatus: onboardStatusRemark
     },
     {
       refetchOnMountOrArgChange: true,
@@ -147,6 +158,17 @@ const Drivers: NextPage = () => {
                 value={selectedFilterOption}
                 handleChange={(val) => {
                   setSelectedFilterOption(String(val));
+                }}
+              />
+            </div>
+            <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
+              <span>Onboard Status:</span>
+              <DropDown
+                placeholder="Filter"
+                options={onboardStatusOptions}
+                value={onboardStatusRemark}
+                handleChange={(val) => {
+                  setOnboardStatusRemark(String(val));
                 }}
               />
             </div>
