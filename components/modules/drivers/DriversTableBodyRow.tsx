@@ -25,7 +25,8 @@ const DriversTableBodyRow: FC<Props> = ({
     userId,
     statusRemark,
     inspectionCode,
-    onlineStatus
+    onlineStatus,
+    onboardStep
   },
   subPath,
   currentPage
@@ -82,6 +83,14 @@ const DriversTableBodyRow: FC<Props> = ({
           {onlineStatus ? onlineStatus : <Skeleton />}
         </p>
       </div>
+      {
+        isStatusRemark &&
+        <div style={{ flex: 1 }} className="flex items-center">
+          <p className="text-xs font-bold">
+            {onboardStep ? onboardStep : <Skeleton />}
+          </p>
+        </div>
+      }
     </div>
   );
 };

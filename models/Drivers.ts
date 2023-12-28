@@ -13,6 +13,7 @@ export interface DriversTableBodyData {
   deletionReason?: string;
   inspectionCode?: string;
   onlineStatus: any;
+  onboardStep: any;
 }
 
 export interface DriversMappedResponse {
@@ -28,6 +29,7 @@ export interface Driver {
   inspection_code: any;
   _id: string;
   user: {
+    onboarding_step: any;
     online_status: any;
     _id: string;
     full_name: string;
@@ -69,6 +71,7 @@ export interface GetAllDriversQuery {
   statusRemark?: string;
   deleted?: string;
   onlineStatus?: string;
+  onboardStatus?: string;
 }
 
 export interface Document {
