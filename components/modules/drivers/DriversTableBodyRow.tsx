@@ -64,12 +64,18 @@ const DriversTableBodyRow: FC<Props> = ({
       <div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">{capitalizeAllFirstLetters(location) || <Skeleton />}</p>
       </div>
-      <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{totalTrips ?? <Skeleton />}</p>
-      </div>
-      <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{walletBalance || <Skeleton />}</p>
-      </div>
+      {
+        !isStatusRemark &&
+        <div style={{ flex: 1 }} className="flex items-center">
+          <p className="text-xs font-bold">{totalTrips ?? <Skeleton />}</p>
+        </div>
+      }
+      {
+        !isStatusRemark &&
+        <div style={{ flex: 1 }} className="flex items-center">
+          <p className="text-xs font-bold">{walletBalance || <Skeleton />}</p>
+        </div>
+      }
       <div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">{driverType || <Skeleton />}</p>
       </div>
