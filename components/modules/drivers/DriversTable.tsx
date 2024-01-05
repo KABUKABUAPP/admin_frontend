@@ -13,10 +13,11 @@ interface Props {
   subPath: string;
   headBg?: string;
   currentPage?: number;
+  onboardStatus?: string;
 }
 
 
-const DriversTable: FC<Props> = ({ tableData, isLoading, isError, refetch, subPath, headBg, currentPage }) => {
+const DriversTable: FC<Props> = ({ tableData, isLoading, isError, refetch, subPath, headBg, currentPage, onboardStatus }) => {
   const router = useRouter();
   const isStatusRemark = router.pathname.includes("drivers/pending");
   const [headCellData, setHeadCellData] = useState([
@@ -48,7 +49,7 @@ const DriversTable: FC<Props> = ({ tableData, isLoading, isError, refetch, subPa
     <EnhancedTable
       headBg={headBg}
       TableHeadComponent={<DriversTableHeadRow headCellData={headCellData}/>}
-      rowComponent={(rows) => <DriversTableBodyRow data={rows} subPath={subPath} currentPage={currentPage} />}
+      rowComponent={(rows) => <DriversTableBodyRow data={rows} subPath={subPath} currentPage={currentPage} onboardStatus={onboardStatus} />}
       rowData={tableData}
       maxWidth="100vw"
       isLoading={isLoading}

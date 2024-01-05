@@ -10,6 +10,7 @@ interface Props {
   data: DriversTableBodyData;
   subPath: string;
   currentPage?: number
+  onboardStatus?: string;
 }
 
 const DriversTableBodyRow: FC<Props> = ({
@@ -29,7 +30,8 @@ const DriversTableBodyRow: FC<Props> = ({
     onboardStep
   },
   subPath,
-  currentPage
+  currentPage,
+  onboardStatus
 }) => {
   const router = useRouter();
   const isStatusRemark = router.pathname.includes("drivers/pending");
@@ -37,14 +39,12 @@ const DriversTableBodyRow: FC<Props> = ({
   return (
     <div
       className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
-      onClick={() => router.push(`/drivers/${subPath}/${userId}?current_page=${currentPage}&inspection_code=${inspectionCode}`)}
+      onClick={() => router.push(`/drivers/${subPath}/${userId}?current_page=${currentPage}&inspection_code=${inspectionCode}${onboardStatus ? `&onboardStatus=${onboardStatus}` : ''}`)}
     >
       <div style={{ flex: 2 }} className="flex items-center">
-        <Link href={`/drivers/${driverId}`}>
           <p className="text-xs font-bold cursor-pointer">
             {driverId || <Skeleton />}
           </p>
-        </Link>
       </div>
       <div style={{ flex: 2 }} className="flex items-center gap-2">
         <div>

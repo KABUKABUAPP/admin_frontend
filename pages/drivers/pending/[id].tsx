@@ -27,6 +27,7 @@ const Driver: NextPage = () => {
 
   const { id } = router.query;
   const inspectionCode = router.query.inspection_code;
+  const onboardStatus = router.query.onboardStatus;
 
   const { data, isLoading, isError, refetch } = useViewDriverQuery(
     { id: String(id) },
@@ -62,7 +63,7 @@ const Driver: NextPage = () => {
       <AppHead title="Kabukabu | Drivers" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar handleBack={() => router.push(`/drivers/pending?currentPage=${router.query.current_page}`)}>
+          <ActionBar handleBack={() => router.push(`/drivers/pending?currentPage=${router.query.current_page}&onboardStatus=${onboardStatus}`)}>
             {userPermissions &&
               userPermissions.drivers_permissions.write &&
               data &&

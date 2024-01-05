@@ -120,7 +120,16 @@ export const driversApi = createApi({
         if (!response) return <MappedViewDriver>{};
         else {
           const { data } = response;
-          
+          const getCarDocs = data?.car_documents.length === 1 && data?.car_documents[0] === null ? [] : data?.car_documents?.map((doc) => {
+            return {
+              title: doc?.title,
+              docImage: doc?.url,
+              docId: doc?._id,
+              status: doc?.status,
+              id: doc?._id,
+            };
+          })
+
           const mapped: MappedViewDriver = {
             driverInfo: {
               image: data?.driver?.user?.profile_image,
@@ -158,15 +167,7 @@ export const driversApi = createApi({
             },
             carDocs: {
               totalDocs: data?.car_documents.length,
-              documents: data?.car_documents?.map((doc) => {
-                return {
-                  title: doc?.title,
-                  docImage: doc?.url,
-                  docId: doc?._id,
-                  status: doc?.status,
-                  id: doc?._id,
-                };
-              }),
+              documents: getCarDocs,
             },
             onlineStatus: data?.driver?.user?.online_status,
             onlineSwitch: data?.driver?.user?.online_switch_date ? data?.driver?.user?.online_switch_date : '',
