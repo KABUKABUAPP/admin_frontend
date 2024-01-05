@@ -53,19 +53,17 @@ const Drivers: NextPage = () => {
     { label: "Declined", value: "declined", default: false },
   ];
 
-  const onboardStatusOptions = [
+  const [onboardStatusOptions, setOnboardStatusOptions] = useState([
     { label: "Ongoing", value: "ongoing", default: false },
     { label: "Complete", value: "complete", default: false },
     { label: "All", value: "", default: true },
-  ]
+  ])
 
   const [selectedStatusRemark, setSelectedStatusRemark] = useState<string>(
     statusRemarkOptions.find((opt) => opt.default === true)?.value || ""
   );
 
-  const [onboardStatusRemark, setOnboardStatusRemark] = useState<string>(
-    onboardStatusOptions.find((opt) => opt.default === true)?.value || ""
-  );
+  const [onboardStatusRemark, setOnboardStatusRemark] = useState<string>(router.query.onboardStatus ? String(router.query.onboardStatus) :  onboardStatusOptions.find((opt) => opt.default === true)?.value || "");
 
   const {
     data: drivers,
@@ -182,6 +180,7 @@ const Drivers: NextPage = () => {
             refetch={reloadDrivers}
             subPath="pending"
             currentPage={currentPage}
+            onboardStatus={onboardStatusRemark}
           />
           {drivers && (
             <Pagination
