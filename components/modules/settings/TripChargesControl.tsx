@@ -7,6 +7,8 @@ import { useGetDriverSettingsQuery, useUpdateDriverSettingsMutation } from "@/ap
 import Loader from "@/components/ui/Loader/Loader";
 import { toast } from "react-toastify";
 import Switch from "react-switch";
+import EditIcon from "@/components/icons/EditIcon";
+import CloseIcon from "@/components/icons/CloseIcon";
 
 interface Props {
     active: boolean;
@@ -39,6 +41,8 @@ const TripChargesControl: FC<Props> = ({active, booking_fee, kabu_percentage, st
     const [settingStateLevy, setSettingStateLevy] = useState<boolean>(state_levy);
     const [settingStartDate, setSettingStartDate] = useState<string>(date_range.start_date);
     const [settingEndDate, setSettingEndDate] = useState<string>(date_range.end_date);
+    const [showStartDate, setShowStartDate] = useState<boolean>(true);
+    const [showEndDate, setShowEndDate] = useState<boolean>(true);
 
     const initialValues = {
         active: active, 
@@ -134,24 +138,48 @@ const TripChargesControl: FC<Props> = ({active, booking_fee, kabu_percentage, st
                             </div>
                             
                             <div className="flex max-sm:flex-col gap-6 mt-2">
-                                <div style={{ flex: 1 }}>
-                                <TextField
-                                    label="Start Date"
-                                    type="date"
-                                    onChange={(val) => {setSettingStartDate(val.target.value)}}
-                                    disabled={!settingActive}
-                                    value={settingStartDate}
-                                />
-                                </div>
-                                <div style={{ flex: 1 }}>
-                                <TextField
-                                    label="End Date"
-                                    type="date"
-                                    onChange={(val) => {setSettingEndDate(val.target.value)}}
-                                    disabled={!settingActive}
-                                    value={settingEndDate}
-                                />
-                                </div>
+                                {
+                                    showStartDate ?
+                                    <div className="flex justify-between" style={{ flex: 1 }}>
+                                        <p>{new Date(settingStartDate).toLocaleDateString()}</p>
+                                        <div onClick={() => {setShowStartDate(!showStartDate)}}>
+                                            <EditIcon />
+                                        </div>
+                                    </div> :
+                                    <div className="flex justify-between" style={{ flex: 1 }}>
+                                        <TextField
+                                            label="Start Date"
+                                            type="date"
+                                            onChange={(val) => {setSettingStartDate(val.target.value)}}
+                                            disabled={!settingActive}
+                                            value={settingStartDate}
+                                        />
+                                        <div onClick={() => {setShowStartDate(!showStartDate)}}>
+                                            <CloseIcon />
+                                        </div>
+                                    </div>
+                                }
+                                {
+                                    showEndDate ?
+                                    <div className="flex justify-between" style={{ flex: 1 }}>
+                                        <p>{new Date(settingEndDate).toLocaleDateString()}</p>
+                                        <div onClick={() => {setShowEndDate(!showEndDate)}}>
+                                            <EditIcon />
+                                        </div>
+                                    </div> :
+                                    <div className="flex justify-between" style={{ flex: 1 }}>
+                                        <TextField
+                                            label="End Date"
+                                            type="date"
+                                            onChange={(val) => {setSettingEndDate(val.target.value)}}
+                                            disabled={!settingActive}
+                                            value={settingEndDate}
+                                        />
+                                        <div onClick={() => {setShowEndDate(!showEndDate)}}>
+                                            <CloseIcon />
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
                         
