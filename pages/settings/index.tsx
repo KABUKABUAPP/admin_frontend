@@ -17,6 +17,7 @@ import { useUserContext } from "@/contexts/UserContext";
 import { useGetDriverSettingsQuery } from "@/api-services/settingsService";
 import Loader from "@/components/ui/Loader/Loader";
 import FarePriceSettings from "@/components/modules/settings/FarePriceSettings";
+import TripChargesControl from "@/components/modules/settings/TripChargesControl";
 
 const Settings: NextPage = () => {
   const { user } = useUserContext();
@@ -57,7 +58,8 @@ const Settings: NextPage = () => {
         { title: "SOS Contact List", isActive: false },
         { title: "Driver Withdrawal Settings", isActive: false },
         { title: "Driver Referral Settings", isActive: false },
-        { title: "Fare Price Settings", isActive: false }
+        { title: "Fare Price Settings", isActive: false },
+        { title: "Trip Charges Control", isActive: false }
       ])
     }
   }, [user])
@@ -65,6 +67,10 @@ const Settings: NextPage = () => {
   useEffect(() => {
     setCurrentView(nav.filter((i) => i.isActive === true)[0].title);
   }, [JSON.stringify(nav)]);
+
+  useEffect(() => {
+    if (driversSettings) console.log(driversSettings);
+  }, [driversSettings]);
 
   const { userPermissions } = useUserPermissions();
 
@@ -129,6 +135,7 @@ const Settings: NextPage = () => {
               {currentView === "Driver Withdrawal Settings" && <DriverWithdrawalSettings frequency={driversSettings.withdrawal.frequency.toString()} type={driversSettings.withdrawal.type.toString()} limit={driversSettings.withdrawal.limit.toString()} />}
               {currentView === "Driver Referral Settings" && <DriverReferralSettings frequency={driversSettings.referral_reward.frequency.toString()} amount={driversSettings.referral_reward.amount.toString()} />}
               {currentView === "Fare Price Settings" && <FarePriceSettings upper_bound={driversSettings.pricing_boundary.upper_bound.toString()} lower_bound={driversSettings.pricing_boundary.lower_bound.toString()} />}
+              {currentView === "Trip Charges Control" && <TripChargesControl {...driversSettings.trip_charges_control} />}
             </>
           }
         />
