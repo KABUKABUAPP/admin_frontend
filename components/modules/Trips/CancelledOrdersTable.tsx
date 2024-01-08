@@ -54,7 +54,7 @@ const CancelledOrdersTable: FC<Props> = ({ setTripCount, tableSearch, order }) =
     }
   },[data])
 
-  const formatTripData = (data: TripData[]): FormattedTripOrder[] => {
+  const formatTripData = (data: any[]): FormattedTripOrder[] => {
     const formattedData = data.map((trip) => {
       return {
         id: trip?._id,
@@ -69,7 +69,7 @@ const CancelledOrdersTable: FC<Props> = ({ setTripCount, tableSearch, order }) =
         carModel: trip?.car?.brand_name + ' ' + trip?.car?.model || "",
         plateNumber: trip?.car?.plate_number || "",
         status: trip?.status || "",
-        reason: trip?.cancel_trip_reason || ""
+        reason: trip?.status_remark || ""
       };
     });
 
