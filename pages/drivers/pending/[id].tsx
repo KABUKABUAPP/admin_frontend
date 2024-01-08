@@ -63,7 +63,7 @@ const Driver: NextPage = () => {
       <AppHead title="Kabukabu | Drivers" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar handleBack={() => router.push(`/drivers/pending?currentPage=${router.query.current_page}&onboardStatus=${onboardStatus}`)}>
+          <ActionBar handleBack={() => router.push(`/drivers/pending?currentPage=${router.query.current_page}${onboardStatus ? `&onboardStatus=${onboardStatus}` : ''}`)}>
             {userPermissions &&
               userPermissions.drivers_permissions.write &&
               data &&

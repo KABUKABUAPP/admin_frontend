@@ -45,6 +45,7 @@ const CancelledOrdersTable: FC<Props> = ({ setTripCount, tableSearch, order }) =
 
   useEffect(()=>{
     if(data){
+      console.log('agedo', data)
       setTripCount(data.data.pagination.totalCount)
     }
 
@@ -56,19 +57,19 @@ const CancelledOrdersTable: FC<Props> = ({ setTripCount, tableSearch, order }) =
   const formatTripData = (data: TripData[]): FormattedTripOrder[] => {
     const formattedData = data.map((trip) => {
       return {
-        id: trip._id,
-        origin: `${trip.start_address.city || ""}, ${
-          trip.start_address.state || ""
-        }, ${trip.start_address.country || ""}`,
-        destination: `${trip.end_address.city || ""}, ${
-          trip.end_address.state || ""
-        }, ${trip.end_address.country || ""}`,
-        rider: trip.user?.full_name || "",
-        driver: trip?.driver?.full_name,
-        carModel: trip?.car?.brand_name + ' ' + trip?.car?.model,
-        plateNumber: trip?.car?.plate_number,
-        status: trip.status,
-        reason: trip.cancel_trip_reason
+        id: trip?._id,
+        origin: `${trip?.start_address?.city || ""}, ${
+          trip?.start_address?.state || ""
+        }, ${trip?.start_address?.country || ""}`,
+        destination: `${trip?.end_address?.city || ""}, ${
+          trip?.end_address?.state || ""
+        }, ${trip?.end_address?.country || ""}`,
+        rider: trip?.user?.full_name || "",
+        driver: trip?.driver?.full_name || "",
+        carModel: trip?.car?.brand_name + ' ' + trip?.car?.model || "",
+        plateNumber: trip?.car?.plate_number || "",
+        status: trip?.status || "",
+        reason: trip?.cancel_trip_reason || ""
       };
     });
 
