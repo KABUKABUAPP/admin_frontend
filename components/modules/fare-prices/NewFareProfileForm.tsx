@@ -25,6 +25,8 @@ const initialValues = {
   surge_multiplier: "",
   driver_fee_monthly_payment: "",
   driver_fee_sharp_payment: "",
+  driver_trip_charges_cap: "",
+  kabukabu_percentage: "",
   payment_types_available: {
     cash: true,
     wallet: true,
@@ -60,6 +62,12 @@ const NewFareProfileForm: FC = () => {
     }
   }, [isSuccess]);
 
+  useEffect(() => {
+    if (isError) {
+      toast.error("Error encountered");
+    }
+  }, [isError]);
+
   const handleNumberInputs = (value: string, fieldName: string) => {
     if (verifyIsDigit(value)) {
       formik.setFieldValue(fieldName, value);
@@ -73,7 +81,7 @@ const NewFareProfileForm: FC = () => {
       <FormikProvider value={formik}>
         <Form>
           <div className="flex max-md:flex-col gap-6">
-            <FormCard maxWidth="400px" height="250px">
+            <FormCard maxWidth="400px" height="350px">
               <div className="flex flex-col gap-6">
                 <div>
                   <SelectField
@@ -104,7 +112,7 @@ const NewFareProfileForm: FC = () => {
               </div>
             </FormCard>
 
-            <FormCard maxWidth="400px" height="250px">
+            <FormCard maxWidth="400px" height="350px">
               <p className="text-lg font-semibold pb-4">Driver Fee</p>
               <div className="flex flex-col gap-6">
                 <TextField
@@ -136,6 +144,22 @@ const NewFareProfileForm: FC = () => {
                   error={
                     formik.touched.driver_fee_sharp_payment
                       ? formik.errors.driver_fee_sharp_payment
+                      : undefined
+                  }
+                />
+                <TextField
+                  label="Driver Trip Charges Cap"
+                  placeholder="₦20,000"
+                  {...formik.getFieldProps("driver_trip_charges_cap")}
+                  onChange={(e) =>
+                    handleNumberInputs(
+                      e.target.value,
+                      "driver_trip_charges_cap"
+                    )
+                  }
+                  error={
+                    formik.touched.driver_trip_charges_cap
+                      ? formik.errors.driver_trip_charges_cap
                       : undefined
                   }
                 />
@@ -225,6 +249,19 @@ const NewFareProfileForm: FC = () => {
                     error={
                       formik.touched.state_levy
                         ? formik.errors.state_levy
+                        : undefined
+                    }
+                  />
+                  <TextField
+                    label="Kabukabu Percentage [%]"
+                    placeholder="3"
+                    {...formik.getFieldProps("kabukabu_percentage")}
+                    onChange={(e) =>
+                      handleNumberInputs(e.target.value, "kabukabu_percentage")
+                    }
+                    error={
+                      formik.touched.kabukabu_percentage
+                        ? formik.errors.kabukabu_percentage
                         : undefined
                     }
                   />
