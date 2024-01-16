@@ -62,7 +62,12 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
     if (userPermissions) {
       const acccessibleLinks = routePermissionsMapping
         .filter((item) => {
-          if (item.route === "/settings" || item.route === "/messages") {
+          if (
+            item.route === "/settings" ||
+            item.route === "/messages" ||
+            item.route === "/sharp-cars" ||
+            item.route === "/live-map"
+          ) {
             return true;
           } else {
             if (
@@ -71,7 +76,12 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
             ) {
               return true;
             }
-            if (item.route === "/settings" || item.route === "/messages") {
+            if (
+              item.route === "/settings" ||
+              item.route === "/messages" ||
+              item.route === "/sharp-cars" ||
+              item.route === "/live-map"
+            ) {
               return true;
             } else {
               return false;

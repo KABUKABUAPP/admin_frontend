@@ -44,8 +44,8 @@ export const sharpCarsApi = createApi({
   baseQuery: baseQueryWithLogoutOnTokenExpiration,
   endpoints: (build) => ({
     getAllSharpCars: build.query<MappedSharpCarsData, GetAllSharpCarsQuery>({
-      query: ({ limit, page }) => ({
-        url: `admin/car/get-all=${limit}&page=${page}`,
+      query: ({ limit, page, activeStatus, assignedStatus, search }) => ({
+        url: `admin/car/get-all?limit=${limit}&page=${page}&active=${activeStatus}&assigned=${assignedStatus}&search=${search}`
       }),
       transformResponse: (response: GetAllSharpCarsResponse) => {
         if (!response) return {} as MappedSharpCarsData;
@@ -55,7 +55,7 @@ export const sharpCarsApi = createApi({
               return {
                 carBrandModel: car?.brand_name,
                 carId: car?._id,
-                dateTimeAdded: car?.created_at.toDateString(),
+                dateTimeAdded: new Date(car?.created_at).toDateString(),
                 driver: "",
                 licenseNumber: car?.plate_number,
               };
@@ -68,6 +68,17 @@ export const sharpCarsApi = createApi({
         }
       },
     }),
+    getCarDeliveries: build.query<any, any>({
+      query: ({ limit, page, deliveryStatus }) => ({
+        url: `admin/car-delivery/get-all?limit=${limit}&page=${page}&status=${deliveryStatus}`
+      }),
+      transformResponse: (response: any) => {
+        if (!response) return {};
+        else {
+          console.log(response);
+        }
+      },
+    })
   }),
 });
 
