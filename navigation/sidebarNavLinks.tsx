@@ -92,6 +92,12 @@ const sidebarNavLinks: SidebarLink[] = [
     isActive: false,
     icon: <SettingsIcon />,
   },
+  {
+    title: "Map View",
+    link: "/live-map",
+    isActive: false,
+    icon: <UserIcon />,
+  }
 ];
 
 export default sidebarNavLinks;

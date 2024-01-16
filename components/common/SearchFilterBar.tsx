@@ -2,6 +2,7 @@ import React, { FC, PropsWithChildren, useEffect, useState } from "react";
 import TextField from "@/components/ui/Input/TextField/TextField";
 import SearchIcon from "@/components/icons/SearchIcon";
 import DropDown from "../ui/DropDown";
+import { useRouter } from "next/router";
 
 interface Props {
   filterOptions?: {
@@ -13,7 +14,12 @@ interface Props {
   handleDropDown?: (val: string | number) => void;
   searchValue?: string;
   handleSearch?: (val: string) => void;
-  title?: string
+  title?: string;
+  pendingInnerFilter?: any;
+  carDeliveriesInnerFilter?: any;
+  tabInnerFilter?: any;
+  innerFilterValue?: any;
+  handleFilterClick?: (val: string) => void;
 }
 
 const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
@@ -23,9 +29,15 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
   handleDropDown,
   searchValue,
   handleSearch,
-  title='Sort:'
+  title='Sort:',
+  pendingInnerFilter,
+  carDeliveriesInnerFilter,
+  tabInnerFilter,
+  innerFilterValue,
+  handleFilterClick
 }) => {
-  
+  const router = useRouter();
+
 
   return (
     <div className="rounded-lg bg-[#F1F1F1] w-full min-h-10 shadow-sm my-6 py-4 px-8 flex items-center justify-between max-sm:flex-col max-sm:gap-5">
@@ -39,6 +51,28 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
             if (handleSearch) handleSearch(e.target.value);
           }}
         />
+      </div>
+
+      <div className="flex">
+        {
+          tabInnerFilter && tabInnerFilter.length > 0 &&
+          <>
+            {tabInnerFilter.map((filter: any) => (
+              <div className="border-r border-r-[#E6E6E6] px-8 max-md:px-6 max-sm:border-r-0 max-sm:py-3 max-sm:border-b">
+              <p
+                className={`${
+                  filter.value === innerFilterValue ? "text-sm text-[#000] font-bold" : "text-xs text-[#9A9A9A]"
+                } cursor-pointer max-sm:text-center`}
+                onClick={() => {
+                  if (handleFilterClick) handleFilterClick(filter.value)
+                }}
+              >
+                {filter.key}
+              </p>
+            </div>
+            ))}
+          </>
+        }
       </div>
 
       <div className="flex-1">{children}</div>
