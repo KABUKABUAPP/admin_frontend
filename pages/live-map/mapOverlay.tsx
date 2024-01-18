@@ -6,6 +6,7 @@ import {
     Marker
 } from '@react-google-maps/api';
 import { useGetAllDriversQuery } from '@/api-services/driversService';
+import { useGetAllRidesQuery } from '@/api-services/ridersService';
 import { useModalContext } from "@/contexts/ModalContext";
 import CloseIcon from '@/components/icons/CloseIcon';
 import Card from '@/components/common/Card';
@@ -15,7 +16,8 @@ import { capitalizeAllFirstLetters } from '@/utils';
 import { useRouter } from 'next/router';
 
 interface MapOverlayProps {
-  onlineStatus: string;
+  onlineStatusDriver: string;
+  onlineStatusRider: string;
 }
 
 interface DriverModalProps {
@@ -61,7 +63,7 @@ const DriverModal : React.FC<DriverModalProps> = ({ driver, handleClose, type })
   )
 }
 
-const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatus }) => {
+const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatusRider }) => {
   const { setModalContent } = useModalContext();
   const [directions, setDirections] = useState<any>(null);
   const [map, setMap] = React.useState(null);
@@ -83,12 +85,28 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatus }) => {
       page: 1,
       search: '',
       order: 'newest_first',
-      onlineStatus: onlineStatus
+      onlineStatus: onlineStatusDriver
     },
     {
       refetchOnMountOrArgChange: true,
       refetchOnReconnect: true,
     }
+  );
+
+  const { 
+    data: riders, 
+    isLoading: ridersLoading, 
+    isError: ridersError, 
+    refetch: riderRefetch
+  } = useGetAllRidesQuery(
+    {
+      limit: 50,
+      page: 1,
+      search: '',
+      order: 'newest_first',
+      status: 'no'
+    },
+    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
   const { isLoaded } = useLoadScript({
@@ -101,76 +119,20 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatus }) => {
   };
 
   useEffect(() => {
-    if (drivers) {
-      const theCoordinates = drivers?.data?.map((d: any) => {
+    if (drivers && riders) {
+      const driversCoordinates = drivers?.data?.map((d: any) => {
         if (d.coordinate) return {lat: d.coordinate[0], lng: d.coordinate[1], personnel: d, type: 'driver'}
       });
 
-      const testDriver = {
-        driverId: '65a84224f92e6d865316d80d',
-        fullName: 'full name',
-        location: `driver state`,
-        imageUrl: 'https://res.cloudinary.com/dv6dky6rb/image/upload/v1705525900/ride_service_images/mgcooi0vbsb21bmnoqa2.web',
-        driverType: "Regular Driver",
-        totalTrips: 30,
-        walletBalance: "0",
-        status: 'active',
-        userId: '65a841e9f92e6d865316d7ee',
-        statusRemark: 'approved',
-        dateDeleted: "NOT DONE",
-        deletionReason: '',
-        inspectionCode: '',
-        onlineStatus: 'online',
-        onboardStep: 6,
-        coordinate: undefined
-      }
+      const ridersCoordinates = riders?.data?.map((d: any) => {
+        if (d.coordinate) return {lat: d.coordinate[0], lng: d.coordinate[1], personnel: d, type: 'rider'}
+      });
 
-      const zeeCoordinates = [
-        { lat: 6.5244, lng: 3.3792, personnel: testDriver, type: 'driver' },
-        { lat: 6.5761, lng: 3.3431, personnel: testDriver, type: 'driver'  },
-        { lat: 6.4281, lng: 3.4215, personnel: testDriver, type: 'driver'  },
-        { lat: 6.5833, lng: 3.3433, personnel: testDriver, type: 'driver'  },
-        { lat: 6.5951, lng: 3.3423, personnel: testDriver, type: 'driver'  },
-        { lat: 6.5244, lng: 3.3792, personnel: testDriver, type: 'driver'  },
-        { lat: 6.5244, lng: 3.3792, personnel: testDriver, type: 'driver'  },
-        { lat: 6.5645, lng: 3.3434, personnel: testDriver, type: 'driver'  },
-        { lat: 6.4654, lng: 3.4064, personnel: testDriver, type: 'driver'  },
-        { lat: 6.5244, lng: 3.3792, personnel: testDriver, type: 'driver'  },
-        { lat: 6.5054, lng: 3.3581, personnel: testDriver, type: 'driver'  },
-        { lat: 6.4281, lng: 3.4215, personnel: testDriver, type: 'driver'  },
-        { lat: 6.5244, lng: 3.3792, personnel: testDriver, type: 'driver'  },
-        { lat: 6.5244, lng: 3.3792, personnel: testDriver, type: 'driver'  },
-        { lat: 6.5244, lng: 3.3792, personnel: testDriver, type: 'driver'  },
-        { lat: 6.5244, lng: 3.3792, personnel: testDriver, type: 'driver'  },
-        { lat: 6.5244, lng: 3.3792, personnel: testDriver, type: 'driver'  }
-      ]
+      const allCoordinates = driversCoordinates.concat(ridersCoordinates)
       
-      const testRider = testDriver;
-
-      const zeeCoordinatesTwo = [
-        { lat: 6.5244, lng: 3.3792, personnel: testRider, type: 'rider' },
-        { lat: 6.5210, lng: 3.3792, personnel: testRider, type: 'rider' },
-        { lat: 6.4281, lng: 3.4215, personnel: testRider, type: 'rider' },
-        { lat: 6.5346, lng: 3.3615, personnel: testRider, type: 'rider' },
-        { lat: 6.5241, lng: 3.3795, personnel: testRider, type: 'rider' },
-        { lat: 6.5248, lng: 3.3788, personnel: testRider, type: 'rider' },
-        { lat: 6.4549, lng: 3.4246, personnel: testRider, type: 'rider' },
-        { lat: 6.6039, lng: 3.3515, personnel: testRider, type: 'rider' },
-        { lat: 6.4971, lng: 3.3456, personnel: testRider, type: 'rider' },
-        { lat: 6.4924, lng: 3.3528, personnel: testRider, type: 'rider' },
-        { lat: 6.5039, lng: 3.3795, personnel: testRider, type: 'rider' },
-        { lat: 6.4418, lng: 3.4177, personnel: testRider, type: 'rider' },
-        { lat: 6.5341, lng: 3.3637, personnel: testRider, type: 'rider' },
-      ];
-
-      //const newZeeCoordinates = zeeCoordinates.concat(zeeCoordinatesTwo)
-
-      const newZeeCoordinates = theCoordinates.concat(zeeCoordinatesTwo)
-      
-      //setCoordinates(theCoordinates);
-      setCoordinates(newZeeCoordinates);
+      setCoordinates(allCoordinates);
     }
-  }, [drivers]);
+  }, [drivers, riders]);
 
   const center = coordinates.length > 0 ? coordinates[0] : { lat: 6.5244, lng: 3.3792 };
 
