@@ -11,7 +11,8 @@ import { useGetInsightsQuery } from '@/api-services/dashboardService';
 const IndexPage: React.FC = () => {
   const [dropDownOptionSelected, setDropDownOptionSelected] = useState('');
   const [expandTrue, setExpandTrue] = useState(true)
-  const [onlineStatusOption, setOnlineStatusOption] = useState<string>("");
+  const [onlineStatusOption, setOnlineStatusOption] = useState<string>("online");
+  const [onlineStatusOptionRider, setOnlineStatusOptionRider] = useState<string>("online");
   const [periodFilter, setPeriodFilter] = useState('today');
   const {
     data: tripsInsight,
@@ -45,12 +46,19 @@ const IndexPage: React.FC = () => {
     },
   });
 
+  const formikTwo = useFormik({
+    initialValues: {},
+    onSubmit: (values) => {
+      
+    },
+  });
+
   return (
     <>
         <AppHead title="Kabukabu | Map View" />
         <AppLayout>
             <div className={styles.app}>
-              <MapOverlay onlineStatus={onlineStatusOption} />
+              <MapOverlay onlineStatusDriver={onlineStatusOption} onlineStatusRider={onlineStatusOptionRider} />
 
               {/* Elements above the map as overlay */}
               <div className={styles.overlay}>
@@ -74,8 +82,10 @@ const IndexPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-                  <div className={`bg-[#FDFDFD] ${expandTrue ? 'w-full' : 'w-[60%]'} gap-5 p-4 rounded-lg`}>
+              </div>
+              <div className={styles.overlaySecond}>
+                <div className="grid grid-cols-1 gap-4 mt-6">
+                  <div className={`bg-[#FDFDFD] ${expandTrue ? 'w-full' : 'w-[75%]'} gap-5 p-4 rounded-lg`}>
                     <div className="flex justify-between items-center my-2">
                     <div className="font-bp flex gap-3 items-center cursor-pointer">
                       <span>View:</span>
@@ -102,22 +112,28 @@ const IndexPage: React.FC = () => {
                         <Form>
                           <div className="flex flex-col space-y-2 p-3">
                             <label className="inline-flex items-center">
-                              <input type="radio" className="form-radio text-yellow-400  bg-yellow-400" name="radio-option" value="driverOnline" onClick={() => setOnlineStatusOption('online')} />
+                              <input type="radio" className="form-radio text-yellow-400  bg-yellow-400" name="radio-option" onClick={() => setOnlineStatusOption('online')} checked={onlineStatusOption === 'online' ? true : false} />
                               <span className="ml-2">Driver Online</span>
                             </label>
 
                             <label className="inline-flex items-center mb-4">
-                              <input type="radio" className="form-radio text-yellow-400  bg-yellow-400" name="radio-option" value="driverOffline" onClick={() => setOnlineStatusOption('offline')} />
+                              <input type="radio" className="form-radio text-yellow-400  bg-yellow-400" name="radio-option" onClick={() => setOnlineStatusOption('offline')} checked={onlineStatusOption === 'offline' ? true : false} />
                               <span className="ml-2">Driver Offline</span>
                             </label>
+                          </div>
+                        </Form>
+                      </FormikProvider>
 
+                      <FormikProvider value={formikTwo}>
+                        <Form>
+                          <div className="flex flex-col space-y-2 p-3">
                             <label className="inline-flex items-center mt-4">
-                              <input type="radio" className="form-radio text-yellow-400  bg-yellow-400" name="radio-option" value="riderOnline" onClick={() => setOnlineStatusOption('online')} />
+                              <input type="radio" className="form-radio text-yellow-400  bg-yellow-400" name="radio-option" onClick={() => setOnlineStatusOptionRider('online')} checked={onlineStatusOptionRider === 'online' ? true : false} />
                               <span className="ml-2">Rider Online</span>
                             </label>
 
                             <label className="inline-flex items-center">
-                              <input type="radio" className="form-radio text-yellow-400  bg-yellow-400" name="radio-option" value="riderOffline" onClick={() => setOnlineStatusOption('offline')} />
+                              <input type="radio" className="form-radio text-yellow-400  bg-yellow-400" name="radio-option" onClick={() => setOnlineStatusOptionRider('offline')} checked={onlineStatusOptionRider === 'offline' ? true : false} />
                               <span className="ml-2">Rider Offline</span>
                             </label>
                           </div>

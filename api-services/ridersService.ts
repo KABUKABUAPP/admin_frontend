@@ -74,6 +74,7 @@ export const ridersApi = createApi({
                 dateDeleted: rider?.date_deleted
                   ? new Date(rider?.date_deleted).toDateString()
                   : "",
+                coordinate: rider.coordinate
               };
             }
           );

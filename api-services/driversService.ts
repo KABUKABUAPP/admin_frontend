@@ -82,7 +82,6 @@ export const driversApi = createApi({
       transformResponse: (response: GetAllDriversResponse) => {
         if (!response) return {} as DriversMappedResponse;
         else {
-          console.log('responsia', response)
           const totalCount = response?.data?.pagination?.totalCount;
           const mappedReponse = response?.data?.drivers?.map((driver) => {
             return {
