@@ -11,6 +11,7 @@ import WithdrawalIcon from "@/components/icons/WithdrawalIcon";
 import BuildingIcon from "@/components/icons/BuildingIcon";
 import SettingsIcon from "@/components/icons/SettingsIcon";
 import MessageIcon from "@/components/icons/MessageIcon";
+import MapPinIcon from "@/components/icons/MapPinIcon";
 
 const sidebarNavLinks: SidebarLink[] = [
   {
@@ -96,7 +97,7 @@ const sidebarNavLinks: SidebarLink[] = [
     title: "Map View",
     link: "/live-map",
     isActive: false,
-    icon: <UserIcon />,
+    icon: <MapPinIcon />,
   }
 ];
 
