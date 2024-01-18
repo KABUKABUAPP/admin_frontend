@@ -74,9 +74,7 @@ export const sharpCarsApi = createApi({
       }),
       transformResponse: (response: any) => {
         if (!response) return {};
-        else {
-          console.log(response);
-        }
+        else {}
       },
     })
   }),

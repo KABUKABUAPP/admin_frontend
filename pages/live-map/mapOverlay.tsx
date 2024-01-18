@@ -120,7 +120,6 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
 
   useEffect(() => {
     if (drivers && riders) {
-      console.log('aspe', riders)
       const driversCoordinates = drivers?.data?.map((d: any) => {
         if (d.coordinate) return {lat: d.coordinate[0], lng: d.coordinate[1], personnel: d, type: 'driver'}
       });
@@ -138,10 +137,6 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
   const center = coordinates.length > 0 ? coordinates[0] : { lat: 6.5244, lng: 3.3792 };
 
   const handleMarkerClick = (index: any, coord: any) => {
-    // Perform actions when a marker is clicked
-    console.log(`Marker ${index + 1} clicked!`, coord);
-    // You can run any specified function here
-
     setModalContent(
       <DriverModal driver={coord.personnel} handleClose={() => setModalContent(null)} type={coord.type} />
     )

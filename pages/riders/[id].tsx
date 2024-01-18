@@ -69,12 +69,6 @@ const Rider: NextPage = () => {
     }
   }, [unblockError]);
 
-  useEffect(() => {
-    if (data) {
-      console.log("Rider Successfully Unblocked", data);
-    }
-  }, [data]);
-
   const { userPermissions } = useUserPermissions();
 
   const currentPageUrl = router.query.current_page ? `currentPage=${router.query.current_page}` : '';
