@@ -57,7 +57,7 @@ const DriverModal : React.FC<DriverModalProps> = ({ driver, handleClose, type })
             <p>{capitalizeAllFirstLetters(driver.onlineStatus)}</p>
           </div>
         </div>
-        <p className="text-md font-bold cursor-pointer" onClick={() => {type === 'driver' ? router.push(`/drivers/active/${driver.userId}?fallbackUrl=${router.asPath}`) : router.push(`/riders/${driver.userId}?fallbackUrl=${router.asPath}`)}}>Click to view profile</p>
+        <p className="text-md font-bold cursor-pointer" onClick={() => {type === 'driver' ? router.push(`/drivers/active/${driver.userId}?fallbackUrl=${router.asPath}`) : router.push(`/riders/${driver.riderId}?fallbackUrl=${router.asPath}`)}}>Click to view profile</p>
       </div>
     </Card>
   )
@@ -120,6 +120,7 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
 
   useEffect(() => {
     if (drivers && riders) {
+      console.log('aspe', riders)
       const driversCoordinates = drivers?.data?.map((d: any) => {
         if (d.coordinate) return {lat: d.coordinate[0], lng: d.coordinate[1], personnel: d, type: 'driver'}
       });
