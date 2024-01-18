@@ -53,9 +53,6 @@ const AddInspectorForm: FC = () => {
       const stateName = states?.filter((s) => s.value == values.state)[0]
         .label as string;
         let reqObj = {}
-
-        //console.log({ ...removeEmptyProperties(values), state: stateName })
-
         addInspector({ ...removeEmptyProperties(values), state: stateName });
     },
   });

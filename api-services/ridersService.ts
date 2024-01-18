@@ -57,7 +57,6 @@ export const ridersApi = createApi({
       }),
       providesTags: ["riders"],
       transformResponse: (response: GetAllRidersResponse) => {
-        console.log('res', response)
         if (!response) return {} as MappedRidersData;
         else {
           const mappedReponse: MappedRider[] = response.data.drivers.map(
@@ -94,7 +93,6 @@ export const ridersApi = createApi({
       providesTags: ["rider"],
       transformResponse: (response: ViewRiderResponse) => {
         if (!response) return <MappedViewRider>{};
-        console.log('moonshine', response)
         return {
           driver: {
             fullName: response?.data?.full_name,

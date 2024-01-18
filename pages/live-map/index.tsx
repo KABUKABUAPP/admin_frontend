@@ -94,9 +94,7 @@ const IndexPage: React.FC = () => {
                           placeholder="Filter"
                           options={filterOptions}
                           value={dropDownOptionSelected}
-                          handleChange={(val) => {
-                            console.log(val);
-                          }}
+                          handleChange={(val) => {}}
                           rightSet={4}
                         />
                       </div>

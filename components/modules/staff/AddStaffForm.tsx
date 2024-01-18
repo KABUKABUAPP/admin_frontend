@@ -68,7 +68,6 @@ const AddStaffForm: FC = () => {
       const stateName = states?.filter((s) => s.value == values.state)[0]
         .label as string;
 
-      console.log({ ...values, state: stateName })
       createStaff({ ...values, state: stateName });
     }
   });

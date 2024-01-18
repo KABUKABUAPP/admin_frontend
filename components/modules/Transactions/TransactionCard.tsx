@@ -44,10 +44,6 @@ const TransactionCard: FC<Props> = (props) => {
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
-  useEffect(() => {
-    if (data) console.log('kiki', data, props.theModalData)
-  }, [data])
-
   return (
     <Card elevation={true} maxWidth="400px" maxHeight="95vh">
         <div ref={ref}>
