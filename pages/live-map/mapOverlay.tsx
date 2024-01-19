@@ -137,8 +137,10 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
       
       setCoordinates(allCoordinates);
       
-      const driverIcon = onlineStatusDriver === 'offline' ? setIconUrlDriver('/taxiOffline.svg') : setIconUrlDriver('/taxiOnline.svg');
-      const riderIcon = onlineStatusRider === 'offline' ? setIconUrlRider('/riderOffline.svg') : setIconUrlDriver('/riderOnline.svg');
+      const driverIcon = onlineStatusDriver === 'offline' ? '/taxiOffline.svg' : '/taxiOnline.svg';
+      const riderIcon = onlineStatusRider === 'offline' ? '/riderOffline.svg': '/riderOnline.svg';
+      setIconUrlDriver(driverIcon);
+      setIconUrlRider(riderIcon);
     }
   }, [drivers, riders]);
 
