@@ -131,8 +131,12 @@ const TripChargesControl: FC<Props> = ({active, booking_fee, kabu_percentage, st
                                 {
                                     showStartDate ?
                                     <div className="flex justify-between" style={{ flex: 1 }}>
-                                        <p>{new Date(settingStartDate).toLocaleDateString()}</p>
-                                        <div onClick={() => {setShowStartDate(!showStartDate)}}>
+                                        <div className="flex flex-col">
+                                            <p className="font-bold">Start Date</p>
+                                            <p>{new Date(settingStartDate).toLocaleDateString()}</p>
+                                        </div>
+                                        
+                                        <div className="cursor-pointer" onClick={() => {setShowStartDate(!showStartDate)}}>
                                             <EditIcon />
                                         </div>
                                     </div> :
@@ -144,7 +148,7 @@ const TripChargesControl: FC<Props> = ({active, booking_fee, kabu_percentage, st
                                             disabled={!settingActive}
                                             value={settingStartDate}
                                         />
-                                        <div onClick={() => {setShowStartDate(!showStartDate)}}>
+                                        <div className="cursor-pointer" onClick={() => {setShowStartDate(!showStartDate)}}>
                                             <CloseIcon />
                                         </div>
                                     </div>
@@ -152,8 +156,12 @@ const TripChargesControl: FC<Props> = ({active, booking_fee, kabu_percentage, st
                                 {
                                     showEndDate ?
                                     <div className="flex justify-between" style={{ flex: 1 }}>
-                                        <p>{new Date(settingEndDate).toLocaleDateString()}</p>
-                                        <div onClick={() => {setShowEndDate(!showEndDate)}}>
+                                        <div className="flex flex-col">
+                                            <p className="font-bold">End Date</p>
+                                            <p>{new Date(settingEndDate).toLocaleDateString()}</p>
+                                        </div>
+                                        
+                                        <div className="cursor-pointer" onClick={() => {setShowEndDate(!showEndDate)}}>
                                             <EditIcon />
                                         </div>
                                     </div> :
@@ -165,7 +173,7 @@ const TripChargesControl: FC<Props> = ({active, booking_fee, kabu_percentage, st
                                             disabled={!settingActive}
                                             value={settingEndDate}
                                         />
-                                        <div onClick={() => {setShowEndDate(!showEndDate)}}>
+                                        <div className="cursor-pointer" onClick={() => {setShowEndDate(!showEndDate)}}>
                                             <CloseIcon />
                                         </div>
                                     </div>
