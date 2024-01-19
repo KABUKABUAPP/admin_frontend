@@ -69,8 +69,8 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
   const [map, setMap] = React.useState(null);
   const [coordinates, setCoordinates] = React.useState<any[]>([]);
   const [riderCoordinates, setRiderCoordinates] = React.useState<any[]>([]);
-  const [iconUrlDriver, setIconUrlDriver] = useState('/taxiOnline.svg');
-  const [iconUrlRider, setIconUrlRider] = useState('/riderOnline.svg');
+  const [iconUrlDriver, setIconUrlDriver] = useState('');
+  const [iconUrlRider, setIconUrlRider] = useState('');
 
   const {
     data: drivers,
