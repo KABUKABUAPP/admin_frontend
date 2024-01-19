@@ -69,7 +69,8 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
   const [map, setMap] = React.useState(null);
   const [coordinates, setCoordinates] = React.useState<any[]>([]);
   const [riderCoordinates, setRiderCoordinates] = React.useState<any[]>([]);
-  const [iconUrl, setIconUrl] = useState('/taxiOnline.svg')
+  const [iconUrlDriver, setIconUrlDriver] = useState('/taxiOnline.svg');
+  const [iconUrlRider, setIconUrlRider] = useState('/riderOnline.svg');
 
   const {
     data: drivers,
@@ -81,7 +82,7 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
     {
       carOwner: true,
       driverStatus: "active",
-      limit: 50,
+      limit: 1000,
       page: 1,
       search: '',
       order: 'newest_first',
@@ -100,7 +101,7 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
     refetch: riderRefetch
   } = useGetAllRidesQuery(
     {
-      limit: 50,
+      limit: 1000,
       page: 1,
       search: '',
       order: 'newest_first',
@@ -131,6 +132,9 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
       const allCoordinates = driversCoordinates.concat(ridersCoordinates)
       
       setCoordinates(allCoordinates);
+      
+      const driverIcon = onlineStatusDriver === 'offline' ? setIconUrlDriver('/taxiOffline.svg') : setIconUrlDriver('/taxiOnline.svg');
+      const riderIcon = onlineStatusRider === 'offline' ? setIconUrlRider('/riderOffline.svg') : setIconUrlDriver('/riderOnline.svg');
     }
   }, [drivers, riders]);
 
@@ -165,7 +169,7 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
                 key={index}
                 position={coord}
                 icon={{
-                  url: coord.type === 'driver' ? iconUrl : '/riderOnline.svg', // Replace with the actual path to your custom icon
+                  url: coord.type === 'driver' ? iconUrlDriver : iconUrlRider, // Replace with the actual path to your custom icon
                   scaledSize: new window.google.maps.Size(40, 40), // Adjust the size as needed
                 }} 
                 onClick={() => handleMarkerClick(index, coord)}
