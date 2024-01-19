@@ -82,7 +82,7 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
     {
       carOwner: true,
       driverStatus: "active",
-      limit: 1000,
+      limit: 200,
       page: 1,
       search: '',
       order: 'newest_first',
@@ -101,7 +101,7 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
     refetch: riderRefetch
   } = useGetAllRidesQuery(
     {
-      limit: 1000,
+      limit: 200,
       page: 1,
       search: '',
       order: 'newest_first',
@@ -122,11 +122,15 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
   useEffect(() => {
     if (drivers && riders) {
       const driversCoordinates = drivers?.data?.map((d: any) => {
-        if (d.coordinate) return {lat: d.coordinate[0], lng: d.coordinate[1], personnel: d, type: 'driver'}
+        if (d.coordinate && d.coordinate.length > 0) return {lat: typeof d.coordinate[0] === 'number'
+        ? d.coordinate[0] : parseFloat(d.coordinate[0]), lng: typeof d.coordinate[1] === 'number'
+        ? d.coordinate[1] : parseFloat(d.coordinate[1]), personnel: d, type: 'driver'}
       });
 
       const ridersCoordinates = riders?.data?.map((d: any) => {
-        if (d.coordinate) return {lat: d.coordinate[0], lng: d.coordinate[1], personnel: d, type: 'rider'}
+        if (d.coordinate && d.coordinate.length > 0) return {lat: typeof d.coordinate[0] === 'number'
+        ? d.coordinate[0] : parseFloat(d.coordinate[0]), lng: typeof d.coordinate[1] === 'number'
+        ? d.coordinate[1] : parseFloat(d.coordinate[1]), personnel: d, type: 'rider'}
       });
 
       const allCoordinates = driversCoordinates.concat(ridersCoordinates)
