@@ -69,8 +69,8 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
   const [map, setMap] = React.useState(null);
   const [coordinates, setCoordinates] = React.useState<any[]>([]);
   const [riderCoordinates, setRiderCoordinates] = React.useState<any[]>([]);
-  const [iconUrlDriver, setIconUrlDriver] = useState('/taxiOnline.svg');
-  const [iconUrlRider, setIconUrlRider] = useState('/riderOnline.svg');
+  const [iconUrlDriver, setIconUrlDriver] = useState('');
+  const [iconUrlRider, setIconUrlRider] = useState('');
 
   const {
     data: drivers,
@@ -82,7 +82,7 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
     {
       carOwner: true,
       driverStatus: "active",
-      limit: 1000,
+      limit: 200,
       page: 1,
       search: '',
       order: 'newest_first',
@@ -101,7 +101,7 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
     refetch: riderRefetch
   } = useGetAllRidesQuery(
     {
-      limit: 1000,
+      limit: 200,
       page: 1,
       search: '',
       order: 'newest_first',
@@ -122,19 +122,25 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
   useEffect(() => {
     if (drivers && riders) {
       const driversCoordinates = drivers?.data?.map((d: any) => {
-        if (d.coordinate) return {lat: d.coordinate[0], lng: d.coordinate[1], personnel: d, type: 'driver'}
+        if (d.coordinate && d.coordinate.length > 0) return {lat: typeof d.coordinate[0] === 'number'
+        ? d.coordinate[0] : parseFloat(d.coordinate[0]), lng: typeof d.coordinate[1] === 'number'
+        ? d.coordinate[1] : parseFloat(d.coordinate[1]), personnel: d, type: 'driver'}
       });
 
       const ridersCoordinates = riders?.data?.map((d: any) => {
-        if (d.coordinate) return {lat: d.coordinate[0], lng: d.coordinate[1], personnel: d, type: 'rider'}
+        if (d.coordinate && d.coordinate.length > 0) return {lat: typeof d.coordinate[0] === 'number'
+        ? d.coordinate[0] : parseFloat(d.coordinate[0]), lng: typeof d.coordinate[1] === 'number'
+        ? d.coordinate[1] : parseFloat(d.coordinate[1]), personnel: d, type: 'rider'}
       });
 
       const allCoordinates = driversCoordinates.concat(ridersCoordinates)
       
       setCoordinates(allCoordinates);
       
-      const driverIcon = onlineStatusDriver === 'offline' ? setIconUrlDriver('/taxiOffline.svg') : setIconUrlDriver('/taxiOnline.svg');
-      const riderIcon = onlineStatusRider === 'offline' ? setIconUrlRider('/riderOffline.svg') : setIconUrlDriver('/riderOnline.svg');
+      const driverIcon = onlineStatusDriver === 'offline' ? '/taxiOffline.svg' : '/taxiOnline.svg';
+      const riderIcon = onlineStatusRider === 'offline' ? '/riderOffline.svg': '/riderOnline.svg';
+      setIconUrlDriver(driverIcon);
+      setIconUrlRider(riderIcon);
     }
   }, [drivers, riders]);
 
