@@ -82,7 +82,6 @@ export const driversApi = createApi({
       transformResponse: (response: GetAllDriversResponse) => {
         if (!response) return {} as DriversMappedResponse;
         else {
-          console.log('responsia', response)
           const totalCount = response?.data?.pagination?.totalCount;
           const mappedReponse = response?.data?.drivers?.map((driver) => {
             return {
@@ -103,7 +102,8 @@ export const driversApi = createApi({
               deletionReason: driver?.user?.reason_for_delete,
               inspectionCode: driver?.inspection_code ? driver?.inspection_code : '',
               onlineStatus: driver?.user?.online_status,
-              onboardStep: driver?.user?.onboarding_step
+              onboardStep: driver?.user?.onboarding_step,
+              coordinate: driver?.user?.coordinate && driver?.user?.coordinate.length > 0 ? driver?.user?.coordinate : undefined
             } as DriversTableBodyData;
           });
 

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import SharpCarOptionItem from "./SharpCarOptionItem";
@@ -12,7 +12,7 @@ interface Props {
 
 const SharpCarOptionBar: FC<Props> = ({ handleClickOption, options }) => {
   
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <div className="bg-[#FFFFFF] w-full px-2 py-6 flex max-sm:flex-col rounded-lg justify-between items-center gap-3">

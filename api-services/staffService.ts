@@ -109,7 +109,6 @@ export const staffApi = createApi({
       transformResponse: (response: ViewStaffResponse) => {
         if (!response) return <MappedViewStaff>{};
         else {
-          console.log('r', response?.data);
           const mappedStaff = {
             fullName: response?.data?.full_name,
             email: response?.data?.email,

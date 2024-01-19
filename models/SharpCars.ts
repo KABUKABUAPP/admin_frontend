@@ -52,5 +52,8 @@ export interface MappedSharpCarsData {
 
 export interface GetAllSharpCarsQuery {
   limit: number;
-  page: number
+  page: number;
+  activeStatus: string;
+  assignedStatus: string;
+  search: string;
 }

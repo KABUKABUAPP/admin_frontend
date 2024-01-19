@@ -22,7 +22,6 @@ const DeleteSOSContactReasonForm: FC = () => {
     initialValues,
     validationSchema: DeleteSosContactValidation,
     onSubmit: (values) => {
-      console.log(values);
     },
   });
 

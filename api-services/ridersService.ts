@@ -74,6 +74,7 @@ export const ridersApi = createApi({
                 dateDeleted: rider?.date_deleted
                   ? new Date(rider?.date_deleted).toDateString()
                   : "",
+                coordinate: rider.coordinate
               };
             }
           );
@@ -92,7 +93,6 @@ export const ridersApi = createApi({
       providesTags: ["rider"],
       transformResponse: (response: ViewRiderResponse) => {
         if (!response) return <MappedViewRider>{};
-        console.log('moonshine', response)
         return {
           driver: {
             fullName: response?.data?.full_name,

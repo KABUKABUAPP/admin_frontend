@@ -15,6 +15,7 @@ export interface MappedRider extends RidersTableBodyData {
 }
 
 export interface Rider {
+  coordinate: any;
   state: any;
   _id: string;
   full_name: string;

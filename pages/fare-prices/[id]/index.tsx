@@ -34,11 +34,7 @@ const FarePrice: NextPage = () => {
       <StartSurgeCard handleClose={() => setModalContent(null)} />
     );
   };
-
-  useEffect(() => {
-    if (data) console.log(data)
-  }, [data])
-
+  
   return (
     <>
       <AppHead title="Kabukabu | Fare Prices" />

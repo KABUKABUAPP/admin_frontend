@@ -1,0 +1,24 @@
+/* styles/index.module.css */
+
+.app {
+  position: relative;
+  height: 100%;
+}
+
+.overlay {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  width: 90%;
+  text-align: center;
+  color: #000;
+}
+
+.overlaySecond {
+  position: absolute;
+  top: 25%;
+  left: 5%;
+  width: 25%;
+  text-align: center;
+  color: #000;
+}
