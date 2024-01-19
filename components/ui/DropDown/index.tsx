@@ -8,9 +8,10 @@ interface Props {
   handleChange?: (value: string | number) => void;
   placeholder?: string;
   left?: number
+  rightSet?: number
 }
 
-const DropDown: FC<Props> = ({ options, value, handleChange, placeholder, left }) => {
+const DropDown: FC<Props> = ({ options, value, handleChange, placeholder, left, rightSet }) => {
   const [isDropDown, setIsDropDown] = useState(false);
   const ref = useClickOutside<HTMLDivElement>(() => setIsDropDown(false));
   const [ selectedLabel, setSelectedLabel ] = useState<string | number>('')
@@ -41,7 +42,7 @@ const DropDown: FC<Props> = ({ options, value, handleChange, placeholder, left }
       {isDropDown && (
         <div
           ref={ref}
-          className="bg-[#FFFFFF] rounded-lg p-3 absolute top-6 right-[0] min-w-[250px] shadow-md"
+          className={`bg-[#FFFFFF] rounded-lg p-3 absolute top-6 ${rightSet ? `right[${rightSet}]` : 'right-[0]'} min-w-[250px] shadow-md`}
           style={{left: left, zIndex: 3000}}
         >
           {options && options.length ? options?.map((option) => {

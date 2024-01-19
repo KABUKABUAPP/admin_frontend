@@ -29,6 +29,7 @@ export interface Driver {
   inspection_code: any;
   _id: string;
   user: {
+    coordinate: any;
     onboarding_step: any;
     online_status: any;
     _id: string;

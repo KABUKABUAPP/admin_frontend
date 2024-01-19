@@ -45,7 +45,6 @@ const CancelledOrdersTable: FC<Props> = ({ setTripCount, tableSearch, order }) =
 
   useEffect(()=>{
     if(data){
-      console.log('agedo', data)
       setTripCount(data.data.pagination.totalCount)
     }
 

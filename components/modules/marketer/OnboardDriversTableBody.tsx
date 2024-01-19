@@ -19,8 +19,6 @@ const OnboardDriversTableBody: FC<Props> = ({ data, loading, error, refetch, typ
   const loadingState = loading && !data && !error;
   const errorState = !loading && !data && error;
 
-  console.log('type in body', type)
-
   return (
     <div
       className="w-full overflow-x-auto p-2  bg-[#FDFDFD] 

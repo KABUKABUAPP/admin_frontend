@@ -44,7 +44,6 @@ const DateRangeFilter: FC<Props> = ({ handleSelectDate }) => {
     onSubmit: (values) => {
         const startDate = new Date(values.startDate).toLocaleDateString(),
             endDate = new Date(values.endDate).toLocaleDateString();
-        console.log(startDate, endDate)
     },
   });
 

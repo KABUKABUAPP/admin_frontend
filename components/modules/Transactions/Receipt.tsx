@@ -56,7 +56,6 @@ interface RatingProps {
 }
 
 const ShowRating: FC<any> = (rating: any) => {
-  console.log('rating', typeof rating.rating, rating.rating)
   let ratingEl = Array.from({ length: rating.rating }, (_, index) => (
     <div key={index}>
       <RatingIcon fill="#1FD11B" />
@@ -85,10 +84,6 @@ const Receipt: FC<Props> = (props) => {
     { narration: props.narration, narration_id: props.narrationId, id: props.id },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
-
-  useEffect(() => {
-    if (data) console.log('kiki', data, 'props', props)
-  }, [data])
 
   const ref = useClickOutside<HTMLDivElement>(() => props.handleClose());
 

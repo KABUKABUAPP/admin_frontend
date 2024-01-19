@@ -74,7 +74,6 @@ export const marketerApi = createApi({
       }),
       transformResponse: (response: GetMarketerResponse) => {
         if (!response) return [];
-        console.log('d', response)
         const mappedData = response.data.data.map((d) => {
           return {
             fullName: d.full_name,

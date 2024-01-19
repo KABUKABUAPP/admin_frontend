@@ -36,7 +36,7 @@ const ActivityLogCard: FC = () => {
 
   const formik = useFormik({
       initialValues: initialValues,
-      onSubmit: (values) => console.log(values)
+      onSubmit: (values) => {}
   });
 
   const { id } = useRouter().query;

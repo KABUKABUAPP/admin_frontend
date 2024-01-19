@@ -61,16 +61,6 @@ const TripChargesControl: FC<Props> = ({active, booking_fee, kabu_percentage, st
     const formik = useFormik({
         initialValues: initialValues,
         onSubmit: (values) => {
-            console.log({
-                active: settingActive ? 'on' : 'off', 
-                booking_fee: settingBookingFee ? 'on' : 'off', 
-                kabu_percentage: settingKabuPerc ? 'on' : 'off', 
-                state_levy: settingStateLevy ? 'on' : 'off', 
-                date_range: {
-                    start_date: convertDateFormat(settingStartDate), 
-                    end_date: convertDateFormat(settingEndDate)
-                }
-            })
             const driversSettingsData = {
                 trip_charges_control: {
                     active: settingActive ? 'on' : 'off', 

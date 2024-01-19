@@ -70,9 +70,8 @@ const RewardPromoForm: FC<Props> = ({ handleBack }) => {
 
     useEffect(() => {
         if (generalPromo.isError) {
-        const { message }: any = generalPromo.error;
-        console.log(message)
-        toast.error('Error encountered');
+            const { message }: any = generalPromo.error;
+            toast.error('Error encountered');
         }
     }, [generalPromo.error]);
 

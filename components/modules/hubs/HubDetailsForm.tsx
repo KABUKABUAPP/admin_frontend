@@ -38,7 +38,6 @@ const HubDetailsForm: FC<Props> = ({ hubImages }) => {
     initialValues,
     validationSchema: AddHubValidation,
     onSubmit: (values) => {
-      console.log('Add hub clicked')
       values.state = selectedStateName;
       values.inspector = inspectorVal.value;
       if (!hubImages.length) {

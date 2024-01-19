@@ -290,9 +290,7 @@ export const settingsApi = createApi({
       }),
       transformResponse: (response: any) => {
         if (!response) return {}
-        else {
-          console.log(response?.data)
-        }
+        else {}
       }
     })
   })

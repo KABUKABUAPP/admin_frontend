@@ -164,6 +164,10 @@ export const routePermissionsMapping: {
     route: '/settings',
     permissionLabel: ''
   },
+  {
+    route: '/live-map',
+    permissionLabel: ''
+  }
 ];
 
 export const nigerianStates = [
@@ -291,15 +295,15 @@ export const sharpCarsOptionsData = [
     keyVal: "",
   },
   {
-    title: "Unassinged Cars",
+    title: "Pending Cars",
     isActive: false,
-    keyVal: "unassigned-cars",
+    keyVal: "pending",
   },
   {
     title: "Car Deliveries",
     isActive: false,
     keyVal: "car-deliveries",
-  },
+  }
 ];
 
 export const transactionsOptionsBar = [
