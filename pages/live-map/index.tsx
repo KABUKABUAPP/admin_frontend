@@ -110,12 +110,12 @@ const IndexPage: React.FC = () => {
                         <Form>
                           <div className="flex flex-col space-y-2 p-3">
                             <label className="inline-flex items-center">
-                              <input type="radio" className="form-radio text-yellow-400  bg-yellow-400" name="radio-option" onClick={() => setOnlineStatusOption('online')} checked={onlineStatusOption === 'online' ? true : false} />
+                              <input type="radio" className="form-radio text-yellow-400  bg-yellow-400" name="radio-option" onClick={() => setOnlineStatusOption('online')} checked={onlineStatusOption === 'online' ? true : false} onChange={() => {}} />
                               <span className="ml-2">Driver Online</span>
                             </label>
 
                             <label className="inline-flex items-center mb-4">
-                              <input type="radio" className="form-radio text-yellow-400  bg-yellow-400" name="radio-option" onClick={() => setOnlineStatusOption('offline')} checked={onlineStatusOption === 'offline' ? true : false} />
+                              <input type="radio" className="form-radio text-yellow-400  bg-yellow-400" name="radio-option" onClick={() => setOnlineStatusOption('offline')} checked={onlineStatusOption === 'offline' ? true : false} onChange={() => {}} />
                               <span className="ml-2">Driver Offline</span>
                             </label>
                           </div>
@@ -126,12 +126,12 @@ const IndexPage: React.FC = () => {
                         <Form>
                           <div className="flex flex-col space-y-2 p-3">
                             <label className="inline-flex items-center mt-4">
-                              <input type="radio" className="form-radio text-yellow-400  bg-yellow-400" name="radio-option" onClick={() => setOnlineStatusOptionRider('online')} checked={onlineStatusOptionRider === 'online' ? true : false} />
+                              <input type="radio" className="form-radio text-yellow-400  bg-yellow-400" name="radio-option" onClick={() => setOnlineStatusOptionRider('online')} checked={onlineStatusOptionRider === 'online' ? true : false} onChange={() => {}} />
                               <span className="ml-2">Rider Online</span>
                             </label>
 
                             <label className="inline-flex items-center">
-                              <input type="radio" className="form-radio text-yellow-400  bg-yellow-400" name="radio-option" onClick={() => setOnlineStatusOptionRider('offline')} checked={onlineStatusOptionRider === 'offline' ? true : false} />
+                              <input type="radio" className="form-radio text-yellow-400  bg-yellow-400" name="radio-option" onClick={() => setOnlineStatusOptionRider('offline')} checked={onlineStatusOptionRider === 'offline' ? true : false} onChange={() => {}} />
                               <span className="ml-2">Rider Offline</span>
                             </label>
                           </div>
