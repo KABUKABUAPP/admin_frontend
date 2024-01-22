@@ -7,9 +7,9 @@ import {
 } from '@react-google-maps/api';
 import { useGetAllDriversQuery } from '@/api-services/driversService';
 import { useGetAllRidesQuery } from '@/api-services/ridersService';
-import { useModalContext } from "@/contexts/ModalContext";
 import CloseIcon from '@/components/icons/CloseIcon';
 import Card from '@/components/common/Card';
+import { useModalContext } from "@/contexts/ModalContext";
 import useClickOutside from '@/hooks/useClickOutside';
 import Avatar from '@/components/common/Avatar';
 import { capitalizeAllFirstLetters } from '@/utils';
@@ -82,7 +82,7 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
     {
       carOwner: true,
       driverStatus: "active",
-      limit: 200,
+      limit: 1000,
       page: 1,
       search: '',
       order: 'newest_first',
@@ -101,7 +101,7 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
     refetch: riderRefetch
   } = useGetAllRidesQuery(
     {
-      limit: 200,
+      limit: 1000,
       page: 1,
       search: '',
       order: 'newest_first',

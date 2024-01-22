@@ -4,9 +4,11 @@ export interface SharpCarsTableBodyData {
   driver: string;
   licenseNumber: string;
   dateTimeAdded: string;
+  images: any;
 }
 
 export interface SharpCar {
+  user: any;
   camera: {
     isSynched: boolean;
   };

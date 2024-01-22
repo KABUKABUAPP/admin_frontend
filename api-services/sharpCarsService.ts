@@ -56,8 +56,9 @@ export const sharpCarsApi = createApi({
                 carBrandModel: car?.brand_name,
                 carId: car?._id,
                 dateTimeAdded: new Date(car?.created_at).toDateString(),
-                driver: "",
+                driver: car?.user ? car?.user : '',
                 licenseNumber: car?.plate_number,
+                images: car?.images
               };
             });
 
@@ -68,16 +69,53 @@ export const sharpCarsApi = createApi({
         }
       },
     }),
+    getOneSharpCars: build.query<any, any>({
+      query: ({ id }) => ({
+        url: `admin/car/view/${id}`
+      }),
+      transformResponse: (response: any) => {
+        if (!response) return {};
+        else {
+          return response.data
+        }
+      },
+    }),
     getCarDeliveries: build.query<any, any>({
       query: ({ limit, page, deliveryStatus }) => ({
         url: `admin/car-delivery/get-all?limit=${limit}&page=${page}&status=${deliveryStatus}`
       }),
       transformResponse: (response: any) => {
         if (!response) return {};
-        else {}
+        else {
+          return response.data
+        }
       },
+    }),
+    assignSharpCar: build.mutation<any, any>({
+      query: ({ carId, driverId }) => ({
+        url: `admin/car/assign-to-driver/${carId}?driver_id=${driverId}&action=assign`,
+        method: "PUT"
+      })
+    }),
+    createDelivery: build.mutation<any, any>({
+      query: (body) => ({
+        url: `admin/car-delivery/create`,
+        body,
+        method: "POST"
+      })
+    }),
+    getSingleDelivery: build.query<any, any>({
+      query: ({ id }) => ({
+        url: `admin/car-delivery/view/${id}`
+      }),
+      transformResponse: (response: any) => {
+        if (!response) return {};
+        else {
+          return response.data
+        }
+      }
     })
   }),
 });
 
-export const { useGetAllSharpCarsQuery } = sharpCarsApi;
+export const { useGetAllSharpCarsQuery, useGetCarDeliveriesQuery, useGetOneSharpCarsQuery, useAssignSharpCarMutation, useCreateDeliveryMutation, useGetSingleDeliveryQuery } = sharpCarsApi;

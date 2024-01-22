@@ -7,13 +7,29 @@ import Skeleton from "react-loading-skeleton";
 import PlateNumber from "@/components/common/PlateNumber";
 import Button from "@/components/ui/Button/Button";
 
+function formatDateTime(inputTime: string) {
+    const options: any = { year: 'numeric', month: 'short', day: 'numeric' };
+    const formattedTime = new Date(inputTime).toLocaleDateString('en-US', options);
+  
+    // Extracting time part and formatting it
+    const timePart = new Date(inputTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' });
+  
+    return `${formattedTime} at ${timePart}`;
+}
+
 interface Props {
   isLoading?: boolean;
   carImages?: string[];
   carModel?: string;
   carColor?: string;
   plateNumber?: string;
-  bg?: string
+  bg?: string;
+  hub?: string;
+  inspector?: string;
+  addedDateTime?: string;
+  assignDriver?: boolean;
+  hubId?: string;
+  inspectorId?: string;
 }
 
 const CarDetailsCard: FC<Props> = ({
@@ -22,7 +38,11 @@ const CarDetailsCard: FC<Props> = ({
   isLoading,
   carColor,
   plateNumber,
-  bg='#FFFFFF'
+  bg='#FFFFFF',
+  hub,
+  inspector,
+  addedDateTime,
+  assignDriver
 }) => {
   const router = useRouter();
   const isDeleted = router.pathname.includes('deleted')
@@ -52,14 +72,30 @@ const CarDetailsCard: FC<Props> = ({
         ) : (
           <Skeleton enableAnimation={isLoading} />
         )}
-
+        
+        {hub && (
+          <div className="flex gap-4">
+            <p className="font-bold">Hub: {hub}</p>
+            <p className="text-sm cursor-pointer">View Hub</p>
+          </div>
+        )}
+        {inspector && (
+          <div className="flex gap-4">
+            <p className="font-bold">Inspector: {inspector}</p>
+            <p className="text-sm cursor-pointer">View Inspector</p>
+          </div>
+        )}
+        {addedDateTime && (
+           <p className="font-bold">Added On: {formatDateTime(addedDateTime)}</p>
+        )}
+        {!assignDriver && 
         <Button
           title="View Location History"
           variant="text"
           color="tetiary"
           disabled={true}
           className={`w-fit ${isDeleted ? '!text-[#9A9A9A]' : ''}`}
-        />
+        />}
       </div>
     </Card>
   );
