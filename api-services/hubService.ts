@@ -70,8 +70,10 @@ export const hubsApi = createApi({
                 hubName: hub?.name,
                 dateCreated: new Date(hub?.created_at)?.toDateString(),
                 inspector: `${hub.inspector?.last_name} ${hub.inspector?.first_name}`,
+                inspectorId: `${hub.inspector?._id}`,
                 stateCountry: `${hub?.state}, ${hub?.country}`,
                 totalCarsProcessed: hub?.cars_processed || 0,
+                address: `${hub.address}, ${hub?.state}, ${hub?.country}`
               };
             }
           );

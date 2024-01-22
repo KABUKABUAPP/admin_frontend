@@ -4,28 +4,30 @@ import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
 import SharpCarsTableBodyRow from "./SharpCarsTableBodyRow";
 import SharpCarsTableHeadRow from "./SharpCarsTableHeadRow";
 import { SharpCarsTableBodyData } from "@/models/SharpCars";
+import SharpCarsDeliveryTableBodyRow from "./SharpCarDeliveryTableBodyRow";
 
 interface Props {
-  data?: SharpCarsTableBodyData[];
+  data?: any;
   isLoading?: boolean;
   isError?: boolean;
   refetch?: () => void;
-  currentPage?: any;
 }
 
 const headCellData = [
-  { title: "Car ID", flex: 1 },
-  { title: "Car Brand & Model", flex: 1 },
-  { title: "Driver", flex: 1 },
-  { title: "License Number", flex: 1 },
-  { title: "Date & Time Added", flex: 1 },
+  { title: "Delivery ID", flex: 1 },
+  { title: "Delivery Hub", flex: 1 },
+  { title: "Hub Inspector", flex: 1 },
+  { title: "Total Cars", flex: 1 },
+  { title: "Estimated Delivery", flex: 1 },
+  { title: "Date & Time Created", flex: 1 },
+  { title: "Status", flex: 1 }
 ];
 
-const SharpCarsTable: FC<Props> = ({ data, isLoading, isError, refetch, currentPage }) => {
+const SharpCarsDeliveryTable: FC<Props> = ({ data, isLoading, isError, refetch }) => {
   return (
     <EnhancedTable
       TableHeadComponent={<SharpCarsTableHeadRow headCellData={headCellData} />}
-      rowComponent={(rows) => <SharpCarsTableBodyRow data={rows} currentPage={currentPage} />}
+      rowComponent={(rows) => <SharpCarsDeliveryTableBodyRow data={rows} />}
       rowData={data}
       maxWidth="100vw"
       isLoading={isLoading}
@@ -36,4 +38,4 @@ const SharpCarsTable: FC<Props> = ({ data, isLoading, isError, refetch, currentP
   );
 };
 
-export default SharpCarsTable;
+export default SharpCarsDeliveryTable;
