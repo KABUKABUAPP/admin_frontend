@@ -6,16 +6,18 @@ import { useRouter } from "next/router";
 interface Props {
   data: SharpCarsTableBodyData;
   currentPage?: any;
+  innerFilterValue?: string;
 }
 
 const SharpCarsTableBodyRow: FC<Props> = ({
   data: { carBrandModel, carId, dateTimeAdded, driver, licenseNumber },
-  currentPage
+  currentPage,
+  innerFilterValue
 }) => {
   const router = useRouter();
   return (
     <div
-      onClick={() => router.query.tab && router.query.tab === 'pending' ? router.push(`/sharp-cars/pending/${carId}?current_page=${currentPage}`) : router.push(`/sharp-cars/${driver}?current_page=${currentPage}`)}
+      onClick={() => router.query.tab && router.query.tab === 'pending' ? router.push(`/sharp-cars/pending/${carId}?current_page=${currentPage}&sub_tab=${innerFilterValue}`) : router.push(`/sharp-cars/${driver}?current_page=${currentPage}`)}
       className="flex p-3 py-8 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
     >
       <div style={{ flex: 1 }} className="flex items-center">

@@ -54,19 +54,22 @@ const SingleCarDelivery: NextPage = () => {
   const [hubLocation, setHubLocation] = useState('');
   const [cars, setCars] = useState<any>([]);
   const [deliveryDate, setDeliveryDate] = useState('');
-  const currentPageUrl = router.query.current_page ? `currentPage=${router.query.current_page}` : '';
-  const handleBackUrl = router.query.fallbackUrl ? router.query.fallbackUrl : `/sharp-cars?tab=car-deliveries&${currentPageUrl}`;
+  const currentPageUrl = router.query.current_page ? `&currentPage=${router.query.current_page}` : '';
+  const subTabUrl = router.query.sub_tab ? `&sub_tab=${router.query.sub_tab}` : '';
+  const handleBackUrl = router.query.fallbackUrl ? router.query.fallbackUrl : `/sharp-cars?tab=car-deliveries${currentPageUrl}${subTabUrl}`;
 
   const { id } = router.query;
+
+  // Use a regular expression to extract the desired part
+  const match = String(id).match(/^([^?]+)/);
+
+  // Extracted part will be in match[1]
+  const extractedString = match ? match[1] : null;
 
   const { data: singleDelivery, isLoading: singleDeliveryLoading, isError: singleDeliveryIsError, refetch: singleDeliveryRefetch } = useGetSingleDeliveryQuery(
     { id: String(id) },
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
-
-  useEffect(() => {
-    if (singleDelivery) console.log('mende', singleDelivery)
-  }, [singleDelivery]);
   
   return (
     <>
@@ -81,7 +84,7 @@ const SingleCarDelivery: NextPage = () => {
                 <div className="flex flex-col">
                   <div className="mb-3">
                     <Card>
-                        <p className="text-sm font-bold">#{id}</p>
+                        <p className="text-sm font-bold">#{extractedString}</p>
                         <div className="flex flex-col my-3">
                             <p className="text-sm font-bold">Delivering to:</p>
                             <p className="text-lg font-bold">{capitalizeAllFirstLetters(singleDelivery?.hub.name)}</p>
