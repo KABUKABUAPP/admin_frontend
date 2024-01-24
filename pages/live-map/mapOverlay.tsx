@@ -172,7 +172,6 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
       // Listen to the 'location' event
       socket.on('location', (data: any) => {
           const newCoordinates = updateCoordinateById(allCoordinates, data)
-          console.log('Location Update:', {data, newCoordinates});
           
           setCoordinates(newCoordinates);
           
