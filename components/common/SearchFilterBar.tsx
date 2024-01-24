@@ -3,6 +3,8 @@ import TextField from "@/components/ui/Input/TextField/TextField";
 import SearchIcon from "@/components/icons/SearchIcon";
 import DropDown from "../ui/DropDown";
 import { useRouter } from "next/router";
+import Button from "../ui/Button/Button";
+import AddIcon from "../icons/AddIcon";
 
 interface Props {
   filterOptions?: {
@@ -20,6 +22,7 @@ interface Props {
   tabInnerFilter?: any;
   innerFilterValue?: any;
   handleFilterClick?: (val: string) => void;
+  carDeliveryView?: boolean;
 }
 
 const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
@@ -34,10 +37,10 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
   carDeliveriesInnerFilter,
   tabInnerFilter,
   innerFilterValue,
-  handleFilterClick
+  handleFilterClick,
+  carDeliveryView
 }) => {
   const router = useRouter();
-
 
   return (
     <div className="rounded-lg bg-[#F1F1F1] w-full min-h-10 shadow-sm my-6 py-4 px-8 flex items-center justify-between max-sm:flex-col max-sm:gap-5">
@@ -78,6 +81,7 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
       <div className="flex-1">{children}</div>
 
       <div className="text-xs flex gap-3 items-center cursor-pointer">
+        {carDeliveryView && <Button title="New Delivery" size="medium" startIcon={<AddIcon />} color="tetiary" className="border border-[#000]" onClick={() => {router.push('/sharp-cars/car-deliveries/new-delivery')}} />}
         <span>{title}</span>
         <DropDown
           placeholder="Filter"

@@ -47,6 +47,7 @@ const Riders: NextPage = () => {
       search: searchRider,
       order: selectedTimeFilter,
       status: statusFilter,
+      onlineStatus: ''
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
