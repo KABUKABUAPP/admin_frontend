@@ -14,6 +14,11 @@ import useClickOutside from '@/hooks/useClickOutside';
 import Avatar from '@/components/common/Avatar';
 import { capitalizeAllFirstLetters } from '@/utils';
 import { useRouter } from 'next/router';
+import { io } from "socket.io-client";
+import { DEV_MONITOR_URL } from '@/constants';
+//const socket = io(`${DEV_MONITOR_URL}`);
+const socket = io(`https://monitor-dev.up.railway.app`);
+
 
 interface MapOverlayProps {
   onlineStatusDriver: string;
@@ -24,6 +29,18 @@ interface DriverModalProps {
   driver: any;
   handleClose: () => void;
   type: string;
+}
+
+function updateCoordinateById(arrayOfObjects: any, singleObject: any) {
+  const updatedArray = arrayOfObjects.map((obj: any) => {
+    if (obj && obj._id === singleObject._id) {
+      // Update the coordinate property with the value from the singleObject
+      obj.coordinate = singleObject.coordinate;
+    }
+    return obj;
+  });
+
+  return updatedArray;
 }
 
 const DriverModal : React.FC<DriverModalProps> = ({ driver, handleClose, type }) => {
@@ -105,7 +122,8 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
       page: 1,
       search: '',
       order: 'newest_first',
-      status: 'no'
+      status: 'no',
+      onlineStatus: onlineStatusRider
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
@@ -119,18 +137,22 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
       width: '100%',
   };
 
+  const joinRoom = () => {
+    socket.emit("location-update", {});
+  };
+
   useEffect(() => {
     if (drivers && riders) {
       const driversCoordinates = drivers?.data?.map((d: any) => {
         if (d.coordinate && d.coordinate.length > 0) return {lat: typeof d.coordinate[0] === 'number'
         ? d.coordinate[0] : parseFloat(d.coordinate[0]), lng: typeof d.coordinate[1] === 'number'
-        ? d.coordinate[1] : parseFloat(d.coordinate[1]), personnel: d, type: 'driver'}
+        ? d.coordinate[1] : parseFloat(d.coordinate[1]), personnel: d, type: 'driver', _id: d.driverId}
       });
 
       const ridersCoordinates = riders?.data?.map((d: any) => {
         if (d.coordinate && d.coordinate.length > 0) return {lat: typeof d.coordinate[0] === 'number'
         ? d.coordinate[0] : parseFloat(d.coordinate[0]), lng: typeof d.coordinate[1] === 'number'
-        ? d.coordinate[1] : parseFloat(d.coordinate[1]), personnel: d, type: 'rider'}
+        ? d.coordinate[1] : parseFloat(d.coordinate[1]), personnel: d, type: 'rider', _id: d.riderId}
       });
 
       const allCoordinates = driversCoordinates.concat(ridersCoordinates)
@@ -141,11 +163,32 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
       const riderIcon = onlineStatusRider === 'offline' ? '/riderOffline.svg': '/riderOnline.svg';
       setIconUrlDriver(driverIcon);
       setIconUrlRider(riderIcon);
+
+      if (onlineStatusDriver === 'online' || onlineStatusRider === 'online') {
+        // Join the 'location-update' room
+        socket.emit('join-room', 'location-update');
+      }
+  
+      // Listen to the 'location' event
+      socket.on('location', (data: any) => {
+          const newCoordinates = updateCoordinateById(allCoordinates, data)
+          
+          setCoordinates(newCoordinates);
+          
+          const driverIcon = onlineStatusDriver === 'offline' ? '/taxiOffline.svg' : '/taxiOnline.svg';
+          const riderIcon = onlineStatusRider === 'offline' ? '/riderOffline.svg': '/riderOnline.svg';
+          setIconUrlDriver(driverIcon);
+          setIconUrlRider(riderIcon);
+      });
+        
+      return () => {
+        socket.disconnect();
+      };
     }
   }, [drivers, riders]);
 
   const center = coordinates.length > 0 ? coordinates[0] : { lat: 6.5244, lng: 3.3792 };
-
+  
   const handleMarkerClick = (index: any, coord: any) => {
     setModalContent(
       <DriverModal driver={coord.personnel} handleClose={() => setModalContent(null)} type={coord.type} />

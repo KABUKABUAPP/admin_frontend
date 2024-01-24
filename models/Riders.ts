@@ -49,6 +49,7 @@ export interface GetAllRidersQuery {
   search: string;
   order: string;
   status: string;
+  onlineStatus: string;
 }
 
 export interface MappedRidersData {
