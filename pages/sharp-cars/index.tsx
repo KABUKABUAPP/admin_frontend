@@ -34,7 +34,7 @@ const SharpCars: NextPage = () => {
   const [options, setOptions] = useState(sharpCarsOptionsData);
   const [tab, setTab] = useState<any>('');
   const [tabInnerFilter, setTabInnerFilter] = useState<any[]>([]);
-  const [innerFilterValue, setInnerFilterValue] = useState('')
+  const [innerFilterValue, setInnerFilterValue] = useState('');
 
   useEffect(() => {
     if (router.pathname === '/sharp-cars' && router.query.tab === undefined) {
@@ -44,13 +44,13 @@ const SharpCars: NextPage = () => {
 
     if (router.pathname === '/sharp-cars' && router.query.tab === 'pending') {
       setTabInnerFilter(pendingInnerFilter);
-      setInnerFilterValue('assigned');
+      setInnerFilterValue(router.query.sub_tab ? `${router.query.sub_tab}` : 'assigned');
       setCarDeliveryView(false);
     }
 
     if (router.pathname === '/sharp-cars' && router.query.tab === 'car-deliveries') {
       setTabInnerFilter(carDeliveriesInnerFilter)
-      setInnerFilterValue('pending-deliveries');
+      setInnerFilterValue(router.query.sub_tab ? `${router.query.sub_tab}` : 'pending-deliveries');
       setCarDeliveryView(true);
     }
   }, [router.query.tab]);
@@ -173,6 +173,7 @@ const SharpCars: NextPage = () => {
               isError={isError}
               refetch={refetch}
               currentPage={currentPage}
+              innerFilterValue={innerFilterValue}
             />
             {data && (
               <Pagination
@@ -194,8 +195,10 @@ const SharpCars: NextPage = () => {
               isLoading={deliveriesLoading}
               isError={deliveriesError}
               refetch={deliveriesRefetch}
+              currentPage={currentPage}
+              innerFilterValue={innerFilterValue}
             />
-            {data && (
+            {deliveries?.data && (
               <Pagination
                 className="pagination-bar"
                 currentPage={currentPage}

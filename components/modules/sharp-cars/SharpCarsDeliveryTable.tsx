@@ -11,6 +11,8 @@ interface Props {
   isLoading?: boolean;
   isError?: boolean;
   refetch?: () => void;
+  currentPage: any;
+  innerFilterValue: string;
 }
 
 const headCellData = [
@@ -23,11 +25,12 @@ const headCellData = [
   { title: "Status", flex: 1 }
 ];
 
-const SharpCarsDeliveryTable: FC<Props> = ({ data, isLoading, isError, refetch }) => {
+const SharpCarsDeliveryTable: FC<Props> = ({ data, isLoading, isError, refetch, 
+  currentPage, innerFilterValue }) => {
   return (
     <EnhancedTable
       TableHeadComponent={<SharpCarsTableHeadRow headCellData={headCellData} />}
-      rowComponent={(rows) => <SharpCarsDeliveryTableBodyRow data={rows} />}
+      rowComponent={(rows) => <SharpCarsDeliveryTableBodyRow data={rows} currentPage={currentPage} innerFilterValue={innerFilterValue}  />}
       rowData={data}
       maxWidth="100vw"
       isLoading={isLoading}

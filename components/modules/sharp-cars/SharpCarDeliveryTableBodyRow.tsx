@@ -22,13 +22,19 @@ function formatDateTime(inputTime: string) {
 
 interface Props {
   data: any
+  currentPage?: any;
+  innerFilterValue?: string;
 }
 
-const SharpCarsDeliveryTableBodyRow: FC<Props> = ({data}) => {
+const SharpCarsDeliveryTableBodyRow: FC<Props> = ({
+  data,
+  currentPage,
+  innerFilterValue
+}) => {
   const router = useRouter();
   return (
     <div
-      onClick={() => router.push(`/sharp-cars/car-deliveries/${data._id}`)}
+      onClick={() => router.push(`/sharp-cars/car-deliveries/${data._id}?current_page=${currentPage}&sub_tab=${innerFilterValue}`)}
       className="flex p-3 py-8 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
     >
       <div style={{ flex: 1 }} className="flex items-center">

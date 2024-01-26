@@ -21,8 +21,9 @@ import { capitalizeAllFirstLetters } from "@/utils";
 
 const SharpCarPending: NextPage = () => {
   const router = useRouter();
-  const currentPageUrl = router.query.current_page ? `currentPage=${router.query.current_page}` : '';
-  const handleBackUrl = router.query.fallbackUrl ? router.query.fallbackUrl : `/sharp-cars?tab=pending&${currentPageUrl}`;
+  const currentPageUrl = router.query.current_page ? `&currentPage=${router.query.current_page}` : '';
+  const subTabUrl = router.query.sub_tab ? `&sub_tab=${router.query.sub_tab}` : '';
+  const handleBackUrl = router.query.fallbackUrl ? router.query.fallbackUrl : `/sharp-cars?tab=pending${currentPageUrl}${subTabUrl}`;
 
   const { id } = router.query;
 
