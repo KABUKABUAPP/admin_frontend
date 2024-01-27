@@ -119,6 +119,7 @@ export const driversApi = createApi({
       transformResponse: (response: ViewDriverResponse) => {
         if (!response) return <MappedViewDriver>{};
         else {
+          console.log('dta', response)
           const { data } = response;
           const getCarDocs = data?.car_documents.length === 1 && data?.car_documents[0] === null ? [] : data?.car_documents?.map((doc) => {
             return {
@@ -189,6 +190,13 @@ export const driversApi = createApi({
       }),
       invalidatesTags: ["driver", "drivers"],
     }),
+    approveSharpRequest: build.mutation<any, any>({
+      query: ({ driverId, reason, status }) => ({
+        url: `admin/driver/approve-sharp-request/${driverId}`,
+        method: "PUT",
+        body: { reason, status },
+      })
+    }),
     inspectDocument: build.mutation<any, InspectDocumentQuery>({
       query: ({ docId, status }) => ({
         url: `admin/driver/inspect-document/${docId}?status=${status}`,
@@ -244,6 +252,7 @@ export const {
   useGetAllDriversQuery,
   useViewDriverQuery,
   useApproveDeclineDriverMutation,
+  useApproveSharpRequestMutation,
   useInspectDocumentMutation,
   useViewGuarantorQuery,
   useVerifyGuarantorMutation,

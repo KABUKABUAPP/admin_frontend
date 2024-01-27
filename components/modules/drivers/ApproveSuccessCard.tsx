@@ -41,7 +41,7 @@ const ApproveSuccessCard: FC = () => {
           className="w-full"
           onClick={() => {
             setModalContent(null);
-            router.push("/drivers/pending");
+            router.push(router.query.fallbackUrl && router.query.fallbackUrl.includes('/sharp-cars?tab=pending-drivers') ? `${router.query.fallbackUrl}` : "/drivers/pending");
           }}
         />
       </div>
