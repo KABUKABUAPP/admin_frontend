@@ -305,6 +305,11 @@ export const sharpCarsOptionsData = [
     title: "Car Deliveries",
     isActive: false,
     keyVal: "car-deliveries",
+  },
+  {
+    title: "Pending Drivers",
+    isActive: false,
+    keyVal: "pending-drivers",
   }
 ];
 

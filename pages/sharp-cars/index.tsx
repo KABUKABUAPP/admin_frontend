@@ -12,6 +12,19 @@ import Pagination from "@/components/common/Pagination";
 import AppHead from "@/components/common/AppHead";
 import { useRouter } from "next/router";
 import SharpCarsDeliveryTable from "@/components/modules/sharp-cars/SharpCarsDeliveryTable";
+import DriverPendingTable from "@/components/modules/sharp-cars/DriverPendingTable";
+import { useGetAllDriversQuery } from "@/api-services/driversService";
+
+const headCellData = [
+  { title: "ID", flex: 1 },
+  { title: "Origin/Destination", flex: 2 },
+  { title: "Rider", flex: 1 },
+  { title: "Driver", flex: 1 },
+  { title: "Car", flex: 1 },
+  { title: "Status", flex: 1 },
+  { title: "Reason", flex: 1 },
+];
+
 
 const SharpCars: NextPage = () => {
   const router = useRouter();
@@ -22,6 +35,7 @@ const SharpCars: NextPage = () => {
   const [assignedStatus, setAssignedStatus] = useState('yes');
   const [search, setSearch] = useState('');
   const [carDeliveryView, setCarDeliveryView] = useState(false);
+  const [driverPendingView, setDriverPendingView] = useState(false);
   const { data, isLoading, isError, refetch } = useGetAllSharpCarsQuery(
     { limit: pageSize, page: currentPage, activeStatus: activeStatus, assignedStatus: assignedStatus, search: search },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
@@ -31,6 +45,29 @@ const SharpCars: NextPage = () => {
     { limit: pageSize, page: currentPage, deliveryStatus: deliveryStatus },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
+
+  const {
+    data: drivers,
+    isLoading: driversLoading,
+    isError: driversError,
+    refetch: reloadDrivers,
+  } = useGetAllDriversQuery(
+    {
+      carOwner: false,
+      driverStatus: "pending",
+      limit: pageSize,
+      page: currentPage,
+      search: search,
+      order: 'newest_first',
+      statusRemark: '',
+      onboardStatus: ''
+    },
+    {
+      refetchOnMountOrArgChange: true,
+      refetchOnReconnect: true,
+    }
+  );
+
   const [options, setOptions] = useState(sharpCarsOptionsData);
   const [tab, setTab] = useState<any>('');
   const [tabInnerFilter, setTabInnerFilter] = useState<any[]>([]);
@@ -40,18 +77,28 @@ const SharpCars: NextPage = () => {
     if (router.pathname === '/sharp-cars' && router.query.tab === undefined) {
       setTabInnerFilter([])
       setCarDeliveryView(false);
+      setDriverPendingView(false);
     }
 
     if (router.pathname === '/sharp-cars' && router.query.tab === 'pending') {
       setTabInnerFilter(pendingInnerFilter);
       setInnerFilterValue(router.query.sub_tab ? `${router.query.sub_tab}` : 'assigned');
       setCarDeliveryView(false);
+      setDriverPendingView(false);
     }
 
     if (router.pathname === '/sharp-cars' && router.query.tab === 'car-deliveries') {
       setTabInnerFilter(carDeliveriesInnerFilter)
       setInnerFilterValue(router.query.sub_tab ? `${router.query.sub_tab}` : 'pending-deliveries');
       setCarDeliveryView(true);
+      setDriverPendingView(false)
+    }
+
+    if (router.pathname === '/sharp-cars' && router.query.tab === 'pending-drivers') {
+      setTabInnerFilter([])
+      setInnerFilterValue('');
+      setCarDeliveryView(false);
+      setDriverPendingView(true);
     }
   }, [router.query.tab]);
 
@@ -143,6 +190,32 @@ const SharpCars: NextPage = () => {
     if (innerFilterValue === 'delivered') setDeliveryStatus('delivered');
   }, [innerFilterValue])
 
+  const formatTripData = (data: any) : any => {
+    const formattedData = data.map((trip: any) => {
+      return {
+        id: trip._id,
+        origin: `${trip.start_address.city || ""}, ${
+          trip.start_address.state || ""
+        }, ${trip.start_address.country || ""}`,
+        destination: `${trip.end_address.city || ""}, ${
+          trip.end_address.state || ""
+        }, ${trip.end_address.country || ""}`,
+        rider: trip.user?.full_name || "",
+        driver: trip?.driver?.full_name,
+        carModel: trip?.car?.brand_name + ' ' + trip?.car?.model,
+        plateNumber: trip?.car?.plate_number,
+        status: trip.status,
+        reason: trip.cancel_trip_reason
+      };
+    });
+
+    return formattedData;
+  };
+
+  useEffect(() => {
+    if(drivers) console.log('drivers', drivers)
+  }, [])
+
   return (
     <>
       <AppHead title="Kabukabu | Sharp Cars" />
@@ -165,7 +238,7 @@ const SharpCars: NextPage = () => {
           carDeliveryView={carDeliveryView}
         />
         {
-          !carDeliveryView && 
+          !carDeliveryView && !driverPendingView && 
           <>
             <SharpCarsTable
               data={data?.data}
@@ -188,7 +261,7 @@ const SharpCars: NextPage = () => {
         }
 
         {
-          carDeliveryView && 
+          carDeliveryView && !driverPendingView && 
           <>
             <SharpCarsDeliveryTable 
               data={deliveries?.data}
@@ -203,6 +276,31 @@ const SharpCars: NextPage = () => {
                 className="pagination-bar"
                 currentPage={currentPage}
                 totalCount={deliveries?.pagination?.totalCount}
+                pageSize={pageSize}
+                onPageChange={(page) => setCurrentPage(page)}
+              />
+            )}
+          </>
+        }
+
+        {
+          !carDeliveryView && driverPendingView && 
+          <>
+            {
+              <DriverPendingTable
+                data={drivers?.data}
+                isError={driversError}
+                isLoading={driversLoading}
+                refetch={reloadDrivers}
+                currentPage={currentPage}
+                innerFilterValue={innerFilterValue}
+              />
+            }
+            {drivers && (
+              <Pagination
+                className="pagination-bar"
+                currentPage={currentPage}
+                totalCount={drivers?.totalCount}
                 pageSize={pageSize}
                 onPageChange={(page) => setCurrentPage(page)}
               />
