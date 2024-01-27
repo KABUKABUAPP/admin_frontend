@@ -20,6 +20,7 @@ import { useModalContext } from "@/contexts/ModalContext";
 import ActionDocumentCardContainer from "@/components/modules/drivers/ActionDocumentCardContainer";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
+import { toast } from "react-toastify";
 
 const Driver: NextPage = () => {
   const router = useRouter();
@@ -77,9 +78,9 @@ const Driver: NextPage = () => {
                   className="!bg-[#1FD11B] !text-[#FFFFFF]"
                   startIcon={<CheckIcon />}
                   size="large"
-                  onClick={() =>
+                  onClick={() => {
                     setModalContent(<ApproveRequestCard id={String(id)} />)
-                  }
+                  }}
                 />
               )}
             {userPermissions &&
