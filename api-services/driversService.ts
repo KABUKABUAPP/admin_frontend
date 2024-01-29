@@ -74,9 +74,10 @@ export const driversApi = createApi({
         statusRemark,
         deleted,
         onlineStatus,
-        onboardStatus
+        onboardStatus,
+        sharpApprovalStatus
       }) => ({
-        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}&search=${search}&order=${order}&is_blocked=${status ? status : ""}&status_remark=${statusRemark ? statusRemark : ""}${deleted ? `&deleted=${deleted}` : ""}${onlineStatus ? `&online_status=${onlineStatus}` : ''}${onboardStatus ? `&is_onboarding=${onboardStatus}` : ''}`,
+        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}&search=${search}&order=${order}&is_blocked=${status ? status : ""}&status_remark=${statusRemark ? statusRemark : ""}${deleted ? `&deleted=${deleted}` : ""}${onlineStatus ? `&online_status=${onlineStatus}` : ''}${onboardStatus ? `&is_onboarding=${onboardStatus}` : ''}${sharpApprovalStatus ? `&sharp_approval_status=${sharpApprovalStatus}` : ''}`,
       }),
       providesTags: ["drivers"],
       transformResponse: (response: GetAllDriversResponse) => {
@@ -103,7 +104,8 @@ export const driversApi = createApi({
               inspectionCode: driver?.inspection_code ? driver?.inspection_code : '',
               onlineStatus: driver?.user?.online_status,
               onboardStep: driver?.user?.onboarding_step,
-              coordinate: driver?.user?.coordinate && driver?.user?.coordinate.length > 0 ? driver?.user?.coordinate : undefined
+              coordinate: driver?.user?.coordinate && driver?.user?.coordinate.length > 0 ? driver?.user?.coordinate : undefined,
+              currentCar: driver?.current_car ? driver?.current_car : null
             } as DriversTableBodyData;
           });
 

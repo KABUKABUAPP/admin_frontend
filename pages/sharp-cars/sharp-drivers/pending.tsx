@@ -79,7 +79,8 @@ const Drivers: NextPage = () => {
       search: searchDriver,
       order: selectedFilterOption,
       statusRemark: selectedStatusRemark,
-      onboardStatus: onboardStatusRemark
+      onboardStatus: onboardStatusRemark,
+      sharpApprovalStatus: 'pending'
     },
     {
       refetchOnMountOrArgChange: true,

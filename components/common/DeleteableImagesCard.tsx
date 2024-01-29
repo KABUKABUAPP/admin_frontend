@@ -1,4 +1,4 @@
-import React, { FC, useRef } from "react";
+import React, { FC, useRef, useEffect } from "react";
 
 import Card from "@/components/common/Card";
 import Button from "@/components/ui/Button/Button";
@@ -6,7 +6,7 @@ import CarImage from "../modules/sharp-cars/CarImage";
 import { getImageUrl } from "@/utils";
 
 interface Props {
-  images?: { image: File; imageId: string }[];
+  images?: any;
   title?: string;
   handleChange: (file: File) => void;
   handleDelete: (imageId: string)=> void
@@ -42,8 +42,8 @@ const DeleteableImagesCard: FC<Props> = ({ images, title, handleChange, handleDe
       />
 
       <div className="pt-2 flex max-w-[300px] overflow-x-auto scrollbar-none gap-2 ">
-        {images?.map((img, idx) => (
-          <CarImage handleDelete={handleDelete} {...img} image={getImageUrl(img.image)} key={idx} />
+        {images?.map((img: any, idx: React.Key | null | undefined) => (
+          <CarImage handleDelete={() => handleDelete(img)} {...img} image={URL.createObjectURL(img)} key={idx} />
         ))}
       </div>
     </Card>

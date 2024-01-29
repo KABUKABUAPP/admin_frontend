@@ -13,6 +13,7 @@ export interface DriversTableBodyData {
   deletionReason?: string;
   inspectionCode?: string;
   onlineStatus: any;
+  currentCar: any;
   onboardStep: any;
 }
 
@@ -26,6 +27,7 @@ export interface ReactivateDriverQuery {
 }
 
 export interface Driver {
+  current_car: any;
   inspection_code: any;
   _id: string;
   user: {
@@ -73,6 +75,7 @@ export interface GetAllDriversQuery {
   deleted?: string;
   onlineStatus?: string;
   onboardStatus?: string;
+  sharpApprovalStatus?: string;
 }
 
 export interface Document {

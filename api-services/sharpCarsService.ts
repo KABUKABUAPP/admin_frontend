@@ -114,8 +114,15 @@ export const sharpCarsApi = createApi({
           return response.data
         }
       }
+    }),
+    createCar: build.mutation<any, any>({
+      query: (body) => ({
+        url: `admin/car/create`,
+        body,
+        method: "POST"
+      })
     })
   }),
 });
 
-export const { useGetAllSharpCarsQuery, useGetCarDeliveriesQuery, useGetOneSharpCarsQuery, useAssignSharpCarMutation, useCreateDeliveryMutation, useGetSingleDeliveryQuery } = sharpCarsApi;
+export const { useGetAllSharpCarsQuery, useGetCarDeliveriesQuery, useGetOneSharpCarsQuery, useAssignSharpCarMutation, useCreateDeliveryMutation, useGetSingleDeliveryQuery, useCreateCarMutation } = sharpCarsApi;

@@ -29,6 +29,7 @@ const AssignDriverModal : React.FC<AssignDriverModalProps> = ({ handleClose, han
   const router = useRouter();
   const [tags, setTags] = useState<any>([]);
   const [search, setSearch] = useState<string>("");
+  const [theDrivers, setTheDrivers] = useState<any>([]);
 
   const {
     data: drivers,
@@ -39,12 +40,13 @@ const AssignDriverModal : React.FC<AssignDriverModalProps> = ({ handleClose, han
   } = useGetAllDriversQuery(
     {
       carOwner: false,
-      driverStatus: "active",
+      driverStatus: "pending",
       limit: 10,
       page: 1,
       search: search,
       order: 'newest_first',
-      status: 'active'
+      status: 'active',
+      sharpApprovalStatus: 'approved'
     },
     {
       refetchOnMountOrArgChange: true,
@@ -52,15 +54,21 @@ const AssignDriverModal : React.FC<AssignDriverModalProps> = ({ handleClose, han
     }
   );
 
+  useEffect(() => {
+    if (drivers) {
+      const theDriversFilter = drivers?.data?.filter((d) => {
+        if (!d.currentCar) return d;
+      })
+
+      setTheDrivers(theDriversFilter)
+    }
+  }, [drivers])
+
   const handleTagDelete = (i: any) => {
     const newTags = [...tags];
     newTags.splice(i, 1);
     setTags(newTags);
   };
-
-  useEffect(() => {
-    if(drivers) console.log('ads', drivers);
-  })
 
   const handleTagAddition = (tag: any) => {
     const findDup = tags.find((tagI: any) => {return tagI.value === tag.value});
@@ -85,7 +93,7 @@ const AssignDriverModal : React.FC<AssignDriverModalProps> = ({ handleClose, han
           <p>Assign Driver To This Car</p>
         </div>
         <Select
-          options={drivers?.data?.map((driver: any) => {
+          options={theDrivers?.map((driver: any) => {
             return {
               value: driver.userId,
               label: capitalizeAllFirstLetters(driver.fullName)
@@ -103,7 +111,15 @@ const AssignDriverModal : React.FC<AssignDriverModalProps> = ({ handleClose, han
           tags.length > 0 && 
           <div style={{display: 'flex', flexWrap: 'wrap'}}>
             {tags?.map((t: any) => (
-            <div className="mx-2 bg-[#F8F8F8] rounded-md p-3 mt-2 mb-3 flex w-full justify-between"><span className="mx-1">{capitalizeAllFirstLetters(t.label)}</span><span className="mx-1 mt-1 cursor-pointer" onClick={() => {handleTagDelete(t)}}><CloseIcon /></span></div>
+              <>
+                {
+                  !t.currentCar &&
+                  <div className="mx-2 bg-[#F8F8F8] rounded-md p-3 mt-2 mb-3 flex w-full justify-between">
+                    <span className="mx-1">{capitalizeAllFirstLetters(t.label)}</span>
+                    <span className="mx-1 mt-1 cursor-pointer" onClick={() => {handleTagDelete(t)}}><CloseIcon /></span>
+                  </div>
+                }
+              </>
             ))}
           </div>
         }
@@ -144,7 +160,7 @@ const CarAssignedCard: FC<Props> = ({ assignDriver, driverData }) => {
         <div className="flex flex-col mt-6">
           <p className="text-md text-[#9A9A9A]">{assignedDriverValue}</p>
           <div className="flex justify-start mt-2">
-            <Button title="Assign Car" size="medium" onClick={() => {
+            <Button title="Assign Driver" size="medium" onClick={() => {
               setModalContent(
                 <AssignDriverModal handleClose={() => setModalContent(null)} handleChooseDriver={handleChooseDriver} />
               )
