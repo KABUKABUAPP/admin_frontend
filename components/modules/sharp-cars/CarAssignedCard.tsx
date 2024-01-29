@@ -58,10 +58,6 @@ const AssignDriverModal : React.FC<AssignDriverModalProps> = ({ handleClose, han
     setTags(newTags);
   };
 
-  useEffect(() => {
-    if(drivers) console.log('ads', drivers);
-  })
-
   const handleTagAddition = (tag: any) => {
     const findDup = tags.find((tagI: any) => {return tagI.value === tag.value});
     if (findDup || tags.length >= 1) return toast.error('Driver has already been chosen');
@@ -103,7 +99,15 @@ const AssignDriverModal : React.FC<AssignDriverModalProps> = ({ handleClose, han
           tags.length > 0 && 
           <div style={{display: 'flex', flexWrap: 'wrap'}}>
             {tags?.map((t: any) => (
-            <div className="mx-2 bg-[#F8F8F8] rounded-md p-3 mt-2 mb-3 flex w-full justify-between"><span className="mx-1">{capitalizeAllFirstLetters(t.label)}</span><span className="mx-1 mt-1 cursor-pointer" onClick={() => {handleTagDelete(t)}}><CloseIcon /></span></div>
+              <>
+                {
+                  !t.current_car &&
+                  <div className="mx-2 bg-[#F8F8F8] rounded-md p-3 mt-2 mb-3 flex w-full justify-between">
+                    <span className="mx-1">{capitalizeAllFirstLetters(t.label)}</span>
+                    <span className="mx-1 mt-1 cursor-pointer" onClick={() => {handleTagDelete(t)}}><CloseIcon /></span>
+                  </div>
+                }
+              </>
             ))}
           </div>
         }
