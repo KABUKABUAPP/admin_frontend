@@ -60,7 +60,8 @@ const SharpCars: NextPage = () => {
       search: search,
       order: 'newest_first',
       statusRemark: '',
-      onboardStatus: ''
+      onboardStatus: '',
+      sharpApprovalStatus: 'pending'
     },
     {
       refetchOnMountOrArgChange: true,
