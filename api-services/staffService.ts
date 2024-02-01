@@ -137,7 +137,18 @@ export const staffApi = createApi({
             total_riders_onboarded_today: response?.data?.total_riders_onboarded_today
           }
 
-          return { userInfo: mappedStaff, isBlocked, activityLogs, disputeData, onboardData };
+          const onboardDataList = {
+            total_drivers_onboarded_list: response?.data?.total_drivers_onboarded_list, 
+            total_drivers_onboarded_this_month_list: response?.data?.total_drivers_onboarded_this_month_list, 
+            total_drivers_onboarded_this_week_list: response?.data?.total_drivers_onboarded_this_week_list, 
+            total_drivers_onboarded_today_list: response?.data?.total_drivers_onboarded_today_list, 
+            total_riders_onboarded_list: response?.data?.total_riders_onboarded_list, 
+            total_riders_onboarded_this_month_list: response?.data?.total_riders_onboarded_this_month_list,
+            total_riders_onboarded_this_week_list: response?.data?.total_riders_onboarded_this_week_list, 
+            total_riders_onboarded_today_list: response?.data?.total_riders_onboarded_today_list
+          }
+
+          return { userInfo: mappedStaff, isBlocked, activityLogs, disputeData, onboardData, onboardDataList };
         }
       }
     }),
