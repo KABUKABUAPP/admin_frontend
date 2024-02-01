@@ -21,9 +21,9 @@ const ActivityLogCard: FC<Props> = ({ logs, userRole, onboardList, handleChange,
     <div className="min-h-1/2">
     <Card>
       <div className="flex justify-between items-center">
-        <p className="text-lg font-semibold">{userRole === 'executive marketer' ? 'Drivers onboarded' : 'Activity logs'}</p>
+        <p className="text-lg font-semibold">{userRole?.includes('marketer') ? 'Drivers onboarded' : 'Activity logs'}</p>
         {
-          userRole === 'executive marketer' &&
+          userRole?.includes('marketer') &&
           <div className="flex items-center gap-2">
             <p className="text-xs font-semibold">Show: </p>
             <DropDown 
@@ -43,16 +43,16 @@ const ActivityLogCard: FC<Props> = ({ logs, userRole, onboardList, handleChange,
       </div>
 
       <div className="pt-4 flex flex-col gap-2">
-        {userRole !== 'executive marketer' && logs && logs?.length > 0 && logs?.map((log, idx) => (
+        {!userRole?.includes('marketer') && logs && logs?.length > 0 && logs?.map((log, idx) => (
           <ActivityLogItem {...log} key={idx} />
         ))}
 
-        {userRole !== 'executive marketer' && logs && logs?.length === 0 && 
+        {!userRole?.includes('marketer') && logs && logs?.length === 0 && 
           <p className="text-center">Staff has not performed any activity</p>
         }
 
         {
-          userRole === 'executive marketer' && onboardList && onboardList?.data?.length > 0 && 
+          userRole?.includes('marketer') && onboardList && onboardList?.data?.length > 0 && 
           <>
             {onboardList?.data?.map((listItem: any, idx: any) => (
               <OnboardListItem data={listItem} key={idx} staffName={staffName} />
