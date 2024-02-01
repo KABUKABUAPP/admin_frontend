@@ -33,7 +33,7 @@ const OnboardDriversTableBody: FC<Props> = ({ data, loading, error, refetch, typ
               return <OnboardDriversTableCell {...item} key={idx} />
             })
           ) : (
-            <p className="text-xs text-center py-3">No Onboarded Drivers</p>
+            <p className="text-xs text-center py-3">No Onboarded {type}</p>
           )}
         </>
       )}

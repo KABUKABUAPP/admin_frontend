@@ -95,6 +95,14 @@ export interface ViewStaffResponse {
   status: string;
   code: number;
   data: {
+    total_drivers_onboarded_list: any;
+    total_drivers_onboarded_this_month_list: any;
+    total_drivers_onboarded_this_week_list: any;
+    total_drivers_onboarded_today_list: any;
+    total_riders_onboarded_this_month_list: any;
+    total_riders_onboarded_this_week_list: any;
+    total_riders_onboarded_today_list: any;
+    total_riders_onboarded_list: any;
     total_drivers_onboarded: any;
     total_drivers_onboarded_this_month: any;
     total_drivers_onboarded_this_week: any;
@@ -133,6 +141,7 @@ export interface ViewStaffResponse {
 }
 
 export interface MappedViewStaff {
+  onboardDataList: any;
   disputeData: any;
   activityLogs: any[] | undefined;
   userInfo: {
