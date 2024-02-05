@@ -52,8 +52,8 @@ export const farePricesApi = createApi({
   tagTypes: ["fare-prices", "fare-price"],
   endpoints: (build) => ({
     getAllFarePrices: build.query<FarePricesMappedData, GetAllFarePricesQuery>({
-      query: ({ search, order }) => ({
-        url: `admin/price/all?search=${search}&order=${order}`,
+      query: ({ search, order, vehicleType }) => ({
+        url: `admin/price/all?search=${search}&order=${order}&price_type=${vehicleType}`,
       }),
       transformResponse: (response: GetAllFarePricesResponse) => {
         if (!response) return {} as FarePricesMappedData;
