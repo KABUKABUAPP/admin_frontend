@@ -14,6 +14,7 @@ import { verifyIsDigit } from "@/utils";
 import useUserPermissions from "@/hooks/useUserPermissions";
 
 const initialValues = {
+  price_type: "",
   state: "",
   country: "",
   base_fare: "",
@@ -172,6 +173,21 @@ const NewFareProfileForm: FC = () => {
               <p className="text-lg font-semibold pb-4">Normal Price</p>
               <div className="pt-4 flex max-md:flex-col gap-4">
                 <div style={{ flex: 1 }} className="flex flex-col gap-6">
+                  <SelectField
+                    label="Vehicle Type"
+                    options={[
+                      { label: "Car", value: "REGULAR_RIDE" },
+                      { label: "Keke", value: "TRICYCLE_RIDE" },
+                      { label: "SUV", value: "SUV_RIDE" },
+                      { label: "Dispatch", value: "DISPATCH" },
+                      { label: "Haulage", value: "HAULAGE" }
+                    ]}
+                    placeholder="Select Vehicle Type"
+                    {...formik.getFieldProps("price_type")}
+                    error={
+                      formik.touched.price_type ? formik.errors.price_type : undefined
+                    }
+                  />
                   <TextField
                     label="Base Fare"
                     placeholder="₦500"

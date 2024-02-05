@@ -33,16 +33,17 @@ interface Props {
   isLoading?: boolean;
   isError?: boolean;
   refetch?: () => void;
+  currentTab: string;
 }
 
-const FarePricesTable: FC<Props> = ({ data, isLoading, isError, refetch }) => {
+const FarePricesTable: FC<Props> = ({ data, isLoading, isError, refetch, currentTab }) => {
   
   return (
     <EnhancedTable
       TableHeadComponent={
         <FarePricesTableHeadRow headCellData={headCellData} />
       }
-      rowComponent={(row) => <FarePricesTableBodyRow data={row} />}
+      rowComponent={(row) => <FarePricesTableBodyRow data={row} currentTab={currentTab} />}
       rowData={data}
       maxWidth="100vw"
       isLoading={isLoading}
