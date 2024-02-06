@@ -98,6 +98,7 @@ const Transactions: NextPage = () => {
     }
     handleActiveTab(currentKey);
     if (String(tab) === 'trip_payments') setTripPaymentsView(true);
+    if (String(tab) !== 'trip_payments') setTripPaymentsView(false);
   }, [tab]);
 
   enum Tab {
