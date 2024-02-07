@@ -1,6 +1,7 @@
 import * as yup from "yup"
 
 const NewFareProfileValidations = yup.object({
+    price_type: yup.string().required('Required'),
     state: yup.string().required('Required'),
     country: yup.string().required('Required'),
     base_fare: yup.number().required('Required'),

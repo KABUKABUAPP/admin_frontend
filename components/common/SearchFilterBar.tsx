@@ -23,6 +23,14 @@ interface Props {
   innerFilterValue?: any;
   handleFilterClick?: (val: string) => void;
   carDeliveryView?: boolean;
+  tripPaymentView?: boolean;
+  tripPaymentOptions?: {
+    label: string | number;
+    value: string | number;
+    default?: boolean;
+  }[];
+  tripPaymentOptionsSelected?: string;
+  handleTripPayments?: (val: string | number) => void;
 }
 
 const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
@@ -38,7 +46,11 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
   tabInnerFilter,
   innerFilterValue,
   handleFilterClick,
-  carDeliveryView
+  carDeliveryView,
+  tripPaymentOptions,
+  tripPaymentOptionsSelected,
+  handleTripPayments,
+  tripPaymentView
 }) => {
   const router = useRouter();
 
@@ -82,6 +94,20 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
 
       <div className="text-xs flex gap-3 items-center cursor-pointer">
         {carDeliveryView && <Button title="New Delivery" size="medium" startIcon={<AddIcon />} color="tetiary" className="border border-[#000]" onClick={() => {router.push('/sharp-cars/car-deliveries/new-delivery')}} />}
+        {
+          tripPaymentView &&
+          <>
+            <span>Trip Type</span>
+            <DropDown
+              placeholder="Filter"
+              options={tripPaymentOptions}
+              value={tripPaymentOptionsSelected}
+              handleChange={(val) => {
+                if (handleTripPayments) handleTripPayments(val);
+              }}
+            />
+          </>
+        }
         <span>{title}</span>
         <DropDown
           placeholder="Filter"
