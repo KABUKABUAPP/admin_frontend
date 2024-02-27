@@ -23,6 +23,7 @@ interface Props {
   carModel?: string;
   carColor?: string;
   plateNumber?: string;
+  carStatus?: string;
   bg?: string;
   hub?: string;
   inspector?: string;
@@ -37,6 +38,7 @@ const CarDetailsCard: FC<Props> = ({
   carModel,
   isLoading,
   carColor,
+  carStatus,
   plateNumber,
   bg='#FFFFFF',
   hub,
@@ -72,6 +74,9 @@ const CarDetailsCard: FC<Props> = ({
         ) : (
           <Skeleton enableAnimation={isLoading} />
         )}
+        <p className="text-sm text-[#9A9A9A]">
+          {carStatus || <Skeleton enableAnimation={isLoading} />}
+        </p>
         
         {hub && (
           <div className="flex gap-4">

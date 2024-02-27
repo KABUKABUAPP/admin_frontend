@@ -106,7 +106,7 @@ const SharpCar: NextPage = () => {
         <div className="lg:h-screen lg:overflow-hidden p-4">
           <ActionBar handleBack={() => router.push(`${handleBackUrl}`)}>
             <Button
-              title="Call Rider"
+              title="Call Driver"
               startIcon={<PhoneIcon />}
               size="large"
             />

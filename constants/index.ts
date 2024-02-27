@@ -169,6 +169,10 @@ export const routePermissionsMapping: {
   {
     route: '/live-map',
     permissionLabel: ''
+  },
+  {
+    route: '/car-owners',
+    permissionLabel: ''
   }
 ];
 
