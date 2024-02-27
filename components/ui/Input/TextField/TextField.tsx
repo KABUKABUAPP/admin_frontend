@@ -10,10 +10,11 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string | undefined;
   startIcon?: ReactNode;
   endIcon?: ReactNode;
+  ref?: any;
 }
 
 const TextField: React.FC<Props> = (props) => {
-  const { label, error, className, startIcon, endIcon, ...rest } = props;
+  const { label, error, className, startIcon, endIcon, ref, ...rest } = props;
 
   const rootClassName = cn(
     s.root,
@@ -31,7 +32,7 @@ const TextField: React.FC<Props> = (props) => {
         <label className="mb-1 block text-sm font-medium">{label}</label>
       )}
       <div className="w-full relative">
-        <input {...rest} className={rootClassName} />
+        <input {...rest} className={rootClassName} ref={ref} />
         {startIcon && !endIcon && (
           <span className="absolute top-2/4 -translate-y-1/2 left-2 cursor-pointer">
             {startIcon}

@@ -17,7 +17,7 @@ export function middleware(req: NextRequest) {
       const parsedUser = JSON.parse(user);
 
       let userAccessibleRoutes = routePermissionsMapping.map((rp) => {
-        if (rp.route === "/settings" || rp.route === "/messages" || rp.route === "/sharp-cars" || rp.route === "/live-map") {
+        if (rp.route === "/settings" || rp.route === "/messages" || rp.route === "/sharp-cars" || rp.route === "/live-map" || rp.route === "/car-owners") {
           return rp.route;
         } else {
           if (
@@ -33,7 +33,7 @@ export function middleware(req: NextRequest) {
         (route) => route !== undefined
       );
 
-      return [...userAccessibleRoutes, "/settings", "/messages", "/live-map"] as string[];
+      return [...userAccessibleRoutes, "/settings", "/messages", "/live-map", '/car-owners'] as string[];
     } else return [] as string[];
   }
 
@@ -131,6 +131,7 @@ export const config = {
     "/transactions/:path*",
     "/trips/:path*",
     "/messages",
-    "/live-map"
+    "/live-map",
+    "/car-owners"
   ],
 };

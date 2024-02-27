@@ -74,9 +74,10 @@ export const driversApi = createApi({
         statusRemark,
         deleted,
         onlineStatus,
-        onboardStatus
+        onboardStatus,
+        sharpApprovalStatus
       }) => ({
-        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}&search=${search}&order=${order}&is_blocked=${status ? status : ""}&status_remark=${statusRemark ? statusRemark : ""}${deleted ? `&deleted=${deleted}` : ""}${onlineStatus ? `&online_status=${onlineStatus}` : ''}${onboardStatus ? `&is_onboarding=${onboardStatus}` : ''}`,
+        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}&search=${search}&order=${order}&is_blocked=${status ? status : ""}&status_remark=${statusRemark ? statusRemark : ""}${deleted ? `&deleted=${deleted}` : ""}${onlineStatus ? `&online_status=${onlineStatus}` : ''}${onboardStatus ? `&is_onboarding=${onboardStatus}` : ''}${sharpApprovalStatus ? `&sharp_approval_status=${sharpApprovalStatus}` : ''}`,
       }),
       providesTags: ["drivers"],
       transformResponse: (response: GetAllDriversResponse) => {
@@ -103,7 +104,8 @@ export const driversApi = createApi({
               inspectionCode: driver?.inspection_code ? driver?.inspection_code : '',
               onlineStatus: driver?.user?.online_status,
               onboardStep: driver?.user?.onboarding_step,
-              coordinate: driver?.user?.coordinate && driver?.user?.coordinate.length > 0 ? driver?.user?.coordinate : undefined
+              coordinate: driver?.user?.coordinate && driver?.user?.coordinate.length > 0 ? driver?.user?.coordinate : undefined,
+              currentCar: driver?.current_car ? driver?.current_car : null
             } as DriversTableBodyData;
           });
 
@@ -119,6 +121,7 @@ export const driversApi = createApi({
       transformResponse: (response: ViewDriverResponse) => {
         if (!response) return <MappedViewDriver>{};
         else {
+          console.log('dta', response)
           const { data } = response;
           const getCarDocs = data?.car_documents.length === 1 && data?.car_documents[0] === null ? [] : data?.car_documents?.map((doc) => {
             return {
@@ -189,6 +192,13 @@ export const driversApi = createApi({
       }),
       invalidatesTags: ["driver", "drivers"],
     }),
+    approveSharpRequest: build.mutation<any, any>({
+      query: ({ driverId, reason, status }) => ({
+        url: `admin/driver/approve-sharp-request/${driverId}`,
+        method: "PUT",
+        body: { reason, status },
+      })
+    }),
     inspectDocument: build.mutation<any, InspectDocumentQuery>({
       query: ({ docId, status }) => ({
         url: `admin/driver/inspect-document/${docId}?status=${status}`,
@@ -244,6 +254,7 @@ export const {
   useGetAllDriversQuery,
   useViewDriverQuery,
   useApproveDeclineDriverMutation,
+  useApproveSharpRequestMutation,
   useInspectDocumentMutation,
   useViewGuarantorQuery,
   useVerifyGuarantorMutation,

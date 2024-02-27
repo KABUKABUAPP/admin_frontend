@@ -37,7 +37,18 @@ const Transactions: NextPage = () => {
     { label: "Newest First", value: "newest_first", default: true },
     { label: "Oldest First", value: "oldest_first", default: false },
   ];
-
+  const tripPaymentOptions = [
+    { label: "All", value: "trip_payment", default: true },
+    { label: "Regular", value: "REGULAR_TRIP_PAYMENT", default: false },
+    { label: "SUV", value: "SUV_TRIP_PAYMENT", default: false },
+    { label: "Tricycle", value: "TRICYCLE_TRIP_PAYMENT", default: false },
+    { label: "Dispatch", value: "DISPATCH_TRIP_PAYMENT", default: false },
+    { label: "Haulage", value: "HAULAGE_TRIP_PAYMENT", default: false }
+  ];
+  const [tripPaymentView, setTripPaymentsView] = useState(false);
+  const [tripPaymentOptionsSelected, setTripPaymentOptionsSelected] = useState<string>(
+    tripPaymentOptions.find((opt) => opt.default === true)?.value || "trip_payment"
+  );
   const [selectedDropDown, setSelectedDropDown] = useState<string>(
     dropDownOptions.find((opt) => opt.default === true)?.value || "newest_first"
   );
@@ -86,6 +97,8 @@ const Transactions: NextPage = () => {
       currentKey = "";
     }
     handleActiveTab(currentKey);
+    if (String(tab) === 'trip_payments') setTripPaymentsView(true);
+    if (String(tab) !== 'trip_payments') setTripPaymentsView(false);
   }, [tab]);
 
   enum Tab {
@@ -155,6 +168,12 @@ const Transactions: NextPage = () => {
           }}
           searchValue={search}
           handleSearch={(val) => setSearch(val)}
+          tripPaymentView={tripPaymentView}
+          tripPaymentOptions={tripPaymentOptions}
+          tripPaymentOptionsSelected={tripPaymentOptionsSelected}
+          handleTripPayments={(val) => {
+            setTripPaymentOptionsSelected(String(val));
+          }}
         />
         {String(tab) === Tab.all_transactions && (
           <AllTransactionsTable order={selectedDropDown} />
@@ -174,7 +193,7 @@ const Transactions: NextPage = () => {
         )}
 
         {String(tab) === Tab.trip_payments && (
-          <TripPaymentsTable order={selectedDropDown} />
+          <TripPaymentsTable order={selectedDropDown} paymentType={tripPaymentOptionsSelected} />
         )}
 
         {String(tab) === Tab.withdrawals && <WithdrawalsTable order={selectedDropDown} />}

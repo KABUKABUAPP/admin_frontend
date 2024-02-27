@@ -20,6 +20,7 @@ import { useModalContext } from "@/contexts/ModalContext";
 import ActionDocumentCardContainer from "@/components/modules/drivers/ActionDocumentCardContainer";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
+import { toast } from "react-toastify";
 
 const Driver: NextPage = () => {
   const router = useRouter();
@@ -57,13 +58,16 @@ const Driver: NextPage = () => {
   }, [JSON.stringify(data)]);
 
   const { userPermissions } = useUserPermissions();
+  
+  const currentPageUrl = `/drivers/pending?currentPage=${router.query.current_page}${onboardStatus ? `&onboardStatus=${onboardStatus}` : ''}`
+  const handleBackUrl = router.query.fallbackUrl ? router.query.fallbackUrl : `${currentPageUrl}`;
 
   return (
     <>
       <AppHead title="Kabukabu | Drivers" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar handleBack={() => router.push(`/drivers/pending?currentPage=${router.query.current_page}${onboardStatus ? `&onboardStatus=${onboardStatus}` : ''}`)}>
+          <ActionBar handleBack={() => router.push(`${handleBackUrl}`)}>
             {userPermissions &&
               userPermissions.drivers_permissions.write &&
               data &&
@@ -74,9 +78,9 @@ const Driver: NextPage = () => {
                   className="!bg-[#1FD11B] !text-[#FFFFFF]"
                   startIcon={<CheckIcon />}
                   size="large"
-                  onClick={() =>
+                  onClick={() => {
                     setModalContent(<ApproveRequestCard id={String(id)} />)
-                  }
+                  }}
                 />
               )}
             {userPermissions &&

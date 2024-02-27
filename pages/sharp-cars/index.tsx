@@ -7,41 +7,99 @@ import SearchFilterBar from "@/components/common/SearchFilterBar";
 import SharpCarsTable from "@/components/modules/sharp-cars/SharpCarsTable";
 import SharpCarOptionBar from "@/components/modules/sharp-cars/SharpCarOptionBar";
 import { sharpCarsOptionsData } from "@/constants";
-import { useGetAllSharpCarsQuery } from "@/api-services/sharpCarsService";
+import { useGetAllSharpCarsQuery, useGetCarDeliveriesQuery } from "@/api-services/sharpCarsService";
 import Pagination from "@/components/common/Pagination";
 import AppHead from "@/components/common/AppHead";
 import { useRouter } from "next/router";
+import SharpCarsDeliveryTable from "@/components/modules/sharp-cars/SharpCarsDeliveryTable";
+import DriverPendingTable from "@/components/modules/sharp-cars/DriverPendingTable";
+import { useGetAllDriversQuery } from "@/api-services/driversService";
+
+const headCellData = [
+  { title: "ID", flex: 1 },
+  { title: "Origin/Destination", flex: 2 },
+  { title: "Rider", flex: 1 },
+  { title: "Driver", flex: 1 },
+  { title: "Car", flex: 1 },
+  { title: "Status", flex: 1 },
+  { title: "Reason", flex: 1 },
+];
+
 
 const SharpCars: NextPage = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(3);
+  const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(router.query.currentPage ? parseInt(router.query.currentPage as string) : 1);
+  const [pageSize, setPageSize] = useState(5);
   const [activeStatus, setActiveStatus] = useState('');
-  const [assignedStatus, setAssignedStatus] = useState('');
+  const [deliveryStatus, setDeliveryStatus] = useState('');
+  const [assignedStatus, setAssignedStatus] = useState('yes');
   const [search, setSearch] = useState('');
   const [carDeliveryView, setCarDeliveryView] = useState(false);
+  const [driverPendingView, setDriverPendingView] = useState(false);
   const { data, isLoading, isError, refetch } = useGetAllSharpCarsQuery(
     { limit: pageSize, page: currentPage, activeStatus: activeStatus, assignedStatus: assignedStatus, search: search },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
-  const router = useRouter();
+
+  const { data: deliveries, isLoading: deliveriesLoading, isError: deliveriesError, refetch: deliveriesRefetch } = useGetCarDeliveriesQuery(
+    { limit: pageSize, page: currentPage, deliveryStatus: deliveryStatus },
+    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
+
+  const {
+    data: drivers,
+    isLoading: driversLoading,
+    isError: driversError,
+    refetch: reloadDrivers,
+  } = useGetAllDriversQuery(
+    {
+      carOwner: false,
+      driverStatus: "pending",
+      limit: pageSize,
+      page: currentPage,
+      search: search,
+      order: 'newest_first',
+      statusRemark: '',
+      onboardStatus: '',
+      sharpApprovalStatus: 'pending'
+    },
+    {
+      refetchOnMountOrArgChange: true,
+      refetchOnReconnect: true,
+    }
+  );
+
   const [options, setOptions] = useState(sharpCarsOptionsData);
   const [tab, setTab] = useState<any>('');
   const [tabInnerFilter, setTabInnerFilter] = useState<any[]>([]);
-  const [innerFilterValue, setInnerFilterValue] = useState('')
+  const [innerFilterValue, setInnerFilterValue] = useState('');
 
   useEffect(() => {
     if (router.pathname === '/sharp-cars' && router.query.tab === undefined) {
       setTabInnerFilter([])
+      setCarDeliveryView(false);
+      setDriverPendingView(false);
     }
 
     if (router.pathname === '/sharp-cars' && router.query.tab === 'pending') {
       setTabInnerFilter(pendingInnerFilter);
-      setInnerFilterValue('assigned');
+      setInnerFilterValue(router.query.sub_tab ? `${router.query.sub_tab}` : 'assigned');
+      setCarDeliveryView(false);
+      setDriverPendingView(false);
     }
 
     if (router.pathname === '/sharp-cars' && router.query.tab === 'car-deliveries') {
       setTabInnerFilter(carDeliveriesInnerFilter)
-      setInnerFilterValue('pending-deliveries');
+      setInnerFilterValue(router.query.sub_tab ? `${router.query.sub_tab}` : 'pending-deliveries');
+      setCarDeliveryView(true);
+      setDriverPendingView(false)
+    }
+
+    if (router.pathname === '/sharp-cars' && router.query.tab === 'pending-drivers') {
+      setTabInnerFilter([])
+      setInnerFilterValue('');
+      setCarDeliveryView(false);
+      setDriverPendingView(true);
     }
   }, [router.query.tab]);
 
@@ -99,7 +157,7 @@ const SharpCars: NextPage = () => {
     if (key.length === 0) {
       router.push(`${router.pathname}`);
       setActiveStatus('yes');
-      setAssignedStatus('');
+      setAssignedStatus('yes');
     }
   };
 
@@ -120,20 +178,50 @@ const SharpCars: NextPage = () => {
 
     if (router.query.tab === undefined) {
       setActiveStatus('yes');
-      setAssignedStatus('');
+      setAssignedStatus('yes');
+      setDeliveryStatus('pending')
     }
   }, [router.query.tab])
 
   useEffect(() => {
-    if (innerFilterValue === 'assigned') setAssignedStatus('yes')
-    if (innerFilterValue === 'unassigned') setAssignedStatus('no')
+    if (innerFilterValue === 'assigned') setAssignedStatus('yes');
+    if (innerFilterValue === 'unassigned') setAssignedStatus('no');
+    if (innerFilterValue === 'pending-deliveries') setDeliveryStatus('pending');
+    if (innerFilterValue === 'active-deliveries') setDeliveryStatus('active');
+    if (innerFilterValue === 'delivered') setDeliveryStatus('delivered');
   }, [innerFilterValue])
+
+  const formatTripData = (data: any) : any => {
+    const formattedData = data.map((trip: any) => {
+      return {
+        id: trip._id,
+        origin: `${trip.start_address.city || ""}, ${
+          trip.start_address.state || ""
+        }, ${trip.start_address.country || ""}`,
+        destination: `${trip.end_address.city || ""}, ${
+          trip.end_address.state || ""
+        }, ${trip.end_address.country || ""}`,
+        rider: trip.user?.full_name || "",
+        driver: trip?.driver?.full_name,
+        carModel: trip?.car?.brand_name + ' ' + trip?.car?.model,
+        plateNumber: trip?.car?.plate_number,
+        status: trip.status,
+        reason: trip.cancel_trip_reason
+      };
+    });
+
+    return formattedData;
+  };
+
+  useEffect(() => {
+    if(drivers) console.log('drivers', drivers)
+  }, [])
 
   return (
     <>
       <AppHead title="Kabukabu | Sharp Cars" />
       <AppLayout>
-        <CountHeader title="Sharp Cars" count={5000} />
+        {carDeliveryView ? <CountHeader title="Sharp Cars" count={deliveries?.pagination?.totalCount} /> : <CountHeader title="Sharp Cars" count={data?.totalCount} />}
         <SharpCarOptionBar
           handleClickOption={(key) => handleClickOption(key)}
           options={options}
@@ -148,22 +236,78 @@ const SharpCars: NextPage = () => {
           tabInnerFilter={tabInnerFilter}
           innerFilterValue={innerFilterValue}
           handleFilterClick={handleFilterClick}
+          carDeliveryView={carDeliveryView}
         />
-        <SharpCarsTable
-          data={data?.data}
-          isLoading={isLoading}
-          isError={isError}
-          refetch={refetch}
-        />
-        {data && (
-          <Pagination
-            className="pagination-bar"
-            currentPage={currentPage}
-            totalCount={data.totalCount}
-            pageSize={pageSize}
-            onPageChange={(page) => setCurrentPage(page)}
-          />
-        )}
+        {
+          !carDeliveryView && !driverPendingView && 
+          <>
+            <SharpCarsTable
+              data={data?.data}
+              isLoading={isLoading}
+              isError={isError}
+              refetch={refetch}
+              currentPage={currentPage}
+              innerFilterValue={innerFilterValue}
+            />
+            {data && (
+              <Pagination
+                className="pagination-bar"
+                currentPage={currentPage}
+                totalCount={data.totalCount}
+                pageSize={pageSize}
+                onPageChange={(page) => setCurrentPage(page)}
+              />
+            )}
+          </>
+        }
+
+        {
+          carDeliveryView && !driverPendingView && 
+          <>
+            <SharpCarsDeliveryTable 
+              data={deliveries?.data}
+              isLoading={deliveriesLoading}
+              isError={deliveriesError}
+              refetch={deliveriesRefetch}
+              currentPage={currentPage}
+              innerFilterValue={innerFilterValue}
+            />
+            {deliveries?.data && (
+              <Pagination
+                className="pagination-bar"
+                currentPage={currentPage}
+                totalCount={deliveries?.pagination?.totalCount}
+                pageSize={pageSize}
+                onPageChange={(page) => setCurrentPage(page)}
+              />
+            )}
+          </>
+        }
+
+        {
+          !carDeliveryView && driverPendingView && 
+          <>
+            {
+              <DriverPendingTable
+                data={drivers?.data}
+                isError={driversError}
+                isLoading={driversLoading}
+                refetch={reloadDrivers}
+                currentPage={currentPage}
+                innerFilterValue={innerFilterValue}
+              />
+            }
+            {drivers && (
+              <Pagination
+                className="pagination-bar"
+                currentPage={currentPage}
+                totalCount={drivers?.totalCount}
+                pageSize={pageSize}
+                onPageChange={(page) => setCurrentPage(page)}
+              />
+            )}
+          </>
+        }
       </AppLayout>
     </>
   );

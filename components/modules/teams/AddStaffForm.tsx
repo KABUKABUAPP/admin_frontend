@@ -22,9 +22,9 @@ const initialValues = {
 
 const AddStaffForm: FC = () => {
   const router = useRouter();
-  const [tags, setTags] = useState<any>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [tags, setTags] = useState<any>([]);
   const [search, setSearch] = useState<string>("");
   const [selectedStatus, setSelectedStatus] = useState<string>("active");
   const [selectedSortFilter, setSelectedSortFilter] = useState<string>("newest_first");

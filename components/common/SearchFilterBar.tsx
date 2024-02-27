@@ -3,6 +3,8 @@ import TextField from "@/components/ui/Input/TextField/TextField";
 import SearchIcon from "@/components/icons/SearchIcon";
 import DropDown from "../ui/DropDown";
 import { useRouter } from "next/router";
+import Button from "../ui/Button/Button";
+import AddIcon from "../icons/AddIcon";
 
 interface Props {
   filterOptions?: {
@@ -20,6 +22,15 @@ interface Props {
   tabInnerFilter?: any;
   innerFilterValue?: any;
   handleFilterClick?: (val: string) => void;
+  carDeliveryView?: boolean;
+  tripPaymentView?: boolean;
+  tripPaymentOptions?: {
+    label: string | number;
+    value: string | number;
+    default?: boolean;
+  }[];
+  tripPaymentOptionsSelected?: string;
+  handleTripPayments?: (val: string | number) => void;
 }
 
 const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
@@ -34,10 +45,14 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
   carDeliveriesInnerFilter,
   tabInnerFilter,
   innerFilterValue,
-  handleFilterClick
+  handleFilterClick,
+  carDeliveryView,
+  tripPaymentOptions,
+  tripPaymentOptionsSelected,
+  handleTripPayments,
+  tripPaymentView
 }) => {
   const router = useRouter();
-
 
   return (
     <div className="rounded-lg bg-[#F1F1F1] w-full min-h-10 shadow-sm my-6 py-4 px-8 flex items-center justify-between max-sm:flex-col max-sm:gap-5">
@@ -78,6 +93,21 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
       <div className="flex-1">{children}</div>
 
       <div className="text-xs flex gap-3 items-center cursor-pointer">
+        {carDeliveryView && <Button title="New Delivery" size="medium" startIcon={<AddIcon />} color="tetiary" className="border border-[#000]" onClick={() => {router.push('/sharp-cars/car-deliveries/new-delivery')}} />}
+        {
+          tripPaymentView &&
+          <>
+            <span>Trip Type</span>
+            <DropDown
+              placeholder="Filter"
+              options={tripPaymentOptions}
+              value={tripPaymentOptionsSelected}
+              handleChange={(val) => {
+                if (handleTripPayments) handleTripPayments(val);
+              }}
+            />
+          </>
+        }
         <span>{title}</span>
         <DropDown
           placeholder="Filter"

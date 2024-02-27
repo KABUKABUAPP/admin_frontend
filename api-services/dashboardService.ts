@@ -97,7 +97,9 @@ export const dashboardApi = createApi({
 
           const onlineStatusChart = {
             online: response?.data?.online_drivers,
-            offline: response?.data?.offline_drivers
+            offline: response?.data?.offline_drivers,
+            onlineRiders: response?.data?.online_riders,
+            offlineRiders: response?.data?.offline_riders
           }
 
           return { headerCard, driversChart, tripsChart, onlineStatusChart }

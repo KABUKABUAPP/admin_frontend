@@ -66,7 +66,8 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
             item.route === "/settings" ||
             item.route === "/messages" ||
             item.route === "/sharp-cars" ||
-            item.route === "/live-map"
+            item.route === "/live-map" ||
+            item.route === "/car-owners"
           ) {
             return true;
           } else {
@@ -80,7 +81,8 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
               item.route === "/settings" ||
               item.route === "/messages" ||
               item.route === "/sharp-cars" ||
-              item.route === "/live-map"
+              item.route === "/live-map" ||
+              item.route === "/car-owners"
             ) {
               return true;
             } else {

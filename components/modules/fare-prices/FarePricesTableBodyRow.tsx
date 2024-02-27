@@ -6,15 +6,17 @@ import { useRouter } from "next/router";
 
 interface Props {
   data: FarePricesTableData;
+  currentTab: string;
 }
 
 const FarePricesTableBodyRow: FC<Props> = ({
   data: { profileId, city, stateCountry, totalFares, dateCreated },
+  currentTab
 }) => {
   const router = useRouter();
   return (
     <div
-      onClick={() => router.push(`/fare-prices/${profileId}`)}
+      onClick={() => router.push(`/fare-prices/${profileId}?current_tab=${currentTab}`)}
       className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
     >
       <div style={{ flex: 1 }} className="flex items-center">

@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import AppLayout from "@/layouts/AppLayout";
 import ViewStaffLayout from "@/components/modules/staff/ViewStaffLayout";
@@ -29,6 +29,8 @@ import EditStaffModal from "@/components/modules/staff/EditStaffModal";
 
 const Staff: NextPage = () => {
   const { setModalContent } = useModalContext();
+  const [onboardListData, setOnboardListData] = useState<any>()
+  const [onboardDropdownData, setOnboardDropdownData] = useState<any>()
   const router = useRouter();
   const { id } = router.query;
   const { data, isLoading, error, refetch } = useViewStaffQuery(
@@ -59,6 +61,10 @@ const Staff: NextPage = () => {
     }
   }, [enableStaffError]);
 
+  useEffect(() => {
+    if (data) setOnboardListData(data.onboardDataList.total_drivers_onboarded_list)
+  }, [data])
+
   const handleResetPassword = () => {
     setModalContent(
       <ResetPasswordCard handleClose={() => setModalContent(null)} />
@@ -72,6 +78,29 @@ const Staff: NextPage = () => {
   };
 
   const { userPermissions } = useUserPermissions();
+
+  const handleOnboardListChange = (e: any) => {
+    switch (e) {
+      case 'today':
+        if (data) setOnboardListData(data.onboardDataList.total_drivers_onboarded_today_list)
+        break;
+    
+      case 'this_week':
+        if (data) setOnboardListData(data.onboardDataList.total_drivers_onboarded_this_week_list)
+        break;
+    
+      case 'this_month':
+        if (data) setOnboardListData(data.onboardDataList.total_drivers_onboarded_this_month_list)
+        break;
+    
+      case 'all':
+        if (data) setOnboardListData(data.onboardDataList.total_drivers_onboarded_list)
+        break;
+    
+      default:
+        break;
+    }
+  }
 
   return (
     <>
@@ -155,7 +184,7 @@ const Staff: NextPage = () => {
                 {data && <SummaryCard disputesRaised={data.disputeData.total} pendingDisputes={data.disputeData.pending} totalOnboarded={data.onboardData.total_drivers_onboarded}  totalOnboardToday={data.onboardData.total_onboarded_today} totalOnboardWeek={data.onboardData.total_onboarded_this_week} totalOnboardMonth={data.onboardData.total_onboarded_this_month} totalRidersOnboarded={data.onboardData.total_riders_onboarded}  totalRidersOnboardToday={data.onboardData.total_riders_onboarded_today} totalRidersOnboardWeek={data.onboardData.total_riders_onboarded_this_week} totalRidersOnboardMonth={data.onboardData.total_riders_onboarded_this_month} userRole={data.userInfo.role} />}
               </>
             }
-            secondRow={data && <>{ <ActivityLogCard logs={data.activityLogs} userRole={data.userInfo.role} />}</>}
+            secondRow={data && <>{ <ActivityLogCard logs={data.activityLogs} userRole={data.userInfo.role} onboardList={onboardListData} staffName={data.userInfo.fullName} onboardDropdownData={onboardDropdownData} handleChange={handleOnboardListChange} />}</>}
           />
         </div>
       </AppLayout>
@@ -165,41 +194,3 @@ const Staff: NextPage = () => {
 
 export default Staff;
 
-const mockLogs = [
-  {
-    title: "John Doe sent a trip to the dispatch",
-    date: "Today at 2:30pm",
-  },
-  {
-    title: "John Doe sent a trip to the dispatch",
-    date: "Today at 2:30pm",
-  },
-  {
-    title: "John Doe sent a trip to the dispatch",
-    date: "Today at 2:30pm",
-  },
-  {
-    title: "John Doe sent a trip to the dispatch",
-    date: "Today at 2:30pm",
-  },
-  {
-    title: "John Doe sent a trip to the dispatch",
-    date: "Today at 2:30pm",
-  },
-  {
-    title: "John Doe sent a trip to the dispatch",
-    date: "Today at 2:30pm",
-  },
-  {
-    title: "John Doe sent a trip to the dispatch",
-    date: "Today at 2:30pm",
-  },
-  {
-    title: "John Doe sent a trip to the dispatch",
-    date: "Today at 2:30pm",
-  },
-  {
-    title: "John Doe sent a trip to the dispatch",
-    date: "Today at 2:30pm",
-  },
-];

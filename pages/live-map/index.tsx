@@ -64,21 +64,41 @@ const IndexPage: React.FC = () => {
               <div className={styles.overlay}>
                 <div className="bg-[#FDFDFD] w-full gap-5 p-4 rounded-lg items-center">
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div>
-                      <p className="text-lg"><b>{tripsInsight?.onlineStatusChart?.online}</b></p>
-                      <p><b>Drivers Online</b></p>
+                    <div className="flex">
+                      <div className="w-[20%]">
+                        <img src="/taxiOnline.svg" alt="" />
+                      </div>
+                      <div className="w-[80%]">
+                        <p className="text-lg"><b>{tripsInsight?.onlineStatusChart?.online}</b></p>
+                        <p><b>Drivers Online</b></p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-lg"><b>{tripsInsight?.onlineStatusChart?.offline}</b></p>
-                      <p><b>Drivers Offline</b></p>
+                    <div className="flex">
+                      <div className="w-[20%]">
+                        <img src="/taxiOffline.svg" alt="" />
+                      </div>
+                      <div className="w-[80%]">
+                        <p className="text-lg"><b>{tripsInsight?.onlineStatusChart?.offline}</b></p>
+                        <p><b>Drivers Offline</b></p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-lg"><b>0</b></p>
-                      <p><b>Riders Online</b></p>
+                    <div className="flex">
+                      <div className="w-[20%]">
+                        <img src="/riderOnline.svg" alt="" />
+                      </div>
+                      <div className="w-[80%]">
+                        <p className="text-lg"><b>{tripsInsight?.onlineStatusChart?.onlineRiders}</b></p>
+                        <p><b>Riders Online</b></p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-lg"><b>0</b></p>
-                      <p><b>Riders Offline</b></p>
+                    <div className="flex">
+                      <div className="w-[20%]">
+                        <img src="/riderOffline.svg" alt="" />
+                      </div>
+                      <div className="w-[80%]">
+                        <p className="text-lg"><b>{tripsInsight?.onlineStatusChart?.offlineRiders}</b></p>
+                        <p><b>Riders Offline</b></p>
+                      </div>
                     </div>
                   </div>
                 </div>
