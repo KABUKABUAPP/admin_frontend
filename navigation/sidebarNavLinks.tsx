@@ -12,6 +12,7 @@ import BuildingIcon from "@/components/icons/BuildingIcon";
 import SettingsIcon from "@/components/icons/SettingsIcon";
 import MessageIcon from "@/components/icons/MessageIcon";
 import MapPinIcon from "@/components/icons/MapPinIcon";
+import UserViewFinder from "@/components/icons/UserViewFinder";
 
 const sidebarNavLinks: SidebarLink[] = [
   {
@@ -56,6 +57,12 @@ const sidebarNavLinks: SidebarLink[] = [
     link: "/sharp-cars",
     isActive: false,
     icon: <CarIcon />,
+  },
+  {
+    title: "Car Owners",
+    link: "/car-owners",
+    isActive: false,
+    icon: <UserViewFinder />,
   },
   {
     title: "Inspectors",

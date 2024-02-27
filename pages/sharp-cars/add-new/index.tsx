@@ -62,11 +62,11 @@ const AddNew: FC = () => {
     data.append('hackney_permit_number', hackneyPermitNumber);
 
     images.forEach((img: string) => {
-      data.append('car_images', `${img}`);
+      data.append('car_images', img);
     });
 
     docArray.forEach(async (doc: any) => {
-      data.append(doc.docType, `${doc.fileUrl}`);
+      data.append(doc.docType, doc.fileUrl);
     });
     
     createCar(data);

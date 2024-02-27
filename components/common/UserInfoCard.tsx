@@ -17,6 +17,7 @@ interface Props {
   email?: string;
   phone?: string;
   tripCount?: string | number;
+  carCount?: string | number;
   rating?: number;
   image?: string;
   isLoading?: boolean;
@@ -62,6 +63,7 @@ const UserInfoCard: FC<Props> = ({
   email,
   phone,
   tripCount,
+  carCount,
   rating,
   image,
   isLoading,
@@ -78,6 +80,7 @@ const UserInfoCard: FC<Props> = ({
   const showTripCount = !router.pathname.includes("inspector");
   const showDeclineCount = router.pathname.includes("pending");
   const showDeclineReason = router.pathname.includes("pending") && (declineCount ? declineCount > 0 : false);
+  const showCarCount = router.pathname === "/car-owners/[id]";
   const isDeleted =
     router.pathname.includes("deleted") || router.query.deleted == "true";
 
@@ -156,7 +159,8 @@ const UserInfoCard: FC<Props> = ({
             </div>}
           </div>
           
-          {showTripCount &&
+          {
+            showTripCount &&
             (tripCount === 0 ? (
               <p className="text-sm font-semibold">0 trips</p>
             ) : (
@@ -165,7 +169,21 @@ const UserInfoCard: FC<Props> = ({
                   {tripCount && `${tripCount} trips`}
                 </p>
               )
-            ))}
+            ))
+          }
+
+          {
+            showCarCount &&
+            (carCount === 0 ? (
+              <p className="text-sm font-semibold">0 cars</p>
+            ) : (
+              showCarCount && (
+                <p className="text-sm font-semibold">
+                  {carCount && `${carCount} cars`}
+                </p>
+              )
+            ))
+          }
 
           <p className="text-sm font-semibold">
             {Boolean(rating) &&

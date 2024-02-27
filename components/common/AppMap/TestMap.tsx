@@ -18,7 +18,7 @@ const StaticMap: FC<Props> = ({ startPoint, endPoint }) => {
   const [map, setMap] = React.useState(null)
   
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: 'AIzaSyAsBegv3npV0vvqFzyeYYEtWDGYGyEu3TI',
+    googleMapsApiKey: 'AIzaSyBKw_APHMTRn37FXj0dd7_CptLColGP4Gc',
   });
 
   const containerStyle = {
