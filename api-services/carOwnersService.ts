@@ -38,7 +38,7 @@ export const carOwnersApi = createApi({
     endpoints: (build) => ({
         getAllCarOwners: build.query<any, any>({
           query: ({ limit, page, search }) => ({
-            url: `admin/car-owner/all?limit=${limit}&page=${page}&search=${search}`
+            url: `admin/car-owner/all?limit=${limit}&page=${page}${search.length > 0 ? `&search=${search}`: ''}`
           }),
           transformResponse: (response: any) => {
             if (!response) return {}
