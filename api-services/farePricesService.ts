@@ -75,16 +75,13 @@ export const farePricesApi = createApi({
       },
     }),
 
-    viewFarePrice: build.query<ViewFarePriceResponse, ViewFareQuery>({
+    viewFarePrice: build.query<any, any>({
       query: ({ id }) => ({
         url: `admin/price/view/${id}`,
       }),
       providesTags: ["fare-price"],
     }),
-    createFarePrice: build.mutation<
-      CreateFarePriceResponse,
-      CreateFarePricePayload
-    >({
+    createFarePrice: build.mutation<any, any>({
       query: (body) => ({
         url: "admin/price/create",
         method: "POST",
@@ -106,7 +103,7 @@ export const farePricesApi = createApi({
       }),
       invalidatesTags: ['fare-price', 'fare-prices']
     }),
-    updateFarePrice: build.mutation<any, UpdateFareQuery>({
+    updateFarePrice: build.mutation<any, any>({
       query: ({ id, payload: body }) => ({
         url: `admin/price/update/${id}`,
         method: "PUT",
