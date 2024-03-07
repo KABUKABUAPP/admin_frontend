@@ -29,6 +29,10 @@ const FarePrice: NextPage = () => {
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
+  useEffect(() => {
+    if (data) console.log(data)
+  }, [data])
+
   const handleSurge = () => {
     setModalContent(
       <StartSurgeCard handleClose={() => setModalContent(null)} />
@@ -126,46 +130,91 @@ const FarePrice: NextPage = () => {
                     ]}
                   />
                   <FarePriceCard
-                    title="Fares[Normal]"
+                    title="Fares[Short Trip]"
                     handleEdit={() => {
                       const monthlyPayment =
                         data.data.driver_fee.monthly_payment;
                       const sharpPayment = data.data.driver_fee.sharp_payment;
-                      const baseFare = data.data.base_fare;
-                      const distance = data.data.distance_per_km;
-                      const time = data.data.time_per_min;
-                      const vat = data.data.state_levy;
-                      const bookingFee = data.data.booking_fee;
-                      const surgeMultiplier = data.data.surge_multiplier;
+                      const baseFare = data.data.short_trip.base_fare;
+                      const distance = data.data.short_trip.distance_per_km;
+                      const time = data.data.short_trip.time_per_min;
+                      const vat = data.data.short_trip.state_levy;
+                      const bookingFee = data.data.short_trip.booking_fee;
+                      const surgeMultiplier = data.data.short_trip.surge_multiplier;
                       const state = data.data.state;
                       const country = data.data.country;
-                      const waitingTimePerMin = data.data.waiting_time_per_min
+                      const waitingTimePerMin = data.data.short_trip.waiting_time_per_min
                       const query = `?monthlyPayment=${monthlyPayment}&sharpPayment=${sharpPayment}&baseFare=${baseFare}&distance=${distance}&time=${time}&vat=${vat}&bookingFee=${bookingFee}&surgeMultiplier=${surgeMultiplier}&state=${state}&country=${country}&waitingTime=${waitingTimePerMin}`;
 
                       router.push(`/fare-prices/${id}${query}`, undefined, {
                         shallow: true,
                       });
-                      setModalContent(<EditNormalFeesForm />);
+                      setModalContent(<EditNormalFeesForm trip_type="short" long_trip={data.data.long_trip} />);
                     }}
                     cardData={[
-                      { title: "Base Fare", body: `₦${data.data.base_fare}` },
+                      { title: "Base Fare", body: `₦${data.data.short_trip.base_fare}` },
                       {
                         title: "Distance",
-                        body: `₦${data.data.distance_per_km}/km`,
+                        body: `₦${data.data.short_trip.distance_per_km}/km`,
                       },
-                      { title: "Time", body: `₦${data.data.time_per_min}/min` },
-                      { title: "VAT", body: `₦${data.data.state_levy}` },
+                      { title: "Time", body: `₦${data.data.short_trip.time_per_min}/min` },
+                      { title: "VAT", body: `₦${data.data.short_trip.state_levy}` },
                       {
                         title: "Booking Fee",
-                        body: `₦${data.data.booking_fee}`,
+                        body: `₦${data.data.short_trip.booking_fee}`,
                       },
                       {
                         title: "Surge Multiplier",
-                        body: `${data.data.surge_multiplier}`,
+                        body: `${data.data.short_trip.surge_multiplier}`,
                       },
                       {
                         title: "Waiting Time Per Minute",
-                        body: `${data.data.waiting_time_per_min}`,
+                        body: `${data.data.short_trip.waiting_time_per_min}`,
+                      }
+                    ]}
+                  />
+
+                  <FarePriceCard
+                    title="Fares[Long Trip]"
+                    handleEdit={() => {
+                      const monthlyPayment =
+                        data.data.driver_fee.monthly_payment;
+                        const sharpPayment = data.data.driver_fee.sharp_payment;
+                        const baseFare = data.data.long_trip.base_fare;
+                        const distance = data.data.long_trip.distance_per_km;
+                        const time = data.data.long_trip.time_per_min;
+                        const vat = data.data.long_trip.state_levy;
+                        const bookingFee = data.data.long_trip.booking_fee;
+                        const surgeMultiplier = data.data.long_trip.surge_multiplier;
+                        const state = data.data.state;
+                        const country = data.data.country;
+                        const waitingTimePerMin = data.data.long_trip.waiting_time_per_min
+                        const query = `?monthlyPayment=${monthlyPayment}&sharpPayment=${sharpPayment}&baseFare=${baseFare}&distance=${distance}&time=${time}&vat=${vat}&bookingFee=${bookingFee}&surgeMultiplier=${surgeMultiplier}&state=${state}&country=${country}&waitingTime=${waitingTimePerMin}`;
+
+                      router.push(`/fare-prices/${id}${query}`, undefined, {
+                        shallow: true,
+                      });
+                      setModalContent(<EditNormalFeesForm trip_type="long" short_trip={data.data.short_trip} />);
+                    }}
+                    cardData={[
+                      { title: "Base Fare", body: `₦${data.data.long_trip.base_fare}` },
+                      {
+                        title: "Distance",
+                        body: `₦${data.data.long_trip.distance_per_km}/km`,
+                      },
+                      { title: "Time", body: `₦${data.data.long_trip.time_per_min}/min` },
+                      { title: "VAT", body: `₦${data.data.long_trip.state_levy}` },
+                      {
+                        title: "Booking Fee",
+                        body: `₦${data.data.long_trip.booking_fee}`,
+                      },
+                      {
+                        title: "Surge Multiplier",
+                        body: `${data.data.long_trip.surge_multiplier}`,
+                      },
+                      {
+                        title: "Waiting Time Per Minute",
+                        body: `${data.data.long_trip.waiting_time_per_min}`,
                       }
                     ]}
                   />
