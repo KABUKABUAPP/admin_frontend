@@ -60,7 +60,7 @@ const IndexPage: React.FC = () => {
         <AppHead title="Kabukabu | Map View" />
         <AppLayout>
             <div className={styles.app}>
-              <MapOverlay onlineStatusDriver={onlineStatusOption} onlineStatusRider={onlineStatusOptionRider} />
+              <MapOverlay onlineStatusDriver={onlineStatusOption} onlineStatusRider={onlineStatusOptionRider} enableDriverOption={enableDriverOption} enableRiderOption={enableRiderOption} />
 
               {/* Elements above the map as overlay */}
               <div className={styles.overlay}>
