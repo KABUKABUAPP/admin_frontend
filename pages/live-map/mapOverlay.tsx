@@ -23,6 +23,8 @@ const socket = io(`https://monitor-dev.up.railway.app`);
 interface MapOverlayProps {
   onlineStatusDriver: string;
   onlineStatusRider: string;
+  enableRiderOption: any;
+  enableDriverOption: any;
 }
 
 interface DriverModalProps {
@@ -80,7 +82,7 @@ const DriverModal : React.FC<DriverModalProps> = ({ driver, handleClose, type })
   )
 }
 
-const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatusRider }) => {
+const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatusRider, enableRiderOption, enableDriverOption }) => {
   const { setModalContent } = useModalContext();
   const [directions, setDirections] = useState<any>(null);
   const [map, setMap] = React.useState(null);
@@ -143,17 +145,17 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
 
   useEffect(() => {
     if (drivers && riders) {
-      const driversCoordinates = drivers?.data?.map((d: any) => {
+      const driversCoordinates = enableDriverOption ? drivers?.data?.map((d: any) => {
         if (d.coordinate && d.coordinate.length > 0) return {lat: typeof d.coordinate[0] === 'number'
         ? d.coordinate[0] : parseFloat(d.coordinate[0]), lng: typeof d.coordinate[1] === 'number'
         ? d.coordinate[1] : parseFloat(d.coordinate[1]), personnel: d, type: 'driver', _id: d.driverId}
-      });
+      }) : [];
 
-      const ridersCoordinates = riders?.data?.map((d: any) => {
+      const ridersCoordinates = enableRiderOption ? riders?.data?.map((d: any) => {
         if (d.coordinate && d.coordinate.length > 0) return {lat: typeof d.coordinate[0] === 'number'
         ? d.coordinate[0] : parseFloat(d.coordinate[0]), lng: typeof d.coordinate[1] === 'number'
         ? d.coordinate[1] : parseFloat(d.coordinate[1]), personnel: d, type: 'rider', _id: d.riderId}
-      });
+      }) : [];
 
       const allCoordinates = driversCoordinates.concat(ridersCoordinates)
       
@@ -185,7 +187,7 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
         socket.disconnect();
       };
     }
-  }, [drivers, riders]);
+  }, [drivers, riders, enableRiderOption, enableDriverOption]);
 
   const center = coordinates.length > 0 ? coordinates[0] : { lat: 6.5244, lng: 3.3792 };
   

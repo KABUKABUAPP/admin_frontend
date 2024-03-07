@@ -21,7 +21,13 @@ const initialValues = {
   waitingTime: "",
 };
 
-const EditNormalFeesForm: FC = () => {
+interface Props {
+  trip_type: string;
+  long_trip?: any;
+  short_trip?: any;
+}
+
+const EditNormalFeesForm: FC<Props> = ({ trip_type, long_trip, short_trip }) => {
   const { setModalContent } = useModalContext();
   const router = useRouter();
   const {
@@ -49,9 +55,7 @@ const EditNormalFeesForm: FC = () => {
     initialValues,
     validationSchema: EditNormalFeesValidation,
     onSubmit: (values) => {
-      const payload = {
-        state: state,
-        country: country,
+      const editedValues = {
         base_fare: Number(values.baseFare),
         distance_per_km: Number(values.distance),
         time_per_min: Number(values.time),
@@ -59,6 +63,12 @@ const EditNormalFeesForm: FC = () => {
         booking_fee: Number(values.bookingFee),
         waiting_time_per_min: Number(values.waitingTime),
         surge_multiplier: Number(surgeMultiplier),
+      }
+      const payload = {
+        state: state,
+        country: country,
+        long_trip: trip_type === 'short' ? long_trip : editedValues,
+        short_trip: trip_type === 'long' ? short_trip : editedValues,
         driver_fee_monthly_payment: Number(monthlyPayment),
         driver_fee_sharp_payment: Number(sharpPayment),
         payment_types_available: {
