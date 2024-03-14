@@ -149,7 +149,7 @@ const FarePrice: NextPage = () => {
                       router.push(`/fare-prices/${id}${query}`, undefined, {
                         shallow: true,
                       });
-                      setModalContent(<EditNormalFeesForm trip_type="short" long_trip={data.data.long_trip} />);
+                      setModalContent(<EditNormalFeesForm trip_type="short" long_trip={data.data.long_trip} short_trip_limit={data.data.short_trip_limit} />);
                     }}
                     cardData={[
                       { title: "Base Fare", body: `₦${data.data.short_trip.base_fare}` },
@@ -170,6 +170,10 @@ const FarePrice: NextPage = () => {
                       {
                         title: "Waiting Time Per Minute",
                         body: `${data.data.short_trip.waiting_time_per_min}`,
+                      },
+                      {
+                        title: "Short Trip Limit",
+                        body: `${data.data.short_trip_limit}`,
                       }
                     ]}
                   />
