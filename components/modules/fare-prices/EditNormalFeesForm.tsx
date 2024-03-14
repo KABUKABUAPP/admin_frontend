@@ -19,15 +19,17 @@ const initialValues = {
   distance: "",
   lasgLevy: "",
   waitingTime: "",
+  shortTripLimit: ""
 };
 
 interface Props {
   trip_type: string;
   long_trip?: any;
   short_trip?: any;
+  short_trip_limit?: any;
 }
 
-const EditNormalFeesForm: FC<Props> = ({ trip_type, long_trip, short_trip }) => {
+const EditNormalFeesForm: FC<Props> = ({ trip_type, long_trip, short_trip, short_trip_limit }) => {
   const { setModalContent } = useModalContext();
   const router = useRouter();
   const {
@@ -64,7 +66,7 @@ const EditNormalFeesForm: FC<Props> = ({ trip_type, long_trip, short_trip }) => 
         waiting_time_per_min: Number(values.waitingTime),
         surge_multiplier: Number(surgeMultiplier),
       }
-      const payload = {
+      let payload: any = {
         state: state,
         country: country,
         long_trip: trip_type === 'short' ? long_trip : editedValues,
@@ -77,6 +79,8 @@ const EditNormalFeesForm: FC<Props> = ({ trip_type, long_trip, short_trip }) => 
           card: true,
         }
       };
+
+      if (trip_type === 'short') payload.short_trip_limit = values.shortTripLimit;
 
       updateFare({ payload, id: String(id) });
     },
@@ -106,7 +110,12 @@ const EditNormalFeesForm: FC<Props> = ({ trip_type, long_trip, short_trip }) => 
       formik.setFieldValue("lasgLevy", vat);
       formik.setFieldValue("waitingTime", waitingTime);
     }
+    if (short_trip_limit) console.log({short_trip_limit})
   }, [router.query]);
+
+  useEffect(() => {
+    formik.setFieldValue("shortTripLimit", short_trip_limit);
+  }, [short_trip_limit]);
 
   return (
     <FormikProvider value={formik}>
@@ -215,6 +224,27 @@ const EditNormalFeesForm: FC<Props> = ({ trip_type, long_trip, short_trip }) => 
               />
             </div>
           </div>
+          {
+            trip_type === 'short' &&
+            <div className="flex gap-4 max-sm:flex-col">
+              <div style={{ flex: 1 }}>
+                <TextField
+                  label="Short Trip Limit"
+                  {...formik.getFieldProps("shortTripLimit")}
+                  error={
+                    formik.touched.shortTripLimit
+                      ? formik.errors.shortTripLimit
+                      : undefined
+                  }
+                  onChange={(e) => {
+                    if (verifyIsDigit(e.target.value)) {
+                      formik.setFieldValue("shortTripLimit", e.target.value);
+                    }
+                  }}
+                />
+              </div>
+            </div>
+          }
           <div className="flex max-sm:flex-col gap-4 px-8 max-sm:px-0 mt-8">
             <div style={{ flex: 1 }}>
               <Button
