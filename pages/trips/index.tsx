@@ -15,6 +15,7 @@ import CancelledTripsTable from "@/components/modules/Trips/CancelledTripsTable"
 import PendingOrdersTable from "@/components/modules/Trips/PendingOrdersTable";
 import CancelledOrdersTable from "@/components/modules/Trips/CancelledOrdersTable";
 import AppHead from "@/components/common/AppHead";
+import ScheduledTripsTable from "@/components/modules/Trips/ScheduledTripsTable";
 
 const Trips: NextPage = () => {
   const [optionsList, setOptionsList] = useState([...TripsOptionsBarData]);
@@ -30,6 +31,7 @@ const Trips: NextPage = () => {
     "completed",
     "cancelled_orders",
     "declined",
+    "scheduled_trips"
   ];
 
   const filterOptions: {
@@ -53,6 +55,7 @@ const Trips: NextPage = () => {
     COMPLETED_TRIPS,
     CANCELLED_TRIPS,
     CANCELLED_ORDERS,
+    SCHEDULED_TRIPS
   }
 
   const handleClickOption = (keyVal: string) => {
@@ -152,6 +155,13 @@ const Trips: NextPage = () => {
         )}
         {tab === tabOptions[Tab.CANCELLED_ORDERS] && (
           <CancelledOrdersTable
+            setTripCount={setTripCount}
+            tableSearch={tableSearch}
+            order={selectedFilterOption}
+          />
+        )}
+        {tab === tabOptions[Tab.SCHEDULED_TRIPS] && (
+          <ScheduledTripsTable
             setTripCount={setTripCount}
             tableSearch={tableSearch}
             order={selectedFilterOption}
