@@ -104,7 +104,7 @@ export interface GetAllTripsResponse {
 export interface GetAllTripsQuery {
   limit: number;
   page: number;
-  status: "disputed" | "cancelled" | "completed" | "initiated" | "started" | "pending";
+  status: "disputed" | "cancelled" | "completed" | "initiated" | "started" | "pending" | "scheduled";
   search: string;
   order: string;
   type: 'order' | 'trip'

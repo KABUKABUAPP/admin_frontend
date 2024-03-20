@@ -251,6 +251,11 @@ export const TripsOptionsBarData = [
     isActive: false,
     keyVal: "declined",
   },
+  {
+    title: "Scheduled Trips",
+    isActive: false,
+    keyVal: "scheduled_trips",
+  }
 ];
 
 export const driverOptionBarData = [
