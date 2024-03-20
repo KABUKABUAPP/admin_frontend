@@ -153,11 +153,13 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
 
       const ridersCoordinates = enableRiderOption ? riders?.data?.map((d: any) => {
         if (d.coordinate && d.coordinate.length > 0) return {lat: typeof d.coordinate[0] === 'number'
-        ? d.coordinate[0] : parseFloat(d.coordinate[0]), lng: typeof d.coordinate[1] === 'number'
-        ? d.coordinate[1] : parseFloat(d.coordinate[1]), personnel: d, type: 'rider', _id: d.riderId}
+        ? d.coordinate[1] : parseFloat(d.coordinate[1]), lng: typeof d.coordinate[1] === 'number'
+        ? d.coordinate[0] : parseFloat(d.coordinate[0]), personnel: d, type: 'rider', _id: d.riderId}
       }) : [];
 
       const allCoordinates = driversCoordinates.concat(ridersCoordinates)
+
+      console.log({riderCoordinates});
       
       setCoordinates(allCoordinates);
       
@@ -192,6 +194,7 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
   const center = coordinates.length > 0 ? coordinates[0] : { lat: 6.5244, lng: 3.3792 };
   
   const handleMarkerClick = (index: any, coord: any) => {
+    console.log(coord);
     setModalContent(
       <DriverModal driver={coord.personnel} handleClose={() => setModalContent(null)} type={coord.type} />
     )
