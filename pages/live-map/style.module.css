@@ -16,9 +16,9 @@
 
 .overlaySecond {
   position: absolute;
-  top: 25%;
+  /*top: 25%;
   left: 5%;
-  width: 25%;
+  width: 25%;*/
   text-align: center;
   color: #000;
 }
