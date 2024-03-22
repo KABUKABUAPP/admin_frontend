@@ -146,14 +146,14 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
   useEffect(() => {
     if (drivers && riders) {
       const driversCoordinates = enableDriverOption ? drivers?.data?.map((d: any) => {
-        if (d.coordinate && d.coordinate.length > 0) return {lat: typeof d.coordinate[0] === 'number'
-        ? d.coordinate[0] : parseFloat(d.coordinate[0]), lng: typeof d.coordinate[1] === 'number'
-        ? d.coordinate[1] : parseFloat(d.coordinate[1]), personnel: d, type: 'driver', _id: d.driverId}
+        if (d.coordinate && d.coordinate.length > 0) return {lat: typeof d.coordinate[1] === 'number'
+        ? d.coordinate[1] : parseFloat(d.coordinate[1]), lng: typeof d.coordinate[0] === 'number'
+        ? d.coordinate[0] : parseFloat(d.coordinate[0]), personnel: d, type: 'driver', _id: d.driverId}
       }) : [];
 
       const ridersCoordinates = enableRiderOption ? riders?.data?.map((d: any) => {
-        if (d.coordinate && d.coordinate.length > 0) return {lat: typeof d.coordinate[0] === 'number'
-        ? d.coordinate[1] : parseFloat(d.coordinate[1]), lng: typeof d.coordinate[1] === 'number'
+        if (d.coordinate && d.coordinate.length > 0) return {lat: typeof d.coordinate[1] === 'number'
+        ? d.coordinate[1] : parseFloat(d.coordinate[1]), lng: typeof d.coordinate[0] === 'number'
         ? d.coordinate[0] : parseFloat(d.coordinate[0]), personnel: d, type: 'rider', _id: d.riderId}
       }) : [];
 
