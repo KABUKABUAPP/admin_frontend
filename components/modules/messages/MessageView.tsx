@@ -49,7 +49,7 @@ const MessageView: FC = () => {
 
   return (
     <>
-        <div className="w-2/5 mr-3">
+        <div className="lg:w-2/5 md:w-full mx-2 mt-3">
           <Card bg="#FFF" rounded="rounded-md">
             <div className="text-md flex mb-3">
                 <p className={`cursor-pointer mr-5 ${instantBold}`} onClick={() => {
@@ -103,7 +103,7 @@ const MessageView: FC = () => {
             )}
           </Card>
         </div>
-        <div className="w-3/5 ml-3">
+        <div className="lg:w-3/5 md:w-full mx-2 mt-3">
           <Card bg="#FFF" rounded="rounded-md" height="80vh">
             {
                 !oneMessage &&

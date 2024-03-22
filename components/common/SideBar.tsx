@@ -17,9 +17,10 @@ import Logo from "./Logo";
 
 interface Props {
   data: SidebarLink[];
+  show: Boolean;
 }
 
-const SideBar: FC<Props> = ({ data }) => {
+const SideBar: FC<Props> = ({ data, show }) => {
   const [isLogoutPopUp, setIsLogoutPopUp] = useState<boolean>(false);
   const ref = useClickOutside<HTMLSpanElement>(() => setIsLogoutPopUp(false));
   const [isModal, setIsModal] = useState<boolean>(false);
@@ -41,7 +42,7 @@ const SideBar: FC<Props> = ({ data }) => {
           />
         </Modal>
       )}
-      <aside className="border w-full max-w-[200px] h-full p-2 bg-[#FDFDFD] max-lg:hidden flex flex-col">
+      <aside className={`border w-full max-w-[200px] h-full p-2 bg-[#FDFDFD] ${show ? '' : 'max-lg:hidden'} flex flex-col`}>
         <div className="py-6">
           <Logo />
         </div>
