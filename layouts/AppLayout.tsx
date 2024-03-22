@@ -9,6 +9,7 @@ import { USER_TOKEN } from "@/constants";
 import { routePermissionsMapping } from "@/constants";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import { useUserContext } from "@/contexts/UserContext";
+import MenuIcon from "@/components/icons/MenuIcon";
 
 interface Props {
   padding?: string;
@@ -19,6 +20,7 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
   padding = "2.5rem 1rem 1rem 1rem",
 }) => {
   const { user } = useUserContext();
+  const [show, setShow] = useState(false);
   
   const router = useRouter();
   //user!.role = 'executive marketer';
@@ -112,11 +114,16 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <SideBar data={getAccessibleLinks(links)} />
+      <SideBar data={getAccessibleLinks(links)} show={show} />
       <main
         className="h-screen w-[calc(100%-200px)] max-lg:w-full bg-[#f8f8f8] overflow-auto"
         style={{ padding: padding }}
       >
+        <div className="lg:hidden ml-3 my-4">
+          <span onClick={() => {
+            setShow(!show);
+          }} style={{width: 'fit-content'}}><MenuIcon /></span>
+        </div>
         <Transition>{children}</Transition>
       </main>
     </div>
