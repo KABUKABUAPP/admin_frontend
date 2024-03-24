@@ -104,8 +104,9 @@ const IndexPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
-
-                <div className="md:w-full lg:w-[50%] xl:w-[25%] gap-4 mt-6">
+              </div>
+              <div className={styles.overlaySecond}>
+                <div className="gap-4 mt-6">
                   <div className={`bg-[#FDFDFD] ${expandTrue ? 'w-full' : 'w-[75%]'} gap-5 p-4 rounded-lg`}>
                     <div className="flex justify-between items-center my-2">
                     <div className="font-bp flex gap-3 items-center cursor-pointer">
