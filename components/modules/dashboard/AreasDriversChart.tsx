@@ -71,7 +71,7 @@ const AreasDriversChart: FC = () => {
         isError: chartDataError,
         refetch: chartDataRefetch,
     } = useGetConcentratedDriversQuery({ refetchOnReconnect: true });
-
+    
     const data = {
         labels: chartDataDrivers?.areas,
         datasets: [

@@ -18,6 +18,7 @@ import { useGetDriverSettingsQuery } from "@/api-services/settingsService";
 import Loader from "@/components/ui/Loader/Loader";
 import FarePriceSettings from "@/components/modules/settings/FarePriceSettings";
 import TripChargesControl from "@/components/modules/settings/TripChargesControl";
+import OnlineConsistency from "@/components/modules/settings/OnlineConsistency";
 
 const Settings: NextPage = () => {
   const { user } = useUserContext();
@@ -46,7 +47,6 @@ const Settings: NextPage = () => {
     refetch: reloadSettings,
   } = useGetDriverSettingsQuery({})
 
-
   const [currentView, setCurrentView] = useState("Account Settings");
 
   useEffect(() => {
@@ -59,7 +59,8 @@ const Settings: NextPage = () => {
         { title: "Driver Withdrawal Settings", isActive: false },
         { title: "Driver Referral Settings", isActive: false },
         { title: "Fare Price Settings", isActive: false },
-        { title: "Trip Charges Control", isActive: false }
+        { title: "Trip Charges Control", isActive: false },
+        { title: "Online Consistency Reward Settings", isActive: false }
       ])
     }
   }, [user])
@@ -132,6 +133,7 @@ const Settings: NextPage = () => {
               {currentView === "Driver Referral Settings" && <DriverReferralSettings frequency={driversSettings.referral_reward.frequency.toString()} amount={driversSettings.referral_reward.amount.toString()} />}
               {currentView === "Fare Price Settings" && <FarePriceSettings upper_bound={driversSettings.pricing_boundary.upper_bound.toString()} lower_bound={driversSettings.pricing_boundary.lower_bound.toString()} />}
               {currentView === "Trip Charges Control" && <TripChargesControl {...driversSettings.trip_charges_control} />}
+              {currentView === "Online Consistency Reward Settings" && <OnlineConsistency {...driversSettings.online_consistency_reward_control} />}
             </>
           }
         />
