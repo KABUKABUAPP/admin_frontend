@@ -1,12 +1,5 @@
 import ChevronDown from "@/components/icons/ChevronDown";
 import React, { FC } from "react";
-import TripsChart from "./TripsChart";
-import { getComponentStates } from "@/utils";
-import Loader from "@/components/ui/Loader/Loader";
-import Button from "@/components/ui/Button/Button";
-import ErrorMessage from "@/components/common/ErrorMessage";
-import DropDown from "@/components/ui/DropDown";
-import { formatChartLabels } from "@/utils";
 import AreasDriversChart from "./AreasDriversChart";
 
 

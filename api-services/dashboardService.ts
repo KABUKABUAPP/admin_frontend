@@ -202,12 +202,12 @@ export const dashboardApi = createApi({
       transformResponse: (response: any) => {
         if (!response?.data) return {}
         else {
-          const areas = response?.data.map((one: any) => {
-            return capitalizeAllFirstLetters(one._id)
+          const areas = response?.data?.data.map((one: any) => {
+            return capitalizeAllFirstLetters(one.name)
           })
 
-          const orders = response?.data.map((one: any) => {
-            return one.orders
+          const orders = response?.data?.data.map((one: any) => {
+            return one.total_orders
           })
           return {areas, orders}
         }
@@ -221,12 +221,12 @@ export const dashboardApi = createApi({
       transformResponse: (response: any) => {
         if (!response?.data) return {}
         else {
-          const areas = response?.data.map((one: any) => {
-            return capitalizeAllFirstLetters(one._id)
+          const areas = response?.data?.data.map((one: any) => {
+            return capitalizeAllFirstLetters(one.name)
           })
 
-          const drivers = response?.data.map((one: any) => {
-            return one.drivers
+          const drivers = response?.data?.data.map((one: any) => {
+            return one.total_drivers
           })
           return {areas, drivers}
         }
