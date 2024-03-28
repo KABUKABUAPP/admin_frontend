@@ -9,7 +9,7 @@ import ViewCarRepairLayout from "@/components/modules/car-repair-loan/ViewCarRep
 import Button from "@/components/ui/Button/Button";
 import AppLayout from "@/layouts/AppLayout";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Loader from '@/components/ui/Loader/Loader';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { capitalizeAllFirstLetters, capitalizeFirstLetter } from "@/utils";
@@ -26,11 +26,15 @@ import ArrowUpDown from "@/components/icons/ArrowUpDown";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const UpdateStatus = () => {
+interface ModalProps {
+    currentLoanRepairStatus: string;
+}
+
+const UpdateStatus:FC<ModalProps> = ({ currentLoanRepairStatus }) => {
     const { setModalContent } = useModalContext();
     const [updateSuccess, setUpdateSuccess] = useState(false);
     const [viewStatusForm, setViewStatusForm] = useState(true);
-    const [currentStatus, setCurrentStatus] = useState('');
+    const [currentStatus, setCurrentStatus] = useState(currentLoanRepairStatus);
     const [mechanicName, setMechanicName] = useState('');
     const [mechanicAddress, setMechanicAddress] = useState('');
     const [mechanicContact, setMechanicContact] = useState('');
@@ -47,6 +51,7 @@ const UpdateStatus = () => {
         if (isSuccess) {
             toast.success('Status updated successfully')
             setUpdateSuccess(true);
+            router.push(`${router.query.fallbackUrl}?currentPage=${router.query.current_page}`)
         }
     }, [isSuccess])
     
@@ -81,6 +86,7 @@ const UpdateStatus = () => {
                         onChange={(e) => {
                             setCurrentStatus(e.target.value);
                         }}
+                        value={currentStatus}
                     />
                     </div>
 
@@ -106,6 +112,7 @@ const UpdateStatus = () => {
                         onChange={(e) =>
                             setMechanicName(e.target.value)
                         }
+                        className="my-3"
                         required
                     />
 
@@ -115,6 +122,7 @@ const UpdateStatus = () => {
                         onChange={(e) =>
                             setMechanicAddress(e.target.value)
                         }
+                        className="my-3"
                         required
                     />
 
@@ -124,6 +132,7 @@ const UpdateStatus = () => {
                         onChange={(e) =>
                             setMechanicContact(e.target.value)
                         }
+                        className="my-3"
                         required
                     />
 
@@ -160,6 +169,7 @@ const UpdateStatus = () => {
                         onChange={(e) => {
                             setLoanAmount(e.target.value);
                         }}
+                        className="my-3"
                         required
                     />
 
@@ -169,6 +179,7 @@ const UpdateStatus = () => {
                         onChange={(e) => {
                             setRepaymentAmount(e.target.value);
                         }}
+                        className="my-3"
                         required
                     />
 
@@ -256,7 +267,7 @@ const SinglePendingLoan = () => {
             <div className="lg:h-screen lg:overflow-hidden p-4">
                 <ActionBar handleBack={() => router.push(`${router.query.fallbackUrl}?currentPage=${router.query.current_page}`)}>
                     <Button title="Call Owner" startIcon={<PhoneIcon />} />
-                    <Button title="Update Status" startIcon={<ArrowUpDown />} onClick={() => setModalContent(<UpdateStatus />)} />
+                    <Button title="Update Status" startIcon={<ArrowUpDown />} onClick={() => setModalContent(<UpdateStatus currentLoanRepairStatus={data?.repair_details?.status} />)} />
                 </ActionBar>
                 {//data && !isLoading && !isError && (
                     <ViewCarRepairLayout 
