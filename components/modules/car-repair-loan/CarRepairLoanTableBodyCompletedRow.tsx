@@ -17,7 +17,6 @@ const CarRepairLoanTableBodyCompletedRow: FC<Props> = ({
 }) => {
   const router = useRouter();
 
-  console.log({data})
   return (
     <div
       onClick={() =>  router.push(`/car-repair-loan/${data?._id}/?current_page=${currentPage}&fallbackUrl=${router.asPath}`)}
