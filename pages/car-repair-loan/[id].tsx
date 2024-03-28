@@ -409,7 +409,7 @@ const SinglePendingLoan = () => {
                                                     {
                                                         data?.payment_history?.map((history: any) => {
                                                             return (
-                                                                <div className="rounded-md bg-[#F8F8F8] p-4 gap-3">
+                                                                <div className="rounded-md bg-[#F8F8F8] p-4 gap-3 my-2">
                                                                     <p className="text-md font-bold">N{history.amount_to_be_paid}</p>
                                                                     <p className="text-sm">N{new Date(history.date_paid).toUTCString()}</p>
                                                                 </div>
