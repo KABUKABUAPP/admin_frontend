@@ -1,14 +1,14 @@
 import React, { FC, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import CarOwnersOptionItem from "./CarOwnersOptionItem";
+import CarRepairLoanOptionItem from "./CarRepairLoanOptionItem";
 
 interface Props {
   options: { title: string; isActive: boolean; keyVal: string }[];
   handleClickOption: (key: string) => void;
 }
 
-const CarOwnersOptionBar: FC<Props> = ({ handleClickOption, options }) => {
+const CarRepairLoanOptionBar: FC<Props> = ({ handleClickOption, options }) => {
   
   const router = useRouter();
 
@@ -17,7 +17,7 @@ const CarOwnersOptionBar: FC<Props> = ({ handleClickOption, options }) => {
       <div className="flex max-sm:flex-col">
         {options.map((item, idx) => {
           return (
-            <CarOwnersOptionItem
+            <CarRepairLoanOptionItem
               {...item}
               key={idx}
               handleClick={(key) => handleClickOption(key)}
@@ -29,4 +29,4 @@ const CarOwnersOptionBar: FC<Props> = ({ handleClickOption, options }) => {
   );
 };
 
-export default CarOwnersOptionBar;
+export default CarRepairLoanOptionBar;

@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import AppLayout from "@/layouts/AppLayout";
@@ -18,10 +18,12 @@ import {
 } from "@/api-services/dashboardService";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import TopMarketerContainer from "@/components/modules/dashboard/TopMarketerContainer";
+import { useDashboardState } from "@/contexts/StateSegmentationContext";
 
 const Dashboard: NextPage = () => {
   const { user } = useUserContext();
   const [chartFilterVal, setChartFilterVal] = useState<string>("7_days");
+  const { dashboardState, setDashboardState } = useDashboardState();
   const handleFilterChart = (val: string | Number) => {
     setChartFilterVal(val.toString());
   };
@@ -64,6 +66,10 @@ const Dashboard: NextPage = () => {
   );
 
   const { userPermissions } = useUserPermissions();
+
+  useEffect(() => {
+    console.log({dashboardState})
+  }, [dashboardState])
 
   return (
     <>
