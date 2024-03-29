@@ -60,9 +60,10 @@ export const carRepairLoanApi = createApi({
             },
         }),
         updateCarRepairLoanStatus: build.mutation<any, any>({
-            query: ({ id }) => ({
+            query: ({ id, data: body }) => ({
               url: `admin/repair-loan/update-status/${id}`,
-              method: "PUT"
+              method: "PUT",
+              body
             })
         })
     })
