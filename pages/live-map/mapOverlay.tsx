@@ -16,6 +16,7 @@ import { capitalizeAllFirstLetters } from '@/utils';
 import { useRouter } from 'next/router';
 import { io } from "socket.io-client";
 import { DEV_MONITOR_URL } from '@/constants';
+import { useDashboardState } from "@/contexts/StateSegmentationContext";
 //const socket = io(`${DEV_MONITOR_URL}`);
 const socket = io(`https://monitor-dev.up.railway.app`);
 
@@ -90,6 +91,7 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
   const [riderCoordinates, setRiderCoordinates] = React.useState<any[]>([]);
   const [iconUrlDriver, setIconUrlDriver] = useState('');
   const [iconUrlRider, setIconUrlRider] = useState('');
+  const { dashboardState, setDashboardState } = useDashboardState();
 
   const {
     data: drivers,
@@ -105,7 +107,8 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
       page: 1,
       search: '',
       order: 'newest_first',
-      onlineStatus: onlineStatusDriver
+      onlineStatus: onlineStatusDriver,
+      dashboard_state: dashboardState 
     },
     {
       refetchOnMountOrArgChange: true,

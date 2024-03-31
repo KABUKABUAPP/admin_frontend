@@ -11,6 +11,7 @@ import {
 import { Bar } from "react-chartjs-2";
 import { useGetConcentratedOrdersQuery } from "@/api-services/dashboardService";
 import Loader from "@/components/ui/Loader/Loader";
+import { useDashboardState } from "@/contexts/StateSegmentationContext";
 
 ChartJS.register(
   CategoryScale,
@@ -65,12 +66,13 @@ export const options: any = {
 
 
 const AreasOrdersChart: FC = () => {
+    const { dashboardState, setDashboardState } = useDashboardState();
     const {
         data: chartDataOrders,
         isLoading: chartDataLoading,
         isError: chartDataError,
         refetch: chartDataRefetch,
-    } = useGetConcentratedOrdersQuery({ refetchOnReconnect: true });
+    } = useGetConcentratedOrdersQuery({ dashboard_state: dashboardState }, { refetchOnReconnect: true });
     
     const data = {
         labels: chartDataOrders?.areas,

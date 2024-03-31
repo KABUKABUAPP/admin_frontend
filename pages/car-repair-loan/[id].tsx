@@ -174,12 +174,13 @@ const UpdateStatus:FC<ModalProps> = ({ currentLoanRepairStatus }) => {
                     />
 
                     <TextField
-                        placeholder="Repayment Amount Here"
+                        placeholder="Repayment Percentage Here"
                         label="Loan Repayment"
                         onChange={(e) => {
                             setRepaymentAmount(e.target.value);
                         }}
                         className="my-3"
+                        endIcon={<p className="font-bold">%</p>}
                         required
                     />
 
@@ -208,7 +209,7 @@ const UpdateStatus:FC<ModalProps> = ({ currentLoanRepairStatus }) => {
                             const data = {
                                 status: currentStatus,
                                 total_cost: loanAmount,
-                                installment_amount: repaymentAmount,
+                                installment_percentage: repaymentAmount,
                                 payment_type: repaymentFrequency
                             }
 
@@ -390,12 +391,12 @@ const SinglePendingLoan = () => {
                                                             <Doughnut data={dataSets} options={options} height={'75px'} />
                                                         </div>
                                                         <div className="w-4/5 flex items-center">
-                                                            {`N${data?.repair_details?.total_paid} of N${data?.repair_details?.total_cost} paid`}
+                                                            {`N${data?.repair_details?.total_paid.toLocaleString()} of N${data?.repair_details?.total_cost.toLocaleString()} paid`}
                                                         </div>
                                                     </div>
                                                     <hr />
                                                     <div className="flex flex-col">
-                                                        <p className="text-md my-2">{`N${data?.repair_details?.installment_amount} ${data?.repair_details?.payment_type.toLowerCase()}`}</p>
+                                                        <p className="text-md my-2">{`N${data?.repair_details?.installment_amount.toLocaleString()} ${data?.repair_details?.payment_type.toLowerCase()}`}</p>
                                                         <p className="text-md my-2">{`Next payment due: ${new Date(data?.next_due_date).toUTCString()}`}</p>
                                                     </div>
                                                 </div>
@@ -410,7 +411,7 @@ const SinglePendingLoan = () => {
                                                         data?.payment_history?.map((history: any) => {
                                                             return (
                                                                 <div className="rounded-md bg-[#F8F8F8] p-4 gap-3 my-2">
-                                                                    <p className="text-md font-bold">N{history.amount_to_be_paid}</p>
+                                                                    <p className="text-md font-bold">N{history.amount_to_be_paid.toLocaleString()}</p>
                                                                     <p className="text-sm">N{new Date(history.date_paid).toUTCString()}</p>
                                                                 </div>
                                                             )

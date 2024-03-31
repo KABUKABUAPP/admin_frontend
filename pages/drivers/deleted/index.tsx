@@ -13,6 +13,7 @@ import { useGetAllDriversQuery } from "@/api-services/driversService";
 import Pagination from "@/components/common/Pagination";
 import AppHead from "@/components/common/AppHead";
 import DeletedDriversTable from "@/components/modules/drivers/DeletedDriversTable";
+import { useDashboardState } from "@/contexts/StateSegmentationContext";
 
 const DeletedDrivers: NextPage = () => {
   const router = useRouter();
@@ -26,6 +27,7 @@ const DeletedDrivers: NextPage = () => {
 
   const [pageSize, setPageSize] = useState(5);
   const [searchDriver, setSearchDriver] = useState<string>("");
+  const { dashboardState, setDashboardState } = useDashboardState();
 
   const filterOptions = [
     { label: "Newest First", value: "newest_first", default: true },
@@ -52,6 +54,7 @@ const DeletedDrivers: NextPage = () => {
       page: currentPage,
       search: searchDriver,
       order: selectedFilterOption,
+      dashboard_state: dashboardState
     },
     {
       refetchOnMountOrArgChange: true,

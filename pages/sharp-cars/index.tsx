@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import SharpCarsDeliveryTable from "@/components/modules/sharp-cars/SharpCarsDeliveryTable";
 import DriverPendingTable from "@/components/modules/sharp-cars/DriverPendingTable";
 import { useGetAllDriversQuery } from "@/api-services/driversService";
+import { useDashboardState } from "@/contexts/StateSegmentationContext";
 
 const headCellData = [
   { title: "ID", flex: 1 },
@@ -36,6 +37,8 @@ const SharpCars: NextPage = () => {
   const [search, setSearch] = useState('');
   const [carDeliveryView, setCarDeliveryView] = useState(false);
   const [driverPendingView, setDriverPendingView] = useState(false);
+  const { dashboardState, setDashboardState } = useDashboardState();
+
   const { data, isLoading, isError, refetch } = useGetAllSharpCarsQuery(
     { limit: pageSize, page: currentPage, activeStatus: activeStatus, assignedStatus: assignedStatus, search: search },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
@@ -61,7 +64,8 @@ const SharpCars: NextPage = () => {
       order: 'newest_first',
       statusRemark: '',
       onboardStatus: '',
-      sharpApprovalStatus: 'pending'
+      sharpApprovalStatus: 'pending',
+      dashboard_state: dashboardState
     },
     {
       refetchOnMountOrArgChange: true,
