@@ -16,7 +16,7 @@ interface StateSegmentationProviderProps {
 
 // Create a context provider component
 export const StateSegmentationProvider: React.FC<StateSegmentationProviderProps> = ({ children }) => {
-  const [dashboardState, setDashboardState] = useState<any | null>(null);
+  const [dashboardState, setDashboardState] = useState<any | null>('all');
 
   return (
     <StateSegmentationContext.Provider value={{ dashboardState, setDashboardState }}>

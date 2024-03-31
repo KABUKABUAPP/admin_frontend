@@ -13,6 +13,7 @@ import Select from 'react-select';
 import { toast } from "react-toastify";
 import { useGetAllDriversQuery } from "@/api-services/driversService";
 import { useAssignSharpCarMutation } from "@/api-services/sharpCarsService";
+import { useDashboardState } from "@/contexts/StateSegmentationContext";
 
 interface Props {
   assignDriver: boolean;
@@ -30,6 +31,7 @@ const AssignDriverModal : React.FC<AssignDriverModalProps> = ({ handleClose, han
   const [tags, setTags] = useState<any>([]);
   const [search, setSearch] = useState<string>("");
   const [theDrivers, setTheDrivers] = useState<any>([]);
+  const { dashboardState, setDashboardState } = useDashboardState();
 
   const {
     data: drivers,
@@ -46,7 +48,8 @@ const AssignDriverModal : React.FC<AssignDriverModalProps> = ({ handleClose, han
       search: search,
       order: 'newest_first',
       status: 'active',
-      sharpApprovalStatus: 'approved'
+      sharpApprovalStatus: 'approved',
+      dashboard_state: dashboardState
     },
     {
       refetchOnMountOrArgChange: true,

@@ -12,10 +12,12 @@ import { useRouter } from "next/router";
 import { useGetAllDriversQuery } from "@/api-services/driversService";
 import Pagination from "@/components/common/Pagination";
 import AppHead from "@/components/common/AppHead";
+import { useDashboardState } from "@/contexts/StateSegmentationContext";
 
 const Drivers: NextPage = () => {
   const router = useRouter();
   const [driverOptions, setDriverOptions] = useState(driverOptionBarData);
+  const { dashboardState, setDashboardState } = useDashboardState();
   const [driverTypeOptions, setDriverTypeOptions] = useState(
     driverTypeFilterOptionsData
   );
@@ -49,6 +51,7 @@ const Drivers: NextPage = () => {
       page: currentPage,
       search: searchDriver,
       order: selectedFilterOption,
+      dashboard_state: dashboardState
     },
     {
       refetchOnMountOrArgChange: true,

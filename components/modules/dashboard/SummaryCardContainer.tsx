@@ -17,15 +17,17 @@ import AreasDriversContainer from "./AreasDriversContainer";
 import AreasOrdersContainer from "./AreasOrdersContainer";
 import DriverOnboardingContainer from "./DriverOnboardingContainer";
 import RiderOnboardingContainer from "./RiderOnboardingContainer";
+import { useDashboardState } from "@/contexts/StateSegmentationContext";
 
 const SummaryCardContainer: FC = () => {
   const [periodFilter, setPeriodFilter] = useState('today');
+  const { dashboardState, setDashboardState } = useDashboardState();
   const {
     data: tripsInsight,
     isLoading: tripsInsightsLoading,
     isError: tripsInsightError,
     refetch: reloadTrips,
-  } = useGetInsightsQuery({filter: periodFilter}, { refetchOnReconnect: true });
+  } = useGetInsightsQuery({filter: periodFilter, dashboard_state: dashboardState}, { refetchOnReconnect: true });
 
   const loadingState =
     !tripsInsight && !tripsInsightError && tripsInsightsLoading;

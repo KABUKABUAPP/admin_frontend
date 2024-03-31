@@ -7,6 +7,7 @@ import AppLayout from '@/layouts/AppLayout';
 import { useFormik, Form, FormikProvider } from "formik";
 import DropDown from '@/components/ui/DropDown';
 import { useGetInsightsQuery } from '@/api-services/dashboardService';
+import { useDashboardState } from "@/contexts/StateSegmentationContext";
 
 const IndexPage: React.FC = () => {
   const [dropDownOptionSelected, setDropDownOptionSelected] = useState('');
@@ -16,12 +17,13 @@ const IndexPage: React.FC = () => {
   const [enableDriverOption, setEnableDriverOption] = useState(true);
   const [enableRiderOption, setEnableRiderOption] = useState(true);
   const [periodFilter, setPeriodFilter] = useState('today');
+  const { dashboardState, setDashboardState } = useDashboardState();
   const {
     data: tripsInsight,
     isLoading: tripsInsightsLoading,
     isError: tripsInsightError,
     refetch: reloadTrips,
-  } = useGetInsightsQuery({filter: periodFilter}, { refetchOnReconnect: true });
+  } = useGetInsightsQuery({filter: periodFilter, dashboard_state: dashboardState}, { refetchOnReconnect: true });
 
   const filterOptions = [
     {

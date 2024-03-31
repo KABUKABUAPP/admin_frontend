@@ -9,17 +9,19 @@ import DropDown from "@/components/ui/DropDown";
 import { formatChartLabels } from "@/utils";
 import OnboardingChart from "./OnboardingChart";
 import { useGetOnboardDataQuery } from "@/api-services/dashboardService";
+import { useDashboardState } from "@/contexts/StateSegmentationContext";
 
 
 const RiderOnboardingContainer: FC = () => {
   const [dropDownOptionSelected, setDropDownOptionSelected] = useState('7_days');
+  const { dashboardState, setDashboardState } = useDashboardState();
 
   const {
       data: chartDataRiders,
       isLoading: chartDataLoading,
       isError: chartDataError,
       refetch: chartDataRefetch,
-  } = useGetOnboardDataQuery({range: dropDownOptionSelected, type: 'rider'}, { refetchOnReconnect: true });
+  } = useGetOnboardDataQuery({range: dropDownOptionSelected, type: 'rider', dashboard_state: dashboardState}, { refetchOnReconnect: true });
 
   const filterOptions = [
     { label: "7 days", value: "7_days", default: true },
