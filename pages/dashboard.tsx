@@ -35,7 +35,7 @@ const Dashboard: NextPage = () => {
     isError: pendingDriverApplicationsError,
     refetch: reloadPendingDriverApplications,
   } = useGetPendingDriverApplicationsQuery(
-    { page: 1, limit: 10 },
+    { page: 1, limit: 10, dashboard_state: dashboardState },
     { refetchOnReconnect: true }
   );
 
@@ -61,7 +61,7 @@ const Dashboard: NextPage = () => {
     isError: chartError,
     refetch: reloadChart,
   } = useGetTripChartDataQuery(
-    { range: chartFilterVal },
+    { range: chartFilterVal, dashboard_state: dashboardState },
     { refetchOnReconnect: true, refetchOnMountOrArgChange: true }
   );
 

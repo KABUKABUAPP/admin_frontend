@@ -62,7 +62,7 @@ export const driversApi = createApi({
   baseQuery: baseQueryWithLogoutOnTokenExpiration,
   tagTypes: ["drivers", "driver"],
   endpoints: (build) => ({
-    getAllDrivers: build.query<DriversMappedResponse, GetAllDriversQuery>({
+    getAllDrivers: build.query<DriversMappedResponse, any>({
       query: ({
         limit,
         page,
@@ -75,9 +75,10 @@ export const driversApi = createApi({
         deleted,
         onlineStatus,
         onboardStatus,
-        sharpApprovalStatus
+        sharpApprovalStatus,
+        dashboard_state
       }) => ({
-        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}&search=${search}&order=${order}&is_blocked=${status ? status : ""}&status_remark=${statusRemark ? statusRemark : ""}${deleted ? `&deleted=${deleted}` : ""}${onlineStatus ? `&online_status=${onlineStatus}` : ''}${onboardStatus ? `&is_onboarding=${onboardStatus}` : ''}${sharpApprovalStatus ? `&sharp_approval_status=${sharpApprovalStatus}` : ''}`,
+        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}&search=${search}&order=${order}&is_blocked=${status ? status : ""}&status_remark=${statusRemark ? statusRemark : ""}${deleted ? `&deleted=${deleted}` : ""}${onlineStatus ? `&online_status=${onlineStatus}` : ''}${onboardStatus ? `&is_onboarding=${onboardStatus}` : ''}${sharpApprovalStatus ? `&sharp_approval_status=${sharpApprovalStatus}` : ''}${dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}`,
       }),
       providesTags: ["drivers"],
       transformResponse: (response: GetAllDriversResponse) => {

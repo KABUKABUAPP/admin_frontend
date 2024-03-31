@@ -13,6 +13,7 @@ import { useGetAllDriversQuery } from "@/api-services/driversService";
 import Pagination from "@/components/common/Pagination";
 import DropDown from "@/components/ui/DropDown";
 import AppHead from "@/components/common/AppHead";
+import { useDashboardState } from "@/contexts/StateSegmentationContext";
 
 const Drivers: NextPage = () => {
   const router = useRouter();
@@ -26,6 +27,7 @@ const Drivers: NextPage = () => {
   const [pageSize, setPageSize] = useState(5);
   const [searchDriver, setSearchDriver] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(router.query.currentPage ? parseInt(router.query.currentPage as string) : 1);
+  const { dashboardState, setDashboardState } = useDashboardState();
 
   const filterOptions = [
     { label: "Newest First", value: "newest_first", default: true },
@@ -72,7 +74,8 @@ const Drivers: NextPage = () => {
       search: searchDriver,
       order: selectedFilterOption,
       status: statusFilter,
-      onlineStatus: onlineStatusOption
+      onlineStatus: onlineStatusOption,
+      dashboard_state: dashboardState
     },
     {
       refetchOnMountOrArgChange: true,

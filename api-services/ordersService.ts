@@ -57,9 +57,9 @@ export const ordersApi = createApi({
   reducerPath: "ordersApi",
   baseQuery: baseQueryWithLogoutOnTokenExpiration,
   endpoints: (build) => ({
-    getAllOrdersQuery: build.query<GetAllTripsResponse, GetAllOrdersQuery>({
-      query: ({ limit, order, page, search, status }) => ({
-        url: `admin/order/get-all-trip-orders?limit=${limit}&page=${page}&status=${status}&search=${search}`,
+    getAllOrdersQuery: build.query<GetAllTripsResponse, any>({
+      query: ({ limit, order, page, search, status, dashboard_state }) => ({
+        url: `admin/order/get-all-trip-orders?limit=${limit}&page=${page}&status=${status}&search=${search}${dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}`,
       }),
       transformResponse: (response: GetOrdersResponse) => {
         if (!response) return <GetAllTripsResponse>{};

@@ -4,6 +4,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { useGetInsightsQuery } from "@/api-services/dashboardService";
 import { useRouter } from "next/router";
+import { useDashboardState } from "@/contexts/StateSegmentationContext";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -19,12 +20,13 @@ interface Props {
 
 const TripsChartCard: FC<Props> = ({ title, value, icon, iconBg = "#FFBF00", loading=false, periodFilter, tripsChart }) => {
     const router = useRouter();
+    const { dashboardState, setDashboardState } = useDashboardState();
     const {
       data: tripsInsight,
       isLoading: tripsInsightsLoading,
       isError: tripsInsightError,
       refetch: reloadTrips,
-    } = useGetInsightsQuery({filter: periodFilter}, { refetchOnReconnect: true });
+    } = useGetInsightsQuery({filter: periodFilter, dashboard_state: dashboardState}, { refetchOnReconnect: true });
 
     const dataSets = {
         labels: [],
