@@ -260,6 +260,10 @@ const SinglePendingLoan = () => {
         responsive: true,
         aspectRatio: 1, // Set the width and height ratio (1:1 in this case for a square chart)
     };
+
+    useEffect(() => {
+        if (data) console.log(data)
+    }, [data])
     
     return (
         <>
@@ -397,7 +401,7 @@ const SinglePendingLoan = () => {
                                                     <hr />
                                                     <div className="flex flex-col">
                                                         <p className="text-md my-2">{`N${data?.repair_details?.installment_amount.toLocaleString()} ${data?.repair_details?.payment_type.toLowerCase()}`}</p>
-                                                        <p className="text-md my-2">{`Next payment due: ${new Date(data?.next_due_date).toUTCString()}`}</p>
+                                                        <p className="text-md my-2">{data?.repair_details?.status === 'completed' ? 'Completed' : `Next payment due: ${new Date(data?.next_due_date).toUTCString()}`}</p>
                                                     </div>
                                                 </div>
                                             </Card>
