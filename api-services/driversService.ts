@@ -248,6 +248,26 @@ export const driversApi = createApi({
       }),
       invalidatesTags: ["drivers", "driver"],
     }),
+    initiateDriverFunding: build.mutation<any, any>({
+      query: ({ driverId, data, adminId }) => ({
+        url: `/admin/transaction/initiate-user-wallet-credit/${driverId}`,
+        method: "POST",
+        headers: {
+          adminid: adminId
+        },
+        body: data
+      })
+    }),
+    completeDriverFunding: build.mutation<any, any>({
+      query: ({ data, adminId }) => ({
+        url: `/admin/transaction/complete-user-wallet-credit`,
+        method: "POST",
+        headers: {
+          adminid: adminId
+        },
+        body: data
+      })
+    })
   }),
 });
 
@@ -261,4 +281,6 @@ export const {
   useVerifyGuarantorMutation,
   useToggleBlockDriverMutation,
   useReactivateDriverMutation,
+  useInitiateDriverFundingMutation,
+  useCompleteDriverFundingMutation
 } = driversApi;

@@ -16,10 +16,10 @@ const CarRepairLoanTableBodyRow: FC<Props> = ({
   innerFilterValue
 }) => {
   const router = useRouter();
-  
+  console.log({router})
   return (
     <div
-      onClick={() =>  router.push(`/car-repair-loan/${data?._id}/?current_page=${currentPage}&fallbackUrl=${router.asPath}`)}
+      onClick={() =>  router.push(`/car-repair-loan/${data?._id}/?current_page=${currentPage}&fallbackUrl=${router.pathname}`)}
       className="flex p-3 py-8 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
     >
       <div style={{ flex: 1 }} className="flex items-center">
