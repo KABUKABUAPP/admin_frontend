@@ -39,7 +39,7 @@ const FundDriverWallet = () => {
 
     useEffect(() => {
         if (initiateSuccess) {
-          toast.success("Funding Initiated Successfully");
+          toast.success("Funding Initiated Successfully. Check Email For OTP");
           setInitiateStage(false)
         }
     }, [initiateSuccess]);
