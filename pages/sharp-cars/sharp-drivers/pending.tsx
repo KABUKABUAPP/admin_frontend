@@ -13,9 +13,11 @@ import { useGetAllDriversQuery } from "@/api-services/driversService";
 import Pagination from "@/components/common/Pagination";
 import DropDown from "@/components/ui/DropDown";
 import AppHead from "@/components/common/AppHead";
+import { useDashboardState } from "@/contexts/StateSegmentationContext";
 
 const Drivers: NextPage = () => {
   const router = useRouter();
+  const { dashboardState, setDashboardState } = useDashboardState();
   const [driverOptions, setDriverOptions] = useState(driverOptionBarData);
   const [driverTypeOptions, setDriverTypeOptions] = useState(
     driverTypeFilterOptionsData
@@ -80,7 +82,8 @@ const Drivers: NextPage = () => {
       order: selectedFilterOption,
       statusRemark: selectedStatusRemark,
       onboardStatus: onboardStatusRemark,
-      sharpApprovalStatus: 'pending'
+      sharpApprovalStatus: 'pending',
+      dashboard_state: dashboardState
     },
     {
       refetchOnMountOrArgChange: true,

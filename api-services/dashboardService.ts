@@ -55,8 +55,8 @@ export const dashboardApi = createApi({
   baseQuery: baseQueryWithLogoutOnTokenExpiration,
   endpoints: (build) => ({
     getInsights: build.query<any, any>({
-      query: ({ filter }) => ({
-        url: `/admin/trip/trip-insights?filter=${filter.toUpperCase()}`,
+      query: ({ filter, dashboard_state }) => ({
+        url: `/admin/trip/trip-insights?filter=${filter.toUpperCase()}${dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}`,
       }),
       transformResponse: (response: any) => {
         if (!response) return [];
@@ -108,9 +108,9 @@ export const dashboardApi = createApi({
       },
     }),
 
-    getTripChartData: build.query<GetTripChartData[], GetTripChartsQuery>({
-      query: ({ range }) => ({
-        url: `/admin/trip/get-trips-chart?range=${range}`,
+    getTripChartData: build.query<GetTripChartData[], any>({
+      query: ({ range, dashboard_state }) => ({
+        url: `/admin/trip/get-trips-chart?range=${range}${dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}`,
       }),
       transformResponse: (response: GetTripChartResponse) => {
         return response.data.map((item) => {
@@ -122,12 +122,9 @@ export const dashboardApi = createApi({
       },
     }),
 
-    getActiveTrips: build.query<
-      ActiveTripsMappedResponse,
-      GetActiveTripsQuery
-    >({
-      query: ({ page, limit,type }) => ({
-        url: `/admin/trip/dashboard/get-active-trips?page=${page}&limit=${limit}&type=${type}`,
+    getActiveTrips: build.query<ActiveTripsMappedResponse, any>({
+      query: ({ page, limit, type, dashboard_state }) => ({
+        url: `/admin/trip/dashboard/get-active-trips?page=${page}&limit=${limit}&type=${type}${dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}`,
       }),
       transformResponse: (response: GetActiveTripsResponse) => {
         if (!response.data.data.length) return {} as ActiveTripsMappedResponse;
@@ -149,12 +146,9 @@ export const dashboardApi = createApi({
       },
     }),
 
-    getPendingDriverApplications: build.query<
-      PendingApplicationsMappedResponse[],
-      GetPendingApplicationsQuery
-    >({
-      query: ({ page, limit }) => ({
-        url: `/admin/driver/dashboard/pending-driver-applications?page=${page}&limit=${limit}`,
+    getPendingDriverApplications: build.query<PendingApplicationsMappedResponse[], any>({
+      query: ({ page, limit, dashboard_state }) => ({
+        url: `/admin/driver/dashboard/pending-driver-applications?page=${page}&limit=${limit}${dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}`,
       }),
       transformResponse: (response: GetPendingApplicationsResponse) => {
         if (!response.data.data.length)
@@ -196,8 +190,8 @@ export const dashboardApi = createApi({
     }),
 
     getConcentratedOrders: build.query<any, any>({
-      query: () => ({
-        url: `/admin/order/dashboard/concentrated-orders`,
+      query: ({ dashboard_state }) => ({
+        url: `/admin/order/dashboard/concentrated-orders${dashboard_state !== 'all' ? `?dashboard_state=${dashboard_state}` : ''}`,
       }),
       transformResponse: (response: any) => {
         if (!response?.data) return {}
@@ -215,8 +209,8 @@ export const dashboardApi = createApi({
     }),
 
     getConcentratedDrivers: build.query<any, any>({
-      query: () => ({
-        url: `/admin/driver/dashboard/concentrated-drivers`,
+      query: ({ dashboard_state }) => ({
+        url: `/admin/driver/dashboard/concentrated-drivers${dashboard_state !== 'all' ? `?dashboard_state=${dashboard_state}` : ''}`,
       }),
       transformResponse: (response: any) => {
         if (!response?.data) return {}
@@ -234,8 +228,8 @@ export const dashboardApi = createApi({
     }),
 
     getOnboardData: build.query<any, any>({
-      query: ({range, type}) => ({
-        url: `/admin/driver/dashboard/onboard-data?range=${range}&type=${type}`,
+      query: ({range, type, dashboard_state}) => ({
+        url: `/admin/driver/dashboard/onboard-data?range=${range}&type=${type}${dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}`,
       }),
       transformResponse: (response: any) => {
         if (!response?.data) return {}
@@ -281,12 +275,9 @@ export const pendingTripsApi = createApi({
     },
   }),
   endpoints: (build) => ({
-    getPendingDriverApplications: build.query<
-      PendingApplicationsMappedResponse[],
-      GetPendingApplicationsQuery
-    >({
-      query: ({ page, limit }) => ({
-        url: `/admin/driver/dashboard/pending-driver-applications?page=${page}&limit=${limit}`,
+    getPendingDriverApplications: build.query<PendingApplicationsMappedResponse[], any>({
+      query: ({ page, limit, dashboard_state }) => ({
+        url: `/admin/driver/dashboard/pending-driver-applications?page=${page}&limit=${limit}${dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}`,
       }),
       transformResponse: (response: GetPendingApplicationsResponse) => {
         if (!response.data.data.length)

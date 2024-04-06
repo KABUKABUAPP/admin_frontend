@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import AppLayout from "@/layouts/AppLayout";
@@ -18,10 +18,12 @@ import {
 } from "@/api-services/dashboardService";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import TopMarketerContainer from "@/components/modules/dashboard/TopMarketerContainer";
+import { useDashboardState } from "@/contexts/StateSegmentationContext";
 
 const Dashboard: NextPage = () => {
   const { user } = useUserContext();
   const [chartFilterVal, setChartFilterVal] = useState<string>("7_days");
+  const { dashboardState, setDashboardState } = useDashboardState();
   const handleFilterChart = (val: string | Number) => {
     setChartFilterVal(val.toString());
   };
@@ -33,7 +35,7 @@ const Dashboard: NextPage = () => {
     isError: pendingDriverApplicationsError,
     refetch: reloadPendingDriverApplications,
   } = useGetPendingDriverApplicationsQuery(
-    { page: 1, limit: 10 },
+    { page: 1, limit: 10, dashboard_state: dashboardState },
     { refetchOnReconnect: true }
   );
 
@@ -59,11 +61,15 @@ const Dashboard: NextPage = () => {
     isError: chartError,
     refetch: reloadChart,
   } = useGetTripChartDataQuery(
-    { range: chartFilterVal },
+    { range: chartFilterVal, dashboard_state: dashboardState },
     { refetchOnReconnect: true, refetchOnMountOrArgChange: true }
   );
 
   const { userPermissions } = useUserPermissions();
+
+  useEffect(() => {
+    console.log({dashboardState})
+  }, [dashboardState])
 
   return (
     <>

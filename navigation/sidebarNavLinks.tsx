@@ -13,6 +13,7 @@ import SettingsIcon from "@/components/icons/SettingsIcon";
 import MessageIcon from "@/components/icons/MessageIcon";
 import MapPinIcon from "@/components/icons/MapPinIcon";
 import UserViewFinder from "@/components/icons/UserViewFinder";
+import FolderSettingsIcon from "@/components/icons/FolderSettingsIcon";
 
 const sidebarNavLinks: SidebarLink[] = [
   {
@@ -81,6 +82,12 @@ const sidebarNavLinks: SidebarLink[] = [
     link: "/hubs",
     isActive: false,
     icon: <BuildingIcon />,
+  },
+  {
+    title: "Repair Loan",
+    link: "/car-repair-loan",
+    isActive: false,
+    icon: <FolderSettingsIcon />,
   },
   {
     title: "Staffs",

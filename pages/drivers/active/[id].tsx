@@ -28,6 +28,8 @@ import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
 import { capitalizeAllFirstLetters } from "@/utils";
 import Card from "@/components/common/Card";
+import TransactionsIcon from "@/components/icons/TransactionsIcon";
+import FundDriverWallet from "@/components/modules/drivers/FundDriverWallet";
 
 function timeAgo(timeString: any) {
   const currentDate = new Date();
@@ -127,17 +129,29 @@ const Driver: NextPage = () => {
               userPermissions.drivers_permissions.write &&
               data &&
               data.driverInfo.isBlocked === false && (
-                <Button
-                  title="Block Driver"
-                  startIcon={<BlockIcon />}
-                  size="large"
-                  color="secondary"
-                  onClick={() => {
-                    setModalContent(
-                      <BlockDriverConfirmation driverId={String(id)} />
-                    );
-                  }}
-                />
+                <>
+                  <Button
+                    title="Fund Driver Wallet"
+                    startIcon={<TransactionsIcon />}
+                    size="large"
+                    onClick={() => {
+                      setModalContent(
+                        <FundDriverWallet />
+                      );
+                    }}
+                  />
+                  <Button
+                    title="Block Driver"
+                    startIcon={<BlockIcon />}
+                    size="large"
+                    color="secondary"
+                    onClick={() => {
+                      setModalContent(
+                        <BlockDriverConfirmation driverId={String(id)} />
+                      );
+                    }}
+                  />
+                </>
               )}
             {userPermissions &&
               userPermissions.drivers_permissions.write &&

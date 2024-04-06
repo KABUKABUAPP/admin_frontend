@@ -173,6 +173,10 @@ export const routePermissionsMapping: {
   {
     route: '/car-owners',
     permissionLabel: ''
+  },
+  {
+    route: '/car-repair-loan',
+    permissionLabel: ''
   }
 ];
 

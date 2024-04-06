@@ -62,7 +62,7 @@ export const driversApi = createApi({
   baseQuery: baseQueryWithLogoutOnTokenExpiration,
   tagTypes: ["drivers", "driver"],
   endpoints: (build) => ({
-    getAllDrivers: build.query<DriversMappedResponse, GetAllDriversQuery>({
+    getAllDrivers: build.query<DriversMappedResponse, any>({
       query: ({
         limit,
         page,
@@ -75,9 +75,10 @@ export const driversApi = createApi({
         deleted,
         onlineStatus,
         onboardStatus,
-        sharpApprovalStatus
+        sharpApprovalStatus,
+        dashboard_state
       }) => ({
-        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}&search=${search}&order=${order}&is_blocked=${status ? status : ""}&status_remark=${statusRemark ? statusRemark : ""}${deleted ? `&deleted=${deleted}` : ""}${onlineStatus ? `&online_status=${onlineStatus}` : ''}${onboardStatus ? `&is_onboarding=${onboardStatus}` : ''}${sharpApprovalStatus ? `&sharp_approval_status=${sharpApprovalStatus}` : ''}`,
+        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}&search=${search}&order=${order}&is_blocked=${status ? status : ""}&status_remark=${statusRemark ? statusRemark : ""}${deleted ? `&deleted=${deleted}` : ""}${onlineStatus ? `&online_status=${onlineStatus}` : ''}${onboardStatus ? `&is_onboarding=${onboardStatus}` : ''}${sharpApprovalStatus ? `&sharp_approval_status=${sharpApprovalStatus}` : ''}${dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}`,
       }),
       providesTags: ["drivers"],
       transformResponse: (response: GetAllDriversResponse) => {
@@ -121,7 +122,6 @@ export const driversApi = createApi({
       transformResponse: (response: ViewDriverResponse) => {
         if (!response) return <MappedViewDriver>{};
         else {
-          console.log('dta', response)
           const { data } = response;
           const getCarDocs = data?.car_documents.length === 1 && data?.car_documents[0] === null ? [] : data?.car_documents?.map((doc) => {
             return {
@@ -247,6 +247,26 @@ export const driversApi = createApi({
       }),
       invalidatesTags: ["drivers", "driver"],
     }),
+    initiateDriverFunding: build.mutation<any, any>({
+      query: ({ driverId, data, adminId }) => ({
+        url: `/admin/transaction/initiate-user-wallet-credit/${driverId}`,
+        method: "POST",
+        headers: {
+          adminid: adminId
+        },
+        body: data
+      })
+    }),
+    completeDriverFunding: build.mutation<any, any>({
+      query: ({ data, adminId }) => ({
+        url: `/admin/transaction/complete-user-wallet-credit`,
+        method: "POST",
+        headers: {
+          adminid: adminId
+        },
+        body: data
+      })
+    })
   }),
 });
 
@@ -260,4 +280,6 @@ export const {
   useVerifyGuarantorMutation,
   useToggleBlockDriverMutation,
   useReactivateDriverMutation,
+  useInitiateDriverFundingMutation,
+  useCompleteDriverFundingMutation
 } = driversApi;

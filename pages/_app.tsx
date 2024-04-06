@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import UserProvider from "@/contexts/UserContext";
 import CallProvider from "@/contexts/CallContext";
 import ModalProvider from "@/contexts/ModalContext";
+import { StateSegmentationProvider } from "@/contexts/StateSegmentationContext";
 import EnlaredImageProvider from "@/contexts/EnlargeImageContext";
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -20,8 +21,10 @@ export default function App({ Component, pageProps }: AppProps) {
         <EnlaredImageProvider>
           <ModalProvider>
             <CallProvider>
-              <Component {...pageProps} />
-              <ToastContainer />
+              <StateSegmentationProvider>
+                <Component {...pageProps} />
+                <ToastContainer />
+              </StateSegmentationProvider>
             </CallProvider>
           </ModalProvider>
         </EnlaredImageProvider>
