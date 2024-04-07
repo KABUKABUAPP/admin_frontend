@@ -50,7 +50,7 @@ const Settings: NextPage = () => {
   const [currentView, setCurrentView] = useState("Account Settings");
 
   useEffect(() => {
-    if (user && user!.role === 'super') {
+    if (user && (user!.role === 'super' || user!.role === 'principal')) {
       setNav([
         { title: "Account Settings", isActive: true },
         { title: "Roles", isActive: false },
