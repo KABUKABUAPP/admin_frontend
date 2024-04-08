@@ -60,7 +60,7 @@ const ActivityLogCard: FC<Props> = ({ logs, userRole, onboardList, handleChange,
           </>
         }
         {
-          onboardList && onboardList?.data?.length === 0 && 
+          userRole?.includes('marketer') && onboardList && onboardList?.data?.length === 0 && 
           <p className="text-center">Staff has not performed any activity</p>
         }
       </div>

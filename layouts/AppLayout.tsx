@@ -121,7 +121,7 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
         className="h-screen w-[calc(100%-200px)] max-lg:w-full bg-[#f8f8f8] overflow-auto"
         style={{ padding: padding }}
       >
-        <div className="lg:hidden ml-3 my-4">
+        <div className="lg:hidden ml-3 my-4" style={{width: 'fit-content'}}>
           <span onClick={() => {
             setShow(!show);
           }} style={{width: 'fit-content'}}><MenuIcon /></span>
