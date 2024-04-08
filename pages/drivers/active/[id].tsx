@@ -30,6 +30,7 @@ import { capitalizeAllFirstLetters } from "@/utils";
 import Card from "@/components/common/Card";
 import TransactionsIcon from "@/components/icons/TransactionsIcon";
 import FundDriverWallet from "@/components/modules/drivers/FundDriverWallet";
+import { useUserContext } from "@/contexts/UserContext";
 
 function timeAgo(timeString: any) {
   const currentDate = new Date();
@@ -63,6 +64,7 @@ function timeAgo(timeString: any) {
 
 
 const Driver: NextPage = () => {
+  const { user } = useUserContext();
   const router = useRouter();
 
   const { id } = router.query;
@@ -130,16 +132,19 @@ const Driver: NextPage = () => {
               data &&
               data.driverInfo.isBlocked === false && (
                 <>
-                  <Button
-                    title="Fund Driver Wallet"
-                    startIcon={<TransactionsIcon />}
-                    size="large"
-                    onClick={() => {
-                      setModalContent(
-                        <FundDriverWallet />
-                      );
-                    }}
-                  />
+                  {
+                    user && user!.role === 'principal' &&
+                    <Button
+                      title="Fund Driver Wallet"
+                      startIcon={<TransactionsIcon />}
+                      size="large"
+                      onClick={() => {
+                        setModalContent(
+                          <FundDriverWallet />
+                        );
+                      }}
+                    />
+                  }
                   <Button
                     title="Block Driver"
                     startIcon={<BlockIcon />}
