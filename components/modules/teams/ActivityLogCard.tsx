@@ -82,39 +82,7 @@ const ActivityLogCard: FC = () => {
             <DropDown placeholder="Newest First"/>
           </div>
         </div>
-
-        {/*<div className="pt-4 flex flex-col gap-2">
-          <FormikProvider value={formik}>
-            <Form>
-              <div className="flex">
-                <div className="p-1">
-                  <TextField
-                    placeholder="Search From"
-                    {...formik.getFieldProps("search_from")}
-                    error={formik.touched.search_from ? formik.errors.search_from : undefined}
-                  />
-                </div>
-                <div className="p-1">
-                  <TextField
-                    placeholder="Search To"
-                    type={"text"}
-                    {...formik.getFieldProps("search_to")}
-                    error={
-                      formik.touched.search_to ? formik.errors.search_to : undefined
-                    }
-                  />
-                </div>
-                <div className="p-1">
-                  <Button
-                    title="Search"
-                    type="submit"
-                  />
-                </div>
-              </div>
-            </Form>
-          </FormikProvider>
-        </div>*/}
-
+        
         <div className="mt-4">
           <div className="bg-[#F8F8F8] rounded-md mt-2 mb-2">
             <Card bg={'#F8F8F8'}>
