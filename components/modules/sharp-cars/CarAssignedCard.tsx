@@ -31,7 +31,7 @@ const AssignDriverModal : React.FC<AssignDriverModalProps> = ({ handleClose, han
   const [tags, setTags] = useState<any>([]);
   const [search, setSearch] = useState<string>("");
   const [theDrivers, setTheDrivers] = useState<any>([]);
-  const { dashboardState, setDashboardState } = useDashboardState();
+  //const { dashboardState, setDashboardState } = useDashboardState();
 
   const {
     data: drivers,
@@ -49,7 +49,7 @@ const AssignDriverModal : React.FC<AssignDriverModalProps> = ({ handleClose, han
       order: 'newest_first',
       status: 'active',
       sharpApprovalStatus: 'approved',
-      dashboard_state: dashboardState
+      dashboard_state: 'all'
     },
     {
       refetchOnMountOrArgChange: true,
