@@ -11,6 +11,7 @@ import UserInfoCard from "@/components/common/UserInfoCard";
 import FinancialsCard from "@/components/modules/riders/FinancialsCard";
 import NextOfKinCard from "@/components/modules/riders/NextOfKinCard";
 import TripHistoryCard from "@/components/common/TripHistoryCard";
+import FundDriverWallet from "@/components/modules/drivers/FundDriverWallet";
 import {
   useToggleBlockRiderMutation,
   useViewRiderQuery,
@@ -22,8 +23,11 @@ import BlockRiderConfirmation from "@/components/modules/riders/BlockRiderConfir
 import { toast } from "react-toastify";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
+import TransactionsIcon from "@/components/icons/TransactionsIcon";
+import { useUserContext } from "@/contexts/UserContext";
 
 const Rider: NextPage = () => {
+  const { user } = useUserContext();
   const router = useRouter();
 
   const { id } = router.query;
@@ -91,17 +95,32 @@ const Rider: NextPage = () => {
               userPermissions.riders_permissions.write &&
               data &&
               data?.driver.isBlocked === false && (
-                <Button
-                  title="Block Rider"
-                  startIcon={<BlockIcon />}
-                  size="large"
-                  color="secondary"
-                  onClick={() => {
-                    setModalContent(
-                      <BlockRiderConfirmation driverId={String(id)} />
-                    );
-                  }}
-                />
+                <>
+                  {
+                    user && user!.role === 'principal' &&
+                    <Button
+                      title="Fund Rider Wallet"
+                      startIcon={<TransactionsIcon />}
+                      size="large"
+                      onClick={() => {
+                        setModalContent(
+                          <FundDriverWallet />
+                        );
+                      }}
+                    />
+                  }
+                  <Button
+                    title="Block Rider"
+                    startIcon={<BlockIcon />}
+                    size="large"
+                    color="secondary"
+                    onClick={() => {
+                      setModalContent(
+                        <BlockRiderConfirmation driverId={String(id)} />
+                      );
+                    }}
+                  />
+                </>
               )}
             {data && data?.driver.isBlocked === true && (
               <Button
