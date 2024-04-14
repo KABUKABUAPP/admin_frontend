@@ -67,10 +67,6 @@ const Dashboard: NextPage = () => {
 
   const { userPermissions } = useUserPermissions();
 
-  useEffect(() => {
-    console.log({dashboardState})
-  }, [dashboardState])
-
   return (
     <>
       <AppHead title="Kabukabu | Dashboard" />
