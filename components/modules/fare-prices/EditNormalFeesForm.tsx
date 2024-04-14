@@ -245,7 +245,7 @@ const EditNormalFeesForm: FC<Props> = ({ trip_type, long_trip, short_trip, short
               </div>
             </div>
           }
-          <div className="flex max-sm:flex-col gap-4 px-8 max-sm:px-0 mt-8">
+          <div className="flex max-sm:flex-col gap-4 px-8 max-sm:px-0 mt-3">
             <div style={{ flex: 1 }}>
               <Button
                 title="Cancel"
