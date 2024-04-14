@@ -60,6 +60,7 @@ export const tripsApi = createApi({
       }),
       transformResponse: (response: ViewTripResponse) => {
         if (!response) return {} as MappedViewTripResponse;
+        console.log({data: response?.data})
         return {
           carModel: `${response?.data?.car?.brand_name} ${response?.data?.car?.model}`,
           destination: `${response?.data?.destination?.city}, ${response?.data?.destination?.state}, ${response?.data?.destination?.country}`,
