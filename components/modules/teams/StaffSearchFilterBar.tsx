@@ -48,13 +48,13 @@ const StaffSearchFilterBar: FC<Props> = ({
       searchValue={searchValue}
       handleSearch={(val) => handleSearch(val)}
     >
-      <div className="flex justify-between">
+      <div className="flex flex-col md:flex-row justify-center md:justify-between gap-3">
         <div className="flex mx-6 justify-center mt-1">
           <span className="mx-3 cursor-pointer" onClick={() => {router.push('/staffs')}}>Staffs</span>
           <span className="mx-3"><b>|</b></span>
           <span className="mx-3 cursor-pointer" onClick={() => {router.push('/staffs/teams')}}><b>Teams</b></span>
         </div>
-        <div className="flex justify-end mr-3">
+        <div className="flex flex-col md:flex-row justify-center md:justify-end mr-3 gap-3">
           {userPermissions && userPermissions.staffs_permissions.write && (
             <Button
               title="Add New Team"
@@ -62,10 +62,10 @@ const StaffSearchFilterBar: FC<Props> = ({
               onClick={() => router.push(`/staffs/teams/add-team`)}
             />
           )}
-          <div className="mx-4 flex items-center justify-center">
+          <div className="mx-4 flex items-center justify-center sm:hidden">
             <Divider height="80%" />
           </div>
-          <div className="text-xs flex gap-3 items-center cursor-pointer justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
+          <div className="text-xs flex gap-3 items-center cursor-pointer justify-center md:justify-end md:pr-3 md:mr-3">
             <span>Audience Type:</span>
             <DropDown
               placeholder="Status"
