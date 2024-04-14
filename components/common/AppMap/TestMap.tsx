@@ -15,7 +15,8 @@ interface Props {
 
 const StaticMap: FC<Props> = ({ startPoint, endPoint }) => {
   const [directions, setDirections] = useState<any>(null);
-  const [map, setMap] = React.useState(null)
+  const [map, setMap] = React.useState(null);
+  const [showMap, setShowMap] = useState(false);
   
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: 'AIzaSyBKw_APHMTRn37FXj0dd7_CptLColGP4Gc',
@@ -57,6 +58,7 @@ const StaticMap: FC<Props> = ({ startPoint, endPoint }) => {
         (result, status) => {
           if (status === window.google.maps.DirectionsStatus.OK) {
             if (result) setDirections(result);
+            setShowMap(true);
           } else {
             console.error("Error fetching directions:", status);
           }
@@ -70,6 +72,7 @@ const StaticMap: FC<Props> = ({ startPoint, endPoint }) => {
       {!isLoaded ? (
         <h1>Loading...</h1>
       ) : (
+          showMap &&
           <GoogleMap mapContainerStyle={containerStyle} zoom={10} center={{ lat: startPoint[0], lng: startPoint[1] }} onLoad={onLoad}>
             {directions && (
               <DirectionsRenderer

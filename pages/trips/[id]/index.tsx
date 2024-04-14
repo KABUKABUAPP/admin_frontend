@@ -28,6 +28,7 @@ import AppHead from "@/components/common/AppHead";
 import TripRatingCard from "@/components/modules/Trips/TripRatingCard";
 import StaticMap from "@/components/common/AppMap/TestMap";
 import { capitalizeAllFirstLetters } from "@/utils";
+import RouteMap from "@/components/common/AppMap/RouteMap";
 const socket = io("https://rideservice-dev.up.railway.app");
 
 const ViewTrip: NextPage = () => {
@@ -240,15 +241,25 @@ const ViewTrip: NextPage = () => {
                 )}
                 <div className="w-full h-full max-h-[550px] max-md:pl-0">
                   {data?.startPoint && data?.endPoint && (
-                      <StaticMap
-                        endPoint={data?.endPoint}
+                    <>
+                      {/*<StaticMap
+                        endPoint={[data?.endPoint[1], data?.endPoint[0]]}
                         startPoint={
                           liveLocation
-                            ? [liveLocation.lat, liveLocation.lng]
-                            : data?.startPoint
+                            ? [liveLocation.lng, liveLocation.lat]
+                            : [data?.startPoint[1], data?.startPoint[0]]
                         }
+                      />*/}
+
+                      <RouteMap start={
+                          liveLocation
+                          ? {lat: liveLocation.lng, lng: liveLocation.lat}
+                          : {lat: data?.startPoint[1], lng: data?.startPoint[0]}
+                        } 
+                        end={{lat: data?.endPoint[1], lng: data?.endPoint[0]}} 
                       />
-                    )}
+                    </>
+                  )}
                 </div>
               </>
             }
