@@ -36,6 +36,7 @@ const initialValues = {
   driver_fee_sharp_payment: "",
   driver_trip_charges_cap: "",
   kabukabu_percentage: "",
+  price_calculation_type: "",
   payment_types_available: {
     cash: true,
     wallet: true,
@@ -87,12 +88,14 @@ const NewFareProfileForm: FC = () => {
         driver_fee_sharp_payment: values.driver_fee_sharp_payment,
         driver_trip_charges_cap: values.driver_trip_charges_cap,
         kabukabu_percentage: values.kabukabu_percentage,
+        price_calculation_type: values.price_calculation_type,
         payment_types_available: {
           cash: true,
           wallet: true,
           card: false,
         }
       }
+
       submit(farePriceData);
     },
   });
@@ -122,8 +125,8 @@ const NewFareProfileForm: FC = () => {
     <div>
       <FormikProvider value={formik}>
         <Form>
-          <div className="flex max-md:flex-col gap-6">
-            <FormCard maxWidth="400px" height="400px">
+          <div className="flex max-md:flex-col gap-6 mx-auto w-full">
+            <FormCard maxWidth="400px" height="450px">
               <div className="flex flex-col gap-6">
                 <div>
                   <SelectField
@@ -185,10 +188,29 @@ const NewFareProfileForm: FC = () => {
                     }
                   />
                 </div>
+
+                <div>
+                  <SelectField
+                    label="Price Calculation Type"
+                    options={[
+                      {
+                        label: 'RANGE',
+                        value: 'RANGE',
+                      },
+                      {
+                        label: 'FIXED',
+                        value: 'FIXED',
+                      }
+                    ]}
+                    placeholder="Price Calculation Type"
+                    {...formik.getFieldProps("price_calculation_type")}
+                    error={formik.touched.price_calculation_type ? formik.errors.price_calculation_type : undefined}
+                  />
+                </div>
               </div>
             </FormCard>
 
-            <FormCard maxWidth="400px" height="400px">
+            <FormCard maxWidth="400px" height="450px">
               <p className="text-lg font-semibold pb-4">Driver Fee</p>
               <div className="flex flex-col gap-6">
                 <TextField
@@ -259,7 +281,7 @@ const NewFareProfileForm: FC = () => {
             </FormCard>
           </div>
 
-          <div className="pt-8">
+          <div className="pt-8 mx-auto w-full">
             <FormCard maxWidth="1000px">
               <p className="text-lg font-semibold pb-4">Short Trip</p>
               <div className="pt-4 flex max-md:flex-col gap-4">
@@ -362,7 +384,7 @@ const NewFareProfileForm: FC = () => {
             </FormCard>
           </div>
 
-          <div className="pt-8">
+          <div className="pt-8 mx-auto w-full">
             <FormCard maxWidth="1000px">
               <p className="text-lg font-semibold pb-4">Long Trip</p>
               <div className="pt-4 flex max-md:flex-col gap-4">

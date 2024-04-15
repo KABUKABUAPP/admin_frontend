@@ -121,7 +121,7 @@ const ViewTrip: NextPage = () => {
     driverRating,
     riderRating,
   }: Record<string, string | number>) => {
-    const tripToEndStr = tab === 'completed' ? 'Trip Ended' : 'Trip To End'
+    const tripToEndStr = tab === 'completed' ? 'Trip Ended' : tab === 'cancelled_orders' ? 'Trip Cancelled' : 'Trip To End'
     return [
       {
         topTitle: "Origin",
