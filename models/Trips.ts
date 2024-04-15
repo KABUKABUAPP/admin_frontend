@@ -183,6 +183,7 @@ export interface ViewTripResponse {
     end_point: [number, number];
     start_point: [number, number];
     trip_completion_time: string;
+    time_of_cancel: string;
   };
   message: string;
 }
