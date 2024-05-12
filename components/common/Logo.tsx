@@ -12,7 +12,7 @@ const Logo: FC = () => {
     >
       <Image
         src={
-          "https://res.cloudinary.com/dt0wfaxft/image/upload/v1685130491/logo_sulnht.png"
+          "https://res.cloudinary.com/kabukabu/image/upload/v1714335039/landing/Black_Variation_1_qjdlqj.png"
         }
         layout="fill"
         objectFit="contain"
