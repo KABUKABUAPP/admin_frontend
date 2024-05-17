@@ -20,12 +20,21 @@ import React, { FC, useEffect, useState } from "react";
 import Image from "next/image";
 import TextField from "@/components/ui/Input/TextField/TextField";
 import { toast } from "react-toastify";
+import Select from 'react-select';
+import { useGetAllHubsQuery, useViewHubQuery } from "@/api-services/hubService";
 
 const ApproveRequest = () => {
     const { setModalContent } = useModalContext();
     const [approveSuccess, setApproveSuccess] = useState(false);
+    const [search, setSearch] = useState<string>("");
+    const [assignedHubId, setAssignedHubId] = useState('');
     const router = useRouter();
     const { id } = router.query;
+
+    const { data, isLoading: allHubsLoading, isError: allHubsIsError, refetch, error: allHubsError } = useGetAllHubsQuery(
+        { limit: 1000, page: 1, order: "newest_first", search },
+        { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+    );
 
     const [approveDeclineCar, { isLoading, isError, isSuccess, error }] = useApproveDeclineCarMutation();
 
@@ -33,6 +42,17 @@ const ApproveRequest = () => {
         if (isSuccess) {
             toast.success('Approved successfully')
             setApproveSuccess(true);
+            const url = new URL(window.location.href);
+            const params = new URLSearchParams(url.search);
+        
+            // Remove the 'approveRequest' parameter
+            params.delete('approveRequest');
+        
+            // Construct the new URL without the 'approveRequest' parameter
+            const newUrl = `${url.origin}${url.pathname}?${params.toString()}`;
+        
+            // Replace the current URL with the new URL
+            router.replace(newUrl, undefined, { shallow: true });
         }
     }, [isSuccess])
     
@@ -55,13 +75,28 @@ const ApproveRequest = () => {
                         <p className="font-bold">This action cannot be undone</p>
                     </div>
 
+                    <div className="flex flex-col justify-center items-center mb-6">
+                        <p className="w-[80%] mx-auto">Select Inspection Hub</p>
+                        <Select
+                            className="w-[80%] mx-auto"
+                            options={data?.data ? data?.data.map((hub: any) => {
+                                return {
+                                    value: hub.hubId,
+                                    label: capitalizeAllFirstLetters(hub.hubName)
+                                }
+                            }) : []}
+                            onKeyDown={(e: any) => {setSearch(e.target.value)}}
+                            onChange={(e: any) => {setAssignedHubId(e.value)}}
+                        />
+                    </div>
+
                     <div className="flex justify-center items-center gap-4">
                         <Button title="Cancel" size="large" onClick={() => {
                             setModalContent(null)
                         }} />
 
                         <Button title="Approve Request" size="large" styles={{backgroundColor: '#1FD11B', color: '#FFF'}} loading={isLoading} disabled={isLoading} onClick={() => {
-                            approveDeclineCar({id: String(id), status: 'approved', reason: ''});
+                            approveDeclineCar({id: String(id), status: 'approved', reason: '', assigned_hub_id: assignedHubId});
                         }} />
                     </div>
                 </>
@@ -131,7 +166,7 @@ const DeclineRequest = () => {
                         }} />
 
                         <Button title="Decline Request" size="large" styles={{backgroundColor: '#E6E6E6', color: '#EF2C5B'}} loading={isLoading} disabled={isLoading} onClick={() => {
-                            approveDeclineCar({id: String(id), status: 'declined', reason});
+                            approveDeclineCar({id: String(id), status: 'declined', reason, assigned_hub_id: ''});
                         }} />
                     </div>
                 </>
@@ -156,15 +191,30 @@ const SingleCar = () => {
     const { setModalContent } = useModalContext();
     const router = useRouter();
     const { id } = router.query;
+    const [assignedHub, setAssignedHub] = useState('')
 
     const { data, isLoading, isError, refetch } = useGetSingleCarQuery(
         { id: String(id) },
         { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
     );
+
+    const { data: hub, isLoading: hubLoading, isError: hubError, refetch: hubRefetch } = useViewHubQuery(
+      { hubId: String(assignedHub) },
+      { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+    );
     
     useEffect(() => {
-        if (data) console.log('data', data)
+        if (data) {
+            console.log('data', data)
+            if (data?.assigned_hub_for_inspection) setAssignedHub(data?.assigned_hub_for_inspection)
+        }
     }, [data])
+
+    useEffect(() => {
+        if (hub) {
+            console.log('hub data', hub)
+        }
+    }, [data, hub])
 
     return (
         <>
@@ -242,6 +292,25 @@ const SingleCar = () => {
                                         <p className="font-bold">Payment Type</p>
                                         <p className="text-sm">{capitalizeAllFirstLetters(data?.payment_plan)}</p>
                                     </div>
+
+                                    {
+                                        hub && !hubLoading && data?.status === 'pending_inspection' &&
+                                        <>
+                                            <div className="flex justify-between bg-[#F5F5F5] rounded-lg w-full p-2 my-4 gap-4">
+                                                <p className="font-bold">Assigned Hub Title</p>
+                                                <p className="text-sm">{capitalizeAllFirstLetters(capitalizeAllFirstLetters(hub?.inspectionCenterTitle))}</p>
+                                            </div>
+                                            <div className="flex justify-between bg-[#F5F5F5] rounded-lg w-full p-2 my-4 gap-4">
+                                                <p className="font-bold">Assigned Hub Name</p>
+                                                <p className="text-sm">{capitalizeAllFirstLetters(capitalizeAllFirstLetters(hub?.inspectionCenterLocation))}</p>
+                                            </div>
+                                            <div className="flex justify-between bg-[#F5F5F5] rounded-lg w-full p-2 my-4 gap-4">
+                                                <p className="font-bold">Assigned Inspector</p>
+                                                <p className="text-sm">{capitalizeAllFirstLetters(capitalizeAllFirstLetters(hub?.inspectorFullname))}</p>
+                                            </div>
+                                        </>
+
+                                    }
                                 </Card>
                             }
                         />

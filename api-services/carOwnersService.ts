@@ -81,8 +81,8 @@ export const carOwnersApi = createApi({
           },
         }),
         approveDeclineCar: build.mutation<any, any>({
-          query: ({ id, status, reason }) => ({
-            url: `admin/car-owner/approve-decline-car/${id}?status=${status}&reason=${reason}`,
+          query: ({ id, status, reason, assigned_hub_id }) => ({
+            url: `admin/car-owner/approve-decline-car/${id}?status=${status}&reason=${reason}&assigned_hub_id=${assigned_hub_id}`,
             method: "PUT"
           })
         })
