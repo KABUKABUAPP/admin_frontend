@@ -130,6 +130,17 @@ const DeclineRequest = () => {
         if (isSuccess) {
             toast.success('Declined successfully')
             setDeclineSuccess(true);
+            const url = new URL(window.location.href);
+            const params = new URLSearchParams(url.search);
+        
+            // Remove the 'approveRequest' parameter
+            params.delete('approveRequest');
+        
+            // Construct the new URL without the 'approveRequest' parameter
+            const newUrl = `${url.origin}${url.pathname}?${params.toString()}`;
+        
+            // Replace the current URL with the new URL
+            router.replace(newUrl, undefined, { shallow: true });
         }
     }, [isSuccess])
     
@@ -166,7 +177,7 @@ const DeclineRequest = () => {
                         }} />
 
                         <Button title="Decline Request" size="large" styles={{backgroundColor: '#E6E6E6', color: '#EF2C5B'}} loading={isLoading} disabled={isLoading} onClick={() => {
-                            approveDeclineCar({id: String(id), status: 'declined', reason, assigned_hub_id: ''});
+                            approveDeclineCar({id: String(id), status: 'declined', reason});
                         }} />
                     </div>
                 </>
