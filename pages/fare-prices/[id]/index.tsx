@@ -30,7 +30,7 @@ const FarePrice: NextPage = () => {
   );
 
   useEffect(() => {
-    if (data) console.log(data)
+    if (data) console.log({data})
   }, [data])
 
   const handleSurge = () => {
@@ -80,13 +80,14 @@ const FarePrice: NextPage = () => {
             <ViewFarePriceLayout
               asideComponents={
                 <FareDetailsCard
-                  fareId={`#${data.data._id}`}
+                  fareId={`${data.data._id}`}
                   fareLocation={`${data.data.state}, ${data.data.country}`}
                   totalFares={`4`}
                   totalTripsInState={`${data?.data?.total_trips_in_state}`}
                   createdOn={new Date(
                     data.data.created_at
                   ).toLocaleDateString()}
+                  active={data?.data?.is_active}
                 />
               }
               mainComponents={
