@@ -28,6 +28,7 @@ interface Props {
   declineReason?: string;
   referral_code?: string;
   inspectionCode?: any;
+  id?: string;
 }
 
 function copyToClipboard(text: string) {
@@ -73,7 +74,8 @@ const UserInfoCard: FC<Props> = ({
   declineReason,
   bg = "#FFFFFF",
   referral_code,
-  inspectionCode
+  inspectionCode,
+  id
 }) => {
   const router = useRouter();
   const showCarsProcessed = router.pathname.includes("inspector");
@@ -126,6 +128,14 @@ const UserInfoCard: FC<Props> = ({
                   }`}
                 >
                   {phone}
+                </span>
+              )}
+              <br />
+              {id && router.asPath.includes('/car-repair-loan') && (
+                <span className={`text-base font-bold cursor-pointer`} onClick={() => {
+                  window.open(`/drivers/active/${id}`, '_blank')
+                }}>
+                  View Driver Details
                 </span>
               )}
               <br />
