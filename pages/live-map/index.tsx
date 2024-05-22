@@ -79,7 +79,7 @@ const IndexPage: React.FC = () => {
                     </div>
                     <div className="flex">
                       <div className="w-[20%]">
-                        <img src="/taxiOffline.svg" alt="" />
+                        <img src="/taxiOfflineMod.png" alt="" />
                       </div>
                       <div className="w-[80%]">
                         <p className="text-lg"><b>{tripsInsight?.onlineStatusChart?.offline}</b></p>
@@ -97,7 +97,7 @@ const IndexPage: React.FC = () => {
                     </div>
                     <div className="flex">
                       <div className="w-[20%]">
-                        <img src="/riderOffline.svg" alt="" />
+                        <img src="/riderOfflineMod.png" alt="" />
                       </div>
                       <div className="w-[80%]">
                         <p className="text-lg"><b>{tripsInsight?.onlineStatusChart?.offlineRiders}</b></p>

@@ -31,6 +31,9 @@ const FinancialsCard: FC<Props> = ({
             variant="text"
             disabled={true}
             className={`${isDeleted ? '!text-[#9A9A9A]' : ''}`}
+            onClick={() => {
+              console.log('transaction history')
+            }}
           />
         </div>
 
