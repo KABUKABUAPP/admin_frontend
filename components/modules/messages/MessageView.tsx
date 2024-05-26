@@ -47,6 +47,10 @@ const MessageView: FC = () => {
     setSearchValue(a);
   }
 
+  useEffect(() => {
+    if (messages) console.log({messages})
+  })
+
   return (
     <>
         <div className="lg:w-2/5 md:w-full mx-2 mt-3">
@@ -88,6 +92,9 @@ const MessageView: FC = () => {
                         </div>
                         <div className="flex">
                             <div className="text-[#9A9A9A] text-sm">Audience: {capitalizeAllFirstLetters(message.audience)}</div>
+                        </div>
+                        <div className="flex">
+                            <div className="text-[#9A9A9A] text-sm">Total Recipients: {message.total_receipients}</div>
                         </div>
                     </Card>
                 </div>

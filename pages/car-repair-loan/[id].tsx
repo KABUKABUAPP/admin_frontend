@@ -284,6 +284,7 @@ const SinglePendingLoan = () => {
                                     email={data?.repair_details?.driver?.email}
                                     phone={data?.repair_details?.driver?.phone_number}
                                     image={data?.repair_details?.driver?.profile_image}
+                                    id={data?.repair_details?.driver?._id}
                                 />
 
                                 <Card>
@@ -412,11 +413,19 @@ const SinglePendingLoan = () => {
                                                 <p className="text-lg font-bold">Payment History</p>
                                                 <div className="flex flex-col mt-3">
                                                     {
-                                                        data?.payment_history?.map((history: any) => {
+                                                        data?.installment_tracker?.map((history: any) => {
                                                             return (
-                                                                <div className="rounded-md bg-[#F8F8F8] p-4 gap-3 my-2">
+                                                                <div className="flex flex-col rounded-md bg-[#F8F8F8] p-4 gap-1 my-2">
                                                                     <p className="text-md font-bold">N{history.amount_to_be_paid.toLocaleString()}</p>
-                                                                    <p className="text-sm">{new Date(history.date_paid).toUTCString()}</p>
+                                                                    {
+                                                                        history.due_date &&
+                                                                        <p className="text-sm"><span className="font-bold">Due Date: </span>{new Date(history.due_date).toUTCString()}</p>
+                                                                    }
+                                                                    {
+                                                                        history.date_paid &&
+                                                                        <p className="text-sm"><span className="font-bold">Date Paid: </span>{new Date(history.date_paid).toUTCString()}</p>
+                                                                    }
+                                                                    <p className="text-md font-bold">{capitalizeAllFirstLetters(history.status)}</p>
                                                                 </div>
                                                             )
                                                         })

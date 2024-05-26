@@ -96,7 +96,7 @@ const EditNormalFeesForm: FC<Props> = ({ trip_type, long_trip, short_trip, short
   useEffect(() => {
     if (isSuccess) {
       toast.success("Fare price updated succesfully");
-      router.push(`/fare-prices/${id}`, undefined, { shallow: true });
+      router.push(`/fare-prices/${id}?current_tab=${router.query.current_tab}`, undefined, { shallow: true });
       setModalContent(null);
     }
   }, [isSuccess]);

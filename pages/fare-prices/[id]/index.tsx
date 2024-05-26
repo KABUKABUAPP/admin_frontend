@@ -30,7 +30,7 @@ const FarePrice: NextPage = () => {
   );
 
   useEffect(() => {
-    if (data) console.log(data)
+    if (data) console.log({data})
   }, [data])
 
   const handleSurge = () => {
@@ -80,13 +80,14 @@ const FarePrice: NextPage = () => {
             <ViewFarePriceLayout
               asideComponents={
                 <FareDetailsCard
-                  fareId={`#${data.data._id}`}
+                  fareId={`${data.data._id}`}
                   fareLocation={`${data.data.state}, ${data.data.country}`}
                   totalFares={`4`}
                   totalTripsInState={`${data?.data?.total_trips_in_state}`}
                   createdOn={new Date(
                     data.data.created_at
                   ).toLocaleDateString()}
+                  active={data?.data?.is_active}
                 />
               }
               mainComponents={
@@ -94,19 +95,10 @@ const FarePrice: NextPage = () => {
                   <FarePriceCard
                     title="Driver Fee"
                     handleEdit={() => {
-                      const monthlyPayment =
-                        data.data.driver_fee.monthly_payment;
+                      const monthlyPayment = data.data.driver_fee.monthly_payment;
                       const sharpPayment = data.data.driver_fee.sharp_payment;
-                      const baseFare = data.data.base_fare;
-                      const distance = data.data.distance_per_km;
-                      const time = data.data.time_per_min;
-                      const waitingTime = data.data.waiting_time_per_min
-                      const vat = data.data.state_levy;
-                      const bookingFee = data.data.booking_fee;
-                      const surgeMultiplier = data.data.surge_multiplier;
-                      const state = data.data.state;
-                      const country = data.data.country;
-                      const query = `?monthlyPayment=${monthlyPayment}&sharpPayment=${sharpPayment}&baseFare=${baseFare}&distance=${distance}&time=${time}&vat=${vat}&bookingFee=${bookingFee}&surgeMultiplier=${surgeMultiplier}&state=${state}&country=${country}&waitingTime=${waitingTime}`;
+                      const priceCalculationType = data.data.price_calculation_type;
+                      const query = `?monthlyPayment=${monthlyPayment}&sharpPayment=${sharpPayment}&priceCalculationType=${priceCalculationType}&current_tab=${router.query.current_tab}`;
 
                       router.push(`/fare-prices/${id}${query}`, undefined, {
                         shallow: true,
@@ -127,6 +119,10 @@ const FarePrice: NextPage = () => {
                         title: "Sharp Payment",
                         body: `₦${data.data.driver_fee.sharp_payment}/Month`,
                       },
+                      {
+                        title: "Price Calculation Type",
+                        body: `${data.data.price_calculation_type}`,
+                      }
                     ]}
                   />
                   <FarePriceCard
@@ -144,7 +140,7 @@ const FarePrice: NextPage = () => {
                       const state = data.data.state;
                       const country = data.data.country;
                       const waitingTimePerMin = data.data.short_trip.waiting_time_per_min
-                      const query = `?monthlyPayment=${monthlyPayment}&sharpPayment=${sharpPayment}&baseFare=${baseFare}&distance=${distance}&time=${time}&vat=${vat}&bookingFee=${bookingFee}&surgeMultiplier=${surgeMultiplier}&state=${state}&country=${country}&waitingTime=${waitingTimePerMin}`;
+                      const query = `?monthlyPayment=${monthlyPayment}&sharpPayment=${sharpPayment}&baseFare=${baseFare}&distance=${distance}&time=${time}&vat=${vat}&bookingFee=${bookingFee}&surgeMultiplier=${surgeMultiplier}&state=${state}&country=${country}&waitingTime=${waitingTimePerMin}&current_tab=${router.query.current_tab}`;
 
                       router.push(`/fare-prices/${id}${query}`, undefined, {
                         shallow: true,
@@ -193,7 +189,7 @@ const FarePrice: NextPage = () => {
                         const state = data.data.state;
                         const country = data.data.country;
                         const waitingTimePerMin = data.data.long_trip.waiting_time_per_min
-                        const query = `?monthlyPayment=${monthlyPayment}&sharpPayment=${sharpPayment}&baseFare=${baseFare}&distance=${distance}&time=${time}&vat=${vat}&bookingFee=${bookingFee}&surgeMultiplier=${surgeMultiplier}&state=${state}&country=${country}&waitingTime=${waitingTimePerMin}`;
+                        const query = `?monthlyPayment=${monthlyPayment}&sharpPayment=${sharpPayment}&baseFare=${baseFare}&distance=${distance}&time=${time}&vat=${vat}&bookingFee=${bookingFee}&surgeMultiplier=${surgeMultiplier}&state=${state}&country=${country}&waitingTime=${waitingTimePerMin}&current_tab=${router.query.current_tab}`;
 
                       router.push(`/fare-prices/${id}${query}`, undefined, {
                         shallow: true,

@@ -11,10 +11,12 @@ import { EditDriverFeeValidation } from "@/validationschemas/EditDriverFeeValida
 import { verifyIsDigit } from "@/utils";
 import { useUpdateDriverFeeMutation } from "@/api-services/farePricesService";
 import { toast } from "react-toastify";
+import SelectField from "@/components/ui/Input/SelectField";
 
 const initialValues = {
   monthlyPayment: "",
   sharpPayment: "",
+  priceCalculationType: ""
 };
 
 interface Props {
@@ -32,15 +34,7 @@ const EditDriverFeeForm: FC<Props> = ({
     id,
     monthlyPayment,
     sharpPayment,
-    baseFare,
-    distance,
-    time,
-    waitingTime,
-    vat,
-    bookingFee,
-    surgeMultiplier,
-    state,
-    country,
+    priceCalculationType
   } = useRouter().query;
   const ref = useClickOutside<HTMLDivElement>(() => {
     router.push(`/fare-prices/${id}`, undefined, { shallow: true });
@@ -54,22 +48,9 @@ const EditDriverFeeForm: FC<Props> = ({
     validationSchema: EditDriverFeeValidation,
     onSubmit: (values) => {
       const payload = {
-        state: state,
-        country: country,
-        base_fare: baseFare,
-        distance_per_km: distance,
-        time_per_min: time,
-        state_levy: vat,
-        booking_fee: bookingFee,
-        waiting_time_per_min: waitingTime,
-        surge_multiplier: Number(surgeMultiplier),
         driver_fee_monthly_payment: Number(values.monthlyPayment),
         driver_fee_sharp_payment: Number(values.sharpPayment),
-        payment_types_available: {
-          cash: true,
-          wallet: true,
-          card: true,
-        },
+        price_calculation_type: values.priceCalculationType
       };
 
       updateDriverFee({ payload, id: String(id) });
@@ -85,7 +66,7 @@ const EditDriverFeeForm: FC<Props> = ({
 
   useEffect(() => {
     if (isSuccess) {
-      router.push(`/fare-prices/${id}`, undefined, { shallow: true });
+      router.push(`/fare-prices/${id}?current_tab=${router.query.current_tab}`, undefined, { shallow: true });
       toast.success("Driver fee updated succesfully");
       setModalContent(null);
     }
@@ -95,6 +76,7 @@ const EditDriverFeeForm: FC<Props> = ({
     if (router.query) {
       formik.setFieldValue("monthlyPayment", monthlyPayment);
       formik.setFieldValue("sharpPayment", sharpPayment);
+      formik.setFieldValue("priceCalculationType", priceCalculationType);
     }
   }, [router.query]);
 
@@ -106,7 +88,7 @@ const EditDriverFeeForm: FC<Props> = ({
           whileInView={{ scale: 1, transition: { duration: 0.2 } }}
           viewport={{ once: true }}
           ref={ref}
-          className="mx-auto bg-[#FFFFFF] rounded-xl w-full max-w-[650px] flex flex-col justify-center p-4 py-5 gap-12"
+          className="mx-auto bg-[#FFFFFF] rounded-xl w-full max-w-[650px] flex flex-col justify-center p-4 py-5 gap-6"
         >
           <p className="text-center text-base font-bold">Update Driver Fee</p>
           <div className="flex gap-4 max-sm:flex-col">
@@ -140,6 +122,30 @@ const EditDriverFeeForm: FC<Props> = ({
                     formik.setFieldValue("sharpPayment", e.target.value);
                   }
                 }}
+              />
+            </div>
+          </div>
+          <div className="flex gap-4 max-sm:flex-col">
+            <div style={{ flex: 1 }}>
+              <SelectField
+                  label="Price Calculation Type"
+                  disabled={false}
+                  options={[
+                    {
+                      label: 'RANGE',
+                      value: 'RANGE',
+                    },
+                    {
+                      label: 'FIXED',
+                      value: 'FIXED',
+                    }
+                  ]}
+                  placeholder="Price Calculation Type"
+                  {...formik.getFieldProps("priceCalculationType")}
+                  error={formik.touched.priceCalculationType ? formik.errors.priceCalculationType : undefined}
+                  onChange={(e) => {
+                    formik.setFieldValue("priceCalculationType", e.target.value);
+                  }}
               />
             </div>
           </div>
