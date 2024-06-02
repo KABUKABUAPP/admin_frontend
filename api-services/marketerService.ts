@@ -52,7 +52,6 @@ export const marketerApi = createApi({
         return response.data;
       }
     }),
-    
     getPerformanceChartData: build.query<any, any>({
       query: ({ limit, page, user_type }) => ({
         url: `/admin/staff/get-my-referrals-data?limit=${limit}&page=${page}&user_type=${user_type}`
@@ -67,7 +66,6 @@ export const marketerApi = createApi({
         });
       }
     }),
-
     getOnboardedDrivers: build.query<any, any>({
       query: ({ limit, page, user_type }) => ({
         url: `/admin/staff/get-my-referrals-data?limit=${limit}&page=${page}&user_type=${user_type}`
@@ -88,12 +86,32 @@ export const marketerApi = createApi({
         return { data: mappedData, totalCount }
       }
     }),
+    getMarketerDashboard: build.query<any, any>({
+      query: ({ limit, page, user_type }) => ({
+        url: `/admin/marketer/home?limit=${limit}&page=${page}&filter=THIS_WEEK&range=7_days&type=${user_type}`
+      }),
+      transformResponse: (response: any) => {
+        if (!response) return {};
+        return response.data;
+      }
+    }),
+    getMarketerMap: build.query<any, any>({
+      query: ({ limit, page }) => ({
+        url: `/admin/marketer/map-view?limit=${limit}&page=${page}&filter=ALL_TIME`
+      }),
+      transformResponse: (response: any) => {
+        if (!response) return {};
+        return response.data;
+      }
+    })
   }),
 });
 
 export const {
   useGetMarketerQuery,
   useGetPerformanceChartDataQuery,
-  useGetOnboardedDriversQuery
+  useGetOnboardedDriversQuery,
+  useGetMarketerDashboardQuery,
+  useGetMarketerMapQuery
 } = marketerApi;
 
