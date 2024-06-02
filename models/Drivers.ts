@@ -96,6 +96,8 @@ export interface ViewDriverResponse {
   code: number;
   data: {
     driver: {
+      approval_status: string;
+      status_remark: string;
       _id: string;
       user: {
         offline_switch_date: any;
@@ -189,6 +191,8 @@ export interface MappedViewDriver {
     isBlocked: boolean;
     declineCount: number;
     declineReason: string;
+    approvalStatus: string;
+    statusRemark: string;
   };
   carDetails: {
     carImages: string[];
