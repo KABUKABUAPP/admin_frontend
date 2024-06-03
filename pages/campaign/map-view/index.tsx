@@ -4,7 +4,6 @@ import MapOverlay from '@/components/modules/campaign/Map/mapOverlay';
 import styles from '@/components/modules/campaign/Map/style.module.css'; 
 import { useFormik, Form, FormikProvider } from "formik";
 import DropDown from '@/components/ui/DropDown';
-import { useGetInsightsQuery } from '@/api-services/dashboardService';
 import { useDashboardState } from "@/contexts/StateSegmentationContext";
 import { useGetMarketerMapQuery } from "@/api-services/marketerService";
 
@@ -18,13 +17,6 @@ const MapViewCampaign = () => {
     const [periodFilter, setPeriodFilter] = useState('today');
     const { dashboardState, setDashboardState } = useDashboardState();
     const [currentPage, setCurrentPage] = useState(1)
-
-    const {
-        data: tripsInsight,
-        isLoading: tripsInsightsLoading,
-        isError: tripsInsightError,
-        refetch: reloadTrips,
-    } = useGetInsightsQuery({filter: periodFilter, dashboard_state: dashboardState}, { refetchOnReconnect: true });
 
     const {
         data: mapInsights,
