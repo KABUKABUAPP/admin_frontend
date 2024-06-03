@@ -29,8 +29,8 @@ const MarketerNav: React.FC = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const campaignView = router.pathname === '/campaign' ? 'font-bold' : '';
-  const campaignMapView = router.pathname === '/campaign/map-view' ? 'font-bold' : '';
+  const campaignView = router.pathname === '/campaign' ? 'font-bold text-[#000]' : 'text-[#9A9A9A]';
+  const campaignMapView = router.pathname === '/campaign/map-view' ? 'font-bold text-[#000]' : 'text-[#9A9A9A]';
 
   return (
     <>
