@@ -123,6 +123,7 @@ export const driversApi = createApi({
         if (!response) return <MappedViewDriver>{};
         else {
           const { data } = response;
+          console.log({theDriver: data})
           const getCarDocs = data?.car_documents.length === 1 && data?.car_documents[0] === null ? [] : data?.car_documents?.map((doc) => {
             return {
               title: doc?.title,
@@ -145,7 +146,9 @@ export const driversApi = createApi({
               id: data?.driver?._id,
               isBlocked: data?.driver?.user?.isBlocked,
               declineCount: data?.driver?.admin_decline_count,
-              declineReason: data?.driver?.admin_approval_remark
+              declineReason: data?.driver?.admin_approval_remark,
+              approvalStatus: data?.driver?.approval_status,
+              statusRemark: data?.driver?.status_remark,
             },
             carDetails: {
               carImages: data?.car_details?.images,
