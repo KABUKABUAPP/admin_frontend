@@ -24,6 +24,7 @@ const MarketerNav: React.FC = () => {
   const [isLogoutPopUp, setIsLogoutPopUp] = useState<boolean>(false);
   const ref = useClickOutside<HTMLSpanElement>(() => setIsLogoutPopUp(false));
   const [isModal, setIsModal] = useState<boolean>(false);
+  const refDrop = useClickOutside<HTMLDivElement>(() => setIsMobileMenuOpen(false));
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -77,27 +78,15 @@ const MarketerNav: React.FC = () => {
           </div>
         </div>
 
-        <div id="mobile-menu" className={`fixed inset-0 bg-gray-800 bg-opacity-75 z-50 ${isMobileMenuOpen ? '' : 'hidden'}`}>
-          <div className="flex justify-end p-4">
-            <button
-              id="close-mobile-menu"
-              className="text-white focus:outline-none"
-              onClick={toggleMobileMenu}
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            </button>
-          </div>
-
+        <div id="mobile-menu" className={`bg-[#FFFFFF] rounded-lg p-3 absolute top-10 sm:top-15 right-[0] w-[250px] shadow-md z-50 ${isMobileMenuOpen ? '' : 'hidden'}`} ref={refDrop}>
           <div className="flex flex-col items-center space-y-4">
-            <a href="#" className="text-white md:hidden" onClick={() => router.push('/campaign')}>
+            <a href="#" className="md:hidden" onClick={() => router.push('/campaign')}>
               Dashboard
             </a>
-            <a href="#" className="text-white md:hidden" onClick={() => router.push('/campaign/map-view')}>
+            <a href="#" className="md:hidden" onClick={() => router.push('/campaign/map-view')}>
               Map View
             </a>
-            <a href="#" className="text-white" onClick={() => setIsModal(true)}>
+            <a href="#"  onClick={() => setIsModal(true)}>
               Logout
             </a>
           </div>
