@@ -9,35 +9,31 @@ import { toast } from "react-toastify";
 import Switch from "react-switch";
 
 interface Props {
-    frequency: string;
+    user_type: string;
     amount: string;
-    type: string;
-    is_active: boolean;
+    online_hours: string;
+    active: boolean;
 }
 
-const DriverReferralSettings: FC<Props> = ({frequency, amount, type, is_active}) => {
+const SignUpBonusSettings: FC<Props> = ({active, amount, online_hours, user_type}) => {
     const [showSaveChanges, setShowSaveChanges] = useState(false)
-    const [settingIsActive, setSettingIsActive] = useState(is_active);
+    const [settingIsActive, setSettingIsActive] = useState(active);
 
     const initialValues = {
-        no_of_trips: frequency,
-        amount_per_referral: amount,
-        type,
-        is_active
+        active: active,
+        amount: amount,
+        online_hours: online_hours,
+        user_type: user_type
     };
 
-    const rewardType = [
+    const userType = [
         {
-            label: 'REFERRAL REWARD TYPE ONBOARD RIDERS',
-            value: 'REFERRAL_REWARD_TYPE_ONBOARD_RIDERS'
+            label: 'Rider',
+            value: 'rider'
         },
         {
-            label: 'REFERRAL REWARD TYPE ONBOARD DRIVERS',
-            value: 'REFERRAL_REWARD_TYPE_ONBOARD_DRIVERS'
-        },
-        {
-            label: 'REFERRAL REWARD FOR DRIVERS BASED ON TRIPS BY OTHER DRIVERS',
-            value: 'REFERRAL_REWARD_FOR_DRIVERS_BASED_ON_TRIPS_BY_OTHER_DRIVERS'
+            label: 'Driver',
+            value: 'driver'
         }
     ]
 
@@ -50,11 +46,11 @@ const DriverReferralSettings: FC<Props> = ({frequency, amount, type, is_active})
         initialValues: initialValues,
         onSubmit: (values) => {
             const driversSettingsData = {
-                referral_reward: {
-                    type: values.type,
-                    amount: values.amount_per_referral,
-                    frequency: values.no_of_trips,
-                    is_active: values.is_active ? 'yes' : 'no'
+                signup_bonus: {
+                    active: values.active ? 'on' : 'off',
+                    amount: values.amount,
+                    online_hours: values.online_hours,
+                    user_type: values.user_type
                 }
             } 
 
@@ -69,22 +65,22 @@ const DriverReferralSettings: FC<Props> = ({frequency, amount, type, is_active})
           return;
         }
     
-        if (formik.values.no_of_trips.length > 0 && formik.values.amount_per_referral.length > 0 && (formik.values.is_active || !formik.values.is_active) && formik.values.type.length > 0) setShowSaveChanges(true);
-        if (formik.values.no_of_trips.length === 0 || formik.values.amount_per_referral.length === 0) setShowSaveChanges(false)
+        if (formik.values.user_type.length > 0 && formik.values.online_hours.length > 0 && (formik.values.active || !formik.values.active) && formik.values.amount.length > 0) setShowSaveChanges(true);
+        if (formik.values.user_type.length === 0 || formik.values.online_hours.length === 0 || formik.values.amount.length === 0) setShowSaveChanges(false)
     }, [formik.values])
 
     useEffect(() => {
-        if (isSuccess) toast.success('Referral Settings Updated Successfully')
+        if (isSuccess) toast.success('Signup Bonus Settings Updated Successfully')
     }, [isSuccess])
 
     useEffect(() => {
-        if (isError) toast.error('Error While Updating Referral Settings')
+        if (isError) toast.error('Error While Updating Signup Bonus Settings')
     }, [isError])
 
     return (
         <>
-            <h1 className="text-3xl font-bold">Driver Referral Settings</h1>
-            <p className="mt-2 text-[#9A9A9A]"><small>Configure driver referrals</small></p>
+            <h1 className="text-3xl font-bold">Signup Bonus Settings</h1>
+            <p className="mt-2 text-[#9A9A9A]"><small>Configure signup bonus settings</small></p>
             
             <FormikProvider value={formik}>
                 <Form>
@@ -94,32 +90,32 @@ const DriverReferralSettings: FC<Props> = ({frequency, amount, type, is_active})
 
                                 <div className="w-full">
                                     <TextField
-                                        label="Trips to be completed"
-                                        placeholder="Trips to be completed"
-                                        {...formik.getFieldProps("no_of_trips")}
+                                        label="Amount"
+                                        placeholder="Amount"
+                                        {...formik.getFieldProps("amount")}
                                         error={
-                                        formik.touched.no_of_trips ? formik.errors.no_of_trips : undefined
+                                        formik.touched.amount ? formik.errors.amount : undefined
                                         }
                                     />
                                     <div className="flex mt-2">
                                         <p><InfoIcon /></p> 
-                                        <p className="ml-2 text-[#9A9A9A]"><small>How many trips does the driver need to complete before the driver recieves value</small></p>
+                                        <p className="ml-2 text-[#9A9A9A]"><small>Signup bonus amount</small></p>
                                     </div>
                                     
                                 </div>
                                 <div className="w-full">
                                 
                                     <TextField
-                                        label="Amount Per Referral"
-                                        placeholder="Amount Per Referral"
-                                        {...formik.getFieldProps("amount_per_referral")}
+                                        label="Online Hours"
+                                        placeholder="Online Hours"
+                                        {...formik.getFieldProps("online_hours")}
                                         error={
-                                        formik.touched.amount_per_referral ? formik.errors.amount_per_referral : undefined
+                                            formik.touched.online_hours ? formik.errors.online_hours : undefined
                                         }
                                     />
                                     <div className="flex mt-2">
                                         <p><InfoIcon /></p> 
-                                        <p className="ml-2 text-[#9A9A9A]"><small>How much does the driver get per referral</small></p>
+                                        <p className="ml-2 text-[#9A9A9A]"><small>No of hours user has to spend online</small></p>
                                     </div>
                                     
                                 </div>
@@ -130,36 +126,36 @@ const DriverReferralSettings: FC<Props> = ({frequency, amount, type, is_active})
                                         <span>Active</span> 
                                         <Switch 
                                             checked={settingIsActive} 
-                                            {...formik.getFieldProps("is_active")}
+                                            {...formik.getFieldProps("active")}
                                             onChange={(e) => {
                                                 setSettingIsActive(!settingIsActive)
-                                                formik.setFieldValue('is_active', !settingIsActive)
+                                                formik.setFieldValue('active', !settingIsActive)
                                             }}
                                         />
                                     </div>
                                     <div className="flex mt-2">
                                         <p><InfoIcon /></p> 
-                                        <p className="ml-2 text-[#9A9A9A]"><small>Activate/deactivate driver referral settings</small></p>
+                                        <p className="ml-2 text-[#9A9A9A]"><small>Activate/deactivate signup bonus</small></p>
                                     </div>
                                 </div>
 
                                 <div className="flex flex-col w-full">
                                     <div className="w-full flex items-center justify-start gap-3">
                                         <SelectField
-                                            options={rewardType}
+                                            options={userType}
                                             disabled={false}
-                                            label="Reward Type"
-                                            placeholder="Reward Type"
+                                            label="User Type"
+                                            placeholder="User Type"
                                             className="w-full"
-                                            {...formik.getFieldProps("type")}
+                                            {...formik.getFieldProps("user_type")}
                                             error={
-                                            formik.touched.type ? formik.errors.type : undefined
+                                                formik.touched.user_type ? formik.errors.user_type : undefined
                                             }
                                         />
                                     </div>
                                     <div className="flex mt-2">
                                         <p><InfoIcon /></p> 
-                                        <p className="ml-2 text-[#9A9A9A]"><small>Add reward type for referrals</small></p>
+                                        <p className="ml-2 text-[#9A9A9A]"><small>User type eligible for rewards</small></p>
                                     </div>
                                 </div>
                             </div>
@@ -189,4 +185,4 @@ const DriverReferralSettings: FC<Props> = ({frequency, amount, type, is_active})
     )
 }
 
-export default DriverReferralSettings;
+export default SignUpBonusSettings;
