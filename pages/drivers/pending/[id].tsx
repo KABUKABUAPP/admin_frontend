@@ -20,7 +20,8 @@ import { useModalContext } from "@/contexts/ModalContext";
 import ActionDocumentCardContainer from "@/components/modules/drivers/ActionDocumentCardContainer";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
-import { toast } from "react-toastify";
+import { useGetDriverSettingsQuery } from "@/api-services/settingsService";
+import UpdateOnboardStatus from "@/components/modules/drivers/UpdateOnboardStatus";
 
 const Driver: NextPage = () => {
   const router = useRouter();
@@ -34,6 +35,13 @@ const Driver: NextPage = () => {
     { id: String(id) },
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
+
+  const {
+    data: driversSettings,
+    isLoading: settingsLoading,
+    isError: settingsError,
+    refetch: reloadSettings,
+  } = useGetDriverSettingsQuery({})
 
   const [isApproveButton, setIsApproveButton] = useState(false);
   const [isDeclineButton, setIsDeclineButton] = useState(false);
@@ -57,6 +65,10 @@ const Driver: NextPage = () => {
     }
   }, [JSON.stringify(data)]);
 
+  useEffect(() => {
+    if (driversSettings) console.log({driversSettings, data})
+  }, [driversSettings])
+
   const { userPermissions } = useUserPermissions();
   
   const currentPageUrl = `/drivers/pending?currentPage=${router.query.current_page}${onboardStatus ? `&onboardStatus=${onboardStatus}` : ''}`
@@ -68,6 +80,15 @@ const Driver: NextPage = () => {
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
           <ActionBar handleBack={() => router.push(`${handleBackUrl}`)}>
+            <Button
+              title="Update Onboarding Step"
+              className="!bg-[#1FD11B] !text-[#FFFFFF]"
+              startIcon={<CheckIcon />}
+              size="large"
+              onClick={() => {
+                setModalContent(<UpdateOnboardStatus onboardStepsData={driversSettings?.driver_onboarding_steps} />)
+              }}
+            />
             {userPermissions &&
               userPermissions.drivers_permissions.write &&
               data &&
