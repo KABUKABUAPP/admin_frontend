@@ -165,7 +165,7 @@ export const driversApi = createApi({
               reason: data?.driver?.admin_approval_remark,
               address: data?.driver?.user?.guarantor?.address,
               fullname: data?.driver?.user?.guarantor?.name,
-              image: data?.driver?.user?.guarantor?.image,
+              image: data?.driver?.user?.guarantor?.image === 'N/A' ? undefined : data?.driver?.user?.guarantor?.image,
               phone: data?.driver?.user?.guarantor?.phone_number,
               relationship: data?.driver?.user?.guarantor?.relationship,
               responded: data?.driver?.user?.guarantor_response,
@@ -269,6 +269,13 @@ export const driversApi = createApi({
         },
         body: data
       })
+    }),
+    updateOnboardingStep: build.mutation<any, any>({
+      query: ({ data, id }) => ({
+        url: `admin/driver/update-onboarding-step/${id}`,
+        method: "PUT",
+        body: data
+      })
     })
   }),
 });
@@ -284,5 +291,6 @@ export const {
   useToggleBlockDriverMutation,
   useReactivateDriverMutation,
   useInitiateDriverFundingMutation,
-  useCompleteDriverFundingMutation
+  useCompleteDriverFundingMutation,
+  useUpdateOnboardingStepMutation
 } = driversApi;
