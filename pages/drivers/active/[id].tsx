@@ -74,6 +74,7 @@ const Driver: NextPage = () => {
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
+  
   const { setModalContent } = useModalContext();
 
   const [currentPage, setCurrentPage] = useState(1);

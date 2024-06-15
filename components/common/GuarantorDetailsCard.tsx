@@ -10,9 +10,6 @@ import CheckIcon from "../icons/CheckIcon";
 import TimesIcon from "../icons/TimesIcon";
 import { useModalContext } from "@/contexts/ModalContext";
 import ViewGuarantorCard from "../modules/drivers/ViewGuarantorCard";
-import { useViewGuarantorQuery } from "@/api-services/driversService";
-import Loader from "../ui/Loader/Loader";
-import { toast } from "react-toastify";
 
 interface Props {
   image?: string;
