@@ -37,10 +37,8 @@ const OnboardStepForm:FC<any> = ({onboardStepsData}) => {
     }, [isSuccess]);
 
     useEffect(() => {
-        if (isError && "data" in error) {
-            const { message, status }: any = isError;
-            if (message) toast.error(message);
-            if (status) toast.error(status);
+        if (isError) {
+            toast.error('Error encountered while updating onboarding step');
         }
     }, [isError]);
 
