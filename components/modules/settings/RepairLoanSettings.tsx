@@ -12,15 +12,18 @@ interface Props {
     penalty_amount: string;
     target: string;
     default_penalty_percentage: string;
+    is_active: boolean;
 }
 
-const RepairLoanSettings: FC<Props> = ({penalty_amount, target, default_penalty_percentage}) => {
+const RepairLoanSettings: FC<Props> = ({penalty_amount, target, default_penalty_percentage, is_active}) => {
+    const [settingIsActive, setSettingIsActive] = useState(is_active);
     const [showSaveChanges, setShowSaveChanges] = useState(false)
 
     const initialValues = {
         penalty_amount: penalty_amount,
         target: target,
-        default_penalty_percentage: default_penalty_percentage
+        default_penalty_percentage: default_penalty_percentage,
+        is_active: is_active
     };
 
     const [updateDriverSettings, { isLoading, isError, isSuccess, error }] =
@@ -33,10 +36,11 @@ const RepairLoanSettings: FC<Props> = ({penalty_amount, target, default_penalty_
             const repairLoanSettingsData = {
                 repair_loan_settings: {
                     daily_trips_target: {
-                        penalty_amount: values.penalty_amount,
-                        target: values.target
+                        penalty_amount: parseInt(values.penalty_amount),
+                        target: parseInt(values.target)
                     },
-                    default_penalty_percentage: values.default_penalty_percentage
+                    default_penalty_percentage: parseInt(values.default_penalty_percentage),
+                    is_active: values.is_active ? 'yes' : 'no'
                 }
             } 
 
@@ -73,7 +77,6 @@ const RepairLoanSettings: FC<Props> = ({penalty_amount, target, default_penalty_
                     <>
                         <div className="flex flex-col gap-8 py-5">
                             <div className="flex justify-between gap-3 max-sm:flex-col">
-
                                 <div className="w-full">
                                     <TextField
                                         label="Penalty Amount"
@@ -121,6 +124,17 @@ const RepairLoanSettings: FC<Props> = ({penalty_amount, target, default_penalty_
                                         <p className="ml-2 text-[#9A9A9A]"><small>Default penalty percentage for defaulters</small></p>
                                     </div>
                                     
+                                </div>
+                                <div className="w-full flex items-center justify-start gap-3">
+                                    <span>Active</span> 
+                                    <Switch 
+                                        checked={settingIsActive} 
+                                        {...formik.getFieldProps("is_active")}
+                                        onChange={(e) => {
+                                            setSettingIsActive(!settingIsActive)
+                                            formik.setFieldValue('is_active', !settingIsActive)
+                                        }}
+                                    />
                                 </div>
                             </div>
                         </div>
