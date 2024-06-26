@@ -35,6 +35,7 @@ const ViewAllGeneralPromo: FC<Props> = ({
       limit: pageSize,
       page: currentPage,
       status: promoStatus,
+      category: 'PROMOTION'
     },
     { refetchOnReconnect: true }
   );

@@ -106,8 +106,8 @@ export const settingsApi = createApi({
       },
     }),
     viewAllPromosNew: build.query<any, any>({
-      query: ({ limit, page, status }) => ({
-        url: `admin/promotions/all-promos/${status}?limit=${limit}&page=${page}`,
+      query: ({ limit, page, status, category }) => ({
+        url: `admin/promotions/all-promos/${status}?limit=${limit}&page=${page}&category=${category}`
       }),
       providesTags: ["all-promos"],
       transformResponse: (response: any) => {
