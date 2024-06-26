@@ -78,8 +78,12 @@ const LoginForm: FC = () => {
       Cookies.set(USER_TOKEN, JSON.stringify(userData));
       setUser({ ...userData });
       toast.success("Login Successful");
-      if ( userData.role === 'executive marketer') {
+      if (userData.role === 'executive marketer') {
         router.push('/marketer');
+      } else if (userData.role === 'temporary_marketer') {
+        router.push('/campaign');
+      } else if (userData.role === 'redemption_agent') {
+        router.push('/redemption');
       } else {
         router.push("/dashboard");
       }
