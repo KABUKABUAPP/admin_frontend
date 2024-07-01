@@ -61,9 +61,10 @@ const FundDriverWallet = () => {
 
     useEffect(() => {
         if (completeError && "data" in completeError) {
-            const { message, status }: any = completeError;
-            if (message) toast.error(message);
-            if (status) toast.error(status);
+            const { data, status }: any = completeError;
+            console.log({completeError})
+            if (data?.message) toast.error(data?.message);
+            //if (status) toast.error(status);
         }
     }, [completeError]);
     

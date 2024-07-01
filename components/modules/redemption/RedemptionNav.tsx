@@ -16,8 +16,9 @@ import Cookies from "js-cookie";
 import { ACCESS_TOKEN, USER_TOKEN } from "@/constants";
 import DashboardIcon from '@/components/icons/DashboardIcon';
 import MapWaveIcon from '@/components/icons/MapWaveIcon';
+import AddIcon from '@/components/icons/AddIcon';
 
-const MarketerNav: React.FC = () => {
+const RedemptionNav: React.FC = () => {
   const { user, setUser } = useUserContext();
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -30,8 +31,9 @@ const MarketerNav: React.FC = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const campaignView = router.pathname === '/campaign' ? 'font-bold text-[#000]' : 'text-[#9A9A9A]';
-  const campaignMapView = router.pathname === '/campaign/map-view' ? 'font-bold text-[#000]' : 'text-[#9A9A9A]';
+  const redemptionView = router.pathname === '/redemption' ? 'font-bold text-[#000]' : 'text-[#9A9A9A]';
+  const redemptionCreateView = router.pathname === '/redemption/create' ? 'font-bold text-[#000]' : 'text-[#9A9A9A]';
+  const redemptionValidateView = router.pathname === '/redemption/validate' ? 'font-bold text-[#000]' : 'text-[#9A9A9A]';
 
   return (
     <>
@@ -42,9 +44,9 @@ const MarketerNav: React.FC = () => {
           </div>
 
           <div className="justify-center hidden md:flex">
-            <p className={`flex items-center justify-center cursor-pointer mx-5 ${campaignView} gap-2`} onClick={() => {router.push('/campaign')}}><span><DashboardIcon /></span>  <span>Dashboard</span></p>
+            <p className={`flex items-center justify-center cursor-pointer mx-5 ${redemptionView} gap-2`} onClick={() => {router.push('/redemption')}}><span><DashboardIcon /></span>  <span>Dashboard</span></p>
             <p className={`flex items-center justify-center`}>|</p>
-            <p className={`flex items-center justify-center cursor-pointer mx-5 ${campaignMapView} gap-2`} onClick={() => {router.push('/campaign/map-view')}}><span><MapWaveIcon /></span>  <span>Map View</span></p>
+            <p className={`flex items-center justify-center cursor-pointer mx-5 ${redemptionValidateView} gap-2`} onClick={() => {router.push('/redemption/validate')}}><span><MapWaveIcon /></span>  <span>Validate</span></p>
           </div>
 
           <div className="hidden md:flex space-x-4">
@@ -80,11 +82,11 @@ const MarketerNav: React.FC = () => {
 
         <div id="mobile-menu" className={`bg-[#FFFFFF] rounded-lg p-3 absolute top-10 sm:top-15 right-[0] w-[250px] shadow-md z-50 ${isMobileMenuOpen ? '' : 'hidden'}`} ref={refDrop}>
           <div className="flex flex-col items-center space-y-4">
-            <a href="#" className="md:hidden" onClick={() => router.push('/campaign')}>
+            <a href="#" className="md:hidden" onClick={() => router.push('/redemption')}>
               Dashboard
             </a>
-            <a href="#" className="md:hidden" onClick={() => router.push('/campaign/map-view')}>
-              Map View
+            <a href="#" className="md:hidden" onClick={() => router.push('/redemption/validate')}>
+              Validate
             </a>
             <a href="#"  onClick={() => setIsModal(true)}>
               Logout
@@ -109,4 +111,4 @@ const MarketerNav: React.FC = () => {
   );
 };
 
-export default MarketerNav;
+export default RedemptionNav;

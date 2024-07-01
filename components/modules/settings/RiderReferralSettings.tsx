@@ -9,38 +9,20 @@ import { toast } from "react-toastify";
 import Switch from "react-switch";
 
 interface Props {
-    frequency: string;
     amount: string;
-    type: string;
-    is_active: boolean;
+    percentage_split: string;
+    status: string;
 }
 
-const DriverReferralSettings: FC<Props> = ({frequency, amount, type, is_active}) => {
+const RiderReferralSettings: FC<Props> = ({amount, percentage_split, status}) => {
     const [showSaveChanges, setShowSaveChanges] = useState(false)
-    const [settingIsActive, setSettingIsActive] = useState(is_active);
+    const [settingIsActive, setSettingIsActive] = useState(status);
 
     const initialValues = {
-        no_of_trips: frequency,
-        amount_per_referral: amount,
-        type,
-        is_active
+        amount: amount,
+        percentage_split: percentage_split,
+        status: status
     };
-
-    const rewardType = [
-        {
-            label: 'REFERRAL REWARD TYPE ONBOARD RIDERS',
-            value: 'REFERRAL_REWARD_TYPE_ONBOARD_RIDERS'
-        },
-        {
-            label: 'REFERRAL REWARD TYPE ONBOARD DRIVERS',
-            value: 'REFERRAL_REWARD_TYPE_ONBOARD_DRIVERS'
-        },
-        {
-            label: 'REFERRAL REWARD FOR DRIVERS BASED ON TRIPS BY OTHER DRIVERS',
-            value: 'REFERRAL_REWARD_FOR_DRIVERS_BASED_ON_TRIPS_BY_OTHER_DRIVERS'
-        }
-    ]
-
 
     const [updateDriverSettings, { isLoading, isError, isSuccess, error }] =
     useUpdateDriverSettingsMutation();
@@ -49,16 +31,15 @@ const DriverReferralSettings: FC<Props> = ({frequency, amount, type, is_active})
     const formik = useFormik({
         initialValues: initialValues,
         onSubmit: (values) => {
-            const driversSettingsData = {
-                referral_reward: {
-                    type: values.type,
-                    amount: values.amount_per_referral,
-                    frequency: values.no_of_trips,
-                    is_active: values.is_active ? 'yes' : 'no'
+            const riderSettingsData = {
+                rider_referral_control: {
+                    amount: values.amount,
+                    percentage_split: values.percentage_split,
+                    status: values.status
                 }
             } 
 
-            updateDriverSettings(driversSettingsData)
+            updateDriverSettings(riderSettingsData)
         },
     });
 
@@ -69,8 +50,8 @@ const DriverReferralSettings: FC<Props> = ({frequency, amount, type, is_active})
           return;
         }
     
-        if (formik.values.no_of_trips.length > 0 && formik.values.amount_per_referral.length > 0 && (formik.values.is_active || !formik.values.is_active) && formik.values.type.length > 0) setShowSaveChanges(true);
-        if (formik.values.no_of_trips.length === 0 || formik.values.amount_per_referral.length === 0) setShowSaveChanges(false)
+        if (formik.values.amount.length > 0 && formik.values.percentage_split.length > 0 && formik.values.status.length > 0) setShowSaveChanges(true);
+        if (formik.values.amount.length === 0 || formik.values.percentage_split.length === 0 || formik.values.status.length === 0) setShowSaveChanges(false)
     }, [formik.values])
 
     useEffect(() => {
@@ -83,8 +64,8 @@ const DriverReferralSettings: FC<Props> = ({frequency, amount, type, is_active})
 
     return (
         <>
-            <h1 className="text-3xl font-bold">Driver Referral Settings</h1>
-            <p className="mt-2 text-[#9A9A9A]"><small>Configure driver referrals</small></p>
+            <h1 className="text-3xl font-bold">Rider Referral Settings</h1>
+            <p className="mt-2 text-[#9A9A9A]"><small>Configure rider referrals</small></p>
             
             <FormikProvider value={formik}>
                 <Form>
@@ -94,32 +75,32 @@ const DriverReferralSettings: FC<Props> = ({frequency, amount, type, is_active})
 
                                 <div className="w-full">
                                     <TextField
-                                        label="Trips to be completed"
-                                        placeholder="Trips to be completed"
-                                        {...formik.getFieldProps("no_of_trips")}
+                                        label="Amount"
+                                        placeholder="Amount"
+                                        {...formik.getFieldProps("amount")}
                                         error={
-                                        formik.touched.no_of_trips ? formik.errors.no_of_trips : undefined
+                                        formik.touched.amount ? formik.errors.amount : undefined
                                         }
                                     />
                                     <div className="flex mt-2">
                                         <p><InfoIcon /></p> 
-                                        <p className="ml-2 text-[#9A9A9A]"><small>How many trips does the driver need to complete before the driver recieves value</small></p>
+                                        <p className="ml-2 text-[#9A9A9A]"><small>Amount per referral</small></p>
                                     </div>
                                     
                                 </div>
                                 <div className="w-full">
                                 
                                     <TextField
-                                        label="Amount Per Referral"
-                                        placeholder="Amount Per Referral"
-                                        {...formik.getFieldProps("amount_per_referral")}
+                                        label="Percentage Split"
+                                        placeholder="Percentage Split"
+                                        {...formik.getFieldProps("percentage_split")}
                                         error={
-                                        formik.touched.amount_per_referral ? formik.errors.amount_per_referral : undefined
+                                        formik.touched.percentage_split ? formik.errors.percentage_split : undefined
                                         }
                                     />
                                     <div className="flex mt-2">
                                         <p><InfoIcon /></p> 
-                                        <p className="ml-2 text-[#9A9A9A]"><small>How much does the driver get per referral</small></p>
+                                        <p className="ml-2 text-[#9A9A9A]"><small>How will the percentage be splitted</small></p>
                                     </div>
                                     
                                 </div>
@@ -129,37 +110,18 @@ const DriverReferralSettings: FC<Props> = ({frequency, amount, type, is_active})
                                     <div className="w-full flex items-center justify-start gap-3">
                                         <span>Active</span> 
                                         <Switch 
-                                            checked={settingIsActive} 
-                                            {...formik.getFieldProps("is_active")}
+                                            checked={settingIsActive === 'active' ? true : false} 
+                                            {...formik.getFieldProps("status")}
                                             onChange={(e) => {
-                                                setSettingIsActive(!settingIsActive)
-                                                formik.setFieldValue('is_active', !settingIsActive)
+                                                const newVal = settingIsActive === 'active' ? 'inactive' : 'active';
+                                                setSettingIsActive(newVal)
+                                                formik.setFieldValue('status', newVal);
                                             }}
                                         />
                                     </div>
                                     <div className="flex mt-2">
                                         <p><InfoIcon /></p> 
-                                        <p className="ml-2 text-[#9A9A9A]"><small>Activate/deactivate driver referral settings</small></p>
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-col w-full">
-                                    <div className="w-full flex items-center justify-start gap-3">
-                                        <SelectField
-                                            options={rewardType}
-                                            disabled={false}
-                                            label="Reward Type"
-                                            placeholder="Reward Type"
-                                            className="w-full"
-                                            {...formik.getFieldProps("type")}
-                                            error={
-                                            formik.touched.type ? formik.errors.type : undefined
-                                            }
-                                        />
-                                    </div>
-                                    <div className="flex mt-2">
-                                        <p><InfoIcon /></p> 
-                                        <p className="ml-2 text-[#9A9A9A]"><small>Add reward type for referrals</small></p>
+                                        <p className="ml-2 text-[#9A9A9A]"><small>Activate/deactivate rider referral settings</small></p>
                                     </div>
                                 </div>
                             </div>
@@ -189,4 +151,4 @@ const DriverReferralSettings: FC<Props> = ({frequency, amount, type, is_active})
     )
 }
 
-export default DriverReferralSettings;
+export default RiderReferralSettings;

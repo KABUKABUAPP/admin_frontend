@@ -7,7 +7,7 @@ interface Props {
 
 const SettingsNav: FC<Props> = ({ navItems, handleCick }) => {
   return (
-    <div className="bg-[#FFFFFF] rounded-lg w-full p-6 pl-0 h-full">
+    <div className="bg-[#FFFFFF] rounded-lg w-full p-6 pl-0 h-auto">
       {navItems.map((item) => {
         return (
           <div

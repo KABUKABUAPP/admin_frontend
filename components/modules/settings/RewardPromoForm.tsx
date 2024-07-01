@@ -21,7 +21,8 @@ const initialValues = {
     condition_value: "",
     reset_type: "",
     start_date: "",
-    end_date: ""
+    end_date: "",
+    category: ""
 } 
 
 interface Props {
@@ -52,6 +53,11 @@ const RewardPromoForm: FC<Props> = ({ handleBack }) => {
         { label: "Weekly", value: "weekly" },
         { label: "Daily", value: "daily" }
     ];
+
+    const categoryOptions = [
+        { label: "Promotion", value: "PROMOTION" },
+        { label: "Voucher", value: "VOUCHER" }
+    ]
 
     const formik = useFormik({
         initialValues,
@@ -158,6 +164,16 @@ const RewardPromoForm: FC<Props> = ({ handleBack }) => {
                 {...formik.getFieldProps("end_date")}
                 error={
                     formik.touched.end_date ? formik.errors.end_date : undefined
+                }
+                />
+                <SelectField
+                label="Category"
+                {...formik.getFieldProps("category")}
+                options={categoryOptions}
+                error={
+                    formik.touched.reset_type
+                    ? formik.errors.reset_type
+                    : undefined
                 }
                 />
             </div>
