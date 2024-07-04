@@ -151,7 +151,7 @@ const UserInfoCard: FC<Props> = ({
             </div>
           </div>
 
-          <div className="flex">
+          <div className="flex flex-col gap-2">
             {referral_code && role === 'executive marketer' && 
             <div className="mx-1">
               <span className="flex bg-[#FFF5D8] pr-2 pl-2" style={{borderRadius: '1rem'}}>
@@ -163,6 +163,36 @@ const UserInfoCard: FC<Props> = ({
                   <Copy handleClick={() => {
                     copyToClipboard(referral_code ? referral_code : '')
                     toast.success("Referral code copied");
+                  }} />
+                </span>
+              </span>
+            </div>}
+
+            {referral_code && role === 'executive marketer' && 
+            <div className="mx-1">
+              <span className="flex bg-[#FFF5D8] px-2 py-3 items-center" style={{borderRadius: '1rem'}}>
+                <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
+                  <small>Copy Referral Link (Rider)</small>
+                </span>
+                <span style={{marginLeft: '1vw', marginTop: '3vh', cursor: 'pointer'}}>
+                  <Copy handleClick={() => {
+                    copyToClipboard(referral_code ? `https://kabukabu.com.ng/ref?code=${referral_code}&type=rider` : '')
+                    toast.success("Referral Link copied");
+                  }} />
+                </span>
+              </span>
+            </div>}
+
+            {referral_code && role === 'executive marketer' && 
+            <div className="mx-1">
+              <span className="flex bg-[#FFF5D8] px-2 py-3 items-center" style={{borderRadius: '1rem'}}>
+                <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
+                  <small>Copy Referral Link (Driver)</small>
+                </span>
+                <span style={{marginLeft: '1vw', marginTop: '3vh', cursor: 'pointer'}}>
+                  <Copy handleClick={() => {
+                    copyToClipboard(referral_code ? `https://kabukabu.com.ng/ref?code=${referral_code}&type=driver` : '')
+                    toast.success("Referral Link copied");
                   }} />
                 </span>
               </span>
