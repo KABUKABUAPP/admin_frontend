@@ -54,7 +54,7 @@ const Driver: NextPage = () => {
           <ViewDriverLayout
             firstRow={
               <>
-                <DriverInfoCard referral_code={""} {...data.driverInfo} bg="#FEE2E9" />
+                <DriverInfoCard referral_code={data?.driverInfo?.referralCode} {...data.driverInfo} bg="#FEE2E9" />
 
                 <GuarantorDetailsCard {...data.guarantor} bg="#FEE2E9" />
 

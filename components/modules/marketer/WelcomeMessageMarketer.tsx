@@ -59,6 +59,7 @@ const WelcomeMessage:FC<Props> = ({name, referral_code}) => {
         <div className="mx-1">
           <span className="flex bg-[#FFF5D8] px-2 py-3 items-center" style={{borderRadius: '1rem'}}>
             <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
+              <b>{(`https://kabukabu.com.ng/ref?code=${referral_code}&type=driver`).substring(0, 25)}...</b><br />
               <small>Copy Referral Link (Driver)</small>
             </span>
             <span style={{marginLeft: '1vw', marginTop: '3vh', cursor: 'pointer'}}>
@@ -73,6 +74,7 @@ const WelcomeMessage:FC<Props> = ({name, referral_code}) => {
         <div className="mx-1">
           <span className="flex bg-[#FFF5D8] px-2 py-3 items-center" style={{borderRadius: '1rem'}}>
             <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
+              <b>{(`https://kabukabu.com.ng/ref?code=${referral_code}&type=rider`).substring(0, 25)}...</b><br />
               <small>Copy Referral Link (Rider)</small>
             </span>
             <span style={{marginLeft: '1vw', marginTop: '3vh', cursor: 'pointer'}}>

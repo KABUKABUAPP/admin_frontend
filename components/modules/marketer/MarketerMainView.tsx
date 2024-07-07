@@ -70,7 +70,7 @@ const MarketerMainView = () => {
             </div>
 
             <div className="flex flex-col md:flex-row">
-                <div className="md:w-2/6 w-full p-4">
+                <div className="md:w-3/6 w-full p-4">
                     <a href="#" className="text-black bg-white" style={{display: 'flex', borderRadius: '1rem'}}>
                         <span style={{margin: '1.5vh 1vw'}}>
                         <Route />
@@ -81,7 +81,7 @@ const MarketerMainView = () => {
                         </span>
                     </a>
                 </div>
-                <div className="md:w-2/6 w-full p-4">
+                <div className="md:w-3/6 w-full p-4">
                     <a href="#" className="text-black bg-white" style={{display: 'flex', borderRadius: '1rem'}}>
                         <span style={{margin: '1.5vh 1vw'}}>
                         <RouteBlue />
@@ -89,17 +89,6 @@ const MarketerMainView = () => {
                         <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
                         <b>{onboardedWeekly}</b><br />
                         <small>{userTypeText} Onboarded This Week</small>
-                        </span>
-                    </a>
-                </div>
-                <div className="md:w-2/6 w-full p-4">
-                    <a href="#" className="text-black bg-white" style={{display: 'flex', borderRadius: '1rem'}}>
-                        <span style={{margin: '1.5vh 1vw'}}>
-                        <RouteBlue />
-                        </span>
-                        <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
-                        <b>N{marketerEarnings}</b><br />
-                        <small>Your Earnings</small>
                         </span>
                     </a>
                 </div>
