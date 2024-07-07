@@ -62,7 +62,10 @@ const Staff: NextPage = () => {
   }, [enableStaffError]);
 
   useEffect(() => {
-    if (data) setOnboardListData(data.onboardDataList.total_drivers_onboarded_list)
+    if (data) {
+      console.log({data})
+      setOnboardListData(data.onboardDataList.total_drivers_onboarded_list)
+    }
   }, [data])
 
   const handleResetPassword = () => {
@@ -168,6 +171,7 @@ const Staff: NextPage = () => {
                   <UserInfoCard
                     {...data.userInfo}
                     bg={data.isBlocked === true ? "#FEE2E9" : "#FFFFFF"}
+                    referralHistory={data.onboardDataList.total_drivers_onboarded_list.data.concat(data.onboardDataList.total_riders_onboarded_list.data)}
                   />
                 )}
                 {!data && !error && isLoading && (

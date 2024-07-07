@@ -6,6 +6,7 @@ import ActionBar from "@/components/common/ActionBar";
 import Button from "@/components/ui/Button/Button";
 import ViewDriverLayout from "@/components/modules/drivers/ViewDriverLayout";
 import DriverInfoCard from "@/components/common/UserInfoCard";
+import CarDetailsCard from "@/components/common/CarDetailsCard";
 import GuarantorDetailsCard from "@/components/common/GuarantorDetailsCard";
 import CarDocuments from "@/components/common/CarDocuments";
 import { useRouter } from "next/router";
@@ -49,10 +50,10 @@ const Driver: NextPage = () => {
   useEffect(() => {
     if (data) {
       const allowApprove = data.carDocs.documents.every(
-        (d) => d.status === "APPROVED"
+        (d: any) => d.status === "APPROVED"
       );
       const allowDecline = data.carDocs.documents.some(
-        (d) => d.status === "DECLINED"
+        (d: any) => d.status === "DECLINED"
       );
 
       if (allowApprove) setIsApproveButton(true);
@@ -123,7 +124,12 @@ const Driver: NextPage = () => {
             <ViewDriverLayout
               firstRow={
                 <>
-                  <DriverInfoCard referral_code={""} {...data.driverInfo} inspectionCode={inspectionCode} />
+                  <DriverInfoCard referral_code={data?.driverInfo?.referralCode} {...data.driverInfo} inspectionCode={inspectionCode} />
+
+                  <CarDetailsCard
+                    {...data.carDetails}
+                    bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+                  />
 
                   <GuarantorDetailsCard {...data.guarantor} />
 

@@ -84,6 +84,7 @@ export const driversApi = createApi({
       transformResponse: (response: GetAllDriversResponse) => {
         if (!response) return {} as DriversMappedResponse;
         else {
+          console.log({response})
           const totalCount = response?.data?.pagination?.totalCount;
           const mappedReponse = response?.data?.drivers?.map((driver) => {
             return {
@@ -114,16 +115,16 @@ export const driversApi = createApi({
         }
       },
     }),
-    viewDriver: build.query<MappedViewDriver, ViewDriverQuery>({
+    viewDriver: build.query<any, ViewDriverQuery>({
       query: ({ id }) => ({
         url: `admin/driver/view/${id}`,
       }),
       providesTags: ["driver"],
       transformResponse: (response: ViewDriverResponse) => {
-        if (!response) return <MappedViewDriver>{};
+        console.log({responseDriverSingle: response})
+        if (!response) return <any>{};
         else {
           const { data } = response;
-          console.log({theDriver: data})
           const getCarDocs = data?.car_documents.length === 1 && data?.car_documents[0] === null ? [] : data?.car_documents?.map((doc) => {
             return {
               title: doc?.title,
@@ -134,7 +135,7 @@ export const driversApi = createApi({
             };
           })
 
-          const mapped: MappedViewDriver = {
+          const mapped: any = {
             driverInfo: {
               image: data?.driver?.user?.profile_image,
               fullName: data?.driver?.user?.full_name,
@@ -149,6 +150,9 @@ export const driversApi = createApi({
               declineReason: data?.driver?.admin_approval_remark,
               approvalStatus: data?.driver?.approval_status,
               statusRemark: data?.driver?.status_remark,
+              referrer: data?.driver?.referrer_details,
+              referralCode: data?.driver?.user?.referral_code,
+              referralHistory: data?.driver?.referral_history
             },
             carDetails: {
               carImages: data?.car_details?.images,

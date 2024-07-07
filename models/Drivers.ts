@@ -96,10 +96,13 @@ export interface ViewDriverResponse {
   code: number;
   data: {
     driver: {
+      referral_history: any;
+      referrer_details: any;
       approval_status: string;
       status_remark: string;
       _id: string;
       user: {
+        referral_code: any;
         offline_switch_date: any;
         online_switch_date: any;
         online_status: any;
