@@ -57,6 +57,7 @@ export const ridersApi = createApi({
       }),
       providesTags: ["riders"],
       transformResponse: (response: GetAllRidersResponse) => {
+        console.log({responseRider: response})
         if (!response) return {} as MappedRidersData;
         else {
           const mappedReponse: MappedRider[] = response.data.drivers.map(
@@ -86,13 +87,14 @@ export const ridersApi = createApi({
         }
       },
     }),
-    viewRider: build.query<MappedViewRider, ViewRiderQuery>({
+    viewRider: build.query<any, ViewRiderQuery>({
       query: ({ id, status }) => ({
         url: `admin/rider/view/${id}?status=${status}`,
       }),
       providesTags: ["rider"],
       transformResponse: (response: ViewRiderResponse) => {
-        if (!response) return <MappedViewRider>{};
+        console.log({responseRiderSingle: response})
+        if (!response) return <any>{};
         return {
           driver: {
             fullName: response?.data?.full_name,
