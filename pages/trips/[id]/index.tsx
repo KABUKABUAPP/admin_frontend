@@ -29,6 +29,7 @@ import TripRatingCard from "@/components/modules/Trips/TripRatingCard";
 import StaticMap from "@/components/common/AppMap/TestMap";
 import { capitalizeAllFirstLetters } from "@/utils";
 import RouteMap from "@/components/common/AppMap/RouteMap";
+import Card from "@/components/common/Card";
 const socket = io("https://rideservice-dev.up.railway.app");
 
 const ViewTrip: NextPage = () => {
@@ -75,6 +76,7 @@ const ViewTrip: NextPage = () => {
       socket.on("connect", () => {
         joinRoom(data.orderId);
       });
+      console.log({data})
     }
 
     socket.on("driver-location", (data: { lat: number; long: number }) => {
@@ -281,6 +283,22 @@ const ViewTrip: NextPage = () => {
                     })
                   }
                 />
+                {
+                  data?.couponDetails &&
+                  <div className="rounded-md w-full my-4">
+                    <Card bg={'#FFF'} width="100%">
+                      <p className="font-bold text-sm mb-4">Coupon Details</p>
+                      <div className="border-b border-b-[#E6E6E6] my-2 flex flex-col gap-2 pb-3">
+                        <p className="text-xs text-[#9A9A9A]">Amount Type</p>
+                        <p className="text-xs font-bold">{data?.couponDetails?.amount_type}</p>
+                      </div>
+                      <div className="border-b border-b-[#E6E6E6] my-2 flex flex-col gap-2 pb-3">
+                        <p className="text-xs text-[#9A9A9A]">Value</p>
+                        <p className="text-xs font-bold">{data?.couponDetails?.value}</p>
+                      </div>
+                    </Card>
+                  </div>
+                }
                 <div className="mt-5">
                   <CarOccupantDetailsCard
                     isRider={true}
