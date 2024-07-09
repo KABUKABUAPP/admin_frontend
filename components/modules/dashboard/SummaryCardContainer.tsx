@@ -50,7 +50,7 @@ const SetCustomDateRange:FC<any> = ({dayStart, dayEnd, setDayStart, setDayEnd, s
   const { setModalContent } = useModalContext();
 
   return (
-    <div className="w-[90%] sm:w-[50%] md:w-[40%] mx-auto">
+    <div className="w-[90%] sm:w-[60%] md:w-[50%] lg:w-[40%] mx-auto">
       <Card bg="#FFF">
         <div className="flex justify-end">
           <div className="w-auto cursor-pointer" onClick={() => {
@@ -59,8 +59,8 @@ const SetCustomDateRange:FC<any> = ({dayStart, dayEnd, setDayStart, setDayEnd, s
             <TimesIconRed />
           </div>
         </div>
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="w-1/2 flex flex-col">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-1 items-center justify-center">
+          <div className="w-full">
               <TextField
                 label="Start Date"
                 type="date"
@@ -71,7 +71,7 @@ const SetCustomDateRange:FC<any> = ({dayStart, dayEnd, setDayStart, setDayEnd, s
                 value={dayStart}
               />
           </div>
-          <div className="w-1/2 flex flex-col">
+          <div className="w-full">
               <TextField
                 label="End Date"
                 type="date"
