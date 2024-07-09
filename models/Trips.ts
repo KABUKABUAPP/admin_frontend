@@ -123,6 +123,7 @@ export interface TripDetail {
 export interface ViewTripResponse {
   status: string;
   data: {
+    coupon_details: any;
     order_id: string;
     origin: {
       country: string;
@@ -220,6 +221,7 @@ export interface MappedViewTripResponse {
   riderComment?: string
   endPoint: [number, number];
   startPoint: [number, number];
+  couponDetails: any;
 }
 
 export interface GetDriverTripHistoryQuery {

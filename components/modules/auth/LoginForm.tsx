@@ -83,7 +83,7 @@ const LoginForm: FC = () => {
       } else if (userData.role === 'temporary_marketer') {
         router.push('/campaign');
       } else if (userData.role === 'redemption_agent') {
-        router.push('/redemption');
+        router.push('/redemption/validate');
       } else {
         router.push("/dashboard");
       }

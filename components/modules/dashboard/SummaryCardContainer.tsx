@@ -18,16 +18,96 @@ import AreasOrdersContainer from "./AreasOrdersContainer";
 import DriverOnboardingContainer from "./DriverOnboardingContainer";
 import RiderOnboardingContainer from "./RiderOnboardingContainer";
 import { useDashboardState } from "@/contexts/StateSegmentationContext";
+import { useModalContext } from "@/contexts/ModalContext";
+import Card from "@/components/common/Card";
+import EditIcon from "@/components/icons/EditIcon";
+import TimesIconRed from "@/components/icons/TimesIconRed";
+import TextField from "@/components/ui/Input/TextField/TextField";
+
+function convertDateToISOString(dateString: any) {
+  // Check if the dateString matches the expected format YYYY-MM-DD
+  const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+  if (!datePattern.test(dateString)) {
+      throw new Error('Invalid date format. Expected format: YYYY-MM-DD');
+  }
+
+  // Create a new Date object from the input date string
+  const dateParts = dateString.split('-');
+  const year = parseInt(dateParts[0], 10);
+  const month = parseInt(dateParts[1], 10) - 1; // Month is zero-based in JS Date object
+  const day = parseInt(dateParts[2], 10);
+
+  // Create the Date object with the given year, month, and day
+  const date = new Date(Date.UTC(year, month, day, 23, 0, 0));
+
+  // Return the ISO string representation
+  return date.toISOString();
+}
+
+
+const SetCustomDateRange:FC<any> = ({dayStart, dayEnd, setDayStart, setDayEnd, setRunRefetch}) => {
+  const { setModalContent } = useModalContext();
+
+  return (
+    <div className="w-[90%] sm:w-[50%] md:w-[40%] mx-auto">
+      <Card bg="#FFF">
+        <div className="flex justify-end">
+          <div className="w-auto cursor-pointer" onClick={() => {
+            setModalContent(null)
+          }}>
+            <TimesIconRed />
+          </div>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="w-1/2 flex flex-col">
+              <TextField
+                label="Start Date"
+                type="date"
+                onChange={(val) => {
+                  setDayStart(convertDateToISOString(val.target.value))
+                }}
+                disabled={false}
+                value={dayStart}
+              />
+          </div>
+          <div className="w-1/2 flex flex-col">
+              <TextField
+                label="End Date"
+                type="date"
+                onChange={(val) => {
+                  setDayEnd(convertDateToISOString(val.target.value))
+                }}
+                disabled={false}
+                value={dayEnd}
+              />
+          </div>
+        </div>
+        <div className="w-1/2 mt-3 mx-auto">
+          <Button
+             title="Proceed" 
+             onClick={() => setRunRefetch(true)}
+             className="w-full"
+          />
+        </div>
+      </Card>
+    </div>
+  )
+}
 
 const SummaryCardContainer: FC = () => {
+  const { setModalContent } = useModalContext()
   const [periodFilter, setPeriodFilter] = useState('today');
   const { dashboardState, setDashboardState } = useDashboardState();
+  const [dayStart, setDayStart] = useState<any>();
+  const [dayEnd, setDayEnd] = useState<any>();
+  const [runRefetch, setRunRefetch] = useState<boolean>(false);
   const {
     data: tripsInsight,
     isLoading: tripsInsightsLoading,
     isError: tripsInsightError,
     refetch: reloadTrips,
-  } = useGetInsightsQuery({filter: periodFilter, dashboard_state: dashboardState}, { refetchOnReconnect: true });
+  } = useGetInsightsQuery({filter: periodFilter, dashboard_state: dashboardState, dayStart: dayStart, dayEnd: dayEnd}, { refetchOnReconnect: true });
 
   const loadingState =
     !tripsInsight && !tripsInsightError && tripsInsightsLoading;
@@ -44,12 +124,24 @@ const SummaryCardContainer: FC = () => {
     { label: "Here's your insight for last 6 months", value: "LAST_6_MONTHS" },
     { label: "Here's your insight for this year", value: "THIS_YEAR" },
     { label: "Here's your insight for last year", value: "LAST_YEAR" },
-    { label: "Here's your insight for all time", value: "ALL_TIME" }
+    { label: "Here's your insight for all time", value: "ALL_TIME" },
+    { label: "Custom Date", value: "custom" }
   ];
 
   const handlePeriodFilter = (e: any) => {
-    setPeriodFilter(e)
+    console.log(e)
+    if (e === 'custom') {
+      setModalContent(
+        <SetCustomDateRange dayStart={dayStart} dayEnd={dayEnd} setDayStart={setDayStart} setDayEnd={setDayEnd} setRunRefetch={setRunRefetch} />
+      )
+    } else {
+      setPeriodFilter(e)
+    }
   }
+
+  useEffect(() => {
+    if (runRefetch) setModalContent(null);
+  }, [runRefetch])
 
   return (
     <>

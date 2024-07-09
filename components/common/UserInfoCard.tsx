@@ -306,7 +306,9 @@ const UserInfoCard: FC<Props> = ({
         </div>
       </Card>
 
-      <div className={`text-[#000] w-[25vw] ${isOpen ? 'block' : 'hidden'} fixed inset-y-0 right-0 z-10`}>
+      <div className={`absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center z-30 ${isOpen ? 'block' : 'hidden'}`}></div>
+
+      <div className={`text-[#000] w-[25vw] ${isOpen ? 'block' : 'hidden'} fixed inset-y-0 right-0 z-50`}>
         <Card height="100vh" rounded="rounded-tl-lg rounded-bl-lg">
           <div className="flex justify-between mt-3 mb-5">
             <div className="font-bold mx-2">
@@ -314,9 +316,10 @@ const UserInfoCard: FC<Props> = ({
             </div>
             <div className="cursor-pointer mx-2" onClick={() => setIsOpen(false)}><TimesIconRed /></div>
           </div>
-          <div className="flex flex-col gap-3 overflow-y-scroll h-[90%]">
-            {
-              referralHistory && referralHistory.length > 0 &&
+          {
+            referralHistory && referralHistory.length > 0 &&
+            <div className="flex flex-col gap-3 overflow-y-scroll h-[90%]">
+              {referralHistory && referralHistory.length > 0 &&
               referralHistory.map((ref: any) => (
                 <div className="flex mt-2 mb-2 mx-3 p-4 bg-[#F6F6F6] rounded-lg">
                   <div className="mx-3">
@@ -332,12 +335,12 @@ const UserInfoCard: FC<Props> = ({
                     <p className="mt-1 mb-1 p-2 rounded-lg w-auto font-bold text-sm bg-[#FFF]">{capitalizeAllFirstLetters(ref.type)}</p>
                   </div>
                 </div>
-              ))
-            } 
-          </div>
+              ))}
+            </div>
+          } 
           
 
-{
+          {
             referralHistory && referralHistory.length === 0 &&
             <p>User referral list is empty</p>
           }
