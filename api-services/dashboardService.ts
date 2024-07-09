@@ -55,8 +55,8 @@ export const dashboardApi = createApi({
   baseQuery: baseQueryWithLogoutOnTokenExpiration,
   endpoints: (build) => ({
     getInsights: build.query<any, any>({
-      query: ({ filter, dashboard_state }) => ({
-        url: `/admin/trip/trip-insights?filter=${filter.toUpperCase()}${dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}`,
+      query: ({ filter, dashboard_state, dayStart, dayEnd }) => ({
+        url: `/admin/trip/trip-insights?filter=${filter.toUpperCase()}${dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}${dayStart && dayEnd ? `&dayStart=${dayStart}&dayEnd=${dayEnd}` : ''}`,
       }),
       transformResponse: (response: any) => {
         if (!response) return [];
