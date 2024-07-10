@@ -30,7 +30,7 @@ const Redemption = () => {
         <>
             <AppHead title={'Redemption'} />
             <RedemptionNav />
-            <div className="w-full sm:w-[60vw] justify-center items-center mx-auto">
+            <div className="w-[90%] sm:w-[60vw] justify-center items-center mx-auto">
                 <div className="flex justify-between">
                 <div className="flex gap-4 py-1">
                     <Button

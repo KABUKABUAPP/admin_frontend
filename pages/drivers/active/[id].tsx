@@ -113,6 +113,10 @@ const Driver: NextPage = () => {
     }
   }, [unblockError]);
 
+  useEffect(() => {
+    if (data) console.log({data})
+  }, [data])
+
   const { userPermissions } = useUserPermissions();
   const currentPageUrl = router.query.current_page ? `currentPage=${router.query.current_page}` : '';
   const handleBackUrl = router.query.fallbackUrl ? router.query.fallbackUrl : `/drivers/active?${currentPageUrl}`;
@@ -237,7 +241,7 @@ const Driver: NextPage = () => {
               firstRow={
                 <>
                   <DriverInfoCard
-                    referral_code={""} {...data.driverInfo}
+                    referral_code={data?.driverInfo?.referralCode} {...data.driverInfo}
                     bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
                   />
 

@@ -40,10 +40,10 @@ const Driver: NextPage = () => {
   useEffect(() => {
     if (data) {
       const allowApprove = data.carDocs.documents.every(
-        (d) => d.status === "APPROVED"
+        (d: any) => d.status === "APPROVED"
       );
       const allowDecline = data.carDocs.documents.some(
-        (d) => d.status === "DECLINED"
+        (d: any) => d.status === "DECLINED"
       );
 
       if (allowApprove) setIsApproveButton(true);
