@@ -107,7 +107,6 @@ export const dashboardApi = createApi({
         
       },
     }),
-
     getTripChartData: build.query<GetTripChartData[], any>({
       query: ({ range, dashboard_state }) => ({
         url: `/admin/trip/get-trips-chart?range=${range}${dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}`,
@@ -121,7 +120,6 @@ export const dashboardApi = createApi({
         });
       },
     }),
-
     getActiveTrips: build.query<ActiveTripsMappedResponse, any>({
       query: ({ page, limit, type, dashboard_state }) => ({
         url: `/admin/trip/dashboard/get-active-trips?page=${page}&limit=${limit}&type=${type}${dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}`,
@@ -145,7 +143,6 @@ export const dashboardApi = createApi({
         }
       },
     }),
-
     getPendingDriverApplications: build.query<PendingApplicationsMappedResponse[], any>({
       query: ({ page, limit, dashboard_state }) => ({
         url: `/admin/driver/dashboard/pending-driver-applications?page=${page}&limit=${limit}${dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}`,
@@ -165,7 +162,6 @@ export const dashboardApi = createApi({
         }
       },
     }),
-
     getPendingSharpApplications: build.query<
       PendingApplicationsMappedResponse[],
       GetPendingSharpApplicationsQuery
@@ -188,7 +184,6 @@ export const dashboardApi = createApi({
         }
       },
     }),
-
     getConcentratedOrders: build.query<any, any>({
       query: ({ dashboard_state }) => ({
         url: `/admin/order/dashboard/concentrated-orders${dashboard_state !== 'all' ? `?dashboard_state=${dashboard_state}` : ''}`,
@@ -207,7 +202,6 @@ export const dashboardApi = createApi({
         }
       }
     }),
-
     getConcentratedDrivers: build.query<any, any>({
       query: ({ dashboard_state }) => ({
         url: `/admin/driver/dashboard/concentrated-drivers${dashboard_state !== 'all' ? `?dashboard_state=${dashboard_state}` : ''}`,
@@ -226,7 +220,6 @@ export const dashboardApi = createApi({
         }
       }
     }),
-
     getOnboardData: build.query<any, any>({
       query: ({range, type, dashboard_state}) => ({
         url: `/admin/driver/dashboard/onboard-data?range=${range}&type=${type}${dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}`,
@@ -246,7 +239,6 @@ export const dashboardApi = createApi({
         }
       }
     })
-
   }),
 });
 
