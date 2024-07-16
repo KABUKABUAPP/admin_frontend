@@ -44,6 +44,7 @@ export const onlineMonitorApi = createApi({
         url: `/admin/online-monitor/view/${id}?fixedDate=${fixedDate}&timeline=${timeline}&dateStart=${dateStart}&dateEnd=${dateEnd}`
       }),
       transformResponse: (response: any) => {
+        console.log({response})
         if (!response) return {};
         else {
           return response;
