@@ -122,7 +122,30 @@ function getLastFiveDays() {
   return datesArray;
 }
 
-const ViewExtendedActivity:FC<any> = ({setTimeline, setFixedDate, lastFiveDays, onlineMonitorData}) => {
+const ViewExtendedActivity:FC<any> = ({lastFiveDays}) => {
+  const today = new Date();
+  const todayDate = new Date(today);
+  const year = todayDate.getFullYear();
+  const month = String(todayDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const day = String(todayDate.getDate()).padStart(2, '0');
+  const [timeline, setTimeline] = useState('');
+  const [fixedDate, setFixedDate] = useState(`${year}-${month}-${day}`);
+  const [dateStart, setDateStart] = useState('');
+  const [dateEnd, setDateEnd] = useState('')
+
+  const router = useRouter();
+  const { id } = router.query;
+
+  const {
+    data: onlineMonitorData,
+    isLoading: onlineMonitorDataLoading,
+    isError: onlineMonitorDataError,
+    refetch: refetchOnlineMonitorData,
+  } = useGetOnlineMonitorQuery(
+    { id: String(id), timeline, fixedDate, dateStart, dateEnd },
+    { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
+
   const { setModalContent } = useModalContext();
 
   return (
@@ -145,7 +168,7 @@ const ViewExtendedActivity:FC<any> = ({setTimeline, setFixedDate, lastFiveDays, 
             onChange={(e) =>{
                 setFixedDate(e.target.value)
                 setModalContent(
-                  <ViewTracker onlineMonitorData={onlineMonitorData} setTimeline={(v: any) => setTimeline(v)} setFixedDate={(v: any) => setFixedDate(v)} lastFiveDays={lastFiveDays} />
+                  <ViewTracker lastFiveDays={lastFiveDays} conditionalDate={e.target.value} />
                 )
               }
             }
@@ -161,7 +184,7 @@ const ViewExtendedActivity:FC<any> = ({setTimeline, setFixedDate, lastFiveDays, 
                   <div className="flex justify-between mt-2 mb-2 mx-3 p-4 bg-[#F6F6F6] rounded-lg cursor-pointer" onClick={() => {
                     setFixedDate(day?.date)
                     setModalContent(
-                      <ViewTracker onlineMonitorData={onlineMonitorData} setTimeline={(v: any) => setTimeline(v)} setFixedDate={(v: any) => setFixedDate(v)} lastFiveDays={lastFiveDays} />
+                      <ViewTracker lastFiveDays={lastFiveDays} conditionalDate={day?.date} />
                     )
                   }}>
                     <div className="mt-1 mb-1 font-bold text-xs">{capitalizeFirstLetter(day?.day)}</div>
@@ -179,8 +202,30 @@ const ViewExtendedActivity:FC<any> = ({setTimeline, setFixedDate, lastFiveDays, 
   )
 }
 
-const ViewTracker:FC<any> = ({setTimeline, setFixedDate, lastFiveDays, onlineMonitorData}) => {
+const ViewTracker:FC<any> = ({lastFiveDays, conditionalDate}) => {
+  const today = new Date();
+  const todayDate = new Date(today);
+  const year = todayDate.getFullYear();
+  const month = String(todayDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const day = String(todayDate.getDate()).padStart(2, '0');
+  const [timeline, setTimeline] = useState('');
+  const [fixedDate, setFixedDate] = useState(`${year}-${month}-${day}`);
+  const [dateStart, setDateStart] = useState('');
+  const [dateEnd, setDateEnd] = useState('')
   const { setModalContent } = useModalContext();
+  
+  const router = useRouter();
+  const { id } = router.query;
+
+  const {
+    data: onlineMonitorData,
+    isLoading: onlineMonitorDataLoading,
+    isError: onlineMonitorDataError,
+    refetch: refetchOnlineMonitorData,
+  } = useGetOnlineMonitorQuery(
+    { id: String(id), timeline, fixedDate: conditionalDate ? conditionalDate : fixedDate, dateStart, dateEnd },
+    { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
 
   return (
     <div className="w-[90%] sm:w-[50%] md:w-[40%] lg:w-[40%]">
@@ -189,7 +234,7 @@ const ViewTracker:FC<any> = ({setTimeline, setFixedDate, lastFiveDays, onlineMon
           <div className="w-[5%] cursor-pointer">
             <div className="w-auto transform rotate-180 flex items-center justify-center" onClick={() => {
               setModalContent(
-                <ViewExtendedActivity setTimeline={(v: any) => setTimeline(v)} setFixedDate={(v: any) => setFixedDate(v)} lastFiveDays={lastFiveDays} onlineMonitorData={onlineMonitorData} />
+                <ViewExtendedActivity lastFiveDays={lastFiveDays} />
               )
             }}>
               <ArrowForwardRight />
@@ -200,7 +245,14 @@ const ViewTracker:FC<any> = ({setTimeline, setFixedDate, lastFiveDays, onlineMon
 
         <div className="flex flex-col overflow-y-scroll w-full h-[60vh]">
           {
-            onlineMonitorData?.data?.trackers?.map((track: any) => (
+            onlineMonitorDataLoading &&
+            <div className="flex justify-center items center">
+              <Loader />
+            </div>
+            
+          }
+          {
+            !onlineMonitorDataLoading && onlineMonitorData?.data?.trackers?.map((track: any) => (
               <div className="flex flex-col mt-2 mb-2 mx-3 p-4 bg-[#F6F6F6] rounded-lg">
                 <div className="mx-3 flex justify-between">
                   <p className="mt-1 mb-1 font-bold">{track.type === 'online' ? `${formatTime(track.online_switch_time)} - ${formatTime(track.offline_switch_time)}` : `${formatTime(track.offline_switch_time)} - ${formatTime(track.online_switch_time)}`}</p>
@@ -210,7 +262,7 @@ const ViewTracker:FC<any> = ({setTimeline, setFixedDate, lastFiveDays, onlineMon
             ))
           }
           {
-            onlineMonitorData?.data?.trackers?.length === 0 &&
+            !onlineMonitorDataLoading && onlineMonitorData?.data?.trackers?.length === 0 &&
             <p className="text-center font-bold">No activity</p>
           }
         </div>
@@ -220,12 +272,18 @@ const ViewTracker:FC<any> = ({setTimeline, setFixedDate, lastFiveDays, onlineMon
 }
 
 const Driver: NextPage = () => {
+  const today = new Date();
+  const todayDate = new Date(today);
+  const year = todayDate.getFullYear();
+  const month = String(todayDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const day = String(todayDate.getDate()).padStart(2, '0');
   const { user } = useUserContext();
   const router = useRouter();
-  const [timeline, setTimeline] = useState('this_week');
-  const [fixedDate, setFixedDate] = useState('');
+  const [timeline, setTimeline] = useState('');
+  const [fixedDate, setFixedDate] = useState(`${year}-${month}-${day}`);
   const [dateStart, setDateStart] = useState('');
   const [dateEnd, setDateEnd] = useState('')
+  const [onlineMonitorDataRes, setOnlineMonitorDataRes] = useState<any>()
 
   const { id } = router.query;
 
@@ -286,7 +344,10 @@ const Driver: NextPage = () => {
   }, [unblockError]);
 
   useEffect(() => {
-    if (onlineMonitorData) console.log({onlineMonitorData})
+    if (onlineMonitorData) {
+      console.log({onlineMonitorData})
+      setOnlineMonitorDataRes(onlineMonitorData)
+    }
   }, [onlineMonitorData])
 
   useEffect(() => {
@@ -412,7 +473,7 @@ const Driver: NextPage = () => {
                           }}>View Today's Online Activity</div>
                           <div className="cursor-pointer text-xs bg-[#FFF5D8] p-2 rounded-lg" onClick={() => {
                             setModalContent(
-                              <ViewExtendedActivity setTimeline={(v: any) => setTimeline(v)} setFixedDate={(v: any) => setFixedDate(v)} lastFiveDays={lastFiveDays} onlineMonitorData={onlineMonitorData}  />
+                              <ViewExtendedActivity lastFiveDays={lastFiveDays} />
                             )
                           }}>View Extended Online Activity</div>
                       </div>
