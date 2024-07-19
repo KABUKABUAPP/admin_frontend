@@ -85,20 +85,31 @@ function formatTime(dateString: any) {
 
   return `${hours}:${formattedMinutes}${ampm}`;
 }
-
-function calculateHoursBetween(startTime: any, endTime: any) {
+function calculateHoursBetween(startTime: string, endTime: string) {
   const startDate = new Date(startTime);
   const endDate = new Date(endTime);
 
   if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-      throw new Error('Invalid date value');
+    throw new Error('Invalid date value');
   }
 
   const differenceInMilliseconds = endDate.getTime() - startDate.getTime();
-  const differenceInHours = differenceInMilliseconds / (1000 * 60 * 60);
+  const differenceInSeconds = differenceInMilliseconds / 1000;
 
-  return Math.round(differenceInHours);
+  if (differenceInSeconds < 60) {
+    return `${Math.round(differenceInSeconds)} seconds`;
+  }
+
+  const differenceInMinutes = differenceInMilliseconds / (1000 * 60);
+
+  if (differenceInMinutes < 60) {
+    return `${Math.round(differenceInMinutes)} minutes`;
+  }
+
+  const differenceInHours = differenceInMilliseconds / (1000 * 60 * 60);
+  return `${Math.round(differenceInHours)} hours`;
 }
+
 
 function getLastFiveDays() {
   const days = ['today', 'yesterday', 'last two days', 'last three days', 'last four days'];
@@ -256,7 +267,7 @@ const ViewTracker:FC<any> = ({lastFiveDays, conditionalDate}) => {
               <div className="flex flex-col mt-2 mb-2 mx-3 p-4 bg-[#F6F6F6] rounded-lg">
                 <div className="mx-3 flex justify-between">
                   <p className="mt-1 mb-1 font-bold">{track.type === 'online' ? `${formatTime(track.online_switch_time)} - ${formatTime(track.offline_switch_time)}` : `${formatTime(track.offline_switch_time)} - ${formatTime(track.online_switch_time)}`}</p>
-                  <p className="mt-1 mb-1 font-bold text-xs">{track.type === 'online' ? `Online for ${calculateHoursBetween(track.online_switch_time, track.offline_switch_time)} hours` : `Offline for ${calculateHoursBetween(track.offline_switch_time, track.online_switch_time)} hours`}</p>
+                  <p className="mt-1 mb-1 font-bold text-xs">{track.type === 'online' ? `Online for ${calculateHoursBetween(track.online_switch_time, track.offline_switch_time)}` : `Offline for ${calculateHoursBetween(track.offline_switch_time, track.online_switch_time)}`}</p>
                 </div>
               </div>
             ))
@@ -455,7 +466,7 @@ const Driver: NextPage = () => {
                                         <div className="flex flex-col mt-2 mb-2 mx-3 p-4 bg-[#F6F6F6] rounded-lg">
                                           <div className="mx-3 flex justify-between">
                                             <p className="mt-1 mb-1 font-bold">{track.type === 'online' ? `${formatTime(track.online_switch_time)} - ${formatTime(track.offline_switch_time)}` : `${formatTime(track.offline_switch_time)} - ${formatTime(track.online_switch_time)}`}</p>
-                                            <p className="mt-1 mb-1 font-bold text-xs">{track.type === 'online' ? `Online for ${calculateHoursBetween(track.online_switch_time, track.offline_switch_time)} hours` : `Offline for ${calculateHoursBetween(track.offline_switch_time, track.online_switch_time)} hours`}</p>
+                                            <p className="mt-1 mb-1 font-bold text-xs">{track.type === 'online' ? `Online for ${calculateHoursBetween(track.online_switch_time, track.offline_switch_time)}` : `Offline for ${calculateHoursBetween(track.offline_switch_time, track.online_switch_time)}`}</p>
                                           </div>
                                         </div>
                                       ))
