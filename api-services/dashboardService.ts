@@ -235,7 +235,10 @@ export const dashboardApi = createApi({
           const theData = response?.data.map((one: any) => {
             return one.drivers
           })
-          return {thePeriod, theData}
+
+          const theDataList = response?.data;
+
+          return {thePeriod, theData, theDataList}
         }
       }
     })
