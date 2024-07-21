@@ -176,7 +176,8 @@ const ViewExtendedActivity:FC<any> = ({lastFiveDays}) => {
             placeholder="Search by a single date or range"
             label="Search by a single date or range"
             type="date"
-            onChange={(e) =>{
+            onChange={(e) => {
+                setTimeline('6_months')
                 setFixedDate(e.target.value)
                 setModalContent(
                   <ViewTracker lastFiveDays={lastFiveDays} conditionalDate={e.target.value} />
@@ -193,9 +194,22 @@ const ViewExtendedActivity:FC<any> = ({lastFiveDays}) => {
               {
                 lastFiveDays.map((day: any) => (
                   <div className="flex justify-between mt-2 mb-2 mx-3 p-4 bg-[#F6F6F6] rounded-lg cursor-pointer" onClick={() => {
-                    setFixedDate(day?.date)
+                    let theDay = '';
+
+                    if (day?.day === 'today') {
+                      theDay = 'today';
+                      setFixedDate(day?.date);
+                    } else if (day?.day === 'yesterday') {
+                      theDay = 'yesterday';
+                      setFixedDate(day?.date);
+                    } else {
+                      theDay = 'date_range'
+                      setDateStart(day?.date)
+                      setDateEnd(day?.date)
+                    }
+
                     setModalContent(
-                      <ViewTracker lastFiveDays={lastFiveDays} conditionalDate={day?.date} />
+                      <ViewTracker lastFiveDays={lastFiveDays} conditionalDate={day?.date} conditionalTimeline={theDay} />
                     )
                   }}>
                     <div className="mt-1 mb-1 font-bold text-xs">{capitalizeFirstLetter(day?.day)}</div>
@@ -213,7 +227,7 @@ const ViewExtendedActivity:FC<any> = ({lastFiveDays}) => {
   )
 }
 
-const ViewTracker:FC<any> = ({lastFiveDays, conditionalDate}) => {
+const ViewTracker:FC<any> = ({lastFiveDays, conditionalDate, conditionalTimeline}) => {
   const today = new Date();
   const todayDate = new Date(today);
   const year = todayDate.getFullYear();
@@ -234,7 +248,7 @@ const ViewTracker:FC<any> = ({lastFiveDays, conditionalDate}) => {
     isError: onlineMonitorDataError,
     refetch: refetchOnlineMonitorData,
   } = useGetOnlineMonitorQuery(
-    { id: String(id), timeline, fixedDate: conditionalDate ? conditionalDate : fixedDate, dateStart, dateEnd },
+    { id: String(id), timeline: conditionalTimeline ? conditionalTimeline : timeline, fixedDate: conditionalDate ? conditionalDate : fixedDate, dateStart, dateEnd },
     { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
@@ -261,6 +275,23 @@ const ViewTracker:FC<any> = ({lastFiveDays, conditionalDate}) => {
               <Loader />
             </div>
             
+          }
+          {
+            !onlineMonitorDataLoading && onlineMonitorData?.data &&
+            <div className="flex flex-col gap-3 p-4">
+              <div className="flex justify-between">
+                <p className="font-bold">Total Online Time (Minutes)</p>
+                <p className="font-bold text-xs">{onlineMonitorData?.data?.totalOnlineTimeInMinutes} minutes</p>
+              </div>
+              <div className="flex justify-between">
+                <p className="font-bold">Total Online Hours</p>
+                <p className="font-bold text-xs">{onlineMonitorData?.data?.totalOnlineHours.hours}hrs {onlineMonitorData?.data?.totalOnlineHours.minutes}mins</p>
+              </div>
+              <div className="flex justify-between">
+                <p className="font-bold">Total Offline Hours</p>
+                <p className="font-bold text-xs">{onlineMonitorData?.data?.totalOfflineHours.hours}hrs {onlineMonitorData?.data?.totalOfflineHours.minutes}mins</p>
+              </div>
+            </div>
           }
           {
             !onlineMonitorDataLoading && onlineMonitorData?.data?.trackers?.map((track: any) => (
@@ -290,7 +321,7 @@ const Driver: NextPage = () => {
   const day = String(todayDate.getDate()).padStart(2, '0');
   const { user } = useUserContext();
   const router = useRouter();
-  const [timeline, setTimeline] = useState('');
+  const [timeline, setTimeline] = useState('today');
   const [fixedDate, setFixedDate] = useState(`${year}-${month}-${day}`);
   const [dateStart, setDateStart] = useState('');
   const [dateEnd, setDateEnd] = useState('')
@@ -461,6 +492,23 @@ const Driver: NextPage = () => {
                                     <div className="font-bold w-[95%] flex justify-center items-center">Today's Online Activity</div>
                                   </div>
                                   <div className="flex flex-col overflow-y-scroll w-full h-[60vh]">
+                                    {
+                                      !onlineMonitorDataLoading && onlineMonitorData?.data &&
+                                      <div className="flex flex-col gap-3 p-4">
+                                        <div className="flex justify-between">
+                                          <p className="font-bold">Total Online Time (Minutes)</p>
+                                          <p className="font-bold text-xs">{onlineMonitorData?.data?.totalOnlineTimeInMinutes} minutes</p>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <p className="font-bold">Total Online Hours</p>
+                                          <p className="font-bold text-xs">{onlineMonitorData?.data?.totalOnlineHours.hours}hrs {onlineMonitorData?.data?.totalOnlineHours.minutes}mins</p>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <p className="font-bold">Total Offline Hours</p>
+                                          <p className="font-bold text-xs">{onlineMonitorData?.data?.totalOfflineHours.hours}hrs {onlineMonitorData?.data?.totalOfflineHours.minutes}mins</p>
+                                        </div>
+                                      </div>
+                                    }
                                     {
                                       onlineMonitorData?.data?.trackers?.map((track: any) => (
                                         <div className="flex flex-col mt-2 mb-2 mx-3 p-4 bg-[#F6F6F6] rounded-lg">
