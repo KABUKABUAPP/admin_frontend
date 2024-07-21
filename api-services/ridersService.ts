@@ -105,7 +105,10 @@ export const ridersApi = createApi({
             isBlocked: response?.data?.isBlocked,
             id: response?.data?._id,
             email: response?.data?.email,
-            phone: response?.data?.phone_number
+            phone: response?.data?.phone_number,
+            referrer: response?.data?.referrer_details,
+            referral_code: response?.data?.referral_code,
+            referralHistory: response?.data?.referral_history
           },
           financials: {
             total: response?.data?.total_spent?.toString(),

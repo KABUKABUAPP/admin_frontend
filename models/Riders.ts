@@ -59,6 +59,9 @@ export interface MappedRidersData {
 
 export interface ViewRiderResponse {
   data: {
+    referral_history: any;
+    referral_code: any;
+    referrer_details: any;
     state: string;
     _id: string;
     next_of_kin: {

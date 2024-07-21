@@ -40,6 +40,10 @@ const Rider: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
+  useEffect(() => {
+    if (data) console.log({data})
+  }, [data])
+
   const {
     data: tripHistory,
     isLoading: tripHistoryLoading,
@@ -142,7 +146,6 @@ const Rider: NextPage = () => {
             firstRow={
               <>
                 <UserInfoCard
-                  referral_code={""} 
                   {...data?.driver}
                   bg={data?.driver.isBlocked ? "#FEE2E9" : "#FFFFFF"} 
                 />

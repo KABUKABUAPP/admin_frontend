@@ -41,9 +41,10 @@ export const onlineMonitorApi = createApi({
   endpoints: (build) => ({
     getOnlineMonitor: build.query<any, any>({
       query: ({ id, fixedDate, timeline, dateStart, dateEnd }) => ({
-        url: `/admin/online-monitor/view/${id}?fixedDate=${fixedDate}&timeline=${timeline}&dateStart=${dateStart}&dateEnd=${dateEnd}`
+        url: `/admin/online-monitor/view/${id}?${fixedDate.length > 0 ? `fixedDate=${fixedDate}` : ''}${timeline.length > 0 ? `&timeline=${timeline}` : ''}${dateStart.length > 0 ? `&dateStart=${dateStart}` : ''}${dateEnd.length > 0 ? `&dateEnd=${dateEnd}` : ''}`
       }),
       transformResponse: (response: any) => {
+        console.log({response})
         if (!response) return {};
         else {
           return response;
