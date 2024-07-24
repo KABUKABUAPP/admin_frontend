@@ -17,7 +17,7 @@ export function middleware(req: NextRequest) {
       const parsedUser = JSON.parse(user);
 
       let userAccessibleRoutes = routePermissionsMapping.map((rp) => {
-        if (rp.route === "/settings" || rp.route === "/messages" || rp.route === "/sharp-cars" || rp.route === "/live-map" || rp.route === "/car-owners" || rp.route === "/car-repair-loan") {
+        if (rp.route === "/settings" || rp.route === "/messages" || rp.route === "/sharp-cars" || rp.route === "/live-map" || rp.route === "/car-owners" || rp.route === "/car-repair-loan" || rp.route === "/campaigns") {
           return rp.route;
         } else {
           if (
@@ -33,7 +33,7 @@ export function middleware(req: NextRequest) {
         (route) => route !== undefined
       );
 
-      return [...userAccessibleRoutes, "/settings", "/messages", "/live-map", "/car-owners", "/car-repair-loan"] as string[];
+      return [...userAccessibleRoutes, "/settings", "/messages", "/live-map", "/car-owners", "/car-repair-loan", "/campaigns"] as string[];
     } else return [] as string[];
   }
 
@@ -133,6 +133,7 @@ export const config = {
     "/messages",
     "/live-map",
     "/car-owners",
-    "/car-repair-loan"
+    "/car-repair-loan",
+    "/campaigns"
   ],
 };
