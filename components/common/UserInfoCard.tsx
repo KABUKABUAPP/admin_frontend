@@ -32,6 +32,8 @@ interface Props {
   id?: string;
   referrer?: any;
   referralHistory?: any;
+  totalReferredDrivers?: any;
+  totalReferredRiders?: any;
 }
 
 function copyToClipboard(text: string) {
@@ -80,7 +82,9 @@ const UserInfoCard: FC<Props> = ({
   inspectionCode,
   id,
   referrer,
-  referralHistory
+  referralHistory,
+  totalReferredDrivers,
+  totalReferredRiders
 }) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -203,37 +207,19 @@ const UserInfoCard: FC<Props> = ({
                 </div>
               }
               
-              {/*referral_code && 
-              <div className="mx-1">
-                <span className="flex bg-[#FFF5D8] px-2 py-3 items-center" style={{borderRadius: '1rem'}}>
-                  <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
-                    <b>{(`https://kabukabu.com.ng/ref?code=${referral_code}&type=rider`).substring(0, 25)}...</b><br />
-                    <small>Copy Referral Link (Rider)</small>
-                  </span>
-                  <span style={{marginLeft: '1vw', marginTop: '3vh', cursor: 'pointer'}}>
-                    <Copy handleClick={() => {
-                      copyToClipboard(referral_code ? `https://kabukabu.com.ng/ref?code=${referral_code}&type=rider` : '')
-                      toast.success("Referral Link copied");
-                    }} />
-                  </span>
-                </span>
-              </div>}
+              {
+                totalReferredDrivers >= 0 &&
+                <div className="bg-[#F1F1F1] rounded-lg p-2 w-full">
+                  <p className="text-xs text-[#000]">Total Referred Drivers: {totalReferredDrivers}</p>
+                </div>
+              }
 
-              {referral_code && 
-              <div className="mx-1">
-                <span className="flex bg-[#FFF5D8] px-2 py-3 items-center" style={{borderRadius: '1rem'}}>
-                  <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
-                    <b>{(`https://kabukabu.com.ng/ref?code=${referral_code}&type=driver`).substring(0, 25)}...</b><br />
-                    <small>Copy Referral Link (Driver)</small>
-                  </span>
-                  <span style={{marginLeft: '1vw', marginTop: '3vh', cursor: 'pointer'}}>
-                    <Copy handleClick={() => {
-                      copyToClipboard(referral_code ? `https://kabukabu.com.ng/ref?code=${referral_code}&type=driver` : '')
-                      toast.success("Referral Link copied");
-                    }} />
-                  </span>
-                </span>
-              </div>*/}
+              {
+                totalReferredRiders >= 0 &&
+                <div className="bg-[#F1F1F1] rounded-lg p-2 w-full">
+                  <p className="text-xs text-[#000]">Total Referred Riders: {totalReferredRiders}</p>
+                </div>
+              }
             </div>
             
             {
