@@ -112,6 +112,12 @@ const sidebarNavLinks: SidebarLink[] = [
     link: "/live-map",
     isActive: false,
     icon: <MapPinIcon />,
+  },
+  {
+    title: "Campaigns",
+    link: "/campaigns",
+    isActive: false,
+    icon: <MapPinIcon />,
   }
 ];
 

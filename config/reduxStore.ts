@@ -23,6 +23,7 @@ import { carOwnersApi } from "@/api-services/carOwnersService";
 import { carRepairLoanApi } from "@/api-services/carRepairLoanService";
 import { redemptionApi } from "@/api-services/redemptionService";
 import { onlineMonitorApi } from "@/api-services/monitorService";
+import { campaignApi } from "@/api-services/campaignService";
 
 export const reduxStore = configureStore({
   reducer: {
@@ -48,7 +49,8 @@ export const reduxStore = configureStore({
     [carOwnersApi.reducerPath]: carOwnersApi.reducer,
     [carRepairLoanApi.reducerPath]: carRepairLoanApi.reducer,
     [redemptionApi.reducerPath]: redemptionApi.reducer,
-    [onlineMonitorApi.reducerPath]: onlineMonitorApi.reducer
+    [onlineMonitorApi.reducerPath]: onlineMonitorApi.reducer,
+    [campaignApi.reducerPath]: campaignApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -74,7 +76,8 @@ export const reduxStore = configureStore({
       carOwnersApi.middleware,
       carRepairLoanApi.middleware,
       redemptionApi.middleware,
-      onlineMonitorApi.middleware
+      onlineMonitorApi.middleware,
+      campaignApi.middleware
     ]),
 });
 
