@@ -4,6 +4,7 @@ import AppHead from "@/components/common/AppHead";
 import Card from "@/components/common/Card";
 import UserInfoCard from "@/components/common/UserInfoCard";
 import AddIcon from "@/components/icons/AddIcon";
+import EditIcon from "@/components/icons/EditIcon";
 import Button from "@/components/ui/Button/Button";
 import TextField from "@/components/ui/Input/TextField/TextField";
 import Loader from "@/components/ui/Loader/Loader";
@@ -32,7 +33,16 @@ const ViewCampaign = () => {
         <>
             <AppHead title="Kabukabu | Repair Loan" />
             <AppLayout>
-                <ActionBar></ActionBar>
+                <ActionBar>
+                    <div className="flex justify-end">
+                        <Button
+                            title="Edit Campaign"
+                            startIcon={<EditIcon />}
+                            size="large"
+                            onClick={() => router.push(`/campaigns/edit/${id}`)}
+                        /> 
+                    </div>
+                </ActionBar>
                 <div className="mx-auto w-[90%] flex flex-col md:flex-row my-4 gap-5">
                     {
                         isLoading && !data &&
@@ -149,6 +159,7 @@ const ViewCampaign = () => {
                                         }
 
                                         {
+                                            
                                             onboardView === 'driver' && data?.direct_drivers_onboarded?.data?.length === 0 &&
                                             <p className="text-center my-4">No onboarded drivers</p>
                                         }

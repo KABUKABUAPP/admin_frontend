@@ -46,6 +46,13 @@ export const campaignApi = createApi({
           body
         })
     }),
+    editCampaign: build.mutation<any, any>({
+      query: ({body, id})=>({
+        url: `admin/campaign/update/${id}`,
+        method: 'PUT',
+        body
+      })
+    }),
     getCampaigns: build.query<any, any>({
       query: ({ start_date, end_date }) => ({
         url: `admin/campaign/get-all?${start_date.length > 0 ? `start_date=${start_date}` : ''}${end_date.length > 0 ? `&end_date=${end_date}` : ''}`
@@ -105,6 +112,7 @@ export const {
     useCreateCampaignMutation,
     useGetCampaignsQuery,
     useGetMarketingStaffsQuery,
-    useViewCampaignQuery
+    useViewCampaignQuery,
+    useEditCampaignMutation
 } = campaignApi;
 

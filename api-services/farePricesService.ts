@@ -74,7 +74,6 @@ export const farePricesApi = createApi({
         }
       },
     }),
-
     viewFarePrice: build.query<any, any>({
       query: ({ id }) => ({
         url: `admin/price/view/${id}`,
@@ -111,6 +110,25 @@ export const farePricesApi = createApi({
       }),
       invalidatesTags: ['fare-price', 'fare-prices']
     }),
+    getAllSurgeInState: build.query<any, any>({
+      query: ({ id }) => ({
+        url: `admin/price-surge/in-state/${id}?limit=1000&page=1`,
+      }),
+      transformResponse: (response: any) => {
+        if (!response) return {} as any;
+        else {
+         return response?.data
+        }
+      },
+    }),
+    updateSurge: build.mutation<any, any>({
+      query: ({ id, payload: body }) => ({
+        url: `admin/price-surge/update/${id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ['fare-price', 'fare-prices']
+    })
   }),
 });
 
@@ -120,4 +138,6 @@ export const {
   useCreateFarePriceMutation,
   useUpdateDriverFeeMutation,
   useUpdateFarePriceMutation,
+  useGetAllSurgeInStateQuery,
+  useUpdateSurgeMutation
 } = farePricesApi;
