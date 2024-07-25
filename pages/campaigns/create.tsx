@@ -114,29 +114,33 @@ const Campaign = () => {
                                             //error={formik.touched.name ? formik.errors.name : undefined}
                                         />
                                         
-                                        <Select
-                                            options={[
-                                                {
-                                                    value: 'all',
-                                                    label: 'All'
-                                                },
-                                                {
-                                                    value: 'rider',
-                                                    label: 'Rider'
-                                                },
-                                                {
-                                                    value: 'driver',
-                                                    label: 'Driver'
-                                                }
-                                            ]}
-                                            className="w-full"
-                                            onKeyDown={(e: any) => {
-                                                setSearch(e.target.value)
-                                            }}
-                                            onChange={(optX: any) => {
-                                                formik.setFieldValue('category', optX.value)
-                                            }}
-                                        />
+                                        
+                                        <div className="flex flex-col justify-center items-center gap-2 w-full">
+                                            <p className="text-sm w-full">Campaign Category</p>
+                                            <Select
+                                                options={[
+                                                    {
+                                                        value: 'all',
+                                                        label: 'All'
+                                                    },
+                                                    {
+                                                        value: 'rider',
+                                                        label: 'Rider'
+                                                    },
+                                                    {
+                                                        value: 'driver',
+                                                        label: 'Driver'
+                                                    }
+                                                ]}
+                                                className="w-full"
+                                                onKeyDown={(e: any) => {
+                                                    setSearch(e.target.value)
+                                                }}
+                                                onChange={(optX: any) => {
+                                                    formik.setFieldValue('category', optX.value)
+                                                }}
+                                            />
+                                        </div>
 
                                         <div className="flex justify-end">
                                             <Button
