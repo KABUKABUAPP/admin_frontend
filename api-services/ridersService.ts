@@ -51,9 +51,7 @@ export const ridersApi = createApi({
   endpoints: (build) => ({
     getAllRides: build.query<MappedRidersData, GetAllRidersQuery>({
       query: ({ limit, page, search, order, status, onlineStatus }) => ({
-        url: `admin/rider/all?limit=${limit}&page=${page}&search=${search}&order=${order}&is_blocked=${
-          status === "deleted" ? "no" : status
-        }${status === "deleted" ? "&deleted=yes" : ""}${onlineStatus.length > 0 ? `&online_status=${onlineStatus}` : ''}`,
+        url: `admin/rider/all?limit=${limit}&page=${page}&search=${search}&order=${order}&is_blocked=${status === "deleted" ? "no" : status}${status === "deleted" ? "&deleted=yes" : ""}${onlineStatus.length > 0 ? `&online_status=${onlineStatus}` : ''}`,
       }),
       providesTags: ["riders"],
       transformResponse: (response: GetAllRidersResponse) => {
