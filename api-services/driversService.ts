@@ -78,7 +78,7 @@ export const driversApi = createApi({
         sharpApprovalStatus,
         dashboard_state
       }) => ({
-        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}&car_owner=${carOwner}&search=${search}&order=${order}&is_blocked=${status ? status : ""}&status_remark=${statusRemark ? statusRemark : ""}${deleted ? `&deleted=${deleted}` : ""}${onlineStatus ? `&online_status=${onlineStatus}` : ''}${onboardStatus ? `&is_onboarding=${onboardStatus}` : ''}${sharpApprovalStatus ? `&sharp_approval_status=${sharpApprovalStatus}` : ''}${dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}`,
+        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}${carOwner ? `&car_owner=${carOwner}` : ''}${search ? `&search=${search}` : ''}${order ? `&order=${order}` : ''}${status ? `&is_blocked=${status}` : ""}${statusRemark ? `&status_remark=${statusRemark}` : ""}${deleted ? `&deleted=${deleted}` : ""}${onlineStatus ? `&online_status=${onlineStatus}` : ''}${onboardStatus ? `&is_onboarding=${onboardStatus}` : ''}${sharpApprovalStatus ? `&sharp_approval_status=${sharpApprovalStatus}` : ''}${dashboard_state && dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}`,
       }),
       providesTags: ["drivers"],
       transformResponse: (response: GetAllDriversResponse) => {
