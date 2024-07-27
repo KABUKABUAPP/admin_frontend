@@ -8,17 +8,18 @@ import EditIcon from "@/components/icons/EditIcon";
 import ViewFarePriceLayout from "@/components/modules/fare-prices/ViewFarePriceLayout";
 import ViewStaffLayout from "@/components/modules/staff/ViewStaffLayout";
 import Button from "@/components/ui/Button/Button";
+import MarketerNav from "@/components/modules/campaign/MarketerNav";
 import TextField from "@/components/ui/Input/TextField/TextField";
 import Loader from "@/components/ui/Loader/Loader";
 import AppLayout from "@/layouts/AppLayout";
 import { capitalizeAllFirstLetters } from "@/utils";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Select from "react-select";
 import { toast } from "react-toastify";
+import Select from "react-select";
 
 
-const ViewCampaign = () => {
+const ViewCampaignMine = () => {
     const router = useRouter();
     const [onboardView, setOnboardView] = useState('driver');
     const id = router.query.id;
@@ -32,20 +33,14 @@ const ViewCampaign = () => {
     }, [data])
 
     return (
-        <>
+        <div style={{ backgroundColor: '#F8F8F8' }}>
             <AppHead title="Kabukabu | Repair Loan" />
-            <AppLayout>
-                <ActionBar>
-                    <div className="flex justify-end">
-                        <Button
-                            title="Edit Campaign"
-                            startIcon={<EditIcon />}
-                            size="large"
-                            onClick={() => router.push(`/campaigns/edit/${id}`)}
-                        /> 
-                    </div>
-                </ActionBar>
-                <div className="mx-auto w-[90%] flex flex-col md:flex-row my-4 gap-5">
+            <MarketerNav />
+            <div className="p-5">
+                <ActionBar></ActionBar>
+            </div>
+            <div className="px-5 pb-5">
+                <div className="mx-auto w-[90%] flex flex-col md:flex-row my-1 gap-5">
                     {
                         isLoading && !data &&
                         <div className="flex justify-center items-center">
@@ -183,9 +178,9 @@ const ViewCampaign = () => {
                         }
                     />
                 }
-            </AppLayout>
-        </>
+            </div>
+        </div>
     )
 }
 
-export default ViewCampaign;
+export default ViewCampaignMine;

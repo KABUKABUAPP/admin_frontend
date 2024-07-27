@@ -104,6 +104,15 @@ export const campaignApi = createApi({
         if (!response) return [];
         return response.data;
       }
+    }),
+    getMyCampaigns: build.query<any, any>({
+      query: ({ start_date, end_date }) => ({
+        url: `admin/campaign/get-mine?${start_date.length > 0 ? `start_date=${start_date}` : ''}${end_date.length > 0 ? `&end_date=${end_date}` : ''}`
+      }),
+      transformResponse: (response: any) => {
+        if (!response) return [];
+        return response.data;
+      }
     })
   }),
 });
@@ -113,6 +122,7 @@ export const {
     useGetCampaignsQuery,
     useGetMarketingStaffsQuery,
     useViewCampaignQuery,
-    useEditCampaignMutation
+    useEditCampaignMutation,
+    useGetMyCampaignsQuery
 } = campaignApi;
 

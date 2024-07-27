@@ -32,6 +32,7 @@ const MarketerNav: React.FC = () => {
 
   const campaignView = router.pathname === '/campaign' ? 'font-bold text-[#000]' : 'text-[#9A9A9A]';
   const campaignMapView = router.pathname === '/campaign/map-view' ? 'font-bold text-[#000]' : 'text-[#9A9A9A]';
+  const campaignMineView = router.pathname === '/campaign/mine' ? 'font-bold text-[#000]' : 'text-[#9A9A9A]';
 
   return (
     <>
@@ -45,6 +46,8 @@ const MarketerNav: React.FC = () => {
             <p className={`flex items-center justify-center cursor-pointer mx-5 ${campaignView} gap-2`} onClick={() => {router.push('/campaign')}}><span><DashboardIcon /></span>  <span>Dashboard</span></p>
             <p className={`flex items-center justify-center`}>|</p>
             <p className={`flex items-center justify-center cursor-pointer mx-5 ${campaignMapView} gap-2`} onClick={() => {router.push('/campaign/map-view')}}><span><MapWaveIcon /></span>  <span>Map View</span></p>
+            <p className={`flex items-center justify-center`}>|</p>
+            <p className={`flex items-center justify-center cursor-pointer mx-5 ${campaignMineView} gap-2`} onClick={() => {router.push('/campaign/mine')}}><span><DashboardIcon /></span>  <span>My Campaign</span></p>
           </div>
 
           <div className="hidden md:flex space-x-4">
@@ -85,6 +88,9 @@ const MarketerNav: React.FC = () => {
             </a>
             <a href="#" className="md:hidden" onClick={() => router.push('/campaign/map-view')}>
               Map View
+            </a>
+            <a href="#" className="md:hidden" onClick={() => router.push('/campaign/mine')}>
+              My Campaign
             </a>
             <a href="#"  onClick={() => setIsModal(true)}>
               Logout
