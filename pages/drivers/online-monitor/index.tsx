@@ -16,6 +16,9 @@ import AppHead from "@/components/common/AppHead";
 import { useDashboardState } from "@/contexts/StateSegmentationContext";
 import { useGetOnlineMonitorWithBenchmarkQuery } from "@/api-services/monitorService";
 import MonitorTable from "@/components/modules/drivers/MonitorTable";
+import Card from "@/components/common/Card";
+import TextField from "@/components/ui/Input/TextField/TextField";
+import { toast } from "react-toastify";
 
 function getYesterdaysDate() {
     // Get today's date
@@ -37,6 +40,37 @@ function getYesterdaysDate() {
     return `${formattedMonth}-${formattedDay}-${year}`;
 }
 
+function objectsToCSVDownload(objectsArray: any, filename = 'data.csv') {
+    if (objectsArray.length === 0) {
+        toast.error('Monitor data is empty for the chose time range.');
+        return;
+    }
+
+    // Extract headers from the keys of the first object
+    const headers = Object.keys(objectsArray[0]);
+
+    // Convert the array of objects to CSV string
+    const csvContent = [
+        headers.join(','), // Join headers with commas
+        ...objectsArray.map((obj: any) => headers.map(header => obj[header]).join(',')) // Map each object to a CSV row
+    ].join('\n'); // Join all rows with newlines
+
+    // Create a Blob from the CSV string
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+    // Create a temporary link to download the Blob
+    const link = document.createElement('a');
+    if (link.download !== undefined) { // Feature detection
+        // Create a URL for the Blob and set it as the href attribute of the link
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
 
 const Drivers: NextPage = () => {
   const router = useRouter();
@@ -54,6 +88,7 @@ const Drivers: NextPage = () => {
   const [minHours, setMinHours] = useState(0);
   const [dateStart, setDateStart] = useState<any>(getYesterdaysDate());
   const [dateEnd, setDateEnd] = useState<any>(getYesterdaysDate());
+  const [downloadReport, setDownloadReport] = useState<boolean>(false);
 
   const filterOptions = [
     { label: "Newest First", value: "newest_first", default: true },
@@ -137,43 +172,77 @@ const Drivers: NextPage = () => {
   }, [JSON.stringify(driverTypeOptions)]);
 
   useEffect(() => {
-    if (monitorData) console.log({monitorData})
+    if (monitorData) {
+        console.log({monitorData})
+
+        if ((monitorData?.data?.data.length === monitorData?.data?.pagination?.totalCount) && downloadReport) {
+            console.log('full list', {monitorDataArr: monitorData?.data?.data})
+            
+            objectsToCSVDownload(monitorData?.data?.data, `Online monitor Data starting from ${dateStart} to ${dateEnd}, minimum of ${minHours} hours`);
+            setPageSize(5);
+            setDownloadReport(false);
+        }
+    }
+
+    
   }, [monitorData])
 
   return (
     <>
       <AppHead title="Kabukabu | Drivers" />
       <AppLayout>
-        {/*<CountHeader count={drivers?.totalCount} title="Online Monitor" />*/}
+        <CountHeader count={monitorData?.data?.pagination?.totalCount} title="Online Monitor" />
         <DriverOptionBar
           options={driverOptions}
           handleClickOption={(keyVal) => {
             router.push(`/drivers/${keyVal}`);
           }}
         />
-        <SearchFilterBar
-          searchValue={searchDriver}
-          handleSearch={(value) => {
-            setSearchDriver(value);
-          }}
-          filterOptions={filterOptions}
-          dropDownOptionSelected={selectedFilterOption}
-          handleDropDown={(val) => setSelectedFilterOption(String(val))}
-        >
-          <div className="flex items-center max-sm:flex-col gap-3 justify-end">
-            <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
-              <span>Show:</span>
-              <DropDown
-                placeholder="Filter"
-                options={statusFilterOptions}
-                value={statusFilter}
-                handleChange={(val) => {
-                  setStatusFilter(String(val));
-                }}
-              />
-            </div>
-          </div>
-        </SearchFilterBar>
+        <div className="my-4">
+            <Card bg="#F1F1F1">
+                <div className="flex items-center max-sm:flex-col gap-3 justify-end">
+                    <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0" onClick={() => {
+                        const theTotalCount = monitorData?.data?.pagination?.totalCount
+
+                        setPageSize(theTotalCount);
+                        setDownloadReport(true);
+                    }}>
+                        <span>Export as CSV</span>
+                    </div>
+                    <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
+                        <TextField
+                            label="Start Date"
+                            placeholder="Start Date Here"
+                            onChange={(e) => {
+                                setDateStart(e?.target?.value);
+                                setDateEnd(getYesterdaysDate());
+                            }}
+                            type="date"
+                        />
+                    </div>
+                    <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
+                        <TextField
+                            label="End Date"
+                            placeholder="End Date Here"
+                            onChange={(e) => {
+                                setDateEnd(e?.target?.value)
+                            }}
+                            type="date"
+                        />
+                    </div>
+                    <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
+                        <TextField
+                            label="Minimum Hours"
+                            placeholder="Minimum Hours Here"
+                            onChange={(e) => {
+                                setMinHours(parseInt(e?.target?.value))
+                            }}
+                            type="number"
+                        />
+                    </div>
+                </div>
+            </Card>
+        </div>
         <div className="mt-5">
           <MonitorTable
             tableData={monitorData?.data?.data}
