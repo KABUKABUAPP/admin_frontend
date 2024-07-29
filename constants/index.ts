@@ -287,6 +287,11 @@ export const driverOptionBarData = [
     isActive: false,
     keyVal: "deleted",
   },
+  {
+    title: "Online Monitor",
+    isActive: false,
+    keyVal: "online-monitor",
+  }
 ];
 
 export const driverTypeFilterOptionsData = [
