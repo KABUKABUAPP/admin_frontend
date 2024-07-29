@@ -70,7 +70,7 @@ const MonitorTable: FC<Props> = ({ tableData, isLoading, isError, refetch, subPa
             </div>
             <div style={{ flex: 1 }} className="flex items-center">
                 <p className="text-xs font-bold">
-                {row.passed || <Skeleton />}
+                {row.passed ? 'Passed' : 'Not Passed' || <Skeleton />}
                 </p>
             </div>
         </div>
