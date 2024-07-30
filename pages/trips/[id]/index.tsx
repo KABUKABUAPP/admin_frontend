@@ -30,7 +30,6 @@ import StaticMap from "@/components/common/AppMap/TestMap";
 import { capitalizeAllFirstLetters } from "@/utils";
 import RouteMap from "@/components/common/AppMap/RouteMap";
 import Card from "@/components/common/Card";
-import RouteMapTwo from "@/components/common/AppMap/RouteMapTwo";
 import RouteMapThree from "@/components/common/AppMap/RouteMapThree";
 const socket = io("https://rideservice-dev.up.railway.app");
 
