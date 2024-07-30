@@ -246,29 +246,12 @@ const ViewTrip: NextPage = () => {
                 <div className="w-full h-full max-h-[550px] max-md:pl-0">
                   {data?.startPoint && data?.endPoint && (
                     <>
-                      {/*<StaticMap
-                        endPoint={[data?.endPoint[1], data?.endPoint[0]]}
-                        startPoint={
-                          liveLocation
-                            ? [liveLocation.lng, liveLocation.lat]
-                            : [data?.startPoint[1], data?.startPoint[0]]
-                        }
-                      />*/}
-
                       {/*<RouteMap start={
                           liveLocation
                           ? {lat: liveLocation.lng, lng: liveLocation.lat}
                           : {lat: data?.startPoint[1], lng: data?.startPoint[0]}
                         } 
                         end={{lat: data?.endPoint[1], lng: data?.endPoint[0]}} 
-                      />
-
-                      <RouteMapTwo start={
-                          liveLocation
-                          ? [liveLocation.lng, liveLocation.lat]
-                          : [data?.startPoint[0], data?.startPoint[1]]
-                        } 
-                        end={[data?.endPoint[0], data?.endPoint[1]]} 
                       />*/}
 
                       <RouteMapThree start={
