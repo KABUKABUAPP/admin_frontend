@@ -8,6 +8,7 @@ import { useFormik, Form, FormikProvider } from "formik";
 import DropDown from '@/components/ui/DropDown';
 import { useGetInsightsQuery } from '@/api-services/dashboardService';
 import { useDashboardState } from "@/contexts/StateSegmentationContext";
+import MapOverlayTwo from './mapOverlayTwo';
 
 const IndexPage: React.FC = () => {
   const [dropDownOptionSelected, setDropDownOptionSelected] = useState('');
@@ -62,7 +63,7 @@ const IndexPage: React.FC = () => {
         <AppHead title="Kabukabu | Map View" />
         <AppLayout>
             <div className={styles.app}>
-              <MapOverlay onlineStatusDriver={onlineStatusOption} onlineStatusRider={onlineStatusOptionRider} enableDriverOption={enableDriverOption} enableRiderOption={enableRiderOption} />
+              <MapOverlayTwo onlineStatusDriver={onlineStatusOption} onlineStatusRider={onlineStatusOptionRider} enableDriverOption={enableDriverOption} enableRiderOption={enableRiderOption} />
 
               {/* Elements above the map as overlay */}
               <div className={styles.overlay}>

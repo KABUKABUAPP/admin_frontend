@@ -26,10 +26,9 @@ import TimesIcon from "@/components/icons/TimesIcon";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
 import TripRatingCard from "@/components/modules/Trips/TripRatingCard";
-import StaticMap from "@/components/common/AppMap/TestMap";
 import { capitalizeAllFirstLetters } from "@/utils";
-import RouteMap from "@/components/common/AppMap/RouteMap";
 import Card from "@/components/common/Card";
+import RouteMapThree from "@/components/common/AppMap/RouteMapThree";
 const socket = io("https://rideservice-dev.up.railway.app");
 
 const ViewTrip: NextPage = () => {
@@ -244,22 +243,20 @@ const ViewTrip: NextPage = () => {
                 <div className="w-full h-full max-h-[550px] max-md:pl-0">
                   {data?.startPoint && data?.endPoint && (
                     <>
-                      {/*<StaticMap
-                        endPoint={[data?.endPoint[1], data?.endPoint[0]]}
-                        startPoint={
-                          liveLocation
-                            ? [liveLocation.lng, liveLocation.lat]
-                            : [data?.startPoint[1], data?.startPoint[0]]
-                        }
-                      />*/}
-
-                      <RouteMap start={
+                      {/*<RouteMap start={
                           liveLocation
                           ? {lat: liveLocation.lng, lng: liveLocation.lat}
                           : {lat: data?.startPoint[1], lng: data?.startPoint[0]}
                         } 
                         end={{lat: data?.endPoint[1], lng: data?.endPoint[0]}} 
-                      />
+                      />*/}
+
+                      <RouteMapThree start={
+                          liveLocation
+                          ? [liveLocation.lng, liveLocation.lat]
+                          : [data?.startPoint[0], data?.startPoint[1]]
+                        } 
+                        end={[data?.endPoint[0], data?.endPoint[1]]} />
                     </>
                   )}
                 </div>
