@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import AppLayout from "@/layouts/AppLayout";
 import DriversTable from "@/components/modules/drivers/DriversTable";
@@ -19,6 +19,12 @@ import MonitorTable from "@/components/modules/drivers/MonitorTable";
 import Card from "@/components/common/Card";
 import TextField from "@/components/ui/Input/TextField/TextField";
 import { toast } from "react-toastify";
+import Button from "@/components/ui/Button/Button";
+import Copy from "@/components/icons/Copy";
+import FileIcon from "@/components/icons/FileIcon";
+import WalletIcon from "@/components/icons/WalletIcon";
+import CalendarIcon from "@/components/icons/CalendarIcon";
+import TextFieldTwo from "@/components/ui/Input/TextFieldTwo/TextFieldTwo";
 
 function getYesterdaysDate() {
     // Get today's date
@@ -70,6 +76,14 @@ function objectsToCSVDownload(objectsArray: any, filename = 'data.csv') {
         link.click();
         document.body.removeChild(link);
     }
+}
+
+function convertDateFormat(dateString: string): string {
+  // Split the input date string by the hyphen
+  const [year, month, day] = dateString.split('-');
+
+  // Return the date in the desired format
+  return `${month}-${day}-${year}`;
 }
 
 const Drivers: NextPage = () => {
@@ -198,6 +212,9 @@ const Drivers: NextPage = () => {
     
   }, [monitorData])
 
+  const startDateInputRef = useRef<HTMLInputElement>(null);
+  const endDateInputRef = useRef<HTMLInputElement>(null);
+
   return (
     <>
       <AppHead title="Kabukabu | Drivers" />
@@ -211,44 +228,54 @@ const Drivers: NextPage = () => {
         />
         <div className="my-4">
             <Card bg="#F1F1F1">
-                <div className="flex items-center max-sm:flex-col gap-3 justify-end">
-                    <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0" onClick={() => {
-                        const theTotalCount = monitorData?.data?.pagination?.totalCount;
-                        setPageSize(theTotalCount);
-                        setDownloadReport(true);
-                    }}>
-                        <span>Export as CSV</span>
-                    </div>
-                    <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
-                        <TextField
-                            label="Start Date"
-                            placeholder="Start Date Here"
-                            onChange={(e) => {
-                                setDateStart(e?.target?.value);
+                <div className="flex items-center max-sm:flex-col gap-3 justify-between">
+                    <div className="flex flex-col sm:flex-row items-center w-full gap-4">
+                      <div className="text-xs flex gap-3 items-center cursor-pointer">
+                          <TextFieldTwo
+                              label="Start Date"
+                              placeholder="Start Date Here"
+                              onChange={(e) => {
+                                setDateStart(convertDateFormat(e?.target?.value));
                                 setDateEnd(getYesterdaysDate());
-                            }}
-                            type="date"
-                        />
+                              }}
+                              type="date"
+                          />
+                      </div>
+                      <div className="text-xs flex gap-3 items-center cursor-pointer">
+                          <TextFieldTwo
+                              label="End Date"
+                              placeholder="End Date Here"
+                              onChange={(e) => {
+                                setDateEnd(convertDateFormat(e?.target?.value))
+                              }}
+                              type="date"
+                          />
+                      </div>
+                      <div className="text-xs flex gap-3 items-center cursor-pointer">
+                          <TextFieldTwo
+                              label="Minimum Hours"
+                              placeholder="Minimum Hours Here"
+                              onChange={(e) => {
+                                  setMinHours(parseInt(e?.target?.value))
+                              }}
+                              type="number"
+                          />
+                      </div>
                     </div>
-                    <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
-                        <TextField
-                            label="End Date"
-                            placeholder="End Date Here"
-                            onChange={(e) => {
-                                setDateEnd(e?.target?.value)
-                            }}
-                            type="date"
-                        />
-                    </div>
-                    <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0">
-                        <TextField
-                            label="Minimum Hours"
-                            placeholder="Minimum Hours Here"
-                            onChange={(e) => {
-                                setMinHours(parseInt(e?.target?.value))
-                            }}
-                            type="number"
-                        />
+                    <div className="text-xs flex gap-3 items-center cursor-pointer justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0">
+                      <Button
+                        title="Export as CSV"
+                        size="medium"
+                        color="primary"
+                        onClick={() => {
+                          const theTotalCount = monitorData?.data?.pagination?.totalCount;
+                          setPageSize(theTotalCount);
+                          setDownloadReport(true);
+                        }}
+                        startIcon={<FileIcon />}
+                        className="min-w-[15vw]"
+                        loading={downloadReport}
+                      />
                     </div>
                 </div>
             </Card>
