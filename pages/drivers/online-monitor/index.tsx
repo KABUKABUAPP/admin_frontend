@@ -78,6 +78,14 @@ function objectsToCSVDownload(objectsArray: any, filename = 'data.csv') {
     }
 }
 
+function convertDateFormat(dateString: string): string {
+  // Split the input date string by the hyphen
+  const [year, month, day] = dateString.split('-');
+
+  // Return the date in the desired format
+  return `${month}-${day}-${year}`;
+}
+
 const Drivers: NextPage = () => {
   const router = useRouter();
   const online_status = router.query.online_status;
@@ -207,18 +215,6 @@ const Drivers: NextPage = () => {
   const startDateInputRef = useRef<HTMLInputElement>(null);
   const endDateInputRef = useRef<HTMLInputElement>(null);
 
-  const handleStartDateInputClick = () => {
-    if (startDateInputRef.current) {
-      startDateInputRef.current.click();
-    }
-  };
-
-  const handleEndDateInputClick = () => {
-    if (endDateInputRef.current) {
-      endDateInputRef.current.click();
-    }
-  };
-
   return (
     <>
       <AppHead title="Kabukabu | Drivers" />
@@ -239,8 +235,8 @@ const Drivers: NextPage = () => {
                               label="Start Date"
                               placeholder="Start Date Here"
                               onChange={(e) => {
-                                  setDateStart(e?.target?.value);
-                                  setDateEnd(getYesterdaysDate());
+                                setDateStart(convertDateFormat(e?.target?.value));
+                                setDateEnd(getYesterdaysDate());
                               }}
                               type="date"
                           />
@@ -250,7 +246,7 @@ const Drivers: NextPage = () => {
                               label="End Date"
                               placeholder="End Date Here"
                               onChange={(e) => {
-                                  setDateEnd(e?.target?.value)
+                                setDateEnd(convertDateFormat(e?.target?.value))
                               }}
                               type="date"
                           />
