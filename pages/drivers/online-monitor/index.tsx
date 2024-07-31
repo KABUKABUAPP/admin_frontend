@@ -202,8 +202,7 @@ const Drivers: NextPage = () => {
             <Card bg="#F1F1F1">
                 <div className="flex items-center max-sm:flex-col gap-3 justify-end">
                     <div className="text-xs flex gap-3 items-center cursor-pointer border-r border-r-black justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0 max-sm:border-r-0" onClick={() => {
-                        const theTotalCount = monitorData?.data?.pagination?.totalCount
-
+                        const theTotalCount = monitorData?.data?.pagination?.totalCount;
                         setPageSize(theTotalCount);
                         setDownloadReport(true);
                     }}>

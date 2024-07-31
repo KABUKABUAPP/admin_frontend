@@ -1,5 +1,5 @@
 // components/MapOverlay.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { 
     GoogleMap,
     useLoadScript,
@@ -17,6 +17,10 @@ import { useRouter } from 'next/router';
 import { io } from "socket.io-client";
 import { DEV_MONITOR_URL } from '@/constants';
 import { useDashboardState } from "@/contexts/StateSegmentationContext";
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+
+mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 //const socket = io(`${DEV_MONITOR_URL}`);
 const socket = io(`https://monitor-dev.up.railway.app`);
 
@@ -83,7 +87,7 @@ const DriverModal : React.FC<DriverModalProps> = ({ driver, handleClose, type })
   )
 }
 
-const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatusRider, enableRiderOption, enableDriverOption }) => {
+const MapOverlayTwo: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatusRider, enableRiderOption, enableDriverOption }) => {
   const { setModalContent } = useModalContext();
   const [directions, setDirections] = useState<any>(null);
   const [map, setMap] = React.useState(null);
@@ -162,7 +166,7 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
 
       const allCoordinates = driversCoordinates.concat(ridersCoordinates)
 
-      console.log({riderCoordinates}, riders?.data?.length);
+      console.log({allCoordinates}, riders?.data?.length);
       
       setCoordinates(allCoordinates);
       
@@ -196,48 +200,61 @@ const MapOverlay: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineStatu
 
   const center = coordinates.length > 0 ? coordinates[0] : { lat: 6.5244, lng: 3.3792 };
   
-  const handleMarkerClick = (index: any, coord: any) => {
+  const handleMarkerClick = (coord: any) => {
     console.log(coord);
     setModalContent(
       <DriverModal driver={coord.personnel} handleClose={() => setModalContent(null)} type={coord.type} />
     )
   };
 
-  const onLoad = React.useCallback(function callback(map: any) {
-    const origin = { lat: center.lat, lng: center.lng };
-    // This is just an example of getting and using the map instance!!! don't just blindly copy!
-    const bounds = new window.google.maps.LatLngBounds(origin);
-    map.fitBounds(bounds);
+  const mapWrapper = useRef<HTMLDivElement>(null);
 
-    setMap(map)
-  }, [])
+  useEffect(() => {
+    if (!mapWrapper.current) return;
+
+    const map = new mapboxgl.Map({
+      container: mapWrapper.current,
+      style: 'mapbox://styles/mapbox/streets-v10',
+      center: coordinates.length > 0 ? [coordinates[0].lng, coordinates[0].lat] : [6.5244, 3.3792],
+      zoom: 12
+    });
+
+    map.on('load', () => {
+      if (coordinates.length > 0) {
+        coordinates.forEach(coord => {
+          // Add a marker to the map
+          if (coord) {
+            new mapboxgl.Marker({ element: createMarkerElement(coord) })
+              .setLngLat([coord.lng, coord.lat])
+              .addTo(map)
+              .getElement()
+              .addEventListener('click', () => handleMarkerClick(coord));
+          }
+        });
+      }
+    });
+
+    const createMarkerElement = (coord: any) => {
+      const el = document.createElement('div');
+      el.className = 'marker';
+      el.style.backgroundImage = `url(${coord.type === 'driver' ? iconUrlDriver : iconUrlRider})`;
+      el.style.width = '50px';
+      el.style.height = '50px';
+      el.style.backgroundSize = '100%';
+      el.dataset.id = coord._id;
+      return el;
+    };
+
+    return () => {
+      map.remove();
+    };
+  }, [coordinates]);
 
   return (
     <div className="w-full h-full rounded-lg overflow-hidden" id="map">
-      {!isLoaded ? (
-        <h1>Loading...</h1>
-      ) : (
-        <GoogleMap mapContainerStyle={mapContainerStyle} zoom={10} center={center} onLoad={onLoad}>
-          {coordinates.map((coord, index) => (
-            <>
-            {
-              coord &&
-              <Marker
-                key={index}
-                position={coord}
-                icon={{
-                  url: coord.type === 'driver' ? iconUrlDriver : iconUrlRider, // Replace with the actual path to your custom icon
-                  scaledSize: new window.google.maps.Size(40, 40), // Adjust the size as needed
-                }} 
-                onClick={() => handleMarkerClick(index, coord)}
-              />
-            }
-            </>
-          ))}
-        </GoogleMap>
-      )}
+      <div ref={mapWrapper} className="mapWrapper" style={{width: '100vw', height: '90vh'}} />
     </div>
   );
 };
 
-export default MapOverlay;
+export default MapOverlayTwo;
