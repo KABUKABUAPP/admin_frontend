@@ -164,9 +164,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineSt
         ? d.coordinate[0] : parseFloat(d.coordinate[0]), personnel: d, type: 'rider', _id: d.riderId}
       }) : [];
 
-      const allCoordinates = driversCoordinates.concat(ridersCoordinates)
-
-      console.log({allCoordinates}, riders?.data?.length);
+      const allCoordinates = driversCoordinates.concat(ridersCoordinates);
       
       setCoordinates(allCoordinates);
       
@@ -239,7 +237,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({ onlineStatusDriver, onlineSt
       el.className = 'marker';
       el.style.backgroundImage = `url(${coord.type === 'driver' ? iconUrlDriver : iconUrlRider})`;
       el.style.width = '50px';
-      el.style.height = '50px';
+      el.style.height = `${coord.type === 'driver' ? '70px' : '50px'}`;
       el.style.backgroundSize = '100%';
       el.dataset.id = coord._id;
       return el;
