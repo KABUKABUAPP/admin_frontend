@@ -118,6 +118,12 @@ const Drivers: NextPage = () => {
     if (activeOption) setCarOwner(carOwnerObj[activeOption]);
   }, [JSON.stringify(driverTypeOptions)]);
 
+  useEffect(() => {
+    if (router.query.online_status && router.query.online_status === 'online') setOnlineStatusOption('online')
+    if (router.query.online_status && router.query.online_status === 'offline') setOnlineStatusOption('offline')
+    if (router.query.online_status && router.query.online_status === '') setOnlineStatusOption('')
+  }, [])
+
   return (
     <>
       <AppHead title="Kabukabu | Drivers" />

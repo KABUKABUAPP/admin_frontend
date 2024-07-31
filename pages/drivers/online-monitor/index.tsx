@@ -170,6 +170,15 @@ const Drivers: NextPage = () => {
     )?.keyVal;
     if (activeOption) setCarOwner(carOwnerObj[activeOption]);
   }, [JSON.stringify(driverTypeOptions)]);
+  
+  interface Person {
+    [key: string]: any; // This allows the object to have any number of properties
+    profile_image?: string; // The profile_image field is optional
+  }
+  
+  const removeProfileImageField = (arr: Person[]): Person[] => {
+    return arr.map(({ profile_image, ...rest }) => rest);
+  };
 
   useEffect(() => {
     if (monitorData) {
@@ -177,8 +186,10 @@ const Drivers: NextPage = () => {
 
         if ((monitorData?.data?.data.length === monitorData?.data?.pagination?.totalCount) && downloadReport) {
             console.log('full list', {monitorDataArr: monitorData?.data?.data})
-            
-            objectsToCSVDownload(monitorData?.data?.data, `Online monitor Data starting from ${dateStart} to ${dateEnd}, minimum of ${minHours} hours`);
+
+            const withoutProfileImage = removeProfileImageField(monitorData?.data?.data)
+
+            objectsToCSVDownload(withoutProfileImage, `Online monitor Data starting from ${dateStart} to ${dateEnd}, minimum of ${minHours} hours`);
             setPageSize(5);
             setDownloadReport(false);
         }
