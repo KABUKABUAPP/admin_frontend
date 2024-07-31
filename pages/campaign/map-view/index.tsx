@@ -6,6 +6,7 @@ import { useFormik, Form, FormikProvider } from "formik";
 import DropDown from '@/components/ui/DropDown';
 import { useDashboardState } from "@/contexts/StateSegmentationContext";
 import { useGetMarketerMapQuery } from "@/api-services/marketerService";
+import MapOverlayTwo from "@/pages/live-map/mapOverlayTwo";
 
 const MapViewCampaign = () => {
     const [dropDownOptionSelected, setDropDownOptionSelected] = useState('');
@@ -62,7 +63,7 @@ const MapViewCampaign = () => {
         <>
             <MarketerNav />
             <div className={styles.app}>
-              <MapOverlay onlineStatusDriver={onlineStatusOption} onlineStatusRider={onlineStatusOptionRider} enableDriverOption={enableDriverOption} enableRiderOption={enableRiderOption} />
+              <MapOverlayTwo onlineStatusDriver={onlineStatusOption} onlineStatusRider={onlineStatusOptionRider} enableDriverOption={enableDriverOption} enableRiderOption={enableRiderOption} />
 
               {/* Elements above the map as overlay */}
               <div className={styles.overlay}>

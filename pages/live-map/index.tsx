@@ -1,6 +1,5 @@
 // pages/index.tsx
 import React, { useState, useEffect } from 'react';
-import MapOverlay from './mapOverlay';
 import styles from './style.module.css'; // Add CSS module for styling
 import AppHead from '@/components/common/AppHead';
 import AppLayout from '@/layouts/AppLayout';
