@@ -20,7 +20,7 @@ import { useDashboardState } from "@/contexts/StateSegmentationContext";
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
+mapboxgl.accessToken = `${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}` || '';
 //const socket = io(`${DEV_MONITOR_URL}`);
 const socket = io(`https://monitor-dev.up.railway.app`);
 
