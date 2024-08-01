@@ -34,9 +34,9 @@ function getYesterdaysDate() {
     const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
 
     // Get the day, month, and year
-    const day = yesterday.getDate();
-    const month = yesterday.getMonth() + 1; // Months are zero-based
-    const year = yesterday.getFullYear();
+    const day = today.getDate();
+    const month = today.getMonth() + 1; // Months are zero-based
+    const year = today.getFullYear();
 
     // Format day and month to always have two digits
     const formattedDay = day < 10 ? `0${day}` : day;
