@@ -34,6 +34,8 @@ interface Props {
   referralHistory?: any;
   totalReferredDrivers?: any;
   totalReferredRiders?: any;
+  approveDeclineDate?: any
+  approvalStatus?: any
 }
 
 function copyToClipboard(text: string) {
@@ -84,7 +86,9 @@ const UserInfoCard: FC<Props> = ({
   referrer,
   referralHistory,
   totalReferredDrivers,
-  totalReferredRiders
+  totalReferredRiders,
+  approveDeclineDate,
+  approvalStatus
 }) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -101,6 +105,8 @@ const UserInfoCard: FC<Props> = ({
   const toggleSidebar = () => {
     setIsOpen(true);
   };
+
+  console.log({approvalStatus, approveDeclineDate})
 
   return (
     <div className="flex">
@@ -279,6 +285,18 @@ const UserInfoCard: FC<Props> = ({
             {showDeclineReason && (
               <p className="text-lg font-semibold">
                 Reason: {declineReason}
+              </p>
+            )}
+
+            {approvalStatus === 'active' && (
+              <p className="text-sm font-semibold">
+                Approval Date: {new Date(approveDeclineDate).toLocaleString()}
+              </p>
+            )}
+
+            {approvalStatus === 'declined' && (
+              <p className="text-sm font-semibold">
+                Decline Date: {new Date(approveDeclineDate).toLocaleString()}
               </p>
             )}
 

@@ -152,7 +152,8 @@ export const driversApi = createApi({
               statusRemark: data?.driver?.status_remark,
               referrer: data?.driver?.referrer_details,
               referralCode: data?.driver?.user?.referral_code,
-              referralHistory: data?.driver?.referral_history
+              referralHistory: data?.driver?.referral_history,
+              approveDeclineDate: data?.driver?.user?.approve_or_decline_date ? data?.driver?.user?.approve_or_decline_date : null
             },
             carDetails: {
               carImages: data?.car_details?.images,

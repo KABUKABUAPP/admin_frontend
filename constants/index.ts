@@ -288,7 +288,7 @@ export const driverOptionBarData = [
     keyVal: "deleted",
   },
   {
-    title: "Online Drivers",
+    title: "Online Consistency",
     isActive: false,
     keyVal: "online-monitor",
   }
