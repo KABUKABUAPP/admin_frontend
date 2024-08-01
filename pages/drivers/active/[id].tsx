@@ -392,10 +392,6 @@ const Driver: NextPage = () => {
     }
   }, [onlineMonitorData])
 
-  useEffect(() => {
-    if (fixedDate) console.log({fixedDate})
-  }, [fixedDate])
-
   const { userPermissions } = useUserPermissions();
   const currentPageUrl = router.query.current_page ? `currentPage=${router.query.current_page}` : '';
   const handleBackUrl = router.query.fallbackUrl ? router.query.fallbackUrl : `/drivers/active?${currentPageUrl}${router.query.online_status ? `&online_status=${router.query.online_status}` : ''}`;

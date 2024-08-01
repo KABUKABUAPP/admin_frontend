@@ -123,6 +123,7 @@ export interface TripDetail {
 export interface ViewTripResponse {
   status: string;
   data: {
+    created_at: any;
     coupon_details: any;
     order_id: string;
     origin: {
@@ -194,6 +195,7 @@ export interface ViewTripQuery {
 }
 
 export interface MappedViewTripResponse {
+  createdAt: string | number;
   origin: string;
   destination: string;
   estimatedPrice: number;

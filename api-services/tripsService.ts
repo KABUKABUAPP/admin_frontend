@@ -60,6 +60,7 @@ export const tripsApi = createApi({
       }),
       transformResponse: (response: ViewTripResponse) => {
         if (!response) return {} as MappedViewTripResponse;
+        console.log({response})
         return {
           carModel: `${response?.data?.car?.brand_name} ${response?.data?.car?.model}`,
           destination: `${response?.data?.destination?.city}, ${response?.data?.destination?.state}, ${response?.data?.destination?.country}`,
@@ -88,7 +89,8 @@ export const tripsApi = createApi({
           riderTripRating: response?.data?.rider_rating,
           tripRating: response?.data?.trip_rating,
           riderComment: response?.data?.rider_comment,
-          couponDetails: response?.data?.coupon_details ? response?.data?.coupon_details : null
+          couponDetails: response?.data?.coupon_details ? response?.data?.coupon_details : null,
+          createdAt: response?.data?.created_at ? response?.data?.created_at : null
         } as MappedViewTripResponse;
       },
     }),
