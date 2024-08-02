@@ -236,7 +236,6 @@ const Drivers: NextPage = () => {
                               placeholder="Start Date Here"
                               onChange={(e) => {
                                 setDateStart(convertDateFormat(e?.target?.value));
-                                setDateEnd(getYesterdaysDate());
                               }}
                               type="date"
                           />
