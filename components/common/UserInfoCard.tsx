@@ -106,8 +106,6 @@ const UserInfoCard: FC<Props> = ({
     setIsOpen(true);
   };
 
-  console.log({approvalStatus, approveDeclineDate})
-
   return (
     <div className="flex">
       <Card bg={bg}>

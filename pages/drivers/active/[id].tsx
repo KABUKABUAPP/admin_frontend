@@ -387,7 +387,6 @@ const Driver: NextPage = () => {
 
   useEffect(() => {
     if (onlineMonitorData) {
-      console.log({onlineMonitorData})
       setOnlineMonitorDataRes(onlineMonitorData)
     }
   }, [onlineMonitorData])
@@ -463,78 +462,78 @@ const Driver: NextPage = () => {
                 <>
                   {
                     <div className="my-3">
-                    <Card>
-                      <div className="flex justify-end pt-2">
-                        <p><b>User Status: </b>{capitalizeAllFirstLetters(data.onlineStatus)}</p>
-                        {data.onlineStatus === 'online' ? <div className="mt-1 mx-2" style={{backgroundColor: '#6BBE66', border: '1px solid #6BBE66', borderRadius: '50%', height: '2vh', width: '1vw'}}></div> : <div className="mt-1 mx-2" style={{backgroundColor: '#9A9A9A', border: '1px solid #9A9A9A', borderRadius: '50%', height: '2vh', width: '1vw'}}></div>}
-                      </div>
-                      {(data.onlineSwitch || data.offlineSwitch) && 
-                      <div className="flex justify-end pb-2">
-                        {data.onlineStatus === 'online' ?  `Active since ${timeAgo(data.onlineSwitch)}` : `Last active ${timeAgo(data.offlineSwitch)}`}
-                      </div>}
-                      {
-                        onlineMonitorData &&
-                        <div className="flex justify-between py-2">
-                          <div className="cursor-pointer text-xs bg-[#FFF5D8] p-2 rounded-lg" onClick={() => {
-                            setModalContent(
-                              <div className="w-[90%] sm:w-[50%] md:w-[40%] lg:w-[40%]">
-                                <Card bg="#FFF">
-                                  <div className="flex w-full justify-center items-center">
-                                    <div className="w-[5%] cursor-pointer" onClick={() => {
-                                      setModalContent(null)
-                                    }}>
-                                      <TimesIconRed />
-                                    </div>
-                                    <div className="font-bold w-[95%] flex justify-center items-center">Today's Online Activity</div>
-                                  </div>
-                                  <div className="flex flex-col overflow-y-scroll w-full h-[60vh]">
-                                    {
-                                      !onlineMonitorDataLoading && onlineMonitorData?.data &&
-                                      <div className="flex flex-col gap-3 p-4">
-                                        <div className="flex justify-between">
-                                          <p className="font-bold">Total Online Time (Minutes)</p>
-                                          <p className="font-bold text-xs">{onlineMonitorData?.data?.totalOnlineTimeInMinutes} minutes</p>
-                                        </div>
-                                        <div className="flex justify-between">
-                                          <p className="font-bold">Total Online Hours</p>
-                                          <p className="font-bold text-xs">{onlineMonitorData?.data?.totalOnlineHours.hours}hrs {onlineMonitorData?.data?.totalOnlineHours.minutes}mins</p>
-                                        </div>
-                                        <div className="flex justify-between">
-                                          <p className="font-bold">Total Offline Hours</p>
-                                          <p className="font-bold text-xs">{onlineMonitorData?.data?.totalOfflineHours.hours}hrs {onlineMonitorData?.data?.totalOfflineHours.minutes}mins</p>
-                                        </div>
+                      <Card>
+                        <div className="flex justify-end pt-2">
+                          <p><b>User Status: </b>{capitalizeAllFirstLetters(data.onlineStatus)}</p>
+                          {data.onlineStatus === 'online' ? <div className="mt-1 mx-2" style={{backgroundColor: '#6BBE66', border: '1px solid #6BBE66', borderRadius: '50%', height: '2vh', width: '1vw'}}></div> : <div className="mt-1 mx-2" style={{backgroundColor: '#9A9A9A', border: '1px solid #9A9A9A', borderRadius: '50%', height: '2vh', width: '1vw'}}></div>}
+                        </div>
+                        {(data.onlineSwitch || data.offlineSwitch) && 
+                        <div className="flex justify-end pb-2">
+                          {data.onlineStatus === 'online' ?  `Active since ${timeAgo(data.onlineSwitch)}` : `Last active ${timeAgo(data.offlineSwitch)}`}
+                        </div>}
+                        {
+                          onlineMonitorData &&
+                          <div className="flex justify-between py-2">
+                            <div className="cursor-pointer text-xs bg-[#FFF5D8] p-2 rounded-lg" onClick={() => {
+                              setModalContent(
+                                <div className="w-[90%] sm:w-[50%] md:w-[40%] lg:w-[40%]">
+                                  <Card bg="#FFF">
+                                    <div className="flex w-full justify-center items-center">
+                                      <div className="w-[5%] cursor-pointer" onClick={() => {
+                                        setModalContent(null)
+                                      }}>
+                                        <TimesIconRed />
                                       </div>
-                                    }
-                                    {
-                                      onlineMonitorData?.data?.trackers?.map((track: any) => (
-                                        <div className="flex flex-col mt-2 mb-2 mx-3 p-4 bg-[#F6F6F6] rounded-lg">
-                                          <div className="mx-3 flex justify-between">
-                                            <p className="mt-1 mb-1 font-bold">{track.type === 'online' ? `${formatTime(track.online_switch_time)} - ${formatTime(track.offline_switch_time)}` : `${formatTime(track.offline_switch_time)} - ${formatTime(track.online_switch_time)}`}</p>
-                                            <p className="mt-1 mb-1 font-bold text-xs">{track.type === 'online' ? `Online for ${calculateHoursBetween(track.online_switch_time, track.offline_switch_time)}` : `Offline for ${calculateHoursBetween(track.offline_switch_time, track.online_switch_time)}`}</p>
+                                      <div className="font-bold w-[95%] flex justify-center items-center">Today's Online Activity</div>
+                                    </div>
+                                    <div className="flex flex-col overflow-y-scroll w-full h-[60vh]">
+                                      {
+                                        !onlineMonitorDataLoading && onlineMonitorData?.data &&
+                                        <div className="flex flex-col gap-3 p-4">
+                                          <div className="flex justify-between">
+                                            <p className="font-bold">Total Online Time (Minutes)</p>
+                                            <p className="font-bold text-xs">{onlineMonitorData?.data?.totalOnlineTimeInMinutes} minutes</p>
+                                          </div>
+                                          <div className="flex justify-between">
+                                            <p className="font-bold">Total Online Hours</p>
+                                            <p className="font-bold text-xs">{onlineMonitorData?.data?.totalOnlineHours.hours}hrs {onlineMonitorData?.data?.totalOnlineHours.minutes}mins</p>
+                                          </div>
+                                          <div className="flex justify-between">
+                                            <p className="font-bold">Total Offline Hours</p>
+                                            <p className="font-bold text-xs">{onlineMonitorData?.data?.totalOfflineHours.hours}hrs {onlineMonitorData?.data?.totalOfflineHours.minutes}mins</p>
                                           </div>
                                         </div>
-                                      ))
-                                    }
+                                      }
+                                      {
+                                        onlineMonitorData?.data?.trackers?.map((track: any) => (
+                                          <div className="flex flex-col mt-2 mb-2 mx-3 p-4 bg-[#F6F6F6] rounded-lg">
+                                            <div className="mx-3 flex justify-between">
+                                              <p className="mt-1 mb-1 font-bold">{track.type === 'online' ? `${formatTime(track.online_switch_time)} - ${formatTime(track.offline_switch_time)}` : `${formatTime(track.offline_switch_time)} - ${formatTime(track.online_switch_time)}`}</p>
+                                              <p className="mt-1 mb-1 font-bold text-xs">{track.type === 'online' ? `Online for ${calculateHoursBetween(track.online_switch_time, track.offline_switch_time)}` : `Offline for ${calculateHoursBetween(track.offline_switch_time, track.online_switch_time)}`}</p>
+                                            </div>
+                                          </div>
+                                        ))
+                                      }
 
-                                    
-                                    {
-                                      onlineMonitorData?.data?.trackers?.length === 0 &&
-                                      <p className="text-center font-bold">No activity</p>
-                                    }
-                                  </div>
-                                </Card>
-                              </div>
-                            )
-                          }}>View Today's Online Activity</div>
-                          <div className="cursor-pointer text-xs bg-[#FFF5D8] p-2 rounded-lg" onClick={() => {
-                            setModalContent(
-                              <ViewExtendedActivity lastFiveDays={lastFiveDays} />
-                            )
-                          }}>View Extended Online Activity</div>
-                      </div>
-                      }
-                      
-                    </Card>
+                                      
+                                      {
+                                        onlineMonitorData?.data?.trackers?.length === 0 &&
+                                        <p className="text-center font-bold">No activity</p>
+                                      }
+                                    </div>
+                                  </Card>
+                                </div>
+                              )
+                            }}>View Today's Online Activity</div>
+                            <div className="cursor-pointer text-xs bg-[#FFF5D8] p-2 rounded-lg" onClick={() => {
+                              setModalContent(
+                                <ViewExtendedActivity lastFiveDays={lastFiveDays} />
+                              )
+                            }}>View Extended Online Activity</div>
+                        </div>
+                        }
+                        
+                      </Card>
                     </div>
                   }
                   {userPermissions &&
