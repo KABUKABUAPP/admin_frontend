@@ -177,6 +177,10 @@ export const routePermissionsMapping: {
   {
     route: '/car-repair-loan',
     permissionLabel: ''
+  },
+  {
+    route: '/campaigns',
+    permissionLabel: ''
   }
 ];
 
@@ -283,6 +287,11 @@ export const driverOptionBarData = [
     isActive: false,
     keyVal: "deleted",
   },
+  {
+    title: "Online Consistency",
+    isActive: false,
+    keyVal: "online-monitor",
+  }
 ];
 
 export const driverTypeFilterOptionsData = [

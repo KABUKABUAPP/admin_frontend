@@ -236,8 +236,8 @@ const ViewTracker:FC<any> = ({lastFiveDays, conditionalDate, conditionalTimeline
   const [timeline, setTimeline] = useState('');
   const [fixedDate, setFixedDate] = useState(`${year}-${month}-${day}`);
   const [dateStart, setDateStart] = useState('');
-  const [dateEnd, setDateEnd] = useState('')
   const { setModalContent } = useModalContext();
+  const [dateEnd, setDateEnd] = useState('')
   
   const router = useRouter();
   const { id } = router.query;
@@ -392,13 +392,9 @@ const Driver: NextPage = () => {
     }
   }, [onlineMonitorData])
 
-  useEffect(() => {
-    if (fixedDate) console.log({fixedDate})
-  }, [fixedDate])
-
   const { userPermissions } = useUserPermissions();
   const currentPageUrl = router.query.current_page ? `currentPage=${router.query.current_page}` : '';
-  const handleBackUrl = router.query.fallbackUrl ? router.query.fallbackUrl : `/drivers/active?${currentPageUrl}`;
+  const handleBackUrl = router.query.fallbackUrl ? router.query.fallbackUrl : `/drivers/active?${currentPageUrl}${router.query.online_status ? `&online_status=${router.query.online_status}` : ''}`;
 
   return (
     <>

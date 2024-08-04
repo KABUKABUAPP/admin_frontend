@@ -26,10 +26,9 @@ import TimesIcon from "@/components/icons/TimesIcon";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
 import TripRatingCard from "@/components/modules/Trips/TripRatingCard";
-import StaticMap from "@/components/common/AppMap/TestMap";
 import { capitalizeAllFirstLetters } from "@/utils";
-import RouteMap from "@/components/common/AppMap/RouteMap";
 import Card from "@/components/common/Card";
+import RouteMapThree from "@/components/common/AppMap/RouteMapThree";
 const socket = io("https://rideservice-dev.up.railway.app");
 
 const ViewTrip: NextPage = () => {
@@ -122,6 +121,7 @@ const ViewTrip: NextPage = () => {
     tripToEnd,
     driverRating,
     riderRating,
+    orderCreated
   }: Record<string, string | number>) => {
     const tripToEndStr = tab === 'completed' ? 'Trip Ended' : tab === 'cancelled_orders' ? 'Trip Cancelled' : 'Trip To End'
     return [
@@ -144,13 +144,26 @@ const ViewTrip: NextPage = () => {
         isRating: false,
       },
       {
+        topTitle: "Order Created",
+        topValue: new Date(orderCreated).toUTCString() != "Invalid Date"
+        ? orderCreated
+          ? new Date(orderCreated).toLocaleString()
+          : ""
+        : "",
+        topIcon: <ClockIcon />,
+        bottomTitle: "",
+        bottomValue: '',
+        bottomIcon: '',
+        isRating: false,
+      },
+      {
         topTitle:
           new Date(tripStarted).toUTCString() != "Invalid Date"
             ? tripStarted
               ? "Trip started"
               : ""
             : "",
-        topValue: tripStarted ? new Date(tripStarted).toUTCString() : "",
+        topValue: tripStarted ? new Date(tripStarted).toLocaleString() : "",
         topIcon: <ClockIcon />,
         bottomTitle:
           new Date(tripToEnd).toUTCString() != "Invalid Date"
@@ -158,7 +171,7 @@ const ViewTrip: NextPage = () => {
               ? tripToEndStr
               : ""
             : "",
-        bottomValue: tripToEnd ? new Date(tripToEnd).toUTCString() : "",
+        bottomValue: tripToEnd ? new Date(tripToEnd).toLocaleString() : "",
         bottomIcon: <ClockIcon />,
         isRating: true,
       },
@@ -244,22 +257,20 @@ const ViewTrip: NextPage = () => {
                 <div className="w-full h-full max-h-[550px] max-md:pl-0">
                   {data?.startPoint && data?.endPoint && (
                     <>
-                      {/*<StaticMap
-                        endPoint={[data?.endPoint[1], data?.endPoint[0]]}
-                        startPoint={
-                          liveLocation
-                            ? [liveLocation.lng, liveLocation.lat]
-                            : [data?.startPoint[1], data?.startPoint[0]]
-                        }
-                      />*/}
-
-                      <RouteMap start={
+                      {/*<RouteMap start={
                           liveLocation
                           ? {lat: liveLocation.lng, lng: liveLocation.lat}
                           : {lat: data?.startPoint[1], lng: data?.startPoint[0]}
                         } 
                         end={{lat: data?.endPoint[1], lng: data?.endPoint[0]}} 
-                      />
+                      />*/}
+
+                      <RouteMapThree start={
+                          liveLocation
+                          ? [liveLocation.lng, liveLocation.lat]
+                          : [data?.startPoint[0], data?.startPoint[1]]
+                        } 
+                        end={[data?.endPoint[0], data?.endPoint[1]]} />
                     </>
                   )}
                 </div>
@@ -276,6 +287,7 @@ const ViewTrip: NextPage = () => {
                       destination: data.destination,
                       estimatedPrice: data.estimatedPrice.toString(),
                       paymentType: data.paymentType,
+                      orderCreated: data.createdAt,
                       tripStarted: data.tripStarted,
                       tripToEnd: data.tripEnded,
                       driverRating: data.driverTripRating,

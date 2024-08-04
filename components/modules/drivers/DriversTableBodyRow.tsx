@@ -39,7 +39,7 @@ const DriversTableBodyRow: FC<Props> = ({
   return (
     <div
       className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
-      onClick={() => router.push(`/drivers/${subPath}/${userId}?current_page=${currentPage}&inspection_code=${inspectionCode}${onboardStatus ? `&onboardStatus=${onboardStatus}` : ''}`)}
+      onClick={() => router.push(`/drivers/${subPath}/${userId}?current_page=${currentPage}&inspection_code=${inspectionCode}${onboardStatus ? `&onboardStatus=${onboardStatus}` : ''}${router.query.online_status ? `&online_status=${router.query.online_status}` : ''}`)}
     >
       <div style={{ flex: 2 }} className="flex items-center">
           <p className="text-xs font-bold cursor-pointer">

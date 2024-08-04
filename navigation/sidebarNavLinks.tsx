@@ -14,6 +14,7 @@ import MessageIcon from "@/components/icons/MessageIcon";
 import MapPinIcon from "@/components/icons/MapPinIcon";
 import UserViewFinder from "@/components/icons/UserViewFinder";
 import FolderSettingsIcon from "@/components/icons/FolderSettingsIcon";
+import MicIcon from "@/components/icons/MicIcon";
 
 const sidebarNavLinks: SidebarLink[] = [
   {
@@ -112,6 +113,12 @@ const sidebarNavLinks: SidebarLink[] = [
     link: "/live-map",
     isActive: false,
     icon: <MapPinIcon />,
+  },
+  {
+    title: "Campaigns",
+    link: "/campaigns",
+    isActive: false,
+    icon: <MicIcon />,
   }
 ];
 

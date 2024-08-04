@@ -72,7 +72,8 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
             item.route === "/sharp-cars" ||
             item.route === "/live-map" ||
             item.route === "/car-owners" ||
-            item.route === "/car-repair-loan"
+            item.route === "/car-repair-loan" ||
+            item.route === "/campaigns"
           ) {
             return true;
           } else {
@@ -88,7 +89,8 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
               item.route === "/sharp-cars" ||
               item.route === "/live-map" ||
               item.route === "/car-owners" ||
-              item.route === "/car-repair-loan"
+              item.route === "/car-repair-loan" ||
+              item.route === "/campaigns"
             ) {
               return true;
             } else {

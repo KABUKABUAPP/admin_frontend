@@ -47,13 +47,13 @@ const FarePrice: NextPage = () => {
           <ActionBar handleBack={() => router.push(`/fare-prices?tab=${router.query.current_tab}`)}>
             {data && (
               <Button
-                title={
-                  data.data.surge_status === true ? "End Surge" : "Start Surge"
-                }
+                title={'View Surges'}
                 size="large"
                 color="tetiary"
                 startIcon={<SurgeIcon />}
-                onClick={handleSurge}
+                onClick={() => {
+                  router.push(`/fare-prices/view-surge/${id}?tab=${router.query.current_tab}`)
+                }}
               />
             )}
             <Button
