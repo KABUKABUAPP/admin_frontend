@@ -7,7 +7,7 @@ import {
 } from "@reduxjs/toolkit/query/react";
 
 import { RIDES_BASE_URL } from "@/constants";
-import { logout, secondsToMilliSeconds } from "@/utils";
+import { capitalizeAllFirstLetters, logout, secondsToMilliSeconds } from "@/utils";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "@/constants";
 import {
@@ -157,7 +157,7 @@ export const driversApi = createApi({
             },
             carDetails: {
               carImages: data?.car_details?.images,
-              carModel: data?.car_details?.model,
+              carModel: capitalizeAllFirstLetters(`${data?.car_details?.brand_name} ${data?.car_details?.model}`),
               carColor: data?.car_details?.color,
               plateNumber: data?.car_details?.plate_number,
             },
