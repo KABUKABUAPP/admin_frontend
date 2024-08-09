@@ -141,8 +141,8 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
             setMinAmount &&
             <div className="text-xs flex gap-3 items-center cursor-pointer">
               <TextFieldTwo
-                  label="Minimum Hours"
-                  placeholder="Minimum Hours Here"
+                  label="Minimum Amount"
+                  placeholder="Minimum Amount Here"
                   onChange={(e) => {
                       setMinAmount(parseInt(e?.target?.value))
                   }}

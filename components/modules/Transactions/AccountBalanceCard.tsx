@@ -16,9 +16,7 @@ const AccountBalanceCard: FC<Props> = ({
   return (
     <div
       onClick={() => handleClick(title)}
-      className={`${
-        isActive ? "bg-[#FEC319] scale-110" : "bg-[#EFEFEF]"
-      } rounded-lg w-[220px] max-w-[100%] px-8 py-4 transition-all cursor-pointer flex flex-col justify-center`}
+      className={`bg-[#FEC319] rounded-lg w-[180px] max-w-[100%] px-8 py-4 transition-all cursor-pointer flex flex-col justify-center`}
     >
       <p className={`font-bold transition-all ${isActive ? "text-2xl" : "text-xl"}`}>
         N{amount?.toLocaleString()}
