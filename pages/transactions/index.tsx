@@ -160,6 +160,10 @@ const Transactions: NextPage = () => {
     { refetchOnMountOrArgChange: true }
   );
 
+  useEffect(() => {
+    if (transactionCard) console.log({transactionCard})
+  }, [transactionCard])
+
   return (
     <>
       <AppHead title="Kabukabu | Transactions" />
