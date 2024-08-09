@@ -55,6 +55,7 @@ export const transactionsApi = createApi({
         transformResponse: (response: any) => {
           if (!response) return response as any;
           else {
+            console.log({response})
             const mappedData = response.data.data.rows.map((tx: any) => {
               return {
                 date: tx?.createdAt,
@@ -66,7 +67,7 @@ export const transactionsApi = createApi({
                 amountRemaining: "",
                 tripId: tx?.narration_id,
                 userType: tx?.user_type,
-                name: tx?.full_name
+                name: capitalizeAllFirstLetters(tx?.full_name)
               };
             });
 
@@ -113,6 +114,19 @@ export const transactionsApi = createApi({
       },
     }),
     getSingleTransaction: build.query<any, any>(
+      {
+        query: ({ narration, narration_id, id }) => ({
+          url: `admin/transaction/view/${id}?narration=${narration}&narration_id=${narration_id}`
+        }),
+        transformResponse: (response: any) => {
+          if (!response) return {};
+          else {
+            return response?.data
+          }
+        },
+      }
+    ),
+    getTotalWalletBalances: build.query<any, any>(
       {
         query: ({ narration, narration_id, id }) => ({
           url: `admin/transaction/view/${id}?narration=${narration}&narration_id=${narration_id}`
