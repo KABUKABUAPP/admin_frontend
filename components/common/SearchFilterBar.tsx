@@ -5,6 +5,15 @@ import DropDown from "../ui/DropDown";
 import { useRouter } from "next/router";
 import Button from "../ui/Button/Button";
 import AddIcon from "../icons/AddIcon";
+import TextFieldTwo from "../ui/Input/TextFieldTwo/TextFieldTwo";
+
+function convertDateFormat(dateString: string): string {
+  // Split the input date string by the hyphen
+  const [year, month, day] = dateString.split('-');
+
+  // Return the date in the desired format
+  return `${month}-${day}-${year}`;
+}
 
 interface Props {
   filterOptions?: {
@@ -31,6 +40,9 @@ interface Props {
   }[];
   tripPaymentOptionsSelected?: string;
   handleTripPayments?: (val: string | number) => void;
+  setDateStart?: (val: any) => void;
+  setDateEnd?: (val: any) => void;
+  setMinAmount?: (val: any) => void;
 }
 
 const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
@@ -50,7 +62,10 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
   tripPaymentOptions,
   tripPaymentOptionsSelected,
   handleTripPayments,
-  tripPaymentView
+  tripPaymentView,
+  setDateStart,
+  setDateEnd,
+  setMinAmount
 }) => {
   const router = useRouter();
 
@@ -93,6 +108,50 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
       <div className="flex-1">{children}</div>
 
       <div className="text-xs flex gap-3 items-center cursor-pointer">
+        <div className="flex flex-col sm:flex-row items-center w-full gap-4">
+          {
+            setDateStart &&
+            <div className="text-xs flex gap-3 items-center cursor-pointer">
+              <TextFieldTwo
+                  label="Start Date"
+                  placeholder="Start Date Here"
+                  onChange={(e) => {
+                    setDateStart(convertDateFormat(e?.target?.value));
+                  }}
+                  type="date"
+              />
+            </div>
+          }
+          
+          {
+            setDateEnd &&
+            <div className="text-xs flex gap-3 items-center cursor-pointer">
+              <TextFieldTwo
+                  label="End Date"
+                  placeholder="End Date Here"
+                  onChange={(e) => {
+                    setDateEnd(convertDateFormat(e?.target?.value))
+                  }}
+                  type="date"
+              />
+            </div>
+          }
+          
+          {
+            setMinAmount &&
+            <div className="text-xs flex gap-3 items-center cursor-pointer">
+              <TextFieldTwo
+                  label="Minimum Hours"
+                  placeholder="Minimum Hours Here"
+                  onChange={(e) => {
+                      setMinAmount(parseInt(e?.target?.value))
+                  }}
+                  type="number"
+              />
+            </div>
+          }
+          
+        </div>
         {carDeliveryView && <Button title="New Delivery" size="medium" startIcon={<AddIcon />} color="tetiary" className="border border-[#000]" onClick={() => {router.push('/sharp-cars/car-deliveries/new-delivery')}} />}
         {
           tripPaymentView &&
