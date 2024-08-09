@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 
 import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
 import { useGetAllTransactionsQuery } from "@/api-services/transactionsService";
@@ -17,17 +17,21 @@ const headCellData = [
 
 interface Props {
   order: string;
+  dateStart?: any;
+  dateEnd?: any;
+  minAmount?: any;
+  setTotalWithdrawal: any;
 }
 
-const AllTransactionsTable: FC<Props> = ({ order }) => {
+const AllTransactionsTable: FC<Props> = ({ order, dateStart, dateEnd, minAmount, setTotalWithdrawal }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState<string>("");
   const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
-    { limit: pageSize, page: currentPage, search: search, filter: "", order },
+    { limit: pageSize, page: currentPage, search: search, filter: "", order, dateStart, dateEnd, minAmount },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
-
+  
   return (
     <>
       <EnhancedTable

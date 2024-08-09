@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 
 import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
 import { useGetAllTransactionsQuery } from "@/api-services/transactionsService";
@@ -17,9 +17,13 @@ const headCellData = [
 
 interface Props {
   order: string;
+  dateStart?: any;
+  dateEnd?: any;
+  minAmount?: any;
+  setTotalWithdrawal: any;
 }
 
-const SubscriptionsTable: FC<Props> = ({order}) => {
+const SubscriptionsTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, setTotalWithdrawal}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState<string>("");
@@ -29,7 +33,10 @@ const SubscriptionsTable: FC<Props> = ({order}) => {
       page: currentPage,
       search: search,
       filter: "driver_trip_charges",
-      order
+      order,
+      dateStart,
+      dateEnd,
+      minAmount
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );

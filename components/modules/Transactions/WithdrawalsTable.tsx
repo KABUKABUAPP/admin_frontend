@@ -1,6 +1,6 @@
 import { useGetAllTransactionsQuery } from "@/api-services/transactionsService";
 import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import TopUpTableRow from "./TableRows/TopUpTableRow";
 import Pagination from "@/components/common/Pagination";
 
@@ -16,9 +16,13 @@ const headCellData = [
 
 interface Props {
   order: string;
+  dateStart?: any;
+  dateEnd?: any;
+  minAmount?: any;
+  setTotalWithdrawal: any;
 }
 
-const WithdrawalsTable: FC<Props> = ({order}) => {
+const WithdrawalsTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, setTotalWithdrawal}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState<string>("");
@@ -28,10 +32,19 @@ const WithdrawalsTable: FC<Props> = ({order}) => {
       page: currentPage,
       search: search,
       filter: "DRIVER_WALLET_WITHDRAWAL",
-      order
+      order,
+      dateStart,
+      dateEnd,
+      minAmount
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
+  
+  useEffect(() => {
+    if (data) {
+      setTotalWithdrawal(data?.totalWithdrawalDebit)
+    }
+  }, [data])
 
   return (
     <>
