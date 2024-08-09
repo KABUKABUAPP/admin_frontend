@@ -362,6 +362,11 @@ export const transactionsOptionsBar = [
     keyVal: "withdrawals",
   },
   {
+    title: "Manual Wallet Credit",
+    isActive: false,
+    keyVal: "manual_credit",
+  },
+  {
     title: "Subscriptions",
     isActive: false,
     keyVal: "subscriptions",

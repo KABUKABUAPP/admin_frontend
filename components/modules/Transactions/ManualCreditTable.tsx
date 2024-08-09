@@ -1,18 +1,17 @@
-import { useGetAllTransactionsQuery } from '@/api-services/transactionsService';
-import EnhancedTable from '@/components/common/EnhancedTable/EnhancedTable'
-import Pagination from '@/components/common/Pagination';
-import React, { FC, useEffect, useState } from 'react'
-import SharpPaymentsTableRow from './TableRows/SharpPaymentsTableRow';
+import { useGetAllTransactionsQuery } from "@/api-services/transactionsService";
+import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
+import React, { FC, useEffect, useState } from "react";
+import TopUpTableRow from "./TableRows/TopUpTableRow";
+import Pagination from "@/components/common/Pagination";
 
 const headCellData = [
   { title: "Transaction ID", flex: 1 },
   { title: "User", flex: 2 },
+  { title: "User Type", flex: 2 },
   { title: "Type", flex: 1 },
   { title: "Narration", flex: 1 },
   { title: "Price", flex: 1 },
-  { title: "Amount remaining", flex: 1 },
   { title: "Date", flex: 1 },
-  { title: "", flex: 2 },
 ];
 
 interface Props {
@@ -23,16 +22,30 @@ interface Props {
   setTotalWithdrawal: any;
 }
 
-const SharpPaymentsTable:FC<Props> = ({order, dateStart, dateEnd, minAmount, setTotalWithdrawal}) => {
-  
+const ManualCreditTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, setTotalWithdrawal}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState<string>("");
   const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
-    { limit: pageSize, page: currentPage, search: search, filter: 'sharp_payment', order, dateStart, dateEnd, minAmount },
+    {
+      limit: pageSize,
+      page: currentPage,
+      search: search,
+      filter: "CREDIT_USER_WALLET_FROM_ADMIN",
+      order,
+      dateStart,
+      dateEnd,
+      minAmount
+    },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
-  
+
+  useEffect(() => {
+    if (data) {
+      setTotalWithdrawal(data?.totalWithdrawalCredit)
+    }
+  }, [data])
+
   return (
     <>
       <EnhancedTable
@@ -40,9 +53,9 @@ const SharpPaymentsTable:FC<Props> = ({order, dateStart, dateEnd, minAmount, set
         generic={true}
         maxWidth="100vw"
         isLoading={isLoading}
-        isError={isError}
         refetch={refetch}
-        rowComponent={(rows)=><SharpPaymentsTableRow data={rows}/>}
+        isError={isError}
+        rowComponent={(rows)=><TopUpTableRow data={rows}/>}
         rowData={data?.data}
       />
       {data && (
@@ -55,7 +68,7 @@ const SharpPaymentsTable:FC<Props> = ({order, dateStart, dateEnd, minAmount, set
         />
       )}
     </>
-  )
-}
+  );
+};
 
-export default SharpPaymentsTable
+export default ManualCreditTable;

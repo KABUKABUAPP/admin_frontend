@@ -47,15 +47,15 @@ export const transactionsApi = createApi({
   reducerPath: "transactionsApi",
   baseQuery: baseQueryWithLogoutOnTokenExpiration,
   endpoints: (build) => ({
-    getAllTransactions: build.query<TransactionsModel, GetAllTransactionsQuery>(
+    getAllTransactions: build.query<any, any>(
       {
-        query: ({ limit, page, search, filter, order }) => ({
-          url: `/admin/transaction/all?limit=${limit}&page=${page}&search=${search}&filter=${filter.toUpperCase()}&order=${order}`
+        query: ({ limit, page, search, filter, order, dateStart, dateEnd, minAmount }) => ({
+          url: `/admin/transaction/all?limit=${limit}&page=${page}&search=${search}&filter=${filter.toUpperCase()}&order=${order}${dateStart ? `&dateFilter=${dateStart}` : ''}${dateEnd ? `&dateFilter=${dateEnd}` : ''}${minAmount ? `&minAmount=${minAmount}` : ''}`
         }),
-        transformResponse: (response: GetAllTransactions) => {
-          if (!response) return response as TransactionsModel;
+        transformResponse: (response: any) => {
+          if (!response) return response as any;
           else {
-            const mappedData = response.data.data.rows.map((tx) => {
+            const mappedData = response.data.data.rows.map((tx: any) => {
               return {
                 date: tx?.createdAt,
                 narration: tx?.narration,
@@ -67,10 +67,10 @@ export const transactionsApi = createApi({
                 tripId: tx?.narration_id,
                 userType: tx?.user_type,
                 name: tx?.full_name
-              } as TransactionsDataModel;
+              };
             });
 
-            return { totalCount: response.data.total, data: mappedData };
+            return { totalCount: response.data.total, data: mappedData, totalWithdrawalCredit: response?.data?.summation?.credit?.success, totalWithdrawalDebit: response?.data?.summation?.debit?.success };
           }
         },
       }

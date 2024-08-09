@@ -134,7 +134,7 @@ const FinancialsCard: FC<Props> = ({
           {
             isLoading ?
             <Loader /> :
-            data?.data?.map((transaction) => (
+            data?.data?.map((transaction: any) => (
               <div className="flex gap-2 justify-center items-center rounded-md p-3 border border-[#E6E6E6] my-3">
                 <div className="flex justify-center items-center w-[5%]">{transaction.type === 'DR' ? <ArrowDownToLine /> : <ArrowUpToLine />}</div>
                 <div className="flex flex-col justify-start w-[75%] gap-2">

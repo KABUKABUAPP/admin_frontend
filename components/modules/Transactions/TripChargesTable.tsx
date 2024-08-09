@@ -1,7 +1,7 @@
 import { useGetAllTransactionsQuery } from "@/api-services/transactionsService";
 import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
 import Pagination from "@/components/common/Pagination";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import TripChargesTableRow from "./TableRows/TripChargesTableRow";
 
 const headCellData = [
@@ -16,9 +16,13 @@ const headCellData = [
 
 interface Props {
   order: string;
+  dateStart?: any;
+  dateEnd?: any;
+  minAmount?: any;
+  setTotalWithdrawal: any;
 }
 
-const TripChargesTable: FC<Props> = ({order}) => {
+const TripChargesTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, setTotalWithdrawal}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState<string>("");
@@ -28,7 +32,10 @@ const TripChargesTable: FC<Props> = ({order}) => {
       page: currentPage,
       search: search,
       filter: "trip_charges_to_kabukabu",
-      order
+      order,
+      dateStart,
+      dateEnd,
+      minAmount
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
