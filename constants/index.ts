@@ -5,6 +5,7 @@ export const RIDES_BASE_URL = process.env.NEXT_PUBLIC_RIDE_BASE_URL;
 export const HUBS_BASE_URL = process.env.NEXT_PUBLIC_HUBS_BASE_URL;
 export const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 export const DEV_MONITOR_URL = process.env.NEXT_PUBLIC_DEV_MONITOR_URL;
+export const TRANSACTION_BASE_URL = process.env.NEXT_PUBLIC_TRANSACTION_BASE_URL
 export const milliSecondToSecondConversionRate = 1000;
 export const ACCESS_TOKEN = "AUTH_TOKEN__ACESS-$";
 export const USER_TOKEN = "USER_stoRED_$##";
@@ -360,6 +361,11 @@ export const transactionsOptionsBar = [
     title: "Withdrawals",
     isActive: false,
     keyVal: "withdrawals",
+  },
+  {
+    title: "Manual Wallet Credit",
+    isActive: false,
+    keyVal: "manual_credit",
   },
   {
     title: "Subscriptions",

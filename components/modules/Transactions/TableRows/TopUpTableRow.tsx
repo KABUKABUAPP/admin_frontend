@@ -23,7 +23,7 @@ const TopUpTableRow: FC<Props> = ({ data }) => {
       </div>
 
       <div style={{ flex: 2 }}>
-        <p className="text-xs font-bold">{data?.user}</p>
+        <p className="text-xs font-bold">{data?.name}</p>
       </div>
 
       <div style={{ flex: 2 }}>

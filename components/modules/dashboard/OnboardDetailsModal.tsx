@@ -41,16 +41,18 @@ const OnboardDetailsModal:FC<any> = ({onboardSelectedData}) => {
                     {
                         onboardSelectedData?.data_list?.map((ref: any) => (
                             <div className="flex mt-2 mb-2 mx-3 p-4 bg-[#F6F6F6] rounded-lg">
+                                {
+                                    ref.full_name &&
+                                    <div className="mx-3">
+                                        <Avatar imageUrl={''} fallBack={ref.full_name[0].toUpperCase()} size="sm" />
+                                    </div>
+                                }
                                 <div className="mx-3">
-                                    <Avatar imageUrl={''} fallBack={ref.full_name[0].toUpperCase()} size="sm" />
-                                </div>
-                                <div className="mx-3">
-                                    <p className="mt-1 mb-1">{capitalizeAllFirstLetters(ref.full_name)}</p>
-                                    <p className="mt-1 mb-1">Onboarding step: {ref.onboarding_step}</p>
-                                    
-                                    <p className="mt-1 mb-1">Date Created: {formatTime(ref.created_at)}</p>
-                                    <p className="mt-1 mb-1">Status Remark: {ref.driver.status_remark}</p>
-                                    <p className="mt-1 mb-1 text-xs text-[#9A9A9A]">{ref.driver.car_owner ? 'Owns the car' : 'Does not own the car'}</p>
+                                    {ref.full_name && <p className="mt-1 mb-1">{capitalizeAllFirstLetters(ref.full_name)}</p>}
+                                    {ref.onboarding_step > 0 && <p className="mt-1 mb-1">Onboarding step: {ref.onboarding_step}</p>}
+                                    {ref.created_at && <p className="mt-1 mb-1">Date Created: {formatTime(ref.created_at)}</p>}
+                                    {ref.driver && ref.driver.status_remark && <p className="mt-1 mb-1">Status Remark: {ref.driver.status_remark}</p>}
+                                    {ref.driver && ref.driver.car_owner && <p className="mt-1 mb-1 text-xs text-[#9A9A9A]">{ref.driver.car_owner ? 'Owns the car' : 'Does not own the car'}</p>}
                                     {
                                     ref.is_onboarding_complete &&
                                     <p className="mt-1 mb-1 text-xs text-[#9A9A9A]">User has completed onboarding</p>
