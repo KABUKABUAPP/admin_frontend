@@ -61,8 +61,8 @@ const Transactions: NextPage = () => {
     { label: "Oldest First", value: "oldest_first", default: false },
   ];
   const tripPaymentOptions = [
-    { label: "All", value: "trip_payment", default: true },
-    { label: "Regular", value: "REGULAR_TRIP_PAYMENT", default: false },
+    { label: "All", value: "trip_payment", default: false },
+    { label: "Regular", value: "REGULAR_TRIP_PAYMENT", default: true },
     { label: "SUV", value: "SUV_TRIP_PAYMENT", default: false },
     { label: "Tricycle", value: "TRICYCLE_TRIP_PAYMENT", default: false },
     { label: "Dispatch", value: "DISPATCH_TRIP_PAYMENT", default: false },
@@ -70,7 +70,7 @@ const Transactions: NextPage = () => {
   ];
   const [tripPaymentView, setTripPaymentsView] = useState(false);
   const [tripPaymentOptionsSelected, setTripPaymentOptionsSelected] = useState<string>(
-    tripPaymentOptions.find((opt) => opt.default === true)?.value || "trip_payment"
+    tripPaymentOptions.find((opt) => opt.default === true)?.value || "REGULAR_TRIP_PAYMENT"
   );
   const [selectedDropDown, setSelectedDropDown] = useState<string>(
     dropDownOptions.find((opt) => opt.default === true)?.value || "newest_first"
@@ -159,10 +159,6 @@ const Transactions: NextPage = () => {
     { range: statusFilter },
     { refetchOnMountOrArgChange: true }
   );
-
-  useEffect(() => {
-    if (transactionCard) console.log({transactionCard})
-  }, [transactionCard])
 
   return (
     <>
