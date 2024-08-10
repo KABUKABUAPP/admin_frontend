@@ -12,7 +12,7 @@ const headCellData = [
   { title: "Narration", flex: 2 },
   { title: "Price", flex: 1 },
   { title: "Date", flex: 1 },
-  { title: "Name", flex: 2 },
+  { title: "Status", flex: 1 },
 ];
 
 interface Props {

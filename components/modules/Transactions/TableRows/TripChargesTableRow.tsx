@@ -6,7 +6,7 @@ import TransactionCard from "../TransactionCard";
 import { useModalContext } from "@/contexts/ModalContext";
 
 interface Props {
-  data?: TransactionsDataModel;
+  data?: any;
 }
 
 const TripChargesTableRow: FC<Props> = ({ data }) => {
@@ -30,7 +30,7 @@ const TripChargesTableRow: FC<Props> = ({ data }) => {
         <p className="text-xs font-bold">{data?.type}</p>
       </div>
 
-      <div style={{ flex: 1 }} className="flex flex-col gap-3 justify-center">
+      <div style={{ flex: 2 }} className="flex flex-col gap-3 justify-center">
         <p className="text-xs font-bold">{data?.narration}</p>
       </div>
 
@@ -42,15 +42,8 @@ const TripChargesTableRow: FC<Props> = ({ data }) => {
         <p className="text-xs font-bold">{data?.date && new Date(data.date).toDateString()}</p>
       </div>
 
-      <div style={{ flex: 2 }} className="flex items-center">
-        {/* <Button
-          title="View Receipt"
-          onClick={() => {
-            setModalContent(
-              <Receipt handleClose={() => setModalContent(null)} />
-            );
-          }}
-        /> */}
+      <div style={{ flex: 1 }} className="flex items-center">
+        <p className="text-xs font-bold">{data?.status && data?.status}</p>
       </div>
     </div>
   );
