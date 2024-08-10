@@ -67,7 +67,8 @@ export const transactionsApi = createApi({
                 amountRemaining: "",
                 tripId: tx?.narration_id,
                 userType: tx?.user_type,
-                name: capitalizeAllFirstLetters(tx?.full_name)
+                name: capitalizeAllFirstLetters(tx?.full_name),
+                status: tx?.status
               };
             });
 
