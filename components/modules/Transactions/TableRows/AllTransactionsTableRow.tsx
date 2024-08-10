@@ -7,7 +7,7 @@ import { capitalizeAllFirstLetters } from "@/utils";
 import TransactionCard from "../TransactionCard";
 
 interface Props {
-  data?: TransactionsDataModel;
+  data?: any;
 }
 
 const AllTransactionsTableRow: FC<Props> = ({ data }) => {
@@ -43,16 +43,8 @@ const AllTransactionsTableRow: FC<Props> = ({ data }) => {
         <p className="text-xs font-bold">{data?.date && new Date(data.date).toDateString()}</p>
       </div>
 
-      <div style={{ flex: 2 }} className="flex">
-        <p className="text-xs font-bold">{capitalizeAllFirstLetters(data?.name)}</p>
-        {/* <Button
-          title="View Receipt"
-          onClick={() => {
-            setModalContent(
-              <Receipt handleClose={() => setModalContent(null)} />
-            );
-          }}
-        /> */}
+      <div style={{ flex: 1 }} className="flex">
+        <p className="text-xs font-bold">{data?.status && data?.status}</p>
       </div>
     </div>
   );
