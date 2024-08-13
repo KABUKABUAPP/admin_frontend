@@ -3,49 +3,35 @@ import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
 import React, { FC, useEffect, useState } from "react";
 import TopUpTableRow from "./TableRows/TopUpTableRow";
 import Pagination from "@/components/common/Pagination";
+import { useGetUsersWalletBalancesQuery } from "@/api-services/walletService";
+import UsersWalletTableRow from "./TableRows/UsersWalletTableRow";
 
 const headCellData = [
-  { title: "Transaction ID", flex: 1 },
-  { title: "User", flex: 2 },
+  { title: "Name", flex: 2 },
+  { title: "User Email", flex: 2 },
   { title: "User Type", flex: 1 },
-  { title: "Type", flex: 1 },
-  { title: "Narration", flex: 2 },
-  { title: "Price", flex: 1 },
-  { title: "Date", flex: 1 },
-  { title: "Status", flex: 1 }
+  { title: "Current Balance", flex: 1 }
 ];
 
 interface Props {
-  order: string;
-  dateStart?: any;
-  dateEnd?: any;
-  minAmount?: any;
-  setTotalWithdrawal: any;
-  transactionStatus: any;
   search: string;
 }
 
-const WithdrawalsTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, setTotalWithdrawal,transactionStatus, search}) => {
+const UsersWalletTable: FC<Props> = ({search}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-  const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
+  const { data, isLoading, isError, refetch } = useGetUsersWalletBalancesQuery(
     {
       limit: pageSize,
       page: currentPage,
-      search: search,
-      filter: "DRIVER_WALLET_WITHDRAWAL",
-      order,
-      dateStart,
-      dateEnd,
-      minAmount,
-      transactionStatus
+      search: search
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
-  
+
   useEffect(() => {
     if (data) {
-      setTotalWithdrawal(data?.totalWithdrawalDebit)
+        console.log({data})
     }
   }, [data])
 
@@ -58,14 +44,14 @@ const WithdrawalsTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, setT
         isLoading={isLoading}
         refetch={refetch}
         isError={isError}
-        rowComponent={(rows)=><TopUpTableRow data={rows}/>}
-        rowData={data?.data}
+        rowComponent={(rows)=> <UsersWalletTableRow data={rows} />}
+        rowData={data?.data?.data}
       />
       {data && (
         <Pagination
           className="pagination-bar"
           currentPage={currentPage}
-          totalCount={data.totalCount}
+          totalCount={data?.data?.pagination?.total}
           pageSize={pageSize}
           onPageChange={(page) => setCurrentPage(page)}
         />
@@ -74,4 +60,4 @@ const WithdrawalsTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, setT
   );
 };
 
-export default WithdrawalsTable;
+export default UsersWalletTable;

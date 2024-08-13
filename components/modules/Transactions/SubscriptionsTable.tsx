@@ -21,12 +21,13 @@ interface Props {
   dateEnd?: any;
   minAmount?: any;
   setTotalWithdrawal: any;
+  transactionStatus: any;
+  search: string;
 }
 
-const SubscriptionsTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, setTotalWithdrawal}) => {
+const SubscriptionsTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, setTotalWithdrawal, transactionStatus, search}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-  const [search, setSearch] = useState<string>("");
   const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
     {
       limit: pageSize,
@@ -36,7 +37,8 @@ const SubscriptionsTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, se
       order,
       dateStart,
       dateEnd,
-      minAmount
+      minAmount,
+      transactionStatus
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
