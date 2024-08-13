@@ -49,8 +49,8 @@ export const transactionsApi = createApi({
   endpoints: (build) => ({
     getAllTransactions: build.query<any, any>(
       {
-        query: ({ limit, page, search, filter, order, dateStart, dateEnd, minAmount }) => ({
-          url: `/admin/transaction/all?limit=${limit}&page=${page}&search=${search}&filter=${filter.toUpperCase()}&order=${order}${dateStart ? `&dateFilter=${dateStart}` : ''}${dateEnd ? `&dateFilter=${dateEnd}` : ''}${minAmount ? `&minAmount=${minAmount}` : ''}`
+        query: ({ limit, page, search, filter, order, dateStart, dateEnd, minAmount, transactionStatus }) => ({
+          url: `/admin/transaction/all?limit=${limit}&page=${page}&search=${search}&filter=${filter.toUpperCase()}&order=${order}${dateStart ? `&dateFilter=${dateStart}` : ''}${dateEnd ? `&dateFilter=${dateEnd}` : ''}${minAmount ? `&minAmount=${minAmount}` : ''}&status=${transactionStatus}`
         }),
         transformResponse: (response: any) => {
           if (!response) return response as any;

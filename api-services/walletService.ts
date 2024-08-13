@@ -40,13 +40,25 @@ export const walletApi = createApi({
   endpoints: (build) => ({
     getWalletBalances: build.query<any, any>(
       {
-        query: ({ }) => ({
-          url: `/admin/transaction/total-wallet-balances`
+        query: ({ range }) => ({
+          url: `/admin/transaction/total-wallet-balances?range=${range}`
         }),
         transformResponse: (response: any) => {
           if (!response) return response as any;
           else {
-
+            return response;
+          }
+        },
+      }
+    ),
+    getUsersWalletBalances: build.query<any, any>(
+      {
+        query: ({ limit, page, search }) => ({
+          url: `/admin/transaction/user-wallets/all?limit=${limit}&page=${page}&search=${search}`
+        }),
+        transformResponse: (response: any) => {
+          if (!response) return response as any;
+          else {
             return response;
           }
         },
@@ -55,4 +67,4 @@ export const walletApi = createApi({
   }),
 });
 
-export const { useGetWalletBalancesQuery } = walletApi;
+export const { useGetWalletBalancesQuery, useGetUsersWalletBalancesQuery } = walletApi;

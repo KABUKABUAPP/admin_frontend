@@ -149,7 +149,7 @@ const Settings: NextPage = () => {
               {currentView === "Signup Bonus Settings" && <SignUpBonusSettings active={driversSettings.signup_bonus.active} amount={driversSettings.signup_bonus.amount.toString()} online_hours={driversSettings.signup_bonus.online_hours.toString()} user_type={driversSettings.signup_bonus.user_type} />}
               {currentView === "Fare Price Settings" && <FarePriceSettings upper_bound={driversSettings.pricing_boundary.upper_bound.toString()} lower_bound={driversSettings.pricing_boundary.lower_bound.toString()} />}
               {currentView === "Trip Charges Control" && <TripChargesControl {...driversSettings.trip_charges_control} />}
-              {currentView === "Online Consistency Reward Settings" && <OnlineConsistency {...driversSettings.online_consistency_reward_control} />}
+              {currentView === "Online Consistency Reward Settings" && <OnlineConsistency {...driversSettings.online_consistency_reward_control} refetchSettings={reloadSettings} />}
             </>
           }
         />
