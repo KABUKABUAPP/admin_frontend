@@ -15,16 +15,18 @@ const headCellData = [
 
 interface Props {
   search: string;
+  userType: string;
 }
 
-const UsersWalletTable: FC<Props> = ({search}) => {
+const UsersWalletTable: FC<Props> = ({search, userType}) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const { data, isLoading, isError, refetch } = useGetUsersWalletBalancesQuery(
     {
       limit: pageSize,
       page: currentPage,
-      search: search
+      search: search,
+      userType
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
