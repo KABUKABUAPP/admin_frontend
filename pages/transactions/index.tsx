@@ -57,6 +57,7 @@ const Transactions: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState<string>("");
+  const [userType, setUserType] = useState<string>("");
   const dropDownOptions = [
     { label: "Newest First", value: "newest_first", default: true },
     { label: "Oldest First", value: "oldest_first", default: false },
@@ -177,6 +178,10 @@ const Transactions: NextPage = () => {
     { refetchOnMountOrArgChange: true }
   );
 
+  useEffect(() => {
+    console.log({userType})
+  }, [userType])
+
   return (
     <>
       <AppHead title="Kabukabu | Transactions" />
@@ -227,6 +232,8 @@ const Transactions: NextPage = () => {
           transactionStatus={transactionStatusFilter}
           transactionStatusDropdown={transactionStatusOptions}
           handleTransactionStatusDropdown={handleTransactionStatusDropdown}
+          showUserTypeFilter={String(tab) === Tab.wallets ? true : false}
+          setUserTypeFilter={setUserType}
         />
         {String(tab) === Tab.all_transactions && (
           <AllTransactionsTable order={selectedDropDown} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} transactionStatus={transactionStatusFilter} search={search} />
@@ -253,7 +260,7 @@ const Transactions: NextPage = () => {
 
         {String(tab) === Tab.manual_credit && <ManualCreditTable order={selectedDropDown} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} transactionStatus={transactionStatusFilter} search={search} />}
 
-        {String(tab) === Tab.wallets && <UsersWalletTable search={search} />}
+        {String(tab) === Tab.wallets && <UsersWalletTable search={search} userType={userType} />}
       </AppLayout>
     </>
   );

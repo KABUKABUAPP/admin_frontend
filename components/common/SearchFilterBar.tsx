@@ -46,6 +46,8 @@ interface Props {
   transactionStatus?: any;
   transactionStatusDropdown?: any;
   handleTransactionStatusDropdown?: (val: string | number) => void;
+  showUserTypeFilter?: boolean;
+  setUserTypeFilter?: (val: string) => void;
 }
 
 const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
@@ -71,7 +73,9 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
   setMinAmount,
   transactionStatus,
   transactionStatusDropdown,
-  handleTransactionStatusDropdown
+  handleTransactionStatusDropdown,
+  showUserTypeFilter,
+  setUserTypeFilter
 }) => {
   const router = useRouter();
 
@@ -148,8 +152,8 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
             setMinAmount &&
             <div className="text-xs flex gap-3 items-center cursor-pointer">
               <TextFieldTwo
-                  label="Minimum Amount"
-                  placeholder="Minimum Amount Here"
+                  label="Amount"
+                  placeholder="Amount Here"
                   onChange={(e) => {
                       setMinAmount(parseInt(e?.target?.value))
                   }}
@@ -160,7 +164,7 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
           {carDeliveryView && <Button title="New Delivery" size="medium" startIcon={<AddIcon />} color="tetiary" className="border border-[#000]" onClick={() => {router.push('/sharp-cars/car-deliveries/new-delivery')}} />}
           {
             tripPaymentView &&
-            <div className="flex flex-col w-full sm:w-[10vw]">
+            <div className="flex flex-col w-full sm:w-auto">
               <p>Trip Type</p>
               <DropDown
                 placeholder="Filter"
@@ -174,7 +178,7 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
           }
           {
             transactionStatusDropdown && 
-            <div className="flex flex-col w-full sm:w-[10vw]">
+            <div className="flex flex-col w-full sm:w-auto">
               <p>{'Status'}</p>
               <DropDown
                 placeholder="Filter"
@@ -186,7 +190,24 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
               />
             </div> 
           }
-          <div className="flex flex-col w-full sm:w-[10vw]">
+          {
+            showUserTypeFilter && 
+            <div className="flex flex-col w-full sm:w-auto">
+              <p>{'User Type'}</p>
+              <DropDown
+                placeholder="Set User Type"
+                options={[
+                  { label: "Driver", value: "driver", default: false },
+                  { label: "Rider", value: "rider", default: false }
+                ]}
+                value={transactionStatus}
+                handleChange={(val: any) => {
+                  if (setUserTypeFilter) setUserTypeFilter(val);
+                }}
+              />
+            </div> 
+          }
+          <div className="flex flex-col w-full sm:w-auto">
             <p>{title}</p>
             <DropDown
               placeholder="Filter"
