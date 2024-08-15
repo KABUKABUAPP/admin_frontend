@@ -53,8 +53,8 @@ export const walletApi = createApi({
     ),
     getUsersWalletBalances: build.query<any, any>(
       {
-        query: ({ limit, page, search }) => ({
-          url: `/admin/transaction/user-wallets/all?limit=${limit}&page=${page}&search=${search}`
+        query: ({ limit, page, search, userType }) => ({
+          url: `/admin/transaction/user-wallets/all?limit=${limit}&page=${page}&search=${search}&user_type=${userType}`
         }),
         transformResponse: (response: any) => {
           if (!response) return response as any;

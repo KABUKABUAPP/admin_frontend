@@ -12,6 +12,7 @@ import { useModalContext } from "@/contexts/ModalContext";
 import Card from "@/components/common/Card";
 import CloseIcon from "@/components/icons/CloseIcon";
 import TimesIconRed from "@/components/icons/TimesIconRed";
+import DropDown from "@/components/ui/DropDown";
 
 interface Props {
     status: string; 
@@ -118,7 +119,64 @@ const AddProfile: FC<any> = ({profile, setRefetchData}) => {
                                             setProfileActive(!profileActive)
                                         }} checked={profileActive} />
                                     </div>
+                                    <div className="flex justify-between" style={{ flex: 1 }}>
+                                        {/*<TextField
+                                            label="Start"
+                                            type="text"
+                                            onChange={(val) => {setProfileStart(val.target.value)}}
+                                            disabled={false}
+                                            value={profileStart}
+                                        />*/}
 
+                                        <div className="flex flex-col w-auto gap-3">
+                                            <p>{'Start'}</p>
+                                            <DropDown
+                                                placeholder="Select Start"
+                                                options={[
+                                                    { label: "Sunday", value: "0", default: false },
+                                                    { label: "Monday", value: "1", default: false },
+                                                    { label: "Tuesday", value: "2", default: false },
+                                                    { label: "Wednesday", value: "3", default: false },
+                                                    { label: "Thursday", value: "4", default: false },
+                                                    { label: "Friday", value: "5", default: false },
+                                                    { label: "Saturday", value: "6", default: false }
+                                                ]}
+                                                value={profileStart}
+                                                handleChange={(val: any) => {
+                                                if (setProfileStart) setProfileStart(val);
+                                                }}
+                                            />
+                                        </div> 
+                                    </div>
+                                    <div className="flex justify-between" style={{ flex: 1 }}>
+                                        {/*<TextField
+                                            label="Stop"
+                                            type="text"
+                                            onChange={(val) => {setProfileStop(val.target.value)}}
+                                            disabled={false}
+                                            value={profileStop}
+                                        />*/}
+
+                                        <div className="flex flex-col w-auto gap-3">
+                                            <p>{'Stop'}</p>
+                                            <DropDown
+                                                placeholder="Select Stop"
+                                                options={[
+                                                    { label: "Sunday", value: "0", default: false },
+                                                    { label: "Monday", value: "1", default: false },
+                                                    { label: "Tuesday", value: "2", default: false },
+                                                    { label: "Wednesday", value: "3", default: false },
+                                                    { label: "Thursday", value: "4", default: false },
+                                                    { label: "Friday", value: "5", default: false },
+                                                    { label: "Saturday", value: "6", default: false }
+                                                ]}
+                                                value={profileStop}
+                                                handleChange={(val: any) => {
+                                                if (setProfileStop) setProfileStop(val);
+                                                }}
+                                            />
+                                        </div> 
+                                    </div>
                                     <div className="flex justify-between" style={{ flex: 1 }}>
                                         <TextField
                                             label="Name"
@@ -153,24 +211,6 @@ const AddProfile: FC<any> = ({profile, setRefetchData}) => {
                                             onChange={(val) => {setProfileHours(val.target.value)}}
                                             disabled={false}
                                             value={profileHours}
-                                        />
-                                    </div>
-                                    <div className="flex justify-between" style={{ flex: 1 }}>
-                                        <TextField
-                                            label="Start"
-                                            type="text"
-                                            onChange={(val) => {setProfileStart(val.target.value)}}
-                                            disabled={false}
-                                            value={profileStart}
-                                        />
-                                    </div>
-                                    <div className="flex justify-between" style={{ flex: 1 }}>
-                                        <TextField
-                                            label="Stop"
-                                            type="text"
-                                            onChange={(val) => {setProfileStop(val.target.value)}}
-                                            disabled={false}
-                                            value={profileStop}
                                         />
                                     </div>
                                 </div>
@@ -275,6 +315,64 @@ const EditProfile: FC<any> = ({theProfile, profile, setRefetchData, theProfileIn
                                             setProfileActive(!profileActive)
                                         }} checked={profileActive} />
                                     </div>
+                                    <div className="flex justify-between" style={{ flex: 1 }}>
+                                        {/*<TextField
+                                            label="Start"
+                                            type="text"
+                                            onChange={(val) => {setProfileStart(val.target.value)}}
+                                            disabled={false}
+                                            value={profileStart}
+                                        />*/}
+
+                                        <div className="flex flex-col w-auto gap-3">
+                                            <p>{'Start'}</p>
+                                            <DropDown
+                                                placeholder="Select Start"
+                                                options={[
+                                                    { label: "Sunday", value: "0", default: false },
+                                                    { label: "Monday", value: "1", default: false },
+                                                    { label: "Tuesday", value: "2", default: false },
+                                                    { label: "Wednesday", value: "3", default: false },
+                                                    { label: "Thursday", value: "4", default: false },
+                                                    { label: "Friday", value: "5", default: false },
+                                                    { label: "Saturday", value: "6", default: false }
+                                                ]}
+                                                value={profileStart}
+                                                handleChange={(val: any) => {
+                                                if (setProfileStart) setProfileStart(val);
+                                                }}
+                                            />
+                                        </div> 
+                                    </div>
+                                    <div className="flex justify-between" style={{ flex: 1 }}>
+                                        {/*<TextField
+                                            label="Stop"
+                                            type="text"
+                                            onChange={(val) => {setProfileStop(val.target.value)}}
+                                            disabled={false}
+                                            value={profileStop}
+                                        />*/}
+
+                                        <div className="flex flex-col w-auto gap-3">
+                                            <p>{'Stop'}</p>
+                                            <DropDown
+                                                placeholder="Select Stop"
+                                                options={[
+                                                    { label: "Sunday", value: "0", default: false },
+                                                    { label: "Monday", value: "1", default: false },
+                                                    { label: "Tuesday", value: "2", default: false },
+                                                    { label: "Wednesday", value: "3", default: false },
+                                                    { label: "Thursday", value: "4", default: false },
+                                                    { label: "Friday", value: "5", default: false },
+                                                    { label: "Saturday", value: "6", default: false }
+                                                ]}
+                                                value={profileStop}
+                                                handleChange={(val: any) => {
+                                                if (setProfileStop) setProfileStop(val);
+                                                }}
+                                            />
+                                        </div> 
+                                    </div>
 
                                     <div className="flex justify-between" style={{ flex: 1 }}>
                                         <TextField
@@ -310,24 +408,6 @@ const EditProfile: FC<any> = ({theProfile, profile, setRefetchData, theProfileIn
                                             onChange={(val) => {setProfileHours(val.target.value)}}
                                             disabled={false}
                                             value={profileHours}
-                                        />
-                                    </div>
-                                    <div className="flex justify-between" style={{ flex: 1 }}>
-                                        <TextField
-                                            label="Start"
-                                            type="text"
-                                            onChange={(val) => {setProfileStart(val.target.value)}}
-                                            disabled={false}
-                                            value={profileStart}
-                                        />
-                                    </div>
-                                    <div className="flex justify-between" style={{ flex: 1 }}>
-                                        <TextField
-                                            label="Stop"
-                                            type="text"
-                                            onChange={(val) => {setProfileStop(val.target.value)}}
-                                            disabled={false}
-                                            value={profileStop}
                                         />
                                     </div>
                                 </div>
@@ -421,6 +501,16 @@ const OnlineConsistency: FC<Props> = ({status, amount, number_of_days, number_of
             }, 3000)
         }
     }, [refetchData])
+
+    const getWeekDay = (a: number) => {
+        if (a === 0) return 'Sunday';
+        if (a === 1) return 'Monday';
+        if (a === 2) return 'Tuesday';
+        if (a === 3) return 'Wednesday';
+        if (a === 4) return 'Thursday';
+        if (a === 5) return 'Friday';
+        if (a === 6) return 'Saturday';
+    }
 
     return (
         <>
@@ -571,11 +661,11 @@ const OnlineConsistency: FC<Props> = ({status, amount, number_of_days, number_of
                                     </div>
                                     <div className="flex flex-col border-b border-b-[#E6E6E6] last:border-none py-3">
                                         {<p className="text-xs text-[#000000] font-semibold">{'Start'}</p>}
-                                        {<p className="text-sm font-bold">{one.start}</p>}
+                                        {<p className="text-sm font-bold">{getWeekDay(one.start)}</p>}
                                     </div>
                                     <div className="flex flex-col border-b border-b-[#E6E6E6] last:border-none py-3">
                                         {<p className="text-xs text-[#000000] font-semibold">{'Stop'}</p>}
-                                        {<p className="text-sm font-bold">{one.stop}</p>}
+                                        {<p className="text-sm font-bold">{getWeekDay(one.stop)}</p>}
                                     </div>
                                 </div>
                             ))
