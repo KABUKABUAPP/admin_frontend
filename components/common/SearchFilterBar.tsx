@@ -79,6 +79,8 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
 }) => {
   const router = useRouter();
 
+  const tab = router.query.tab;
+
   return (
     <div className="rounded-lg bg-[#F1F1F1] w-full min-h-10 shadow-sm my-6 py-4 px-8 flex items-center justify-between max-sm:flex-col max-sm:gap-5 gap-3">
       <div className="w-full sm:w-[15vw]">
@@ -177,7 +179,7 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
             </div>
           }
           {
-            transactionStatusDropdown && 
+            transactionStatusDropdown && tab && tab !== 'wallets' &&
             <div className="flex flex-col w-full sm:w-auto">
               <p>{'Status'}</p>
               <DropDown

@@ -31,7 +31,7 @@ const AccountBalanceCardContainer: FC<Props> = ({ data, handleClick, totalWithdr
   return (
     <>
       <div className="flex gap-8 flex-wrap py-3 max-md:justify-center">
-        {(!tab || (tab !== 'withdrawals' && tab !== 'manual_credit')) && data.map((item, idx) => (
+        {(!tab || (tab !== 'withdrawals' && tab !== 'manual_credit' && tab !== 'wallets')) && data.map((item, idx) => (
           <AccountBalanceCard {...item} key={idx} handleClick={(title)=>handleClick(title)}/>
         ))}
 
