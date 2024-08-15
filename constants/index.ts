@@ -377,11 +377,11 @@ export const transactionsOptionsBar = [
     isActive: false,
     keyVal: "sharp_payments",
   },
-  /*{
+  {
     title: "Wallets",
     isActive: false,
     keyVal: "wallets",
-  }*/
+  }
 ];
 
 export const tripsRowMockData = [

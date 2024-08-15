@@ -103,6 +103,7 @@ const Drivers: NextPage = () => {
   const [dateStart, setDateStart] = useState<any>(getYesterdaysDate());
   const [dateEnd, setDateEnd] = useState<any>(getYesterdaysDate());
   const [downloadReport, setDownloadReport] = useState<boolean>(false);
+  const [daysPassedOptionsSelected, setDaysPassedOptionsSelected] = useState<any>('off');
 
   const filterOptions = [
     { label: "Newest First", value: "newest_first", default: true },
@@ -142,7 +143,7 @@ const Drivers: NextPage = () => {
     error: monitorError,
   } = useGetOnlineMonitorWithBenchmarkQuery(
     {
-        min_hours: minHours, limit: pageSize, page: currentPage, dateStart, dateEnd
+        min_hours: minHours, limit: pageSize, page: currentPage, dateStart, dateEnd, daysPassed: daysPassedOptionsSelected
     },
     {
       refetchOnMountOrArgChange: true,
@@ -215,6 +216,11 @@ const Drivers: NextPage = () => {
   const startDateInputRef = useRef<HTMLInputElement>(null);
   const endDateInputRef = useRef<HTMLInputElement>(null);
 
+  const daysPassedOptions = [
+    { label: "Off", value: "off", default: true },
+    { label: "On", value: "on", default: false }
+  ];
+
   return (
     <>
       <AppHead title="Kabukabu | Drivers" />
@@ -259,6 +265,17 @@ const Drivers: NextPage = () => {
                               }}
                               type="number"
                           />
+                      </div>
+                      <div className="text-xs flex flex-col gap-3 items-center cursor-pointer">
+                        <p>Days Passed</p>
+                        <DropDown
+                          placeholder="Filter"
+                          options={daysPassedOptions}
+                          value={daysPassedOptionsSelected}
+                          handleChange={(val) => {
+                            setDaysPassedOptionsSelected(val);
+                          }}
+                        />
                       </div>
                     </div>
                     <div className="text-xs flex gap-3 items-center cursor-pointer justify-end pr-3 mr-3 max-sm:pr-0 max-sm:mr-0">

@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import React, { FC } from "react";
 
 interface Props {
@@ -13,10 +14,14 @@ const AccountBalanceCard: FC<Props> = ({
   isActive,
   handleClick,
 }) => {
+  const router = useRouter();
+
+  const tab = router.query.tab;
+
   return (
     <div
       onClick={() => handleClick(title)}
-      className={`bg-[#FEC319] rounded-lg w-[180px] max-w-[100%] px-8 py-4 transition-all cursor-pointer flex flex-col justify-center`}
+      className={`${isActive || (tab && tab === 'wallets' && title === 'Wallet Balance(Total)') ? "bg-[#FEC319] scale-110" : "bg-[#EFEFEF]"} rounded-lg w-[180px] max-w-[100%] px-8 py-4 transition-all cursor-pointer flex flex-col justify-center`}
     >
       <p className={`font-bold transition-all ${isActive ? "text-2xl" : "text-xl"}`}>
         N{amount?.toLocaleString()}

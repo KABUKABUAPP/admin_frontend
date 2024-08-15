@@ -43,6 +43,11 @@ interface Props {
   setDateStart?: (val: any) => void;
   setDateEnd?: (val: any) => void;
   setMinAmount?: (val: any) => void;
+  transactionStatus?: any;
+  transactionStatusDropdown?: any;
+  handleTransactionStatusDropdown?: (val: string | number) => void;
+  showUserTypeFilter?: boolean;
+  setUserTypeFilter?: (val: string) => void;
 }
 
 const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
@@ -65,14 +70,22 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
   tripPaymentView,
   setDateStart,
   setDateEnd,
-  setMinAmount
+  setMinAmount,
+  transactionStatus,
+  transactionStatusDropdown,
+  handleTransactionStatusDropdown,
+  showUserTypeFilter,
+  setUserTypeFilter
 }) => {
   const router = useRouter();
 
+  const tab = router.query.tab;
+
   return (
-    <div className="rounded-lg bg-[#F1F1F1] w-full min-h-10 shadow-sm my-6 py-4 px-8 flex items-center justify-between max-sm:flex-col max-sm:gap-5">
-      <div className="w-[200px]">
+    <div className="rounded-lg bg-[#F1F1F1] w-full min-h-10 shadow-sm my-6 py-4 px-8 flex items-center justify-between max-sm:flex-col max-sm:gap-5 gap-3">
+      <div className="w-full sm:w-[15vw]">
         <TextField
+          label="Search"
           startIcon={<SearchIcon />}
           className="!bg-[#E6E6E6]"
           placeholder="Search here"
@@ -141,8 +154,8 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
             setMinAmount &&
             <div className="text-xs flex gap-3 items-center cursor-pointer">
               <TextFieldTwo
-                  label="Minimum Amount"
-                  placeholder="Minimum Amount Here"
+                  label="Amount"
+                  placeholder="Amount Here"
                   onChange={(e) => {
                       setMinAmount(parseInt(e?.target?.value))
                   }}
@@ -150,32 +163,64 @@ const SearchFilterBar: FC<PropsWithChildren<Props>> = ({
               />
             </div>
           }
-          
-        </div>
-        {carDeliveryView && <Button title="New Delivery" size="medium" startIcon={<AddIcon />} color="tetiary" className="border border-[#000]" onClick={() => {router.push('/sharp-cars/car-deliveries/new-delivery')}} />}
-        {
-          tripPaymentView &&
-          <>
-            <span>Trip Type</span>
+          {carDeliveryView && <Button title="New Delivery" size="medium" startIcon={<AddIcon />} color="tetiary" className="border border-[#000]" onClick={() => {router.push('/sharp-cars/car-deliveries/new-delivery')}} />}
+          {
+            tripPaymentView &&
+            <div className="flex flex-col w-full sm:w-auto">
+              <p>Trip Type</p>
+              <DropDown
+                placeholder="Filter"
+                options={tripPaymentOptions}
+                value={tripPaymentOptionsSelected}
+                handleChange={(val) => {
+                  if (handleTripPayments) handleTripPayments(val);
+                }}
+              />
+            </div>
+          }
+          {
+            transactionStatusDropdown && tab && tab !== 'wallets' &&
+            <div className="flex flex-col w-full sm:w-auto">
+              <p>{'Status'}</p>
+              <DropDown
+                placeholder="Filter"
+                options={transactionStatusDropdown}
+                value={transactionStatus}
+                handleChange={(val) => {
+                  if (handleTransactionStatusDropdown) handleTransactionStatusDropdown(val);
+                }}
+              />
+            </div> 
+          }
+          {
+            showUserTypeFilter && 
+            <div className="flex flex-col w-full sm:w-auto">
+              <p>{'User Type'}</p>
+              <DropDown
+                placeholder="Set User Type"
+                options={[
+                  { label: "Driver", value: "driver", default: false },
+                  { label: "Rider", value: "rider", default: false }
+                ]}
+                value={transactionStatus}
+                handleChange={(val: any) => {
+                  if (setUserTypeFilter) setUserTypeFilter(val);
+                }}
+              />
+            </div> 
+          }
+          <div className="flex flex-col w-full sm:w-auto">
+            <p>{title}</p>
             <DropDown
               placeholder="Filter"
-              options={tripPaymentOptions}
-              value={tripPaymentOptionsSelected}
+              options={filterOptions}
+              value={dropDownOptionSelected}
               handleChange={(val) => {
-                if (handleTripPayments) handleTripPayments(val);
+                if (handleDropDown) handleDropDown(val);
               }}
             />
-          </>
-        }
-        <span>{title}</span>
-        <DropDown
-          placeholder="Filter"
-          options={filterOptions}
-          value={dropDownOptionSelected}
-          handleChange={(val) => {
-            if (handleDropDown) handleDropDown(val);
-          }}
-        />
+          </div>
+        </div>
       </div>
     </div>
   );

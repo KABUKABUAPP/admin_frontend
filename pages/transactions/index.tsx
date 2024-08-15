@@ -23,6 +23,7 @@ import WithdrawalsTable from "@/components/modules/Transactions/WithdrawalsTable
 import ManualCreditTable from "@/components/modules/Transactions/ManualCreditTable";
 import DropDown from "@/components/ui/DropDown";
 import AppHead from "@/components/common/AppHead";
+import UsersWalletTable from "@/components/modules/Transactions/UsersWalletTable";
 
 
 function getYesterdaysDate() {
@@ -56,6 +57,7 @@ const Transactions: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [search, setSearch] = useState<string>("");
+  const [userType, setUserType] = useState<string>("");
   const dropDownOptions = [
     { label: "Newest First", value: "newest_first", default: true },
     { label: "Oldest First", value: "oldest_first", default: false },
@@ -75,7 +77,7 @@ const Transactions: NextPage = () => {
   const [selectedDropDown, setSelectedDropDown] = useState<string>(
     dropDownOptions.find((opt) => opt.default === true)?.value || "newest_first"
   );
-  const [minAmount, setMinAmount] = useState(1);
+  const [minAmount, setMinAmount] = useState(0);
   const [dateStart, setDateStart] = useState<any>();
   const [dateEnd, setDateEnd] = useState<any>();
   const [totalWithdrawal, setTotalWithdrawal] = useState(1)
@@ -137,6 +139,7 @@ const Transactions: NextPage = () => {
     manual_credit = "manual_credit",
     subscriptions = "subscriptions",
     sharp_payments = "sharp_payments",
+    wallets = "wallets",
   }
 
   const statusFilterOptions = [
@@ -150,6 +153,21 @@ const Transactions: NextPage = () => {
     statusFilterOptions.find((opt) => opt.default === true)?.value || "today"
   );
 
+  const transactionStatusOptions = [
+    { label: "Success", value: "success", default: true },
+    { label: "Pending", value: "pending", default: false },
+    { label: "Failed", value: "failed", default: false },
+    { label: "Reversed", value: "reversed", default: false }
+  ];
+
+  const [transactionStatusFilter, setTransactionStatusFilter] = useState<string>(
+    transactionStatusOptions.find((opt) => opt.default === true)?.value || "success"
+  );
+
+  const handleTransactionStatusDropdown = (val: any) => {
+    setTransactionStatusFilter(val);
+  }
+
   const {
     data: transactionCard,
     isLoading: transactionCardLoading,
@@ -159,6 +177,10 @@ const Transactions: NextPage = () => {
     { range: statusFilter },
     { refetchOnMountOrArgChange: true }
   );
+
+  useEffect(() => {
+    console.log({userType})
+  }, [userType])
 
   return (
     <>
@@ -181,6 +203,7 @@ const Transactions: NextPage = () => {
             data={transactionCard}
             handleClick={(title) => {}}
             totalWithdrawal={totalWithdrawal}
+            range={statusFilter}
           />
         )}
         <OptionBar
@@ -206,31 +229,38 @@ const Transactions: NextPage = () => {
           setDateStart={setDateStart}
           setDateEnd={setDateEnd}
           setMinAmount={setMinAmount}
+          transactionStatus={transactionStatusFilter}
+          transactionStatusDropdown={transactionStatusOptions}
+          handleTransactionStatusDropdown={handleTransactionStatusDropdown}
+          showUserTypeFilter={String(tab) === Tab.wallets ? true : false}
+          setUserTypeFilter={setUserType}
         />
         {String(tab) === Tab.all_transactions && (
-          <AllTransactionsTable order={selectedDropDown} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} />
+          <AllTransactionsTable order={selectedDropDown} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} transactionStatus={transactionStatusFilter} search={search} />
         )}
         {String(tab) === Tab.sharp_payments && (
-          <SharpPaymentsTable order={selectedDropDown} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} />
+          <SharpPaymentsTable order={selectedDropDown} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} transactionStatus={transactionStatusFilter} search={search} />
         )}
 
         {String(tab) === Tab.subscriptions && (
-          <SubscriptionsTable order={selectedDropDown} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} />
+          <SubscriptionsTable order={selectedDropDown} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} transactionStatus={transactionStatusFilter} search={search} />
         )}
 
-        {String(tab) === Tab.top_up && <TopUpTable order={selectedDropDown} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} />}
+        {String(tab) === Tab.top_up && <TopUpTable order={selectedDropDown} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} transactionStatus={transactionStatusFilter} search={search} />}
 
         {String(tab) === Tab.trip_charges && (
-          <TripChargesTable order={selectedDropDown} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} />
+          <TripChargesTable order={selectedDropDown} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} transactionStatus={transactionStatusFilter} search={search} />
         )}
 
         {String(tab) === Tab.trip_payments && (
-          <TripPaymentsTable order={selectedDropDown} paymentType={tripPaymentOptionsSelected} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} />
+          <TripPaymentsTable order={selectedDropDown} paymentType={tripPaymentOptionsSelected} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} transactionStatus={transactionStatusFilter} search={search} />
         )}
 
-        {String(tab) === Tab.withdrawals && <WithdrawalsTable order={selectedDropDown} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} />}
+        {String(tab) === Tab.withdrawals && <WithdrawalsTable order={selectedDropDown} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} transactionStatus={transactionStatusFilter} search={search} />}
 
-        {String(tab) === Tab.manual_credit && <ManualCreditTable order={selectedDropDown} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} />}
+        {String(tab) === Tab.manual_credit && <ManualCreditTable order={selectedDropDown} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} transactionStatus={transactionStatusFilter} search={search} />}
+
+        {String(tab) === Tab.wallets && <UsersWalletTable search={search} userType={userType} />}
       </AppLayout>
     </>
   );

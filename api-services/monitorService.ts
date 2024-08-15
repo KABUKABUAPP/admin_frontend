@@ -52,8 +52,8 @@ export const onlineMonitorApi = createApi({
       }
     }),
     getOnlineMonitorWithBenchmark: build.query<any, any>({
-      query: ({ min_hours, limit, page, dateStart, dateEnd }) => ({
-        url: `/admin/online-monitor/total-hours-benchmarks?min_hours=${min_hours}&limit=${limit}&page=${page}${dateStart.length > 0 ? `&dateStart=${dateStart}` : ''}${dateEnd.length > 0 ? `&dateEnd=${dateEnd}` : ''}`
+      query: ({ min_hours, limit, page, dateStart, dateEnd, daysPassed }) => ({
+        url: `/admin/online-monitor/total-hours-benchmarks?min_hours=${min_hours}&limit=${limit}&page=${page}${dateStart.length > 0 ? `&dateStart=${dateStart}` : ''}${dateEnd.length > 0 ? `&dateEnd=${dateEnd}` : ''}&days_passed=${daysPassed}`
       }),
       transformResponse: (response: any) => {
         console.log({response})
