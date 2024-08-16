@@ -109,6 +109,13 @@ export const rolesOptionsArr: {
     write: false,
     isChecked: false,
   },
+  {
+    title: "Settings",
+    label: "settings_permissions",
+    read: false,
+    write: false,
+    isChecked: false,
+  }
 ];
 
 export const routePermissionsMapping: {
