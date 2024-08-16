@@ -161,11 +161,11 @@ export const routePermissionsMapping: {
   },
   {
     route: '/messages',
-    permissionLabel: ''
+    permissionLabel: 'push_notifications_permissions'
   },
   {
     route: '/settings',
-    permissionLabel: ''
+    permissionLabel: 'settings_permissions'
   },
   {
     route: '/live-map',
@@ -173,11 +173,11 @@ export const routePermissionsMapping: {
   },
   {
     route: '/car-owners',
-    permissionLabel: ''
+    permissionLabel: 'sharp_program_permissions'
   },
   {
     route: '/car-repair-loan',
-    permissionLabel: ''
+    permissionLabel: 'sharp_program_permissions'
   },
   {
     route: '/campaigns',

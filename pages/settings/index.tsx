@@ -87,6 +87,7 @@ const Settings: NextPage = () => {
     permissions?: UserPermissions | null
   ) => {
     if (permissions) {
+      console.log({permissions})
       const filteredNav = nav.filter((item) => {
         if (
           item.title === "Promotions" &&
@@ -100,6 +101,8 @@ const Settings: NextPage = () => {
           permissions.roles_permissions.write === false
         ) {
           return false;
+        } else if (permissions.settings_permissions && permissions.settings_permissions.write === false) {
+          return false
         } else {
           return true;
         }
