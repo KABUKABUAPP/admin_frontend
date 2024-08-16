@@ -30,13 +30,14 @@ const Driver: NextPage = () => {
   );
   
   const currentPageUrl = router.query.current_page ? `currentPage=${router.query.current_page}` : '';
+  const handleBackUrl = router.query.fallbackUrl ? router.query.fallbackUrl : `/drivers?${currentPageUrl}`;
 
   return (
     <>
       <AppHead title="Kabukabu | Drivers" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar handleBack={() => router.push(`/drivers?${currentPageUrl}`)}>
+          <ActionBar handleBack={() => router.push(`${handleBackUrl}`)}>
             <Button
               title="Call Driver"
               startIcon={<PhoneIcon />}
