@@ -109,6 +109,13 @@ export const rolesOptionsArr: {
     write: false,
     isChecked: false,
   },
+  {
+    title: "Settings",
+    label: "settings_permissions",
+    read: false,
+    write: false,
+    isChecked: false,
+  }
 ];
 
 export const routePermissionsMapping: {
@@ -161,11 +168,11 @@ export const routePermissionsMapping: {
   },
   {
     route: '/messages',
-    permissionLabel: ''
+    permissionLabel: 'push_notifications_permissions'
   },
   {
     route: '/settings',
-    permissionLabel: ''
+    permissionLabel: 'settings_permissions'
   },
   {
     route: '/live-map',
@@ -173,11 +180,11 @@ export const routePermissionsMapping: {
   },
   {
     route: '/car-owners',
-    permissionLabel: ''
+    permissionLabel: 'sharp_program_permissions'
   },
   {
     route: '/car-repair-loan',
-    permissionLabel: ''
+    permissionLabel: 'sharp_program_permissions'
   },
   {
     route: '/campaigns',
