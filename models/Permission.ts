@@ -11,4 +11,8 @@ export type PermissionLabel =
   | "hubs_permissions"
   | "staffs_permissions"
   | "roles_permissions"
+  | "push_notifications_permissions"
+  | "settings_permissions"
   | "";
+
+  
