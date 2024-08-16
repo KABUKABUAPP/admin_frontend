@@ -5,6 +5,7 @@ import TopUpTableRow from "./TableRows/TopUpTableRow";
 import Pagination from "@/components/common/Pagination";
 import { useGetUsersWalletBalancesQuery } from "@/api-services/walletService";
 import UsersWalletTableRow from "./TableRows/UsersWalletTableRow";
+import { useRouter } from "next/router";
 
 const headCellData = [
   { title: "Name", flex: 2 },
@@ -19,7 +20,8 @@ interface Props {
 }
 
 const UsersWalletTable: FC<Props> = ({search, userType}) => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(router.query.currentPage ? parseInt(router.query.currentPage as string) : 1);
   const [pageSize, setPageSize] = useState(10);
   const { data, isLoading, isError, refetch } = useGetUsersWalletBalancesQuery(
     {
@@ -31,12 +33,6 @@ const UsersWalletTable: FC<Props> = ({search, userType}) => {
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
-  useEffect(() => {
-    if (data) {
-        console.log({data})
-    }
-  }, [data])
-
   return (
     <>
       <EnhancedTable
@@ -46,7 +42,7 @@ const UsersWalletTable: FC<Props> = ({search, userType}) => {
         isLoading={isLoading}
         refetch={refetch}
         isError={isError}
-        rowComponent={(rows)=> <UsersWalletTableRow data={rows} />}
+        rowComponent={(rows)=> <UsersWalletTableRow data={rows} currentPage={currentPage} />}
         rowData={data?.data?.data}
       />
       {data && (
@@ -55,7 +51,9 @@ const UsersWalletTable: FC<Props> = ({search, userType}) => {
           currentPage={currentPage}
           totalCount={data?.data?.pagination?.total}
           pageSize={pageSize}
-          onPageChange={(page) => setCurrentPage(page)}
+          onPageChange={(page) => {
+            setCurrentPage(page)
+          }}
         />
       )}
     </>

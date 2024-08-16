@@ -361,7 +361,7 @@ const Rider: NextPage = () => {
       <AppHead title="Kabukabu | Riders" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar handleBack={() => router.push(`${handleBackUrl}`)}>
+          <ActionBar handleBack={() => router.push(`${handleBackUrl}${router.query.fallbackUrl?.includes('/transactions?tab=wallets') ? `${`&currentPage=${router.query.currentPage}`}` : ''}`)}>
             {userPermissions && userPermissions.riders_permissions.write && (
               <Button
                 title="Call Rider"
