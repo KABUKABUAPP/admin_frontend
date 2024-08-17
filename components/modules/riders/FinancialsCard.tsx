@@ -53,6 +53,7 @@ const FinancialsCard: FC<Props> = ({ walletBalance, total, bg='#FFFFFF' }) => {
       search: `${router.query.id}`,
       filter: transactionFilter,
       order: 'newest_first',
+      transactionStatus: 'success' 
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
