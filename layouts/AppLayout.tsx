@@ -84,12 +84,12 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
               return true;
             }
             if (
-              item.route === "/settings" ||
-              item.route === "/messages" ||
-              item.route === "/sharp-cars" ||
+              //item.route === "/settings" ||
+              //item.route === "/messages" ||
+              //item.route === "/sharp-cars" ||
               item.route === "/live-map" ||
-              item.route === "/car-owners" ||
-              item.route === "/car-repair-loan" ||
+              //item.route === "/car-owners" ||
+              //item.route === "/car-repair-loan" ||
               item.route === "/campaigns"
             ) {
               return true;

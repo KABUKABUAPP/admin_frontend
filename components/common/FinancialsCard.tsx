@@ -61,6 +61,7 @@ const FinancialsCard: FC<Props> = ({
       search: `${router.query.id}`,
       filter: transactionFilter,
       order: 'newest_first',
+      transactionStatus: 'success' 
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );

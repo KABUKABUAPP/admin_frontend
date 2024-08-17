@@ -84,6 +84,14 @@ export interface LoginResponse {
           read: boolean;
           write: boolean;
         };
+        settings_permissions: {
+          read: boolean;
+          write: boolean;
+        };
+        push_notifications_permissions: {
+          read: boolean;
+          write: boolean;
+        };
       };
       isBlocked: boolean;
       status: boolean;
