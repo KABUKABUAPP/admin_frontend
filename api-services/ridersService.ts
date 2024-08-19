@@ -55,7 +55,6 @@ export const ridersApi = createApi({
       }),
       providesTags: ["riders"],
       transformResponse: (response: GetAllRidersResponse) => {
-        console.log({responseRider: response})
         if (!response) return {} as MappedRidersData;
         else {
           const mappedReponse: MappedRider[] = response.data.drivers.map(

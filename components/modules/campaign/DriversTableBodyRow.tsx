@@ -36,7 +36,7 @@ const DriversTableBodyRow: FC<Props> = ({
   onboardStatus
 }) => {
   const router = useRouter();
-  const isStatusRemark = router.pathname.includes("drivers/pending");
+  const isStatusRemark = router.query.tab === "pending" || router.query.tab === "declined";
 
   return (
     <div
@@ -76,14 +76,17 @@ const DriversTableBodyRow: FC<Props> = ({
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">
-          {isStatusRemark ? statusRemark : status || <Skeleton />}
+          {(isStatusRemark && router.query.tab !== 'declined' ? statusRemark : status) || <Skeleton />}
         </p>
       </div>
-      <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">
-          {onlineStatus ? onlineStatus : <Skeleton />}
-        </p>
-      </div>
+      {
+        !isStatusRemark &&
+        <div style={{ flex: 1 }} className="flex items-center">
+          <p className="text-xs font-bold">
+            {onlineStatus ? onlineStatus : <Skeleton />}
+          </p>
+        </div>
+      }
       {
         isStatusRemark &&
         <div style={{ flex: 1 }} className="flex items-center">

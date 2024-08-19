@@ -19,8 +19,8 @@ interface Props {
 
 const DriversTable: FC<Props> = ({ tableData, isLoading, isError, refetch, subPath, headBg, currentPage, onboardStatus }) => {
   const router = useRouter();
-  const isStatusRemark = router.pathname.includes("drivers/pending");
-  const [headCellData, setHeadCellData] = useState([
+  const isStatusRemark = router.query.tab === "pending" || router.query.tab === "declined";
+  const headCellData = [
     { title: "Full Name", flex: 2 },
     { title: "Location", flex: 1 },
     { title: "Total Trips", flex: 1 },
@@ -29,26 +29,22 @@ const DriversTable: FC<Props> = ({ tableData, isLoading, isError, refetch, subPa
     { title: "Driver Type", flex: 1 },
     { title: "Status", flex: 1 },
     { title: "Online Status", flex: 1 }
-  ])
+  ]
 
-  useEffect(() => {
-    if (isStatusRemark) {
-      setHeadCellData([
-        { title: "Driver ID", flex: 2 },
-        { title: "Full Name", flex: 2 },
-        { title: "Location", flex: 1 },
-        { title: "Driver Type", flex: 1 },
-        { title: "Status", flex: 1 },
-        { title: "Online Status", flex: 1 },
-        { title: "Onboard Step", flex: 1 }
-      ]);
-    }
-  }, [isStatusRemark, tableData])
+  const headCellDataStatusRemark = [
+    { title: "Full Name", flex: 2 },
+    { title: "Location", flex: 1 },
+    { title: "Phone Number", flex: 2 },
+    { title: "Email", flex: 2 },
+    { title: "Driver Type", flex: 1 },
+    { title: "Status", flex: 1 },
+    { title: "Onboard Step", flex: 1 }
+  ]
 
   return (
     <EnhancedTable
       headBg={headBg}
-      TableHeadComponent={<DriversTableHeadRow headCellData={headCellData}/>}
+      TableHeadComponent={<DriversTableHeadRow headCellData={isStatusRemark ? headCellDataStatusRemark : headCellData}/>}
       rowComponent={(rows) => <DriversTableBodyRow data={rows} subPath={subPath} currentPage={currentPage} onboardStatus={onboardStatus} />}
       rowData={tableData}
       maxWidth="100vw"
