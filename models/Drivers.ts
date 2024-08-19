@@ -12,9 +12,11 @@ export interface DriversTableBodyData {
   dateDeleted?: string;
   deletionReason?: string;
   inspectionCode?: string;
-  onlineStatus: any;
-  currentCar: any;
-  onboardStep: any;
+  onlineStatus?: any;
+  currentCar?: any;
+  onboardStep?: any;
+  phoneNumber?: any;
+  email?: any;
 }
 
 export interface DriversMappedResponse {
@@ -31,6 +33,8 @@ export interface Driver {
   inspection_code: any;
   _id: string;
   user: {
+    email: any;
+    phone_number: any;
     coordinate: any;
     onboarding_step: any;
     online_status: any;

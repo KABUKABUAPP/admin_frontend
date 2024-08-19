@@ -8,6 +8,8 @@ export interface RidersTableBodyData {
   imageUrl: string;
   deletedReason?: string;
   dateDeleted?: string;
+  phoneNumber?: string;
+  email?: string;
 }
 
 export interface MappedRider extends RidersTableBodyData {
@@ -15,6 +17,8 @@ export interface MappedRider extends RidersTableBodyData {
 }
 
 export interface Rider {
+  email: any;
+  phone_number: any;
   coordinate: any;
   state: any;
   _id: string;
