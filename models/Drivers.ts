@@ -17,6 +17,7 @@ export interface DriversTableBodyData {
   onboardStep?: any;
   phoneNumber?: any;
   email?: any;
+  declineReason?: any;
 }
 
 export interface DriversMappedResponse {
@@ -29,6 +30,8 @@ export interface ReactivateDriverQuery {
 }
 
 export interface Driver {
+  approval_status_remark: any;
+  admin_approval_remark: any;
   current_car: any;
   inspection_code: any;
   _id: string;

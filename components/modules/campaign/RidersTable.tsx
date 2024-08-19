@@ -16,11 +16,10 @@ interface Props {
 const headCellData = [
   { title: "Full Name", flex: 2 },
   { title: "Location", flex: 1 },
-  { title: "Total Trips", flex: 1 },
+  //{ title: "Total Trips", flex: 1 },
   { title: "Phone Number", flex: 2 },
   { title: "Email", flex: 2 },
-  { title: "Wallet Balance", flex: 1 },
-  { title: "Status", flex: 1 },
+  { title: "Status", flex: 1 }
 ];
 
 const RidersTable: FC<Props> = ({
