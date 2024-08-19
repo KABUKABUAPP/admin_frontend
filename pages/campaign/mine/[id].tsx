@@ -59,7 +59,7 @@ const ViewCampaignMine = () => {
     const [carOwner, setCarOwner] = useState<boolean>(false);
     const [pageSize, setPageSize] = useState(5);
     const [searchDriver, setSearchDriver] = useState<string>("");
-    const [driverStatus, setDriverStatus] = useState<string>("pending");
+    const [driverStatus, setDriverStatus] = useState<string>(`${router.query.tab}`);
     const [currentPage, setCurrentPage] = useState(1);
     const [currentRiderPage, setCurrentRiderPage] = useState(1);
     const [referralCode, setReferralCode] = useState('');
@@ -132,7 +132,7 @@ const ViewCampaignMine = () => {
       } = useGetAllDriversQuery(
         {
           carOwner: carOwner,
-          driverStatus: driverStatus,
+          driverStatus: router.query.tab,
           limit: pageSize,
           page: currentPage,
           search: searchDriver,
@@ -140,7 +140,7 @@ const ViewCampaignMine = () => {
           status: statusFilter,
           onlineStatus: onlineStatusOption,
           dashboard_state: dashboardState,
-          referralCode
+          //referralCode
         },
         {
           refetchOnMountOrArgChange: true,
@@ -163,7 +163,6 @@ const ViewCampaignMine = () => {
 
     useEffect(() => {
         if (data) {
-            console.log({data});
             setReferralCode(data?.campaign_details?.referral_code);
         }
     }, [data])
@@ -176,6 +175,15 @@ const ViewCampaignMine = () => {
     
         setDriverTypeOptions(() => mutatedOptions);
     };
+
+    useEffect(() => {
+        const mutatedOptions = driverTypeOptions.map((option) => {
+            if (option.keyVal === router.query.tab) return { ...option, isActive: true };
+            return { ...option, isActive: false };
+        });
+    
+        setDriverTypeOptions(() => mutatedOptions);
+    }, [router.query.tab])
 
     return (
         <div style={{ backgroundColor: '#F8F8F8' }}>
@@ -296,6 +304,7 @@ const ViewCampaignMine = () => {
                                                         handleClickOption={(keyVal) => {
                                                             handleDriverTypeOption(keyVal)
                                                             setDriverStatus(keyVal)
+                                                            router.push(`/campaign/mine/${router.query.id}?tab=${keyVal}`)
                                                         }}
                                                     />
                                                     <div className="text-xs flex gap-2 flex-col lg:flex-row items-center cursor-pointer justify-end">

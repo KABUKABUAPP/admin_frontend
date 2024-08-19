@@ -67,7 +67,7 @@ const CampaignMine = () => {
                         <EnhancedTable
                             TableHeadComponent={<StaffTableHeadRow headCellData={headCellData} />}
                             rowComponent={(row) => (
-                                <div onClick={() => router.push(`/campaign/mine/${row.id}`)} className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer">
+                                <div onClick={() => router.push(`/campaign/mine/${row.id}?tab=pending`)} className="flex p-3 py-5 gap-6 border-b border-b[#E6E6E6] cursor-pointer">
                                     <div style={{ flex: 1 }} className="flex items-center">
                                         <p className="text-xs font-bold cursor-pointer">{capitalizeAllFirstLetters(row.name)}</p>
                                     </div>
