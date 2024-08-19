@@ -30,10 +30,6 @@ const MarketerMainView = () => {
         { refetchOnReconnect: true, refetchOnMountOrArgChange: true }
     );
 
-    useEffect(() => {
-        if (marketerData) console.log({marketerData})
-    }, [marketerData])
-
     return (
         <>
             {

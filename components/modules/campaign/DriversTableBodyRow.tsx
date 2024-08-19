@@ -29,7 +29,8 @@ const DriversTableBodyRow: FC<Props> = ({
     onlineStatus,
     onboardStep,
     phoneNumber,
-    email
+    email,
+    declineReason
   },
   subPath,
   currentPage,
@@ -91,7 +92,7 @@ const DriversTableBodyRow: FC<Props> = ({
         isStatusRemark &&
         <div style={{ flex: 1 }} className="flex items-center">
           <p className="text-xs font-bold">
-            {onboardStep ? onboardStep : <Skeleton />}
+            {router.query.tab === "declined" ? declineReason : (onboardStep ? onboardStep : <Skeleton />)}
           </p>
         </div>
       }
