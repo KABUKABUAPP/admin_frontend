@@ -76,9 +76,10 @@ export const driversApi = createApi({
         onlineStatus,
         onboardStatus,
         sharpApprovalStatus,
-        dashboard_state
+        dashboard_state,
+        referralCode
       }) => ({
-        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}${carOwner ? `&car_owner=${carOwner}` : ''}${search ? `&search=${search}` : ''}${order ? `&order=${order}` : ''}${status ? `&is_blocked=${status}` : ""}${statusRemark ? `&status_remark=${statusRemark}` : ""}${deleted ? `&deleted=${deleted}` : ""}${onlineStatus ? `&online_status=${onlineStatus}` : ''}${onboardStatus ? `&is_onboarding=${onboardStatus}` : ''}${sharpApprovalStatus ? `&sharp_approval_status=${sharpApprovalStatus}` : ''}${dashboard_state && dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}`,
+        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}${carOwner ? `&car_owner=${carOwner}` : ''}${search ? `&search=${search}` : ''}${order ? `&order=${order}` : ''}${status ? `&is_blocked=${status}` : ""}${statusRemark ? `&status_remark=${statusRemark}` : ""}${deleted ? `&deleted=${deleted}` : ""}${onlineStatus ? `&online_status=${onlineStatus}` : ''}${onboardStatus ? `&is_onboarding=${onboardStatus}` : ''}${sharpApprovalStatus ? `&sharp_approval_status=${sharpApprovalStatus}` : ''}${dashboard_state && dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}${referralCode ? `&referral_code=${referralCode}` : ''}`,
       }),
       providesTags: ["drivers"],
       transformResponse: (response: GetAllDriversResponse) => {
@@ -107,7 +108,9 @@ export const driversApi = createApi({
               onlineStatus: driver?.user?.online_status,
               onboardStep: driver?.user?.onboarding_step,
               coordinate: driver?.user?.coordinate && driver?.user?.coordinate.length > 0 ? driver?.user?.coordinate : undefined,
-              currentCar: driver?.current_car ? driver?.current_car : null
+              currentCar: driver?.current_car ? driver?.current_car : null,
+              phoneNumber: driver?.user?.phone_number,
+              email: driver?.user?.email
             } as DriversTableBodyData;
           });
 
