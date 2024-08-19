@@ -37,17 +37,14 @@ const RidersTableBodyRow: FC<Props> = ({
       <div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">{capitalizeAllFirstLetters(location)}</p>
       </div>
-      <div style={{ flex: 1 }} className="flex items-center">
+      {/*<div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">{totalTrips}</p>
-      </div>
+      </div>*/}
       <div style={{ flex: 2 }} className="flex items-center">
         <p className="text-xs font-bold">{phoneNumber}</p>
       </div>
       <div style={{ flex: 2 }} className="flex items-center">
         <p className="text-xs font-bold">{email}</p>
-      </div>
-      <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{walletBalance?.toLocaleString()}</p>
       </div>
       <div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">{status}</p>

@@ -85,7 +85,6 @@ export const driversApi = createApi({
       transformResponse: (response: GetAllDriversResponse) => {
         if (!response) return {} as DriversMappedResponse;
         else {
-          console.log({response})
           const totalCount = response?.data?.pagination?.totalCount;
           const mappedReponse = response?.data?.drivers?.map((driver) => {
             return {
@@ -110,7 +109,8 @@ export const driversApi = createApi({
               coordinate: driver?.user?.coordinate && driver?.user?.coordinate.length > 0 ? driver?.user?.coordinate : undefined,
               currentCar: driver?.current_car ? driver?.current_car : null,
               phoneNumber: driver?.user?.phone_number,
-              email: driver?.user?.email
+              email: driver?.user?.email,
+              declineReason: driver?.admin_approval_remark ||  driver?.approval_status_remark
             } as DriversTableBodyData;
           });
 

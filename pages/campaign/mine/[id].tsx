@@ -140,7 +140,7 @@ const ViewCampaignMine = () => {
           status: statusFilter,
           onlineStatus: onlineStatusOption,
           dashboard_state: dashboardState,
-          //referralCode
+          referralCode
         },
         {
           refetchOnMountOrArgChange: true,

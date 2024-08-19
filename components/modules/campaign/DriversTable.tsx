@@ -38,7 +38,7 @@ const DriversTable: FC<Props> = ({ tableData, isLoading, isError, refetch, subPa
     { title: "Email", flex: 2 },
     { title: "Driver Type", flex: 1 },
     { title: "Status", flex: 1 },
-    { title: "Onboard Step", flex: 1 }
+    { title: router.query.tab === "declined" ? "Decline Reason" : "Onboard Step", flex: 1 }
   ]
 
   return (
