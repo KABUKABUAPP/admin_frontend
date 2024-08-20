@@ -30,7 +30,7 @@ const SharpPaymentsTable:FC<Props> = ({order, dateStart, dateEnd, minAmount, set
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
-    { limit: pageSize, page: currentPage, search: search, filter: 'sharp_payment', order, dateStart, dateEnd, minAmount, transactionStatus },
+    { limit: pageSize, page: currentPage, search: search, filter: 'SHARP_PAYMENT_TO_KABUKABU', order, dateStart, dateEnd, minAmount, transactionStatus },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
   

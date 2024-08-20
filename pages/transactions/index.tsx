@@ -24,6 +24,8 @@ import ManualCreditTable from "@/components/modules/Transactions/ManualCreditTab
 import DropDown from "@/components/ui/DropDown";
 import AppHead from "@/components/common/AppHead";
 import UsersWalletTable from "@/components/modules/Transactions/UsersWalletTable";
+import Cookies from "js-cookie";
+import { USER_TOKEN } from "@/constants";
 
 
 function getYesterdaysDate() {
@@ -80,18 +82,10 @@ const Transactions: NextPage = () => {
   const [minAmount, setMinAmount] = useState(0);
   const [dateStart, setDateStart] = useState<any>();
   const [dateEnd, setDateEnd] = useState<any>();
-  const [totalWithdrawal, setTotalWithdrawal] = useState(1)
-
-  const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
-    {
-      limit: pageSize,
-      page: currentPage,
-      search: search,
-      filter: "",
-      order: selectedDropDown,
-    },
-    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
-  );
+  const [totalWithdrawal, setTotalWithdrawal] = useState(1);
+  const [transactionFilter, setTransactionFilter] = useState('');
+  const [summationView, setSummationView] = useState('credit');
+  const [userRole, setUserRole] = useState('');
 
   const handleClickAccountCard = (title: string) => {
     const mutated = accountCardData.map((item) => {
@@ -176,11 +170,66 @@ const Transactions: NextPage = () => {
   } = useGetTransactionsCardQuery(
     { range: statusFilter },
     { refetchOnMountOrArgChange: true }
+  );  
+
+  useEffect(() => {
+    if (!router.query.tab || router.query.tab === '') {
+      setTransactionFilter(``);
+    }
+
+    if (router.query.tab && router.query.tab === 'trip_payments') {
+      setTransactionFilter(`REGULAR_TRIP_PAYMENT`);
+    }
+
+    if (router.query.tab && router.query.tab === 'trip_charges') {
+      setTransactionFilter(`TRIP_CHARGES_TO_KABUKABU`);
+    }
+
+    if (router.query.tab && router.query.tab === 'top_up') {
+      setTransactionFilter(`WALLET_TOPUP`);
+    }
+
+    if (router.query.tab && router.query.tab === 'withdrawals') {
+      setTransactionFilter(`DRIVER_WALLET_WITHDRAWAL`);
+    }
+
+    if (router.query.tab && router.query.tab === 'manual_credit') {
+      setTransactionFilter(`CREDIT_USER_WALLET_FROM_ADMIN`);
+    }
+
+    if (router.query.tab && router.query.tab === 'subscriptions') {
+      setTransactionFilter(`DRIVER_TRIP_CHARGES`);
+    }
+
+    if (router.query.tab && router.query.tab === 'sharp_payments') {
+      setTransactionFilter(`SHARP_PAYMENT_TO_KABUKABU`);
+    }
+  }, [router.query.tab]);
+
+  const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
+    {
+      limit: pageSize,
+      page: currentPage,
+      search: search,
+      filter: transactionFilter,
+      order: selectedDropDown,
+      dateStart,
+      dateEnd,
+      minAmount,
+      transactionStatus: transactionStatusFilter
+    },
+    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
   useEffect(() => {
-    console.log({userType})
-  }, [userType])
+    const storedToken = Cookies.get(USER_TOKEN);
+
+    if (storedToken) {
+      const parsedToken = JSON.parse(storedToken);
+      setUserRole(parsedToken.role)
+    }
+  }, [])
+
 
   return (
     <>
@@ -198,7 +247,7 @@ const Transactions: NextPage = () => {
             }}
           />
         </div>
-        {transactionCard && (
+        {transactionCard && userRole === 'principal' && (
           <AccountBalanceCardContainer
             data={transactionCard}
             handleClick={(title) => {}}
@@ -235,6 +284,116 @@ const Transactions: NextPage = () => {
           showUserTypeFilter={String(tab) === Tab.wallets ? true : false}
           setUserTypeFilter={setUserType}
         />
+
+          {
+            router.query.tab !== 'wallets' &&
+            <div className="z-20 rounded-lg bg-[#FFF] my-5 p-4">
+                <div className="flex w-auto justify-center items-center sm:justify-start gap-3">
+                  <div className={`cursor-pointer w-auto ${summationView === 'credit' && 'font-semibold'}`} onClick={() => {
+                    setSummationView('credit')
+                  }}>Credit</div>
+                  <div className="w-auto">|</div>
+                  <div className={`cursor-pointer w-auto ${summationView === 'debit' && 'font-semibold'}`} onClick={() => {
+                    setSummationView('debit')
+                  }}>Debit</div>
+                </div>
+
+                {
+                  summationView === 'credit' && data &&
+                  <div className="flex flex-col sm:flex-row gap-3 my-3">
+                    <div className="rounded-md w-full sm:w-1/6 bg-[#EFEFEF] flex flex-col p-2">
+                      <p className={`font-bold transition-all text-xl`}>
+                        N{data?.summation?.credit?.failed.toLocaleString()}
+                      </p>
+                      <p className="text-xs font-semibold">{'Failed'}</p>
+                    </div>
+                    
+                    <div className="rounded-md w-full sm:w-1/6 bg-[#EFEFEF] flex flex-col p-2">
+                      <p className={`font-bold transition-all text-xl`}>
+                        N{data?.summation?.credit?.pending.toLocaleString()}
+                      </p>
+                      <p className="text-xs font-semibold">{'Pending'}</p>
+                    </div>
+                    
+                    <div className="rounded-md w-full sm:w-1/6 bg-[#EFEFEF] flex flex-col p-2">
+                      <p className={`font-bold transition-all text-xl`}>
+                        N{data?.summation?.credit?.reversal.toLocaleString()}
+                      </p>
+                      <p className="text-xs font-semibold">{'Reversals'}</p>
+                    </div>
+                    
+                    <div className="rounded-md w-full sm:w-1/6 bg-[#EFEFEF] flex flex-col p-2">
+                      <p className={`font-bold transition-all text-xl`}>
+                        N{data?.summation?.credit?.success.toLocaleString()}
+                      </p>
+                      <p className="text-xs font-semibold">{'Successful'}</p>
+                    </div>
+                    
+                    <div className="rounded-md w-full sm:w-1/6 bg-[#EFEFEF] flex flex-col p-2">
+                      <p className={`font-bold transition-all text-xl`}>
+                        N{data?.summation?.credit?.other.toLocaleString()}
+                      </p>
+                      <p className="text-xs font-semibold">{'Others'}</p>
+                    </div>
+                    
+                    <div className="rounded-md w-full sm:w-1/6 bg-[#EFEFEF] flex flex-col p-2">
+                      <p className={`font-bold transition-all text-xl`}>
+                        N{data?.summation?.credit?.total.toLocaleString()}
+                      </p>
+                      <p className="text-xs font-semibold">{'Total'}</p>
+                    </div>
+                  </div>
+                }
+
+                {
+                  summationView === 'debit' && data &&
+                  <div className="flex flex-col sm:flex-row gap-3 my-3">
+                    <div className="rounded-md w-full sm:w-1/6 bg-[#EFEFEF] flex flex-col p-2">
+                      <p className={`font-bold transition-all text-xl`}>
+                        N{data?.summation?.debit?.failed.toLocaleString()}
+                      </p>
+                      <p className="text-xs font-semibold">{'Failed'}</p>
+                    </div>
+                    
+                    <div className="rounded-md w-full sm:w-1/6 bg-[#EFEFEF] flex flex-col p-2">
+                      <p className={`font-bold transition-all text-xl`}>
+                        N{data?.summation?.debit?.pending.toLocaleString()}
+                      </p>
+                      <p className="text-xs font-semibold">{'Pending'}</p>
+                    </div>
+                    
+                    <div className="rounded-md w-full sm:w-1/6 bg-[#EFEFEF] flex flex-col p-2">
+                      <p className={`font-bold transition-all text-xl`}>
+                        N{data?.summation?.debit?.reversal.toLocaleString()}
+                      </p>
+                      <p className="text-xs font-semibold">{'Reversals'}</p>
+                    </div>
+                    
+                    <div className="rounded-md w-full sm:w-1/6 bg-[#EFEFEF] flex flex-col p-2">
+                      <p className={`font-bold transition-all text-xl`}>
+                        N{data?.summation?.debit?.success.toLocaleString()}
+                      </p>
+                      <p className="text-xs font-semibold">{'Successful'}</p>
+                    </div>
+                    
+                    <div className="rounded-md w-full sm:w-1/6 bg-[#EFEFEF] flex flex-col p-2">
+                      <p className={`font-bold transition-all text-xl`}>
+                        N{data?.summation?.debit?.other.toLocaleString()}
+                      </p>
+                      <p className="text-xs font-semibold">{'Others'}</p>
+                    </div>
+                    
+                    <div className="rounded-md w-full sm:w-1/6 bg-[#EFEFEF] flex flex-col p-2">
+                      <p className={`font-bold transition-all text-xl`}>
+                        N{data?.summation?.debit?.total.toLocaleString()}
+                      </p>
+                      <p className="text-xs font-semibold">{'Total'}</p>
+                    </div>
+                  </div>
+                }
+            </div>
+          }
+
         {String(tab) === Tab.all_transactions && (
           <AllTransactionsTable order={selectedDropDown} dateStart={dateStart} dateEnd={(dateStart && !dateEnd) ? getYesterdaysDate() : dateEnd} minAmount={minAmount} setTotalWithdrawal={setTotalWithdrawal} transactionStatus={transactionStatusFilter} search={search} />
         )}

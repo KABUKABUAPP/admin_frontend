@@ -55,7 +55,6 @@ export const transactionsApi = createApi({
         transformResponse: (response: any) => {
           if (!response) return response as any;
           else {
-            console.log({response})
             const mappedData = response.data.data.rows.map((tx: any) => {
               return {
                 date: tx?.createdAt,
@@ -72,7 +71,7 @@ export const transactionsApi = createApi({
               };
             });
 
-            return { totalCount: response.data.total, data: mappedData, totalWithdrawalCredit: response?.data?.summation?.credit?.success, totalWithdrawalDebit: response?.data?.summation?.debit?.success };
+            return { totalCount: response.data.total, data: mappedData, totalWithdrawalCredit: response?.data?.summation?.credit?.success, totalWithdrawalDebit: response?.data?.summation?.debit?.success, summation: response?.data?.summation };
           }
         },
       }
