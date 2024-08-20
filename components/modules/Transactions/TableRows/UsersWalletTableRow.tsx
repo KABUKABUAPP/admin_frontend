@@ -14,7 +14,6 @@ interface Props {
 const UsersWalletTableRow: FC<Props> = ({ data, currentPage }) => {
   const { setModalContent } = useModalContext();
   const router = useRouter();
-  console.log(router)
 
   return (
     <div className="flex p-3 py-6 items-center gap-6 border-b border-b[#E6E6E6] cursor-pointer" onClick={() => {}}>

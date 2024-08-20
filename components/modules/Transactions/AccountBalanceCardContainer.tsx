@@ -24,10 +24,6 @@ const AccountBalanceCardContainer: FC<Props> = ({ data, handleClick, totalWithdr
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
-  useEffect(() => {
-    if (walletData) console.log({walletData})
-  }, [walletData])
-
   return (
     <>
       <div className="flex gap-8 flex-wrap py-3 max-md:justify-center">

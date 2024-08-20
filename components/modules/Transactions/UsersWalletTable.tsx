@@ -3,7 +3,7 @@ import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
 import React, { FC, useEffect, useState } from "react";
 import TopUpTableRow from "./TableRows/TopUpTableRow";
 import Pagination from "@/components/common/Pagination";
-import { useGetUsersWalletBalancesQuery } from "@/api-services/walletService";
+import { useGetUsersWalletBalancesQuery, walletApi } from "@/api-services/walletService";
 import UsersWalletTableRow from "./TableRows/UsersWalletTableRow";
 import { useRouter } from "next/router";
 
@@ -32,6 +32,10 @@ const UsersWalletTable: FC<Props> = ({search, userType}) => {
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
+
+  /*useEffect(() => {
+    if (data) console.log('senth wallet', {data});
+  }, [data])*/
 
   return (
     <>
