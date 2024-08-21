@@ -11,8 +11,6 @@ import { capitalizeAllFirstLetters } from "@/utils";
 const Marketer: NextPage = () => {
     const { user } = useUserContext();
 
-    console.log({user})
-
     return (
         <>
             <AppHead title="Kabukabu | Marketer" />
