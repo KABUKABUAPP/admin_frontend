@@ -36,17 +36,17 @@ function copyToClipboard(text: string) {
 
 const WelcomeMessage:FC<Props> = ({name, referral_code}) => {
   return (
-    <div className="flex justify-between p-4">
+    <div className="flex flex-col sm:flex-row sm:justify-between p-4 gap-4">
       <div>
         <p className='font-bold'>Hello {name}👋🏽</p>
         <p className='text-xs mt-2'>Here's your insight for today</p>
       </div>
 
-      {/*<div className="ml-auto">
-        <p className="flex bg-[#FFF5D8] pr-2 pl-2" style={{borderRadius: '1rem'}}>
+      <div className="mx-1 bg-[#FFF5D8] pr-2 pl-2" style={{borderRadius: '1rem'}}>
+        <span className="flex justify-between">
           <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
+            <small>Your Referral code</small><br />
             <b>{referral_code}</b><br />
-            <small>Your referral code</small>
           </span>
           <span style={{marginLeft: '1vw', marginTop: '3vh', cursor: 'pointer'}}>
             <Copy handleClick={() => {
@@ -54,8 +54,18 @@ const WelcomeMessage:FC<Props> = ({name, referral_code}) => {
               toast.success("Referral code copied");
             }} />
           </span>
-        </p>
-      </div>*/}
+        </span>
+        <span className="flex justify-between text-xs gap-2 py-3">
+          <span className="cursor-pointer" onClick={() => {
+            copyToClipboard(referral_code ? `https://kabukabu.com.ng/ref?code=${referral_code}&type=driver` : '')
+            toast.success("Referral Link copied");
+          }}>Copy Link(Driver)</span>
+          <span className="cursor-pointer" onClick={() => {
+            copyToClipboard(referral_code ? `https://kabukabu.com.ng/ref?code=${referral_code}&type=rider` : '')
+            toast.success("Referral Link copied");
+          }}>Copy Link(Rider)</span>
+        </span>
+      </div>
     </div>
   )
 }

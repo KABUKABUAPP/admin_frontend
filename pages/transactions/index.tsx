@@ -286,7 +286,7 @@ const Transactions: NextPage = () => {
         />
 
           {
-            router.query.tab !== 'wallets' &&
+            !router.query.tab &&
             <div className="z-20 rounded-lg bg-[#FFF] my-5 p-4">
                 <div className="flex w-auto justify-center items-center sm:justify-start gap-3">
                   <div className={`cursor-pointer w-auto ${summationView === 'credit' && 'font-semibold'}`} onClick={() => {
