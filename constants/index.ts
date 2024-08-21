@@ -299,6 +299,11 @@ export const driverOptionBarData = [
     title: "Online Consistency",
     isActive: false,
     keyVal: "online-monitor",
+  },
+  {
+    title: "Rewarded Users",
+    isActive: false,
+    keyVal: "rewarded-users",
   }
 ];
 
