@@ -24,9 +24,10 @@ interface Props {
   setTotalWithdrawal: any;
   transactionStatus: any;
   search: string;
+  timeline: string;
 }
 
-const TopUpTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, setTotalWithdrawal, transactionStatus, search}) => {
+const TopUpTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, setTotalWithdrawal, transactionStatus, search, timeline}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
@@ -39,7 +40,8 @@ const TopUpTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, setTotalWi
       dateStart,
       dateEnd,
       minAmount,
-      transactionStatus
+      transactionStatus,
+      timeline
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
