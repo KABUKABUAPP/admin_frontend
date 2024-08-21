@@ -22,9 +22,10 @@ interface Props {
   setTotalWithdrawal: any;
   transactionStatus: any;
   search: string;
+  timeline: string;
 }
 
-const TripChargesTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, setTotalWithdrawal, transactionStatus, search}) => {
+const TripChargesTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, setTotalWithdrawal, transactionStatus, search, timeline}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
@@ -37,7 +38,8 @@ const TripChargesTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, setT
       dateStart,
       dateEnd,
       minAmount,
-      transactionStatus
+      transactionStatus,
+      timeline
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );

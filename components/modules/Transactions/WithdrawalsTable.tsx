@@ -23,9 +23,10 @@ interface Props {
   setTotalWithdrawal: any;
   transactionStatus: any;
   search: string;
+  timeline: string;
 }
 
-const WithdrawalsTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, setTotalWithdrawal,transactionStatus, search}) => {
+const WithdrawalsTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, setTotalWithdrawal,transactionStatus, search, timeline}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
@@ -38,7 +39,8 @@ const WithdrawalsTable: FC<Props> = ({order, dateStart, dateEnd, minAmount, setT
       dateStart,
       dateEnd,
       minAmount,
-      transactionStatus
+      transactionStatus,
+      timeline
     },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
