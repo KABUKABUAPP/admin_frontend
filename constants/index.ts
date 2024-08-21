@@ -379,11 +379,11 @@ export const transactionsOptionsBar = [
     isActive: false,
     keyVal: "manual_credit",
   },
-  {
+  /*{
     title: "Subscriptions",
     isActive: false,
     keyVal: "subscriptions",
-  },
+  },*/
   {
     title: "Sharp Payments",
     isActive: false,
