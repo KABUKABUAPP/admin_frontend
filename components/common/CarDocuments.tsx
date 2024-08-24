@@ -61,11 +61,6 @@ const EditBasicDriverDetails = () => {
     if (error) toast.error('Error encountered');
   }, [error])
 
-  useEffect(() => {
-    if (driverData) {
-      console.log({driverData});
-    }
-  }, [driverData])
 
   const handleDocChange = (doc: any) => {
     setDocArray([...docArray, doc]);

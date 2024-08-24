@@ -45,8 +45,8 @@ interface Props {
   totalReferredRiders?: any;
   approveDeclineDate?: any;
   approvalStatus?: any;
-  city: string;
-  state: string;
+  city?: string;
+  state?: string;
   showEdit?: boolean;
 }
 
@@ -146,7 +146,6 @@ const EditBasicDriverDetails = () => {
 
   useEffect(() => {
     if (driverData) {
-      console.log({driverData});
       setFullName(driverData?.driverInfo?.fullName);
       setEmailAddress(driverData?.driverInfo?.email);
       setHouseAddress(driverData?.driverInfo?.address);

@@ -124,7 +124,6 @@ export const driversApi = createApi({
       }),
       providesTags: ["driver"],
       transformResponse: (response: ViewDriverResponse) => {
-        console.log({responseDriverSingle: response})
         if (!response) return <any>{};
         else {
           const { data } = response;

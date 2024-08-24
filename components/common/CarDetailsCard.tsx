@@ -95,7 +95,6 @@ const EditBasicDriverDetails = () => {
 
   useEffect(() => {
     if (driverData) {
-      console.log({driverData});
       setCarBrand(driverData?.carDetails?.carBrand);
       setCarModel(driverData?.carDetails?.carModelOrd);
       setCarColor(driverData?.carDetails?.carColor);
