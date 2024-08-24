@@ -87,7 +87,6 @@ const Settings: NextPage = () => {
     permissions?: UserPermissions | null
   ) => {
     if (permissions) {
-      console.log({permissions})
       const filteredNav = nav.filter((item) => {
         if (
           item.title === "Promotions" &&
@@ -115,10 +114,6 @@ const Settings: NextPage = () => {
       isActive: boolean;
     }[];
   };
-
-  useEffect(() => {
-    if (driversSettings) console.log({driversSettings})
-  }, [driversSettings])
 
   return (
     <>
