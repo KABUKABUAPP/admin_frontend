@@ -324,9 +324,9 @@ const Driver: NextPage = () => {
   const [timeline, setTimeline] = useState('today');
   const [fixedDate, setFixedDate] = useState(`${year}-${month}-${day}`);
   const [dateStart, setDateStart] = useState('');
-  const [dateEnd, setDateEnd] = useState('')
-  const [onlineMonitorDataRes, setOnlineMonitorDataRes] = useState<any>()
-
+  const [dateEnd, setDateEnd] = useState('');
+  const [showEdit, setShowEdit] = useState(false);
+  const [onlineMonitorDataRes, setOnlineMonitorDataRes] = useState<any>();
   const { id } = router.query;
 
   const { data, isLoading, isError, refetch } = useViewDriverQuery(
@@ -394,6 +394,12 @@ const Driver: NextPage = () => {
   const { userPermissions } = useUserPermissions();
   const currentPageUrl = router.query.current_page ? `currentPage=${router.query.current_page}` : '';
   const handleBackUrl = router.query.fallbackUrl ? router.query.fallbackUrl : `/drivers/active?${currentPageUrl}${router.query.online_status ? `&online_status=${router.query.online_status}` : ''}`;
+  
+  useEffect(() => {
+    if (userPermissions && userPermissions.drivers_permissions.write) {
+      setShowEdit(true);
+    }
+  }, [userPermissions])
 
   return (
     <>
@@ -579,11 +585,13 @@ const Driver: NextPage = () => {
                   <DriverInfoCard
                     referral_code={data?.driverInfo?.referralCode} {...data.driverInfo}
                     bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+                    showEdit={showEdit}
                   />
 
                   <CarDetailsCard
                     {...data.carDetails}
                     bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+                    showEdit={showEdit}
                   />
 
                   <FinancialsCard
@@ -594,11 +602,13 @@ const Driver: NextPage = () => {
                   <GuarantorDetailsCard
                     {...data.guarantor}
                     bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+                    showEdit={showEdit}
                   />
 
                   <CarDocuments
                     {...data.carDocs}
                     bg={data.driverInfo.isBlocked ? "#FEE2E9" : "#FFFFFF"}
+                    showEdit={showEdit}
                   />
                 </>
               }
