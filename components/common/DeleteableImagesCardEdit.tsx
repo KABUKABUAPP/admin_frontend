@@ -19,7 +19,7 @@ const DeleteableImagesCard: FC<Props> = ({ images, title, handleChange, handleDe
     <Card>
       <p className="text-lg font-semibold pb-2">{title || `Car Images`}</p>
       <Button
-        title="Click to upload"
+        title="Click this text to upload image"
         variant="text"
         color="tetiary"
         size="small"
