@@ -111,7 +111,7 @@ const EditBasicDriverDetails = () => {
     refetch: refetchCities,
   } = useGetNigerianCityByStateQuery(
     { id: selectedStateId },
-    { skip: !selectedStateId, refetchOnMountOrArgChange: true }
+    { refetchOnMountOrArgChange: true }
   );
 
   const handleUpdateSubmit = () => {
@@ -162,6 +162,16 @@ const EditBasicDriverDetails = () => {
     }
   }, [driverData])
 
+  useEffect(() => {
+    if (driverData && states && cities) {
+
+      const theCity = cities?.find((city) => {
+        return city.label === capitalizeAllFirstLetters(driverData?.driverInfo?.city)
+      });
+      if (theCity) setSelectedCityId(`${theCity?.value}`)
+    }
+  }, [driverData, states, cities])
+
   return (
     <div className="mx-auto w-[90%] sm:w-[60%] md:w-[50%] lg:w-[40%]">
       <Card bg="#FFF">
@@ -206,7 +216,7 @@ const EditBasicDriverDetails = () => {
               <div className="flex justify-between gap-3 max-sm:flex-col">
                 <SelectField
                   options={cities ? cities : []}
-                  disabled={!cities?.length}
+                  disabled={false}
                   label="City"
                   placeholder="City here"
                   className="w-full"
