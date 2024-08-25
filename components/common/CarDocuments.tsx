@@ -43,7 +43,7 @@ const EditBasicDriverDetails = () => {
     var data = new FormData()
 
     docArray.forEach(async (doc: any) => {
-      data.append(doc.docType, doc.fileUrl);
+      data.append(doc.docType.toLowerCase(), doc.fileUrl);
     });
 
     updateDetails({driverId: String(id), body: data});
