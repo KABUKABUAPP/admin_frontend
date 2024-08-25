@@ -17,6 +17,7 @@ import TextField from "../ui/Input/TextField/TextField";
 import CarImagesCard from "@/components/common/DeleteableImagesCardEdit";
 import { useGetNigerianCityByStateQuery, useGetNigerianStatesQuery } from "@/api-services/geoLocationService";
 import SelectField from "../ui/Input/SelectField";
+import { capitalizeAllFirstLetters } from "@/utils";
 
 interface Props {
   image?: string;
@@ -73,7 +74,7 @@ const EditBasicDriverDetails = () => {
     refetch: refetchCities,
   } = useGetNigerianCityByStateQuery(
     { id: selectedStateId },
-    { skip: !selectedStateId, refetchOnMountOrArgChange: true }
+    { refetchOnMountOrArgChange: true }
   );
 
   const handleUpdateSubmit = () => {
@@ -121,11 +122,6 @@ const EditBasicDriverDetails = () => {
       setFullName(driverData?.guarantor?.fullname);
       setRelationship(driverData?.guarantor?.relationship);
       setHouseAddress(driverData?.guarantor?.address);
-
-      const theCity = cities?.find((city) => {
-        return city.label === driverData?.guarantor?.city
-      });
-      if (theCity) setSelectedCityId(`${theCity?.value}`)
       
       const theState = states?.find((state) => {
         return state.label === driverData?.guarantor?.state
@@ -140,6 +136,18 @@ const EditBasicDriverDetails = () => {
       }
     }
   }, [driverData])
+
+  
+
+  useEffect(() => {
+    if (driverData && states && cities) {
+
+      const theCity = cities?.find((city) => {
+        return city.label === capitalizeAllFirstLetters(driverData?.driverInfo?.city)
+      });
+      if (theCity) setSelectedCityId(`${theCity?.value}`)
+    }
+  }, [driverData, states, cities])
 
   function handleFileInputChange(event: any) {
     const file = event.target.files[0];
@@ -162,7 +170,7 @@ const EditBasicDriverDetails = () => {
   }
 
   return (
-    <div className="mx-auto w-[90%] sm:w-[60%] md:w-[50%] lg:w-[40%]">
+    <div className="mx-auto w-[90%] sm:w-[60%] md:w-[50%] lg:w-[40%] max-h-screen overflow-y-scroll">
       <Card bg="#FFF">
         <div className="flex justify-end">
           <div className="w-auto cursor-pointer" onClick={() => {
@@ -236,7 +244,7 @@ const EditBasicDriverDetails = () => {
             <div className="flex justify-between gap-3 max-sm:flex-col">
               <SelectField
                 options={cities ? cities : []}
-                disabled={!cities?.length}
+                disabled={false}
                 label="City"
                 placeholder="City here"
                 className="w-full"
