@@ -120,14 +120,6 @@ const AddProfile: FC<any> = ({profile, setRefetchData}) => {
                                         }} checked={profileActive} />
                                     </div>
                                     <div className="flex justify-between" style={{ flex: 1 }}>
-                                        {/*<TextField
-                                            label="Start"
-                                            type="text"
-                                            onChange={(val) => {setProfileStart(val.target.value)}}
-                                            disabled={false}
-                                            value={profileStart}
-                                        />*/}
-
                                         <div className="flex flex-col w-auto gap-3">
                                             <p>{'Start'}</p>
                                             <DropDown
@@ -149,14 +141,6 @@ const AddProfile: FC<any> = ({profile, setRefetchData}) => {
                                         </div> 
                                     </div>
                                     <div className="flex justify-between" style={{ flex: 1 }}>
-                                        {/*<TextField
-                                            label="Stop"
-                                            type="text"
-                                            onChange={(val) => {setProfileStop(val.target.value)}}
-                                            disabled={false}
-                                            value={profileStop}
-                                        />*/}
-
                                         <div className="flex flex-col w-auto gap-3">
                                             <p>{'Stop'}</p>
                                             <DropDown
