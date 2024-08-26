@@ -64,8 +64,8 @@ export const onlineMonitorApi = createApi({
       }
     }),
     fetchRewardedUsers: build.query<any, any>({
-      query: ({ limit, page, dateStart, dateEnd, beneficiary }) => ({
-        url: `/admin/online-monitor/fetch-rewarded-users?limit=${limit}&page=${page}${dateStart.length > 0 ? `&dateStart=${dateStart}` : ''}${dateEnd.length > 0 ? `&dateEnd=${dateEnd}` : ''}${beneficiary.length > 0 ? `&beneficiary=${beneficiary}` : ''}`
+      query: ({ limit, page, start, stop, beneficiary }) => ({
+        url: `/admin/online-monitor/fetch-rewarded-users?limit=${limit}&page=${page}&start=${start}&stop=${stop}${beneficiary.length > 0 ? `&beneficiary=${beneficiary}` : ''}`
       }),
       transformResponse: (response: any) => {
         if (!response) return {};
