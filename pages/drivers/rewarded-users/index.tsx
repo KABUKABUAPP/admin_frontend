@@ -146,7 +146,7 @@ const RewardedUsers: NextPage = () => {
   };
 
   useEffect(() => {
-    if (data) {
+    if ( beneficiaryOptionsSelected === 'EXISTING_USER' && data) {
       const accordionData = data?.data?.map((pro: any) => {
         return {
           title: pro.date,
