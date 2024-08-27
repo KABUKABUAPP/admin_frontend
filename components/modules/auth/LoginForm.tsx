@@ -79,7 +79,7 @@ const LoginForm: FC = () => {
       setUser({ ...userData });
       toast.success("Login Successful");
       if (userData.role === 'executive marketer') {
-        router.push('/marketer');
+        router.push('/campaign');
       } else if (userData.role === 'temporary_marketer') {
         router.push('/campaign');
       } else if (userData.role === 'redemption_agent') {

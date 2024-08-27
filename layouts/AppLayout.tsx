@@ -25,7 +25,7 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
   const router = useRouter();
   //user!.role = 'temporary_marketer';
 
-  if ( user && user!.role === 'executive marketer') router.push('/marketer');
+  if ( user && user!.role === 'executive marketer') router.push('/campaign');
   if ( user && user!.role === 'redemption_agent') router.push('/redemption');
   if ( user && user!.role === 'temporary_marketer') router.push('/campaign');
 
