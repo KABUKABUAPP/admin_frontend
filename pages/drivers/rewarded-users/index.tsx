@@ -71,6 +71,8 @@ const RewardedUsers: NextPage = () => {
   const [dateEnd, setDateEnd] = useState<any>('');
   const [currentView, setCurrentView] = useState('existing-user');
   const [accordionItems, setAccordionItems] = useState<any>();
+  const [month, setMonth] = useState<any>();
+  const [year, setYear] = useState<any>()
 
   const filterOptions = [
     { label: "Newest First", value: "newest_first", default: true },
@@ -110,7 +112,7 @@ const RewardedUsers: NextPage = () => {
     error,
   } = useFetchRewardedUsersQuery(
     {
-        limit: pageSize, page: currentPage, start: profileStart, stop: profileStop, beneficiary: beneficiaryOptionsSelected
+        limit: pageSize, page: currentPage, start: profileStart, stop: profileStop, beneficiary: beneficiaryOptionsSelected, month: month ? String(month) : '', year : year ? String(year) : ''
     },
     {
       refetchOnMountOrArgChange: true,
@@ -195,6 +197,96 @@ const RewardedUsers: NextPage = () => {
     if (a === 6) return 'Saturday';
   }
 
+  const monthOptions = [
+    {
+      label: 'None',
+      value: ''
+    },
+    {
+      label: 'January',
+      value: 0
+    },
+    {
+      label: 'February',
+      value: 1
+    },
+    {
+      label: 'March',
+      value: 2
+    },
+    {
+      label: 'April',
+      value: 3
+    },
+    {
+      label: 'May',
+      value: 4
+    },
+    {
+      label: 'June',
+      value: 5
+    },
+    {
+      label: 'July',
+      value: 6
+    },
+    {
+      label: 'August',
+      value: 7
+    },
+    {
+      label: 'September',
+      value: 8
+    },
+    {
+      label: 'October',
+      value: 9
+    },
+    {
+      label: 'November',
+      value: 10
+    },
+    {
+      label: 'December',
+      value: 11
+    },
+  ]
+
+  const yearOptions = [
+    {
+      label: 'None',
+      value: ''
+    },
+    {
+      label: '2024',
+      value: 2024
+    },
+    {
+      label: '2025',
+      value: 2025
+    },
+    {
+      label: '2026',
+      value: 2026
+    },
+    {
+      label: '2027',
+      value: 2027
+    },
+    {
+      label: '2028',
+      value: 2028
+    },
+    {
+      label: '2029',
+      value: 2029
+    },
+    {
+      label: '2030',
+      value: 2030
+    }
+  ]
+
   return (
     <>
       <AppHead title="Kabukabu | Drivers" />
@@ -209,7 +301,33 @@ const RewardedUsers: NextPage = () => {
         <div className="my-4">
             <Card bg="#F1F1F1">
                 <div className="flex items-center max-sm:flex-col gap-3 justify-between">
-                    <div className="flex flex-col sm:flex-row items-center w-full gap-4 justify-end">
+                    {
+                      beneficiaryOptionsSelected === 'EXISTING_USER' && !showProfile &&
+                      <div className="flex flex-col sm:flex-row items-center w-full gap-4 justify-center">
+                        <div>
+                          <p>{'Month'}</p>
+                          <DropDown
+                            placeholder="Choose Month"
+                            options={monthOptions}
+                            value={month}
+                            handleChange={(val) => {
+                              setMonth(val);
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <p>{'Year'}</p>
+                          <DropDown
+                            placeholder="Choose Year"
+                            options={yearOptions}
+                            value={year}
+                            handleChange={(val) => {
+                              setYear(val);
+                            }}
+                          />
+                        </div>
+                      </div>}
+                    <div className="flex flex-col sm:flex-row items-center w-full gap-4 justify-center sm:justify-end">
                       <div className="flex">
                           <div className="flex flex-col w-auto gap-3">
                               <p className={`cursor-pointer ${beneficiaryOptionsSelected === 'EXISTING_USER' ? `font-bold` : ''}`} onClick={() => {setBeneficiaryOptionsSelected('EXISTING_USER')}}>{'Existing User'}</p>
