@@ -40,6 +40,17 @@ interface Props {
   showEdit?: boolean;
 }
 
+const isUrl = (input: any) => {
+  try {
+    // Try to create a new URL object
+    new URL(input);
+    return true;
+  } catch (err) {
+    // If an error is thrown, it's not a valid URL
+    return false;
+  }
+};
+
 const EditBasicDriverDetails = () => {
   const router = useRouter();
   const { setModalContent } = useModalContext();
@@ -76,8 +87,13 @@ const EditBasicDriverDetails = () => {
     data.append('car_color', carColor);
     data.append('car_plate_number', plateNumber);
     images.forEach((img: string) => {
-      data.append('car_images', img);
+      if (isUrl(img)) {
+        data.append('car_images_links', img);
+      } else {
+        data.append('car_images', img);
+      }
     });
+
     updateDetails({driverId: String(id), body: data});
   }
 
@@ -104,6 +120,23 @@ const EditBasicDriverDetails = () => {
     }
   }, [driverData])
 
+  const handleImageClick = (index: any) => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+
+    fileInput.onchange = (event:any) => {
+      const file = event.target.files[0];
+      if (file) {
+        const newImages = [...images];
+        newImages[newImages.indexOf(index)] = file;
+        setImages(newImages);
+      }
+    };
+
+    fileInput.click();
+  };
+
   return (
     <div className="mx-auto w-[90%] sm:w-[60%] md:w-[50%] lg:w-[40%]">
       <Card bg="#FFF">
@@ -124,7 +157,7 @@ const EditBasicDriverDetails = () => {
             setImages([...images, file]);
           }}
           handleDelete={(id) => {
-            setImages(images.filter((img: any) => img !== id));
+            handleImageClick(id)
           }}
         />
 
