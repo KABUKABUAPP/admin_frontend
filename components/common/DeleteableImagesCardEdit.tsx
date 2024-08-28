@@ -4,6 +4,8 @@ import Card from "@/components/common/Card";
 import Button from "@/components/ui/Button/Button";
 import CarImage from "../modules/sharp-cars/CarImage";
 import { getImageUrl } from "@/utils";
+import CarImageEdit from "./CarImageEdit";
+import FileIcon from "../icons/FileIcon";
 
 interface Props {
   images?: any;
@@ -19,11 +21,12 @@ const DeleteableImagesCard: FC<Props> = ({ images, title, handleChange, handleDe
     <Card>
       <p className="text-lg font-semibold pb-2">{title || `Car Images`}</p>
       <Button
-        title="Click this text to upload image"
+        title="Click here to upload new image"
         variant="text"
         color="tetiary"
         size="small"
         className="!text-[#9A9A9A]"
+        startIcon={<FileIcon />}
         onClick={() => {
           if (fileInputRef) {
             fileInputRef.current.click();
@@ -43,7 +46,7 @@ const DeleteableImagesCard: FC<Props> = ({ images, title, handleChange, handleDe
 
       <div className="pt-2 flex max-w-[400px] overflow-x-scroll scrollbar-none gap-2 ">
         {images?.map((img: any, idx: React.Key | null | undefined) => (
-          <CarImage handleDelete={() => handleDelete(img)} {...img} image={typeof img === 'string' && img.includes('https') ? img : URL.createObjectURL(img)} key={idx} />
+          <CarImageEdit handleDelete={() => handleDelete(img)} {...img} image={typeof img === 'string' && img.includes('https') ? img : URL.createObjectURL(img)} key={idx} />
         ))}
       </div>
     </Card>
