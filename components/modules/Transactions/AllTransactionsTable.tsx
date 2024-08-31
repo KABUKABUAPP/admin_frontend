@@ -23,13 +23,14 @@ interface Props {
   setTotalWithdrawal: any;
   transactionStatus: any;
   search: string;
+  timeline: string;
 }
 
-const AllTransactionsTable: FC<Props> = ({ order, dateStart, dateEnd, minAmount, setTotalWithdrawal, transactionStatus, search }) => {
+const AllTransactionsTable: FC<Props> = ({ order, dateStart, dateEnd, minAmount, setTotalWithdrawal, transactionStatus, search, timeline }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
-    { limit: pageSize, page: currentPage, search: search, filter: "", order, dateStart, dateEnd, minAmount, transactionStatus },
+    { limit: pageSize, page: currentPage, search: search, filter: "", order, dateStart, dateEnd, minAmount, timeline },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
   

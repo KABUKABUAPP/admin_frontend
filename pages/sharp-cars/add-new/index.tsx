@@ -46,8 +46,6 @@ const AddNew: FC = () => {
   }
 
   const handleSubmit = () => {
-    //console.log({images, docArray, brand, model, year, color, plateNumber, vehicleLicenseNumber, insuranceNumber, proofOfOwnershipNumber, roadWorthinessCertificateNumber, hackneyPermitNumber})
-
     var data = new FormData();
     data.append('brand', brand);
     data.append('model', model);

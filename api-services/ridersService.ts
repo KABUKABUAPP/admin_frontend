@@ -49,13 +49,12 @@ export const ridersApi = createApi({
   baseQuery: baseQueryWithLogoutOnTokenExpiration,
   tagTypes: ["riders", "rider"],
   endpoints: (build) => ({
-    getAllRides: build.query<MappedRidersData, GetAllRidersQuery>({
-      query: ({ limit, page, search, order, status, onlineStatus }) => ({
-        url: `admin/rider/all?limit=${limit}&page=${page}&search=${search}&order=${order}&is_blocked=${status === "deleted" ? "no" : status}${status === "deleted" ? "&deleted=yes" : ""}${onlineStatus.length > 0 ? `&online_status=${onlineStatus}` : ''}`,
+    getAllRides: build.query<MappedRidersData, any>({
+      query: ({ limit, page, search, order, status, onlineStatus, referralCode }) => ({
+        url: `admin/rider/all?limit=${limit}&page=${page}&search=${search}&order=${order}&is_blocked=${status === "deleted" ? "no" : status}${status === "deleted" ? "&deleted=yes" : ""}${onlineStatus.length > 0 ? `&online_status=${onlineStatus}` : ''}${referralCode ? `&referral_code=${referralCode}` : ''}`,
       }),
       providesTags: ["riders"],
       transformResponse: (response: GetAllRidersResponse) => {
-        console.log({responseRider: response})
         if (!response) return {} as MappedRidersData;
         else {
           const mappedReponse: MappedRider[] = response.data.drivers.map(
@@ -73,7 +72,9 @@ export const ridersApi = createApi({
                 dateDeleted: rider?.date_deleted
                   ? new Date(rider?.date_deleted).toDateString()
                   : "",
-                coordinate: rider.coordinate
+                coordinate: rider.coordinate,
+                phoneNumber: rider.phone_number,
+                email: rider.email
               };
             }
           );

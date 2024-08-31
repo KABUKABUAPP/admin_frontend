@@ -67,8 +67,69 @@ const MarketerMainView = () => {
                                     <RouteBlue />
                                     </span>
                                     <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
+                                    <b>{marketerData ? marketerData?.offline_drivers : 0}</b><br />
+                                    <small>Drivers Offline</small>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col md:flex-row">
+                            <div className="md:w-2/6 w-full p-4">
+                                <a href="#" className="text-black bg-white" style={{display: 'flex', borderRadius: '1rem'}}>
+                                    <span style={{margin: '1.5vh 1vw'}}>
+                                    <Route />
+                                    </span>
+                                    <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
+                                    <b>{marketerData ? marketerData?.pending_drivers : 0}</b><br />
+                                    <small>Pending Drivers</small>
+                                    </span>
+                                </a>
+                            </div>
+                            <div className="md:w-2/6 w-full p-4">
+                                <a href="#" className="text-black bg-white" style={{display: 'flex', borderRadius: '1rem'}}>
+                                    <span style={{margin: '1.5vh 1vw'}}>
+                                    <RouteBlue />
+                                    </span>
+                                    <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
+                                    <b>{marketerData ? marketerData?.total_drivers : 0}</b><br />
+                                    <small>Total Drivers</small>
+                                    </span>
+                                </a>
+                            </div>
+                            <div className="md:w-2/6 w-full p-4">
+                                <a href="#" className="text-black bg-white" style={{display: 'flex', borderRadius: '1rem'}}>
+                                    <span style={{margin: '1.5vh 1vw'}}>
+                                    <RouteBlue />
+                                    </span>
+                                    <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
+                                    <b>{marketerData ? marketerData?.offline_riders : 0}</b><br />
+                                    <small>Riders Offline</small>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col md:flex-row">
+                            <div className="md:w-2/6 w-full p-4">
+                                <a href="#" className="text-black bg-white" style={{display: 'flex', borderRadius: '1rem'}}>
+                                    <span style={{margin: '1.5vh 1vw'}}>
+                                    <Route />
+                                    </span>
+                                    <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
                                     <b>{marketerData ? marketerData?.online_riders : 0}</b><br />
-                                    <small>Riders Online</small>
+                                    <small>Online Riders</small>
+                                    </span>
+                                </a>
+                            </div>
+                            <div className="md:w-2/6 w-full p-4">
+                                <a href="#" className="text-black bg-white" style={{display: 'flex', borderRadius: '1rem'}}>
+                                    <span style={{margin: '1.5vh 1vw'}}>
+                                    <RouteBlue />
+                                    </span>
+                                    <span style={{marginLeft: '1vw', marginTop: '1.5vh'}}>
+                                    <b>{marketerData ? marketerData?.total_riders : 0}</b><br />
+                                    <small>Total Riders</small>
                                     </span>
                                 </a>
                             </div>

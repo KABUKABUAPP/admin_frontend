@@ -299,6 +299,11 @@ export const driverOptionBarData = [
     title: "Online Consistency",
     isActive: false,
     keyVal: "online-monitor",
+  },
+  {
+    title: "Rewarded Users",
+    isActive: false,
+    keyVal: "rewarded-users",
   }
 ];
 
@@ -374,11 +379,11 @@ export const transactionsOptionsBar = [
     isActive: false,
     keyVal: "manual_credit",
   },
-  {
+  /*{
     title: "Subscriptions",
     isActive: false,
     keyVal: "subscriptions",
-  },
+  },*/
   {
     title: "Sharp Payments",
     isActive: false,

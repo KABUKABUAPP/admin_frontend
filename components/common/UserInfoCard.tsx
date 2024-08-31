@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import Card from "@/components/common/Card";
@@ -11,6 +11,15 @@ import { capitalizeAllFirstLetters } from "@/utils";
 import Copy from "../icons/Copy";
 import { toast } from "react-toastify";
 import TimesIconRed from "../icons/TimesIconRed";
+import { useModalContext } from "@/contexts/ModalContext";
+import TextField from "../ui/Input/TextField/TextField";
+import {
+  useGetNigerianCityByStateQuery,
+  useGetNigerianStatesQuery,
+} from "@/api-services/geoLocationService";
+import SelectField from "../ui/Input/SelectField";
+import Button from "../ui/Button/Button";
+import { useUpdateDriverDetailsMutation, useViewDriverQuery } from "@/api-services/driversService";
 
 interface Props {
   fullName?: string;
@@ -34,8 +43,11 @@ interface Props {
   referralHistory?: any;
   totalReferredDrivers?: any;
   totalReferredRiders?: any;
-  approveDeclineDate?: any
-  approvalStatus?: any
+  approveDeclineDate?: any;
+  approvalStatus?: any;
+  city?: string;
+  state?: string;
+  showEdit?: boolean;
 }
 
 function copyToClipboard(text: string) {
@@ -65,6 +77,191 @@ function copyToClipboard(text: string) {
   document.body.removeChild(textarea);
 }
 
+const EditBasicDriverDetails = () => {
+  const router = useRouter();
+  const { setModalContent } = useModalContext();
+  const [fullName, setFullName] = useState('');
+  const [emailAddress, setEmailAddress] = useState('');
+  const [houseAddress, setHouseAddress] = useState('');
+  const [selectedStateId, setSelectedStateId] = useState<string>("");
+  const [selectedCityId, setSelectedCityId] = useState<string>("");
+  const [selectedStateLabel, setSelectedStateLabel] = useState<string>("");
+  const [selectedCityLabel, setSelectedCityLabel] = useState<string>("");
+  
+  const [updateDetails, { error, isLoading, isSuccess }] = useUpdateDriverDetailsMutation();
+  
+  const { id } = router.query;
+
+  const { data: driverData, isLoading: driverLoading, isError: driverError, refetch: driverRefetch } = useViewDriverQuery(
+    { id: String(id) },
+    { skip: !id, refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
+
+  const {
+    data: states,
+    isLoading: statesLoading,
+    error: statesError,
+    refetch: refetchStates,
+  } = useGetNigerianStatesQuery(null);
+
+  const {
+    data: cities,
+    isLoading: citiesLoading,
+    error: citiesError,
+    refetch: refetchCities,
+  } = useGetNigerianCityByStateQuery(
+    { id: selectedStateId },
+    { refetchOnMountOrArgChange: true }
+  );
+
+  const handleUpdateSubmit = () => {
+    const updateData = {
+      fullName,
+      emailAddress,
+      houseAddress,
+      selectedCityLabel,
+      selectedStateLabel
+    }
+
+    var data = new FormData();
+    data.append('full_name', fullName);
+    data.append('email', emailAddress);
+    data.append('house_address', houseAddress);
+    data.append('city', selectedCityLabel);
+    data.append('state', selectedStateLabel);
+    updateDetails({driverId: String(id), body: data});
+  }
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success('Successfully updated');
+      window.location.reload();
+    }
+  }, [isSuccess]);
+
+  
+  useEffect(() => {
+    if (error) toast.error('Error encountered');
+  }, [error])
+
+  useEffect(() => {
+    if (driverData) {
+      setFullName(driverData?.driverInfo?.fullName);
+      setEmailAddress(driverData?.driverInfo?.email);
+      setHouseAddress(driverData?.driverInfo?.address);
+
+      const theCity = cities?.find((city) => {
+        return city.label === driverData?.driverInfo?.city
+      });
+      if (theCity) setSelectedCityId(`${theCity?.value}`)
+      
+      const theState = states?.find((state) => {
+        return state.label === driverData?.driverInfo?.state
+      });
+      if (theState) setSelectedStateId(`${theState?.value}`)
+    }
+  }, [driverData])
+
+  useEffect(() => {
+    if (driverData && states && cities) {
+
+      const theCity = cities?.find((city) => {
+        return city.label === capitalizeAllFirstLetters(driverData?.driverInfo?.city)
+      });
+      if (theCity) setSelectedCityId(`${theCity?.value}`)
+    }
+  }, [driverData, states, cities])
+
+  return (
+    <div className="mx-auto w-[90%] sm:w-[60%] md:w-[50%] lg:w-[40%]">
+      <Card bg="#FFF">
+        <div className="flex justify-end">
+          <div className="w-auto cursor-pointer" onClick={() => {
+            setModalContent(null)
+          }}>
+            <TimesIconRed />
+          </div>
+        </div>
+        <div className="text-center">
+          <p className="font-semibold">Update Basic Details</p>
+        </div>
+          <div className="flex flex-col gap-3">
+              <TextField
+                label="Full Name"
+                placeholder="Enter Full Name"
+                onChange={(e) =>
+                    setFullName(e.target.value)
+                }
+                value={fullName}
+              />
+
+              <TextField
+                label="Email Address"
+                placeholder="Enter Email Address"
+                onChange={(e) =>
+                    setEmailAddress(e.target.value)
+                }
+                value={emailAddress}
+              />
+
+              <TextField
+                label="House Address"
+                placeholder="Enter House Address"
+                onChange={(e) =>
+                    setHouseAddress(e.target.value)
+                }
+                value={houseAddress}
+              />
+              
+              <div className="flex justify-between gap-3 max-sm:flex-col">
+                <SelectField
+                  options={cities ? cities : []}
+                  disabled={false}
+                  label="City"
+                  placeholder="City here"
+                  className="w-full"
+                  onChange={(e) => {
+                    setSelectedCityId(e.target.value);
+                    const theCity = cities?.find((city) => {
+                      return city.value === e.target.value
+                    });
+                    if (theCity) setSelectedCityLabel(theCity.label);
+                  }}
+                  value={selectedCityId}
+                />
+                <SelectField
+                  options={states ? states : []}
+                  disabled={!states?.length}
+                  label="State"
+                  placeholder="Lagos State"
+                  className="w-full"
+                  onChange={(e) => {
+                    setSelectedStateId(e.target.value);
+                    const theState = states?.find((state) => {
+                      return state.value === e.target.value
+                    });
+                    if (theState) setSelectedStateLabel(theState.label);
+                  }}
+                  value={selectedStateId}
+                />
+              </div>
+              <div className="flex justify-end">
+                <Button
+                  title="Save Changes"
+                  className="!text-[16px] mt-6"
+                  size="large"
+                  type="submit"
+                  disabled={isLoading}
+                  loading={isLoading}
+                  onClick={handleUpdateSubmit}
+                />
+              </div>
+          </div>
+      </Card>
+    </div>
+  )
+} 
+
 const UserInfoCard: FC<Props> = ({
   fullName,
   address,
@@ -88,7 +285,10 @@ const UserInfoCard: FC<Props> = ({
   totalReferredDrivers,
   totalReferredRiders,
   approveDeclineDate,
-  approvalStatus
+  approvalStatus,
+  city,
+  state,
+  showEdit
 }) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -97,10 +297,11 @@ const UserInfoCard: FC<Props> = ({
   const showDeclineCount = router.pathname.includes("pending");
   const showDeclineReason = router.pathname.includes("pending") && (declineCount ? declineCount > 0 : false);
   const showCarCount = router.pathname === "/car-owners/[id]";
-  const isDeleted =
-    router.pathname.includes("deleted") || router.query.deleted == "true";
+  const isDeleted = router.pathname.includes("deleted") || router.query.deleted == "true";
 
   const deletionReason = router.query.deletion_reason;
+
+  const { setModalContent } = useModalContext();
 
   const toggleSidebar = () => {
     setIsOpen(true);
@@ -127,7 +328,7 @@ const UserInfoCard: FC<Props> = ({
               {isDeleted && <Pill title="Deleted" />}
             </div>
             {role && <p className="text-lg font-semibold">{capitalizeAllFirstLetters(role)}</p>}
-            {address && <p className="text-lg font-semibold">{capitalizeAllFirstLetters(address)}</p>}
+            {address && <p className="text-lg font-semibold">{`${capitalizeAllFirstLetters(address)}, ${capitalizeAllFirstLetters(city)}, ${capitalizeAllFirstLetters(state)}`}</p>}
             <div className="flex">
               <div>
                 {email && (
@@ -305,6 +506,16 @@ const UserInfoCard: FC<Props> = ({
               </div>
             )}
           </div>
+          {
+            showEdit &&
+            <div className="w-auto">
+              <p className="bg-[#FFF5D8] py-1 px-4 rounded-md cursor-pointer" onClick={() => {
+                setModalContent(
+                  <EditBasicDriverDetails />
+                )
+              }}>Edit</p>
+            </div>
+          }
         </div>
       </Card>
 

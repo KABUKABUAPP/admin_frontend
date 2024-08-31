@@ -76,15 +76,15 @@ export const driversApi = createApi({
         onlineStatus,
         onboardStatus,
         sharpApprovalStatus,
-        dashboard_state
+        dashboard_state,
+        referralCode
       }) => ({
-        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}${carOwner ? `&car_owner=${carOwner}` : ''}${search ? `&search=${search}` : ''}${order ? `&order=${order}` : ''}${status ? `&is_blocked=${status}` : ""}${statusRemark ? `&status_remark=${statusRemark}` : ""}${deleted ? `&deleted=${deleted}` : ""}${onlineStatus ? `&online_status=${onlineStatus}` : ''}${onboardStatus ? `&is_onboarding=${onboardStatus}` : ''}${sharpApprovalStatus ? `&sharp_approval_status=${sharpApprovalStatus}` : ''}${dashboard_state && dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}`,
+        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}${carOwner ? `&car_owner=${carOwner}` : ''}${search ? `&search=${search}` : ''}${order ? `&order=${order}` : ''}${status ? `&is_blocked=${status}` : ""}${statusRemark ? `&status_remark=${statusRemark}` : ""}${deleted ? `&deleted=${deleted}` : ""}${onlineStatus ? `&online_status=${onlineStatus}` : ''}${onboardStatus && onboardStatus.length > 0 ? `&is_onboarding=${onboardStatus}` : ''}${sharpApprovalStatus ? `&sharp_approval_status=${sharpApprovalStatus}` : ''}${dashboard_state && dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}${referralCode ? `&referral_code=${referralCode}` : ''}`,
       }),
       providesTags: ["drivers"],
       transformResponse: (response: GetAllDriversResponse) => {
         if (!response) return {} as DriversMappedResponse;
         else {
-          console.log({response})
           const totalCount = response?.data?.pagination?.totalCount;
           const mappedReponse = response?.data?.drivers?.map((driver) => {
             return {
@@ -107,7 +107,10 @@ export const driversApi = createApi({
               onlineStatus: driver?.user?.online_status,
               onboardStep: driver?.user?.onboarding_step,
               coordinate: driver?.user?.coordinate && driver?.user?.coordinate.length > 0 ? driver?.user?.coordinate : undefined,
-              currentCar: driver?.current_car ? driver?.current_car : null
+              currentCar: driver?.current_car ? driver?.current_car : null,
+              phoneNumber: driver?.user?.phone_number,
+              email: driver?.user?.email,
+              declineReason: driver?.admin_approval_remark ||  driver?.approval_status_remark
             } as DriversTableBodyData;
           });
 
@@ -115,13 +118,12 @@ export const driversApi = createApi({
         }
       },
     }),
-    viewDriver: build.query<any, ViewDriverQuery>({
+    viewDriver: build.query<any, any>({
       query: ({ id }) => ({
         url: `admin/driver/view/${id}`,
       }),
       providesTags: ["driver"],
       transformResponse: (response: ViewDriverResponse) => {
-        console.log({responseDriverSingle: response})
         if (!response) return <any>{};
         else {
           const { data } = response;
@@ -153,13 +155,19 @@ export const driversApi = createApi({
               referrer: data?.driver?.referrer_details,
               referralCode: data?.driver?.user?.referral_code,
               referralHistory: data?.driver?.referral_history,
-              approveDeclineDate: data?.driver?.user?.approve_or_decline_date ? data?.driver?.user?.approve_or_decline_date : null
+              approveDeclineDate: data?.driver?.user?.approve_or_decline_date ? data?.driver?.user?.approve_or_decline_date : null,
+              city: data?.driver?.city,
+              state: data?.driver?.state,
+              country: data?.driver?.country
             },
             carDetails: {
               carImages: data?.car_details?.images,
               carModel: capitalizeAllFirstLetters(`${data?.car_details?.brand_name} ${data?.car_details?.model}`),
               carColor: data?.car_details?.color,
               plateNumber: data?.car_details?.plate_number,
+              carBrand: data?.car_details?.brand_name,
+              carModelOrd: data?.car_details?.model,
+              carYear: data?.car_details?.year
             },
             financials: {
               walletBalance: data?.wallet_balance?.toLocaleString(),
@@ -175,6 +183,9 @@ export const driversApi = createApi({
               relationship: data?.driver?.user?.guarantor?.relationship,
               responded: data?.driver?.user?.guarantor_response,
               responseStatus: data?.driver?.user?.guarantor_status,
+              city: data?.driver?.user?.guarantor?.city,
+              state: data?.driver?.user?.guarantor?.state,
+              email: data?.driver?.user?.guarantor?.email
             },
             carDocs: {
               totalDocs: data?.car_documents.length,
@@ -281,6 +292,13 @@ export const driversApi = createApi({
         method: "PUT",
         body: data
       })
+    }),
+    updateDriverDetails: build.mutation<any, any>({
+      query: ({ driverId, body }) => ({
+        url: `admin/driver/update-details/${driverId}`,
+        method: "PUT",
+        body
+      })
     })
   }),
 });
@@ -297,5 +315,6 @@ export const {
   useReactivateDriverMutation,
   useInitiateDriverFundingMutation,
   useCompleteDriverFundingMutation,
-  useUpdateOnboardingStepMutation
+  useUpdateOnboardingStepMutation,
+  useUpdateDriverDetailsMutation
 } = driversApi;

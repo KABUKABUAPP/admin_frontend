@@ -62,12 +62,24 @@ export const onlineMonitorApi = createApi({
           return response;
         }
       }
+    }),
+    fetchRewardedUsers: build.query<any, any>({
+      query: ({ limit, page, start, stop, beneficiary, year, month }) => ({
+        url: `/admin/online-monitor/fetch-rewarded-users?limit=${limit}&page=${page}&start=${start}&stop=${stop}${beneficiary.length > 0 ? `&beneficiary=${beneficiary}` : ''}${month && month.length > 0 ? `&month=${month}` : ''}${year && year.length > 0 ? `&year=${year}` : ''}`
+      }),
+      transformResponse: (response: any) => {
+        if (!response) return {};
+        else {
+          return response;
+        }
+      }
     })
   }),
 });
 
 export const {
   useGetOnlineMonitorQuery,
-  useGetOnlineMonitorWithBenchmarkQuery
+  useGetOnlineMonitorWithBenchmarkQuery,
+  useFetchRewardedUsersQuery
 } = onlineMonitorApi;
 

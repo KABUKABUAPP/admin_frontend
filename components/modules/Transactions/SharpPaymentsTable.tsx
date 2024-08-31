@@ -23,14 +23,15 @@ interface Props {
   setTotalWithdrawal: any;
   transactionStatus: any;
   search: string;
+  timeline: string;
 }
 
-const SharpPaymentsTable:FC<Props> = ({order, dateStart, dateEnd, minAmount, setTotalWithdrawal, transactionStatus, search}) => {
+const SharpPaymentsTable:FC<Props> = ({order, dateStart, dateEnd, minAmount, setTotalWithdrawal, transactionStatus, search, timeline}) => {
   
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const { data, isLoading, isError, refetch } = useGetAllTransactionsQuery(
-    { limit: pageSize, page: currentPage, search: search, filter: 'sharp_payment', order, dateStart, dateEnd, minAmount, transactionStatus },
+    { limit: pageSize, page: currentPage, search: search, filter: 'SHARP_PAYMENT_TO_KABUKABU', order, dateStart, dateEnd, minAmount, transactionStatus, timeline },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
   
