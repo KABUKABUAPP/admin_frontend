@@ -79,7 +79,7 @@ export const driversApi = createApi({
         dashboard_state,
         referralCode
       }) => ({
-        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}${carOwner ? `&car_owner=${carOwner}` : ''}${search ? `&search=${search}` : ''}${order ? `&order=${order}` : ''}${status ? `&is_blocked=${status}` : ""}${statusRemark ? `&status_remark=${statusRemark}` : ""}${deleted ? `&deleted=${deleted}` : ""}${onlineStatus ? `&online_status=${onlineStatus}` : ''}${onboardStatus ? `&is_onboarding=${onboardStatus}` : ''}${sharpApprovalStatus ? `&sharp_approval_status=${sharpApprovalStatus}` : ''}${dashboard_state && dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}${referralCode ? `&referral_code=${referralCode}` : ''}`,
+        url: `admin/driver/all?limit=${limit}&page=${page}&driver_status=${driverStatus}${carOwner ? `&car_owner=${carOwner}` : ''}${search ? `&search=${search}` : ''}${order ? `&order=${order}` : ''}${status ? `&is_blocked=${status}` : ""}${statusRemark ? `&status_remark=${statusRemark}` : ""}${deleted ? `&deleted=${deleted}` : ""}${onlineStatus ? `&online_status=${onlineStatus}` : ''}${onboardStatus && onboardStatus.length > 0 ? `&is_onboarding=${onboardStatus}` : ''}${sharpApprovalStatus ? `&sharp_approval_status=${sharpApprovalStatus}` : ''}${dashboard_state && dashboard_state !== 'all' ? `&dashboard_state=${dashboard_state}` : ''}${referralCode ? `&referral_code=${referralCode}` : ''}`,
       }),
       providesTags: ["drivers"],
       transformResponse: (response: GetAllDriversResponse) => {
