@@ -285,7 +285,7 @@ const ViewTrip: NextPage = () => {
                     getTripDetails({
                       origin: data.origin,
                       destination: data.destination,
-                      estimatedPrice: data.estimatedPrice.toString(),
+                      estimatedPrice: data.paymentDetails && data.paymentDetails.is_discount ? <><s>{data.paymentDetails.original_sum}</s> {data.paymentDetails.total_charge}</> : data.estimatedPrice.toString(),
                       paymentType: data.paymentType,
                       orderCreated: data.createdAt,
                       tripStarted: data.tripStarted,
