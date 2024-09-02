@@ -54,13 +54,12 @@ export const tripsApi = createApi({
         url: `/admin/trip/get-all?limit=${limit}&page=${page}&status=${status}&search=${search}&order=${order}&type=${type}`,
       }),
     }),
-    viewTrip: build.query<MappedViewTripResponse, ViewTripQuery>({
+    viewTrip: build.query<any, any>({
       query: ({ id }) => ({
         url: `/admin/trip/view/${id}`,
       }),
-      transformResponse: (response: ViewTripResponse) => {
-        if (!response) return {} as MappedViewTripResponse;
-        console.log({response})
+      transformResponse: (response: any) => {
+        if (!response) return {} as any;
         return {
           carModel: `${response?.data?.car?.brand_name} ${response?.data?.car?.model}`,
           destination: `${response?.data?.destination?.city}, ${response?.data?.destination?.state}, ${response?.data?.destination?.country}`,
@@ -90,8 +89,9 @@ export const tripsApi = createApi({
           tripRating: response?.data?.trip_rating,
           riderComment: response?.data?.rider_comment,
           couponDetails: response?.data?.coupon_details ? response?.data?.coupon_details : null,
-          createdAt: response?.data?.created_at ? response?.data?.created_at : null
-        } as MappedViewTripResponse;
+          createdAt: response?.data?.created_at ? response?.data?.created_at : null,
+          paymentDetails: response?.data?.payment_details ? response?.data?.payment_details : null
+        } as any;
       },
     }),
     getDriverTripHistory: build.query<
