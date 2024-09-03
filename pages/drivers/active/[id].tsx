@@ -36,6 +36,7 @@ import { useGetOnlineMonitorQuery } from "@/api-services/monitorService";
 import TextField from "@/components/ui/Input/TextField/TextField";
 import SearchIcon from "@/components/icons/SearchIcon";
 import ArrowForwardRight from "@/components/icons/ArrowForwardRight";
+import SingleDriverMap from "@/components/common/AppMap/SingleDriverMap";
 
 function timeAgo(timeString: any) {
   const currentDate = new Date();
@@ -539,6 +540,22 @@ const Driver: NextPage = () => {
                         </div>
                         }
                         
+                        <div className="cursor-pointer text-xs bg-[#F6F6F6] p-2 rounded-lg" onClick={() => {
+                              setModalContent(
+                                <div className="w-[90%] sm:w-[80%] md:w-[70%] lg:w-[60%] my-auto h-[80vh]">
+                                  <Card bg="#FFF">
+                                    <div className="flex flex-col w-full">
+                                      <div className="flex justify-end w-auto cursor-pointer" onClick={() => {
+                                        setModalContent(null)
+                                      }}>
+                                        <TimesIconRed />
+                                      </div>
+                                      <SingleDriverMap />
+                                    </div>
+                                  </Card>
+                                </div>
+                              )
+                            }}>View Driver Location on Map</div>
                       </Card>
                     </div>
                   }
