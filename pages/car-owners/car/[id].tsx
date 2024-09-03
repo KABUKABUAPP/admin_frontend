@@ -22,6 +22,7 @@ import TextField from "@/components/ui/Input/TextField/TextField";
 import { toast } from "react-toastify";
 import Select from 'react-select';
 import { useGetAllHubsQuery, useViewHubQuery } from "@/api-services/hubService";
+import UserInfoCard from "@/components/common/UserInfoCard";
 
 const ApproveRequest = () => {
     const { setModalContent } = useModalContext();
@@ -255,6 +256,11 @@ const SingleCar = () => {
                                         plateNumber={data?.car?.plate_number}
                                         carStatus={capitalizeAllFirstLetters(data?.status)}
                                     />
+                                    <UserInfoCard 
+                                        fullName={data?.user.full_name}
+                                        email={data?.user?.email}
+                                        phone={data?.user?.phone_number}
+                                    />
                                     {/*<Card>
                                         <div className="flex flex-col gap-4">
                                             <div className="flex items-center justify-between">
@@ -309,15 +315,19 @@ const SingleCar = () => {
                                         <>
                                             <div className="flex justify-between bg-[#F5F5F5] rounded-lg w-full p-2 my-4 gap-4">
                                                 <p className="font-bold">Assigned Hub Title</p>
-                                                <p className="text-sm">{capitalizeAllFirstLetters(capitalizeAllFirstLetters(hub?.inspectionCenterTitle))}</p>
+                                                <p className="text-sm">{capitalizeAllFirstLetters(hub?.inspectionCenterTitle)}</p>
                                             </div>
                                             <div className="flex justify-between bg-[#F5F5F5] rounded-lg w-full p-2 my-4 gap-4">
                                                 <p className="font-bold">Assigned Hub Name</p>
-                                                <p className="text-sm">{capitalizeAllFirstLetters(capitalizeAllFirstLetters(hub?.inspectionCenterLocation))}</p>
+                                                <p className="text-sm">{capitalizeAllFirstLetters(hub?.inspectionCenterLocation)}</p>
                                             </div>
                                             <div className="flex justify-between bg-[#F5F5F5] rounded-lg w-full p-2 my-4 gap-4">
                                                 <p className="font-bold">Assigned Inspector</p>
-                                                <p className="text-sm">{capitalizeAllFirstLetters(capitalizeAllFirstLetters(hub?.inspectorFullname))}</p>
+                                                <p className="text-sm">{capitalizeAllFirstLetters(hub?.inspectorFullname)}</p>
+                                            </div>
+                                            <div className="flex justify-between bg-[#F5F5F5] rounded-lg w-full p-2 my-4 gap-4">
+                                                <p className="font-bold">Inspection Code</p>
+                                                <p className="text-sm">{data?.sharp_code}</p>
                                             </div>
                                         </>
 

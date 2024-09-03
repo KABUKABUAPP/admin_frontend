@@ -123,11 +123,12 @@ export const driversApi = createApi({
         url: `admin/driver/view/${id}`,
       }),
       providesTags: ["driver"],
-      transformResponse: (response: ViewDriverResponse) => {
+      transformResponse: (response: any) => {
         if (!response) return <any>{};
         else {
           const { data } = response;
-          const getCarDocs = data?.car_documents.length === 1 && data?.car_documents[0] === null ? [] : data?.car_documents?.map((doc) => {
+          console.log({responseDriver: response})
+          const getCarDocs = data?.car_documents.length === 1 && data?.car_documents[0] === null ? [] : data?.car_documents?.map((doc: any) => {
             return {
               title: doc?.title,
               docImage: doc?.url,
@@ -167,7 +168,8 @@ export const driversApi = createApi({
               plateNumber: data?.car_details?.plate_number,
               carBrand: data?.car_details?.brand_name,
               carModelOrd: data?.car_details?.model,
-              carYear: data?.car_details?.year
+              carYear: data?.car_details?.year,
+              coordinates: data?.driver?.user?.coordinate
             },
             financials: {
               walletBalance: data?.wallet_balance?.toLocaleString(),
