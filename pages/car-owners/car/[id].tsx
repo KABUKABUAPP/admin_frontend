@@ -23,6 +23,7 @@ import { toast } from "react-toastify";
 import Select from 'react-select';
 import { useGetAllHubsQuery, useViewHubQuery } from "@/api-services/hubService";
 import UserInfoCard from "@/components/common/UserInfoCard";
+import ActionDocumentCard from "@/components/modules/drivers/ActionDocumentCard";
 
 const ApproveRequest = () => {
     const { setModalContent } = useModalContext();
@@ -261,13 +262,24 @@ const SingleCar = () => {
                                         email={data?.user?.email}
                                         phone={data?.user?.phone_number}
                                     />
-                                    {/*<Card>
-                                        <div className="flex flex-col gap-4">
-                                            <div className="flex items-center justify-between">
-                                                <p className="text-lg font-semibold">Assigned Driver</p>
-                                            </div>
+
+                                    {<Card>
+                                        <p className="text-lg font-semibold">Car Documents</p>
+                                        <div className="flex flex-col gap-3">
+                                            {
+                                                data?.documents && data?.documents?.map((doc: any) => (
+                                                    <ActionDocumentCard
+                                                        id={doc._id}
+                                                        docId={doc._id}
+                                                        status={doc.status}
+                                                        docImage={doc.url}
+                                                        title={doc.title}
+                                                    />
+                                                ))
+                                                
+                                            }
                                         </div>
-                                    </Card>*/}
+                                    </Card>}
                                 </>
                             }
                             secondRow={
