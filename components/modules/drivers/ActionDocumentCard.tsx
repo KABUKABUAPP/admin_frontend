@@ -10,6 +10,7 @@ import Loader from "@/components/ui/Loader/Loader";
 import { toast } from "react-toastify";
 import { useEnlargedImageContext } from "@/contexts/EnlargeImageContext";
 import useUserPermissions from "@/hooks/useUserPermissions";
+import { useRouter } from "next/router";
 
 interface Props extends MappedDocument {
   id: string;
@@ -26,6 +27,7 @@ const ActionDocumentCard: FC<Props> = ({
     PENDING: "#F8F8F8",
     DECLINED: "#FEE2E9",
   };
+  const router = useRouter();
 
   const { setImageUrl } = useEnlargedImageContext();
 
@@ -40,6 +42,13 @@ const ActionDocumentCard: FC<Props> = ({
       toast.error(status);
     }
   }, [error]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success('Document Approval Successful');
+      window.location.reload()
+    }
+  }, [isSuccess]);
 
   return (
     <div
@@ -89,7 +98,7 @@ const ActionDocumentCard: FC<Props> = ({
               />
             </>
           )}
-        {!isLoading && status !== "PENDING" && (
+        {isSuccess || (!isLoading && status !== "PENDING") && (
           <>
             <div>
               {status === "APPROVED" ? (
