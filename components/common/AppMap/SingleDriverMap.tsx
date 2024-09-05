@@ -25,7 +25,6 @@ const SingleDriverMap = () => {
         const driverIcon = data?.onlineStatus === 'offline' ? '/taxiOffline.svg' : '/taxiOnline.svg';
         setIconUrlDriver(driverIcon);
         setCoordinates(data?.carDetails?.coordinates)
-        console.log('mentally', {data});
     }
   }, [data])
   

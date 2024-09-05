@@ -196,6 +196,7 @@ export const driversApi = createApi({
             onlineStatus: data?.driver?.user?.online_status,
             onlineSwitch: data?.driver?.user?.online_switch_date ? data?.driver?.user?.online_switch_date : '',
             offlineSwitch: data?.driver?.user?.offline_switch_date ? data?.driver?.user?.offline_switch_date : '',
+            sharpPaymentDetails: data?.sharp_payment_details ? data?.sharp_payment_details : null
           };
 
           return mapped;
