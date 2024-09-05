@@ -402,6 +402,10 @@ const Driver: NextPage = () => {
     }
   }, [userPermissions])
 
+  useEffect(() => {
+    if (data) console.log({data})
+  }, [data])
+
   return (
     <>
       <AppHead title="Kabukabu | Drivers" />
@@ -595,6 +599,32 @@ const Driver: NextPage = () => {
                         <Loader size="medium" />
                       </div>
                     )}
+                    {
+                      data?.sharpPaymentDetails &&
+                      <div className="my-4">
+                        <Card bg="#FFF">
+                          <p className="text-lg font-bold">Sharp Payment History</p>
+                          {
+                            data?.sharpPaymentDetails?.payments.map((history: any) => {
+                              return (
+                                  <div className="flex flex-col rounded-md bg-[#F8F8F8] p-4 gap-1 my-2">
+                                      <p className="text-md font-bold">N{history.amount_to_be_paid.toLocaleString()}</p>
+                                      {
+                                          history.due_date &&
+                                          <p className="text-sm"><span className="font-bold">Due Date: </span>{new Date(history.due_date).toUTCString()}</p>
+                                      }
+                                      {
+                                          history.date_paid &&
+                                          <p className="text-sm"><span className="font-bold">Date Paid: </span>{new Date(history.date_paid).toUTCString()}</p>
+                                      }
+                                      <p className="text-md font-bold">{capitalizeAllFirstLetters(history.status)}</p>
+                                  </div>
+                              )
+                            })
+                          }
+                        </Card>
+                      </div>
+                    }
                 </>
               }
               firstRow={

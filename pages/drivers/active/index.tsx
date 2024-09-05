@@ -105,8 +105,8 @@ const Drivers: NextPage = () => {
     setDriverTypeOptions(() => mutatedOptions);
   };
 
-  const carOwnerObj: { [key: string]: boolean } = {
-    "all-drivers": true,
+  const carOwnerObj: { [key: string]: any } = {
+    "all-drivers": null,
     "sharp-drivers": false,
     "regular-drivers": true,
   };
