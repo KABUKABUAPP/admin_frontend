@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import AppLayout from "@/layouts/AppLayout";
@@ -18,12 +18,14 @@ import AppHead from "@/components/common/AppHead";
 import CarAssignedCard from "@/components/modules/sharp-cars/CarAssignedCard";
 import { useGetOneSharpCarsQuery } from "@/api-services/sharpCarsService";
 import { capitalizeAllFirstLetters } from "@/utils";
+import { useGetSingleCarOwnerQuery } from "@/api-services/carOwnersService";
 
 const SharpCarPending: NextPage = () => {
   const router = useRouter();
   const currentPageUrl = router.query.current_page ? `&currentPage=${router.query.current_page}` : '';
   const subTabUrl = router.query.sub_tab ? `&sub_tab=${router.query.sub_tab}` : '';
   const handleBackUrl = router.query.fallbackUrl ? router.query.fallbackUrl : `/sharp-cars?tab=pending${currentPageUrl}${subTabUrl}`;
+  const [carOwnerId, setCarOwnerId] = useState('');
 
   const { id } = router.query;
 
@@ -31,6 +33,7 @@ const SharpCarPending: NextPage = () => {
     { id: String(id) },
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
+
   
   return (
     <>
