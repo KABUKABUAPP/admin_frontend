@@ -43,7 +43,20 @@ const EditBasicDriverDetails = () => {
     var data = new FormData()
 
     docArray.forEach(async (doc: any) => {
-      data.append(doc.docType.toLowerCase(), doc.fileUrl);
+      console.log(doc)
+      let docType = ''
+
+      if (doc.docType === 'DRIVER_LICENSE') {
+        data.append('driver_licence', doc.fileUrl);
+      }
+      if (doc.docType === 'VEHICLE_LICENSE') {
+        data.append('vehicle_licence', doc.fileUrl);
+      }
+      if (doc.docType === 'ROAD_WORTHINESS') {
+        data.append('road_worthiness_certificate', doc.fileUrl);
+      } else {
+        data.append(doc.docType.toLowerCase(), doc.fileUrl);
+      }
     });
 
     updateDetails({driverId: String(id), body: data});
