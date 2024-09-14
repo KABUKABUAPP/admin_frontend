@@ -66,10 +66,6 @@ const Driver: NextPage = () => {
     }
   }, [JSON.stringify(data)]);
 
-  useEffect(() => {
-    if (driversSettings) console.log({driversSettings, data})
-  }, [driversSettings])
-
   const { userPermissions } = useUserPermissions();
   
   const currentPageUrl = `/drivers/pending?currentPage=${router.query.current_page}${onboardStatus ? `&onboardStatus=${onboardStatus}` : ''}`

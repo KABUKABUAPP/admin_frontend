@@ -23,6 +23,7 @@ import RiderReferralSettings from "@/components/modules/settings/RiderReferralSe
 import RepairLoanSettings from "@/components/modules/settings/RepairLoanSettings";
 import MarketerDashboardSettings from "@/components/modules/settings/MarketerDashboardSettings";
 import SignUpBonusSettings from "@/components/modules/settings/SignUpBonus";
+import SharpProgramSettings from "@/components/modules/settings/SharpProgram";
 
 const Settings: NextPage = () => {
   const { user } = useUserContext();
@@ -68,7 +69,8 @@ const Settings: NextPage = () => {
         { title: "Signup Bonus Settings", isActive: false },
         { title: "Fare Price Settings", isActive: false },
         { title: "Trip Charges Control", isActive: false },
-        { title: "Online Consistency Reward Settings", isActive: false }
+        { title: "Online Consistency Reward Settings", isActive: false },
+        { title: "Sharp Program", isActive: false }
       ])
     }
   }, [user])
@@ -115,6 +117,10 @@ const Settings: NextPage = () => {
     }[];
   };
 
+  useEffect(() => {
+    if (driversSettings) console.log({driversSettings})
+  }, [driversSettings]);
+
   return (
     <>
       <AppHead title="Kabukabu | Settings" />
@@ -148,6 +154,7 @@ const Settings: NextPage = () => {
               {currentView === "Fare Price Settings" && <FarePriceSettings upper_bound={driversSettings.pricing_boundary.upper_bound.toString()} lower_bound={driversSettings.pricing_boundary.lower_bound.toString()} />}
               {currentView === "Trip Charges Control" && <TripChargesControl {...driversSettings.trip_charges_control} />}
               {currentView === "Online Consistency Reward Settings" && <OnlineConsistency {...driversSettings.online_consistency_reward_control} refetchSettings={reloadSettings} />}
+              {currentView === "Sharp Program" && <SharpProgramSettings {...driversSettings.sharp_program} />}
             </>
           }
         />
