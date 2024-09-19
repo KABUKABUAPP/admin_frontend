@@ -25,6 +25,7 @@ import { redemptionApi } from "@/api-services/redemptionService";
 import { onlineMonitorApi } from "@/api-services/monitorService";
 import { campaignApi } from "@/api-services/campaignService";
 import { walletApi } from "@/api-services/walletService";
+import { emailApi } from "@/api-services/emailService";
 
 export const reduxStore = configureStore({
   reducer: {
@@ -53,6 +54,7 @@ export const reduxStore = configureStore({
     [onlineMonitorApi.reducerPath]: onlineMonitorApi.reducer,
     [campaignApi.reducerPath]: campaignApi.reducer,
     [walletApi.reducerPath]: walletApi.reducer,
+    [emailApi.reducerPath]: emailApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -80,7 +82,8 @@ export const reduxStore = configureStore({
       redemptionApi.middleware,
       onlineMonitorApi.middleware,
       campaignApi.middleware,
-      walletApi.middleware
+      walletApi.middleware,
+      emailApi.middleware
     ]),
 });
 
