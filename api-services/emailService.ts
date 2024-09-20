@@ -1,13 +1,13 @@
 import { BaseQueryFn, FetchArgs, FetchBaseQueryError, createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { RIDES_BASE_URL } from "@/constants";
+import { NOTIFICATION_BASE_URL } from "@/constants";
 
 import { logout, secondsToMilliSeconds } from "@/utils";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "@/constants";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: `${RIDES_BASE_URL}`,
+  baseUrl: `${NOTIFICATION_BASE_URL}`,
   timeout: secondsToMilliSeconds(30),
   prepareHeaders(headers) {
     const token = Cookies.get(ACCESS_TOKEN);
@@ -35,31 +35,21 @@ const baseQueryWithLogoutOnTokenExpiration: BaseQueryFn<
 };
 
 
-export const messageApi = createApi({
-  reducerPath: "messageApi",
+export const emailApi = createApi({
+  reducerPath: "emailApi",
   baseQuery: baseQueryWithLogoutOnTokenExpiration,
   endpoints: (build) => ({
-    broadcastMessage:  build.mutation<any, any>({
+    broadcastCustomEmail:  build.mutation<any, any>({
         query: (body)=>({
-          url: '/admin/broadcast/create',
+          url: '/admin/email/send-custom-emails',
           method: 'POST',
           body
         })
-    }),
-    getAllBroadcasts: build.query<any, any>({
-      query: ({ limit, page, type }) => ({
-        url: `/admin/broadcast/all?limit=${limit}&page=${page}&type=${type}`
-      }),
-      transformResponse: (response: any) => {
-        if (!response) return [];
-        return response.data;
-      }
     })
   }),
 });
 
 export const {
-    useBroadcastMessageMutation,
-    useGetAllBroadcastsQuery,
-} = messageApi;
+    useBroadcastCustomEmailMutation
+} = emailApi;
 
