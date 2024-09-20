@@ -99,6 +99,7 @@ const MessageView: FC = () => {
                     </Card>
                 </div>
             ))}
+            <div className="w-full">
             {messages && (
               <Pagination
                 className="pagination-bar"
@@ -108,6 +109,7 @@ const MessageView: FC = () => {
                 onPageChange={(page) => setPageNumber(page)}
               />
             )}
+            </div>
           </Card>
         </div>
         <div className="lg:w-3/5 md:w-full mx-2 mt-3">

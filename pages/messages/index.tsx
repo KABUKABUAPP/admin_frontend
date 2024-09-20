@@ -37,7 +37,7 @@ const Messages: NextPage = () => {
         />
       </div>
       
-      <div className="flex flex-col sm:flex-row">
+      <div className="flex flex-col md:flex-row">
         <MessageView />
       </div>
     </AppLayout>
