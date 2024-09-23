@@ -4,6 +4,7 @@ import Button from '@/components/ui/Button/Button';
 import SelectField from '@/components/ui/Input/SelectField';
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import WysiwygEditor from './WysiwygEditor';
 
 interface MediaFile {
   src: string;
@@ -18,6 +19,13 @@ const EmailForm: React.FC = () => {
   const [recipient, setRecipient] = useState<string>('');
   const [media, setMedia] = useState<MediaFile[]>([]);
   const [mediaArray, setMediaArray] = useState<File[]>([]);
+
+  const handleGetContent = (html: string) => {
+    console.log(html)
+    // This function receives the HTML content from the editor
+    setEmailContent(html);
+  };
+
   const [broadcastMessage, { isLoading, isError, isSuccess, error }] =
     useBroadcastCustomEmailMutation();
 
@@ -36,6 +44,19 @@ const EmailForm: React.FC = () => {
 
       setMediaArray([...mediaArray, ...files]);
       setMedia([...media, ...mediaPreview]);
+      mediaPreview.forEach((media, idx) => {
+        setEmailContent(`
+            ${emailContent} 
+            <div className="flex justify-center items-center">
+                <img
+                    key={index}
+                    src={${media.src}}
+                    alt={uploaded-media-${idx + 1}}
+                    className="w-full h-auto rounded-md shadow"
+                />
+            </div>
+        `)
+      })
     }
   };
 
@@ -151,24 +172,6 @@ const EmailForm: React.FC = () => {
                         }}
                     />
                     <p className="text-xs">Press enter to add email to list</p>
-                    {
-                        emails.length > 0 && 
-                        <div className="flex my-3 flex-wrap">
-                            {
-                                emails.map((mail: any) => (
-                                    <div className="flex items-center w-auto gap-3 p-3 rounded-full bg-[#F6F6F6] text-[#000] my-1">
-                                        <p>{mail}</p>
-                                        <div className="cursor-pointer" onClick={() => {
-                                            const updatedEmails = emails.filter((oneMail: any) => oneMail !== mail);
-
-                                            setEmails(updatedEmails);
-                                        }}><TimesIconRed /></div>
-                                    </div>
-                                    
-                                ))
-                            }
-                        </div>
-                    }
                 </div>
             }
             <div>
@@ -189,24 +192,15 @@ const EmailForm: React.FC = () => {
                 <label htmlFor="emailBody" className="block font-semibold">
                 Email Content:
                 </label>
-                <textarea
+                <WysiwygEditor getContent={handleGetContent} handleMediaUpload={handleMediaUpload} />
+                {/*<textarea
                 id="emailBody"
                 value={emailContent}
                 onChange={handleContentChange}
                 className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                 rows={6}
                 placeholder="Type your email content here..."
-                />
-            </div>
-            <div>
-                <label className="block font-semibold">Upload Images/Media:</label>
-                <input
-                type="file"
-                accept="image/*,video/*"
-                onChange={handleMediaUpload}
-                multiple
-                className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-                />
+                />*/}
             </div>
         </form>
       </div>
@@ -217,33 +211,53 @@ const EmailForm: React.FC = () => {
         <div className="space-y-4">
             {
                 emailRecipient === 'CUSTOM' &&
-                <p>
-                    <strong>To:</strong> {recipient || 'Recipient will appear here'}
-                </p>
+                <div className="flex flex-col gap-1">
+                    <p>
+                        <strong>Recipient:</strong>
+                    </p>
+                    {emails.length > 0 && 
+                        <div className="flex flex-wrap">
+                            {
+                                emails.map((mail: any) => (
+                                    <div className="flex items-center w-auto gap-3 p-3 rounded-full bg-[#F6F6F6] text-[#000] my-1">
+                                        <p>{mail}</p>
+                                        <div className="cursor-pointer" onClick={() => {
+                                            const updatedEmails = emails.filter((oneMail: any) => oneMail !== mail);
+
+                                            setEmails(updatedEmails);
+                                        }}><TimesIconRed /></div>
+                                    </div>
+                                    
+                                ))
+                            }
+                        </div>
+                    }
+                </div>
             }
             <hr />
             <p>
                 <strong>Subject:</strong> {subject || 'Subject will appear here'}
             </p>
             <hr />
+            {emailContent.length > 0 && 
             <div className="border p-4 rounded-md bg-gray-50">
-                <div id="email-content-body">
-                    <p className="whitespace-pre-wrap">
-                    {emailContent || 'Email content will appear here...'}
-                    </p>
-                    {/* Display uploaded media */}
-                    <div className="mt-4 space-y-4">
-                    {media.map((mediaFile, index) => (
-                        <img
-                        key={index}
-                        src={mediaFile.src}
-                        alt={`uploaded-media-${index}`}
-                        className="w-full h-auto rounded-md shadow"
-                        />
-                    ))}
-                    </div>
-                </div>
-            </div>
+                <div id="email-content-body" dangerouslySetInnerHTML={{__html: `${emailContent}`}} />
+                    
+                {/*<p className="whitespace-pre-wrap">
+                {emailContent || 'Email content will appear here...'}
+                </p>
+                    Display uploaded media 
+                <div className="mt-4 space-y-4">
+                {media.map((mediaFile, index) => (
+                    <img
+                    key={index}
+                    src={mediaFile.src}
+                    alt={`uploaded-media-${index}`}
+                    className="w-full h-auto rounded-md shadow"
+                    />
+                ))}
+                </div>*/}
+            </div>}
           
             <div className="flex justify-end">
                 <Button
