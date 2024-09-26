@@ -160,8 +160,8 @@ const Messages: NextPage = () => {
                 <p className="text-lg font-bold mt-6">New Message</p>
                 <FormikProvider value={formik}>
                     <Form>
-                        <div className="flex mt-6 w-[100%]">
-                            <div className="w-2/5 mr-3">
+                        <div className="flex flex-col sm:flex-row mt-6 w-[100%]">
+                            <div className="w-full sm:w-2/5 my-4 sm:mr-3">
                                 <Card bg="#FFF" rounded="rounded-md" height="60vh">
                                     <div className="mt-3">
                                     <SelectField
@@ -282,7 +282,7 @@ const Messages: NextPage = () => {
                                     </div>
                                 </Card>
                             </div>
-                            <div className="w-3/5 ml-3">
+                            <div className="w-full sm:w-3/5 my-4 sm:ml-3">
                                 <Card bg="#FFF" rounded="rounded-md" height="60vh">
                                     <div className="mt-3">
                                     <TextField
