@@ -4,7 +4,8 @@ import Button from '@/components/ui/Button/Button';
 import SelectField from '@/components/ui/Input/SelectField';
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import WysiwygEditor from './WysiwygEditor';
+import BlogPostEditor from '@/components/common/HtmlEditor';
+import TextField from "@/components/ui/Input/TextField/TextField";
 
 interface MediaFile {
   src: string;
@@ -33,32 +34,43 @@ const EmailForm: React.FC = () => {
     setEmailContent(e.target.value);
   };
 
-  const handleMediaUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const files = Array.from(e.target.files);
+  /*const handleMediaUpload = async (file: File) => {
+    // Create a preview object for the uploaded file
+    const mediaPreview = {
+      src: URL.createObjectURL(file),
+      file,
+    };
+  
+    // Update the media arrays (for single file)
+    setMediaArray((prevArray) => [...prevArray, file]); // Store the actual file
+    setMedia((prevMedia) => [...prevMedia, mediaPreview]); // Store the preview URL
 
-      const mediaPreview = files.map((file) => ({
-        src: URL.createObjectURL(file),
-        file,
-      }));
+    let body = new FormData()
+    body.set('key', '49f6872819f2b77a024f3a4326f29a56')
+    body.append('image', file)
 
-      setMediaArray([...mediaArray, ...files]);
-      setMedia([...media, ...mediaPreview]);
-      mediaPreview.forEach((media, idx) => {
-        setEmailContent(`
-            ${emailContent} 
-            <div className="flex justify-center items-center">
-                <img
-                    key={index}
-                    src={${media.src}}
-                    alt={uploaded-media-${idx + 1}}
-                    className="w-full h-auto rounded-md shadow"
-                />
-            </div>
-        `)
-      })
-    }
-  };
+    let imageUploadOp = await axios({
+        method: 'post',
+        url: 'https://api.imgbb.com/1/upload',
+        data: body
+    })
+
+    let url = imageUploadOp.data.data.display_url
+  
+    // Update the editor content with the media preview
+    const mediaHtml = `
+      <div className="flex justify-center items-center">
+        <img
+          src="${url}"
+          alt="uploaded-media"
+          className="w-full h-auto rounded-md shadow"
+        />
+      </div>
+    `;
+  
+    // Append to the editor's content
+    setEmailContent((prevContent) => prevContent + mediaHtml);
+  };*/
 
   function createHtmlFile() {
     // Get the HTML content from the element
@@ -153,10 +165,23 @@ const EmailForm: React.FC = () => {
             {
                 emailRecipient === 'CUSTOM' &&
                 <div>
-                    <label htmlFor="recipient" className="block font-semibold">
-                    Recipient:
-                    </label>
-                    <input
+                    <TextField
+                      label="Recipient"
+                      type='email'
+                        value={recipient}
+                        onChange={(e) => setRecipient(e.target.value)}
+                        className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                        placeholder="Recipient's Email"
+                        onKeyDown={(event: any) => {
+                          if (event.key === 'Enter') {
+                            event.preventDefault();
+                            setEmails([...emails, recipient]);
+                            setRecipient('');
+                          }
+                        }}
+                    />
+                    <p className="text-xs">Press enter to add email to list</p>
+                    {/*<input
                         type="email"
                         id="recipient"
                         value={recipient}
@@ -170,15 +195,24 @@ const EmailForm: React.FC = () => {
                                 setRecipient('');
                             }
                         }}
-                    />
-                    <p className="text-xs">Press enter to add email to list</p>
+                    />*/}
                 </div>
             }
             <div>
-                <label htmlFor="subject" className="block font-semibold">
-                Subject:
-                </label>
-                <input
+                
+                <TextField
+                  label="Subject"
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                  placeholder="Email Subject"
+                  onKeyDown={(event: any) => {
+                    if (event.key === 'Enter') {
+                      event.preventDefault();
+                    }
+                  }}
+                />
+                {/*<input
                 type="text"
                 id="subject"
                 value={subject}
@@ -186,14 +220,21 @@ const EmailForm: React.FC = () => {
                 required
                 className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                 placeholder="Email Subject"
-                />
+                />*/}
             </div>
             <div>
                 <label htmlFor="emailBody" className="block font-semibold">
                 Email Content:
                 </label>
-                <WysiwygEditor getContent={handleGetContent} handleMediaUpload={handleMediaUpload} />
-                {/*<textarea
+                <BlogPostEditor
+                  onSave={handleGetContent}
+                  setMediaArray={setMediaArray} 
+                  setMedia={setMedia}
+                  media={media}
+                  mediaArray={mediaArray}
+                />
+                {/*
+                <textarea
                 id="emailBody"
                 value={emailContent}
                 onChange={handleContentChange}
@@ -246,7 +287,7 @@ const EmailForm: React.FC = () => {
                 {/*<p className="whitespace-pre-wrap">
                 {emailContent || 'Email content will appear here...'}
                 </p>
-                    Display uploaded media 
+                
                 <div className="mt-4 space-y-4">
                 {media.map((mediaFile, index) => (
                     <img
