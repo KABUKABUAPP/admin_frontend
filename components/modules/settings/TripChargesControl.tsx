@@ -16,6 +16,7 @@ interface Props {
     kabu_percentage: boolean;
     state_levy: boolean;
     date_range: any;
+    shared_trip_percentage_discount: number
 }
 
 function convertDateFormat(inputDate: any) {
@@ -33,7 +34,7 @@ function convertDateFormat(inputDate: any) {
     return `${formattedMonth}-${formattedDay}-${year}`;
 }
 
-const TripChargesControl: FC<Props> = ({active, booking_fee, kabu_percentage, state_levy, date_range}) => {
+const TripChargesControl: FC<Props> = ({active, booking_fee, kabu_percentage, state_levy, date_range, shared_trip_percentage_discount}) => {
     const [showSaveChanges, setShowSaveChanges] = useState(false);
     const [settingActive, setSettingActive] = useState<boolean>(active);
     const [settingBookingFee, setSettingBookingFee] = useState<boolean>(booking_fee);
@@ -43,6 +44,7 @@ const TripChargesControl: FC<Props> = ({active, booking_fee, kabu_percentage, st
     const [settingEndDate, setSettingEndDate] = useState<string>(date_range.end_date);
     const [showStartDate, setShowStartDate] = useState<boolean>(true);
     const [showEndDate, setShowEndDate] = useState<boolean>(true);
+    const [sharedTripDiscount, setSharedTripDiscount] = useState(shared_trip_percentage_discount)
 
     const initialValues = {
         active: active, 
@@ -70,7 +72,8 @@ const TripChargesControl: FC<Props> = ({active, booking_fee, kabu_percentage, st
                     date_range: {
                         start_date: convertDateFormat(settingStartDate), 
                         end_date: convertDateFormat(settingEndDate)
-                    }
+                    },
+                    shared_trip_percentage_discount: sharedTripDiscount
                 }
             }
 
@@ -125,6 +128,17 @@ const TripChargesControl: FC<Props> = ({active, booking_fee, kabu_percentage, st
                                 State Levy <Switch onChange={() => {
                                     setSettingStateLevy(!settingStateLevy)
                                 }} checked={settingStateLevy} disabled={!settingActive} />
+                            </div>
+                            <div className="flex justify-start gap-3 max-sm:flex-col">
+                                <TextField
+                                    label="Shared Trip Percentage Discount"
+                                    placeholder="Shared Trip Percentage Discount"
+                                    type="number"
+                                    onChange={(e) => {
+                                        setSharedTripDiscount(parseInt(e.target.value))
+                                    }}
+                                    value={sharedTripDiscount}
+                                />
                             </div>
                             
                             <div className="flex max-sm:flex-col gap-6 mt-2">
