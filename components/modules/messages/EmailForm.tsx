@@ -96,6 +96,7 @@ const EmailForm: React.FC = () => {
     e.preventDefault();
     // Handle form submission, sending the email content along with the mediaArray
     const theEmailBody = createHtmlFile();
+    const theContentString = document.getElementById('email-content-body')?.outerHTML;
     var data = new FormData();
     data.append('subject', subject);
     if (emailRecipient === 'CUSTOM') {
@@ -104,6 +105,7 @@ const EmailForm: React.FC = () => {
         })
     }
     if (theEmailBody) data.append('html', theEmailBody);
+    if (theContentString) data.append('html_text', theContentString);
     mediaArray.forEach((media) => {
         data.append('attachments', media);
     })

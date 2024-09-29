@@ -45,11 +45,21 @@ export const emailApi = createApi({
           method: 'POST',
           body
         })
+    }),
+    getAllEmailBroadcasts: build.query<any, any>({
+      query: ({ limit, page }) => ({
+        url: `/admin/email/all?limit=${limit}&page=${page}`
+      }),
+      transformResponse: (response: any) => {
+        if (!response) return [];
+        return response.data;
+      }
     })
   }),
 });
 
 export const {
-    useBroadcastCustomEmailMutation
+    useBroadcastCustomEmailMutation,
+    useGetAllEmailBroadcastsQuery
 } = emailApi;
 
