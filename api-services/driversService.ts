@@ -134,6 +134,7 @@ export const driversApi = createApi({
               docImage: doc?.url,
               docId: doc?._id,
               status: doc?.status,
+              reason: doc?.reason ? doc?.reason : null,
               id: doc?._id,
             };
           })
@@ -222,8 +223,8 @@ export const driversApi = createApi({
       })
     }),
     inspectDocument: build.mutation<any, InspectDocumentQuery>({
-      query: ({ docId, status }) => ({
-        url: `admin/driver/inspect-document/${docId}?status=${status}`,
+      query: ({ docId, status, reason }) => ({
+        url: `admin/driver/inspect-document/${docId}?status=${status}${status === 'DECLINED' ? `&reason=${reason}` : ''}`,
         method: "PUT",
       }),
       invalidatesTags: ["driver"],

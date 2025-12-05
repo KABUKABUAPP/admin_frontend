@@ -183,6 +183,7 @@ export interface MappedDocument {
   docImage?: string | undefined;
   docId?: string | undefined;
   status?: string | undefined;
+  reason?: string | undefined;
   id: string;
 }
 
@@ -250,6 +251,7 @@ export interface ApproveDeclineDriverResponse {
 export interface InspectDocumentQuery {
   docId: string;
   status: "DECLINED" | "APPROVED";
+  reason: string;
 }
 
 export interface ViewGuarantorResponse {

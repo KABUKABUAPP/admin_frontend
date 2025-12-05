@@ -17,7 +17,6 @@ const ApproveRequestCard: FC<Props> = ({ id }) => {
   const { setModalContent } = useModalContext();
   const ref = useClickOutside<HTMLDivElement>(() => setModalContent(null));
 
-  console.log(router.query, router.query.fallbackUrl)
   const [
     approveRequest,
     {
