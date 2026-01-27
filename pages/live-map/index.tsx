@@ -473,19 +473,14 @@ const IndexPage: React.FC = () => {
                   </>
                 ) : (
                   <div className={styles.tripDetailsWrapper}>
-                    <button
-                      type="button"
-                      className={styles.tripDetailsBackButton}
-                      onClick={() => setSelectedTrip(null)}
-                    >
-                      <img src="/arrowLeftFromLine.svg" alt="Back" />
-                    </button>
                     <div className={styles.tripDetailsCard}>
-                      {selectedTrip.loading ? (
-                        <div className="p-4 text-left text-sm font-semibold">Loading trip details...</div>
-                      ) : (
-                        <TripDetailsCard cardSubTitle={selectedTripSubtitle} data={selectedTripDetails} />
-                      )}
+                      <TripDetailsCard
+                        variant="map"
+                        onBack={() => setSelectedTrip(null)}
+                        isLoading={selectedTrip.loading}
+                        cardSubTitle={selectedTripSubtitle}
+                        data={selectedTripDetails}
+                      />
                     </div>
                   </div>
                 )}
