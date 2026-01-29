@@ -11,7 +11,6 @@ import MapOverlayTwo from './mapOverlayTwo';
 import TripDetailsCard from '@/components/modules/Trips/TripDetailsCard';
 import OriginIcon from '@/components/icons/OriginIcon';
 import DestinationIcon from '@/components/icons/DestinationIcon';
-import CashIcon from '@/components/icons/CashIcon';
 import WalletIcon from '@/components/icons/WalletIcon';
 import ClockIcon from '@/components/icons/ClockIcon';
 import RatingIcon from '@/components/icons/RatingIcon';
@@ -25,7 +24,7 @@ const IndexPage: React.FC = () => {
   const [onlineStatusOptionRider, setOnlineStatusOptionRider] = useState<string>("online");
   const [enableDriverOption, setEnableDriverOption] = useState(true);
   const [enableRiderOption, setEnableRiderOption] = useState(true);
-  const [liveTrackingSelection, setLiveTrackingSelection] = useState<'pending' | 'completed' | 'active' | 'cancelled'>('completed');
+  const [liveTrackingSelection, setLiveTrackingSelection] = useState<Array<'pending' | 'completed' | 'active' | 'cancelled'>>(['completed']);
   const [isMapHovered, setIsMapHovered] = useState(false);
   const [isMapFullscreen, setIsMapFullscreen] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState<{
@@ -159,8 +158,7 @@ const IndexPage: React.FC = () => {
           const date = new Date(value);
           return Number.isNaN(date.getTime()) ? '' : date.toLocaleString();
         };
-        const estimatedPrice = viewTrip?.estimatedPrice ? String(viewTrip.estimatedPrice) : '';
-        return [
+        const details: TripDetail[] = [
           {
             topTitle: 'Origin',
             topValue: viewTrip.origin,
@@ -171,12 +169,12 @@ const IndexPage: React.FC = () => {
             isRating: false,
           },
           {
-            topTitle: 'Estimated Price',
-            topValue: estimatedPrice,
-            topIcon: <CashIcon />,
-            bottomTitle: 'Payment Type',
-            bottomValue: viewTrip.paymentType,
-            bottomIcon: <WalletIcon />,
+            topTitle: 'Payment Type',
+            topValue: viewTrip.paymentType,
+            topIcon: <WalletIcon />,
+            bottomTitle: '',
+            bottomValue: '',
+            bottomIcon: '',
             isRating: false,
           },
           {
@@ -188,16 +186,26 @@ const IndexPage: React.FC = () => {
             bottomIcon: '',
             isRating: false,
           },
-          {
-            topTitle: viewTrip.tripStarted ? 'Trip started' : '',
-            topValue: formatDate(viewTrip.tripStarted),
-            topIcon: <ClockIcon />,
-            bottomTitle: viewTrip.tripEnded ? tripToEndStr : '',
-            bottomValue: formatDate(viewTrip.tripEnded),
-            bottomIcon: <ClockIcon />,
+        ];
+
+        const hasStarted = Boolean(viewTrip.tripStarted);
+        const hasEnded = Boolean(viewTrip.tripEnded);
+        if (hasStarted || hasEnded) {
+          details.push({
+            topTitle: hasStarted ? 'Trip started' : '',
+            topValue: hasStarted ? formatDate(viewTrip.tripStarted) : '',
+            topIcon: hasStarted ? <ClockIcon /> : '',
+            bottomTitle: hasEnded ? tripToEndStr : '',
+            bottomValue: hasEnded ? formatDate(viewTrip.tripEnded) : '',
+            bottomIcon: hasEnded ? <ClockIcon /> : '',
             isRating: true,
-          },
-          {
+          });
+        }
+
+        const hasRatings =
+          Boolean(viewTrip.driverTripRating) || Boolean(viewTrip.riderTripRating);
+        if (status === 'completed' && hasRatings) {
+          details.push({
             topTitle: viewTrip.driverTripRating ? 'Driver Rating' : '',
             topValue: viewTrip.driverTripRating,
             topIcon: <RatingIcon fill="#000000" />,
@@ -205,8 +213,10 @@ const IndexPage: React.FC = () => {
             bottomValue: viewTrip.riderTripRating,
             bottomIcon: <RatingIcon fill="#000000" />,
             isRating: true,
-          },
-        ];
+          });
+        }
+
+        return details;
       })()
     : undefined;
 
@@ -253,223 +263,245 @@ const IndexPage: React.FC = () => {
               </div>
 
               {/* Elements above the map as overlay */}
-              {!isMapFullscreen && (
-              <div className="flex flex-col md:flex-row justify-between">
+              <div className={`flex flex-col md:flex-row justify-between ${isMapFullscreen ? styles.overlayFullscreen : ''}`}>
                 {!selectedTrip?.id ? (
                   <>
-                <div className={styles.overlaySecondWrapper}>
-                  <button
-                    type="button"
-                    className={styles.filtersToggle}
-                    onClick={() => setShowFilters((prev) => !prev)}
-                    aria-expanded={showFilters}
-                    aria-controls="live-map-filters"
-                  >
-                    <span>Showing: All filters</span>
-                    <span className={`${styles.filtersIcon} ${showFilters ? styles.filtersIconOpen : ''}`} aria-hidden="true">
-                      <svg viewBox="0 0 20 20" role="presentation" focusable="false">
-                        <path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </span>
-                  </button>
-                  {showFilters && (
-                    <div className={styles.overlaySecond} id="live-map-filters">
-                      <div className="gap-4">
-                        <div className={`bg-[#FDFDFD] ${expandTrue ? 'w-full' : 'w-[75%]'} gap-5 p-4 rounded-lg`}>
-                          <div className="flex justify-between items-center my-2">
-                            <div className="font-bp flex gap-3 items-center cursor-pointer">
-                              <span>View:</span>
-                              <div className="flex justify-right">
-                                <DropDown
-                                  placeholder="Filter"
-                                  options={filterOptions}
-                                  value={dropDownOptionSelected}
-                                  handleChange={(val) => {}}
-                                  rightSet={4}
-                                />
+                    <div className={styles.overlaySecondWrapper}>
+                      <button
+                        type="button"
+                        className={styles.filtersToggle}
+                        onClick={() => setShowFilters((prev) => !prev)}
+                        aria-expanded={showFilters}
+                        aria-controls="live-map-filters"
+                      >
+                        <span>Showing: All filters</span>
+                        <span className={`${styles.filtersIcon} ${showFilters ? styles.filtersIconOpen : ''}`} aria-hidden="true">
+                          <svg viewBox="0 0 20 20" role="presentation" focusable="false">
+                            <path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </span>
+                      </button>
+                      {showFilters && (
+                        <div className={styles.overlaySecond} id="live-map-filters">
+                          <div className="gap-4">
+                            <div className={`bg-[#FDFDFD] ${expandTrue ? 'w-full' : 'w-[75%]'} gap-5 p-4 rounded-lg`}>
+                              <div className="flex justify-between items-center my-2">
+                                <div className="font-bp flex gap-3 items-center cursor-pointer">
+                                  <span>View:</span>
+                                  <div className="flex justify-right">
+                                    <DropDown
+                                      placeholder="Filter"
+                                      options={filterOptions}
+                                      value={dropDownOptionSelected}
+                                      handleChange={(val) => {}}
+                                      rightSet={4}
+                                    />
+                                  </div>
+                                  
+                                </div>
+                                <p className="font-bold text-lg cursor-pointer" onClick={() => setExpandTrue(!expandTrue)}>
+                                  <img src="/arrowLeftFromLine.svg" alt="" />
+                                </p>
                               </div>
-                              
+                              <div className="bg-[#F8F8F8] rounded-md p-4">
+                                <div className="mt-2">
+                                  <p className="text-md font-bold text-left">Show Availability</p>
+                                  <div className="flex">
+                                    <FormikProvider value={formik}>
+                                      <Form>
+                                        <div className="flex">
+                                          <div className="flex flex-col space-y-2 p-3">
+                                            <label className="inline-flex items-center">
+                                              <input
+                                                type="checkbox"
+                                                className="form-checkbox text-yellow-400 checked:bg-yellow-400"
+                                                name="driver-online"
+                                                checked={onlineStatusOption === 'online'}
+                                                onChange={() => {setOnlineStatusOption('online')}}
+                                                disabled={!enableDriverOption}
+                                              />
+                                              <span className="ml-2 text-xs">Driver Online</span>
+                                            </label>
+
+                                            <label className="inline-flex items-center mb-4">
+                                              <input
+                                                type="checkbox"
+                                                className="form-checkbox text-yellow-400 checked:bg-yellow-400"
+                                                name="driver-offline"
+                                                checked={onlineStatusOption === 'offline'}
+                                                onChange={() => setOnlineStatusOption('offline')}
+                                                disabled={!enableDriverOption}
+                                              />
+                                              <span className="ml-2 text-xs">Driver Offline</span>
+                                            </label>
+                                          </div>
+
+                                          <div className="flex flex-col space-y-2 p-3">
+                                            <label className="inline-flex items-center">
+                                              <input
+                                                type="checkbox"
+                                                className="form-checkbox text-yellow-400 checked:bg-yellow-400"
+                                                name="rider-online"
+                                                checked={onlineStatusOptionRider === 'online'}
+                                                onChange={() => setOnlineStatusOptionRider('online')}
+                                                disabled={!enableRiderOption}
+                                              />
+                                              <span className="ml-2 text-xs">Rider Online</span>
+                                            </label>
+
+                                            <label className="inline-flex items-center">
+                                              <input
+                                                type="checkbox"
+                                                className="form-checkbox text-yellow-400 checked:bg-yellow-400"
+                                                name="rider-offline"
+                                                checked={onlineStatusOptionRider === 'offline'}
+                                                onChange={() => setOnlineStatusOptionRider('offline')}
+                                                disabled={!enableRiderOption}
+                                              />
+                                              <span className="ml-2 text-xs">Rider Offline</span>
+                                            </label>
+                                          </div>
+                                        </div>
+                                      </Form>
+                                    </FormikProvider>
+                                  </div>
+                                </div>
+
+                                <div className="mt-2">
+                                  <p className="text-md font-bold text-left">Live Tracking</p>
+                                  <div className="flex">
+                                    <FormikProvider value={formikTwo}>
+                                      <Form>
+                                        <div className="flex">
+                                          <div className="flex flex-col space-y-2 p-3">
+                                            <label className="inline-flex items-center">
+                                              <input
+                                                type="checkbox"
+                                                className="form-checkbox text-yellow-400 checked:bg-yellow-400"
+                                                name="pending-trips"
+                                                checked={liveTrackingSelection.includes('pending')}
+                                                onChange={() =>
+                                                  setLiveTrackingSelection((prev) =>
+                                                    prev.includes('pending')
+                                                      ? prev.filter((item) => item !== 'pending')
+                                                      : [...prev, 'pending']
+                                                  )
+                                                }
+                                              />
+                                              <img src="/indicator_pending.png" alt="" className="ml-2 h-2 w-2" />
+                                              <span className="ml-2 text-xs">Pending Trips</span>
+                                            </label>
+
+                                            <label className="inline-flex items-center mb-4">
+                                              <input
+                                                type="checkbox"
+                                                className="form-checkbox text-yellow-400 checked:bg-yellow-400"
+                                                name="completed-trips"
+                                                checked={liveTrackingSelection.includes('completed')}
+                                                onChange={() =>
+                                                  setLiveTrackingSelection((prev) =>
+                                                    prev.includes('completed')
+                                                      ? prev.filter((item) => item !== 'completed')
+                                                      : [...prev, 'completed']
+                                                  )
+                                                }
+                                              />
+                                              <img src="/indicator_completed.png" alt="" className="ml-2 h-2 w-2" />
+                                              <span className="ml-2 text-xs">Completed Trips</span>
+                                            </label>
+                                          </div>
+
+                                          <div className="flex flex-col space-y-2 p-3">
+                                            <label className="inline-flex items-center">
+                                              <input
+                                                type="checkbox"
+                                                className="form-checkbox text-yellow-400 checked:bg-yellow-400"
+                                                name="active-trips"
+                                                checked={liveTrackingSelection.includes('active')}
+                                                onChange={() =>
+                                                  setLiveTrackingSelection((prev) =>
+                                                    prev.includes('active')
+                                                      ? prev.filter((item) => item !== 'active')
+                                                      : [...prev, 'active']
+                                                  )
+                                                }
+                                              />
+                                              <img src="/indicator_active.png" alt="" className="ml-2 h-2 w-2" />
+                                              <span className="ml-2 text-xs">Active Trips</span>
+                                            </label>
+
+                                            <label className="inline-flex items-center">
+                                              <input
+                                                type="checkbox"
+                                                className="form-checkbox text-yellow-400 checked:bg-yellow-400"
+                                                name="cancelled-trips"
+                                                checked={liveTrackingSelection.includes('cancelled')}
+                                                onChange={() =>
+                                                  setLiveTrackingSelection((prev) =>
+                                                    prev.includes('cancelled')
+                                                      ? prev.filter((item) => item !== 'cancelled')
+                                                      : [...prev, 'cancelled']
+                                                  )
+                                                }
+                                              />
+                                              <img src="/indicator_cancelled.png" alt="" className="ml-2 h-2 w-2" />
+                                              <span className="ml-2 text-xs">Cancelled Trips</span>
+                                            </label>
+                                          </div>
+                                        </div>
+                                      </Form>
+                                    </FormikProvider>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                            <p className="font-bold text-lg cursor-pointer" onClick={() => setExpandTrue(!expandTrue)}>
-                              <img src="/arrowLeftFromLine.svg" alt="" />
-                            </p>
                           </div>
-                          <div className="bg-[#F8F8F8] rounded-md p-4">
-                            <div className="mt-2">
-                              <p className="text-md font-bold text-left">Show Availability</p>
-                              <div className="flex">
-                                <FormikProvider value={formik}>
-                                  <Form>
-                                    <div className="flex">
-                                      <div className="flex flex-col space-y-2 p-3">
-                                        <label className="inline-flex items-center">
-                                          <input
-                                            type="checkbox"
-                                            className="form-checkbox text-yellow-400 checked:bg-yellow-400"
-                                            name="driver-online"
-                                            checked={onlineStatusOption === 'online'}
-                                            onChange={() => {setOnlineStatusOption('online')}}
-                                            disabled={!enableDriverOption}
-                                          />
-                                          <span className="ml-2 text-xs">Driver Online</span>
-                                        </label>
+                        </div>
+                      )}
+                    </div>
 
-                                        <label className="inline-flex items-center mb-4">
-                                          <input
-                                            type="checkbox"
-                                            className="form-checkbox text-yellow-400 checked:bg-yellow-400"
-                                            name="driver-offline"
-                                            checked={onlineStatusOption === 'offline'}
-                                            onChange={() => setOnlineStatusOption('offline')}
-                                            disabled={!enableDriverOption}
-                                          />
-                                          <span className="ml-2 text-xs">Driver Offline</span>
-                                        </label>
-                                      </div>
-
-                                      <div className="flex flex-col space-y-2 p-3">
-                                        <label className="inline-flex items-center">
-                                          <input
-                                            type="checkbox"
-                                            className="form-checkbox text-yellow-400 checked:bg-yellow-400"
-                                            name="rider-online"
-                                            checked={onlineStatusOptionRider === 'online'}
-                                            onChange={() => setOnlineStatusOptionRider('online')}
-                                            disabled={!enableRiderOption}
-                                          />
-                                          <span className="ml-2 text-xs">Rider Online</span>
-                                        </label>
-
-                                        <label className="inline-flex items-center">
-                                          <input
-                                            type="checkbox"
-                                            className="form-checkbox text-yellow-400 checked:bg-yellow-400"
-                                            name="rider-offline"
-                                            checked={onlineStatusOptionRider === 'offline'}
-                                            onChange={() => setOnlineStatusOptionRider('offline')}
-                                            disabled={!enableRiderOption}
-                                          />
-                                          <span className="ml-2 text-xs">Rider Offline</span>
-                                        </label>
-                                      </div>
-                                    </div>
-                                  </Form>
-                                </FormikProvider>
-                              </div>
+                    <div className={styles.overlay}>
+                      <div className="bg-[#FDFDFD] w-full md:w-[60%] gap-2 py-1 px-4 rounded-full items-center">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                          <div className="flex">
+                            <div className="w-[20%]">
+                              <img src="/taxiOnline.svg" alt="" />
                             </div>
-
-                            <div className="mt-2">
-                              <p className="text-md font-bold text-left">Live Tracking</p>
-                              <div className="flex">
-                                <FormikProvider value={formikTwo}>
-                                  <Form>
-                                    <div className="flex">
-                                      <div className="flex flex-col space-y-2 p-3">
-                                        <label className="inline-flex items-center">
-                                          <input
-                                            type="checkbox"
-                                            className="form-checkbox text-yellow-400 checked:bg-yellow-400"
-                                            name="pending-trips"
-                                            checked={liveTrackingSelection === 'pending'}
-                                            onChange={() => setLiveTrackingSelection('pending')}
-                                          />
-                                          <img src="/indicator_pending.png" alt="" className="ml-2 h-2 w-2" />
-                                          <span className="ml-2 text-xs">Pending Trips</span>
-                                        </label>
-
-                                        <label className="inline-flex items-center mb-4">
-                                          <input
-                                            type="checkbox"
-                                            className="form-checkbox text-yellow-400 checked:bg-yellow-400"
-                                            name="completed-trips"
-                                            checked={liveTrackingSelection === 'completed'}
-                                            onChange={() => setLiveTrackingSelection('completed')}
-                                          />
-                                          <img src="/indicator_completed.png" alt="" className="ml-2 h-2 w-2" />
-                                          <span className="ml-2 text-xs">Completed Trips</span>
-                                        </label>
-                                      </div>
-
-                                      <div className="flex flex-col space-y-2 p-3">
-                                        <label className="inline-flex items-center">
-                                          <input
-                                            type="checkbox"
-                                            className="form-checkbox text-yellow-400 checked:bg-yellow-400"
-                                            name="active-trips"
-                                            checked={liveTrackingSelection === 'active'}
-                                            onChange={() => setLiveTrackingSelection('active')}
-                                          />
-                                          <img src="/indicator_active.png" alt="" className="ml-2 h-2 w-2" />
-                                          <span className="ml-2 text-xs">Active Trips</span>
-                                        </label>
-
-                                        <label className="inline-flex items-center">
-                                          <input
-                                            type="checkbox"
-                                            className="form-checkbox text-yellow-400 checked:bg-yellow-400"
-                                            name="cancelled-trips"
-                                            checked={liveTrackingSelection === 'cancelled'}
-                                            onChange={() => setLiveTrackingSelection('cancelled')}
-                                          />
-                                          <img src="/indicator_cancelled.png" alt="" className="ml-2 h-2 w-2" />
-                                          <span className="ml-2 text-xs">Cancelled Trips</span>
-                                        </label>
-                                      </div>
-                                    </div>
-                                  </Form>
-                                </FormikProvider>
-                              </div>
+                            <div className="w-[80%] pl-2">
+                              <p className="text-md text-start"><b>{tripsInsight?.onlineStatusChart?.online}</b></p>
+                              <p className="text-sm text-start"><b>Drivers Online</b></p>
+                            </div>
+                          </div>
+                          <div className="flex">
+                            <div className="w-[20%]">
+                              <img src="/taxiOfflineMod.png" alt="" />
+                            </div>
+                            <div className="w-[80%] pl-2">
+                              <p className="text-md text-start"><b>{tripsInsight?.onlineStatusChart?.offline}</b></p>
+                              <p className="text-sm text-start"><b>Drivers Offline</b></p>
+                            </div>
+                          </div>
+                          <div className="flex">
+                            <div className="w-[20%]">
+                              <img src="/riderOnline.svg" alt="" />
+                            </div>
+                            <div className="w-[80%] pl-2">
+                              <p className="text-md text-start"><b>{tripsInsight?.onlineStatusChart?.onlineRiders}</b></p>
+                              <p className="text-sm text-start"><b>Riders Online</b></p>
+                            </div>
+                          </div>
+                          <div className="flex">
+                            <div className="w-[20%]">
+                              <img src="/riderOfflineMod.png" alt="" />
+                            </div>
+                            <div className="w-[80%] pl-2">
+                              <p className="text-md text-start"><b>{tripsInsight?.onlineStatusChart?.offlineRiders}</b></p>
+                              <p className="text-sm text-start"><b>Riders Offline</b></p>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  )}
-                </div>
-
-                <div className={styles.overlay}>
-                  <div className="bg-[#FDFDFD] w-full md:w-[60%] gap-2 py-1 px-4 rounded-full items-center">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                      <div className="flex">
-                        <div className="w-[20%]">
-                          <img src="/taxiOnline.svg" alt="" />
-                        </div>
-                        <div className="w-[80%] pl-2">
-                          <p className="text-md text-start"><b>{tripsInsight?.onlineStatusChart?.online}</b></p>
-                          <p className="text-sm text-start"><b>Drivers Online</b></p>
-                        </div>
-                      </div>
-                      <div className="flex">
-                        <div className="w-[20%]">
-                          <img src="/taxiOfflineMod.png" alt="" />
-                        </div>
-                        <div className="w-[80%] pl-2">
-                          <p className="text-md text-start"><b>{tripsInsight?.onlineStatusChart?.offline}</b></p>
-                          <p className="text-sm text-start"><b>Drivers Offline</b></p>
-                        </div>
-                      </div>
-                      <div className="flex">
-                        <div className="w-[20%]">
-                          <img src="/riderOnline.svg" alt="" />
-                        </div>
-                        <div className="w-[80%] pl-2">
-                          <p className="text-md text-start"><b>{tripsInsight?.onlineStatusChart?.onlineRiders}</b></p>
-                          <p className="text-sm text-start"><b>Riders Online</b></p>
-                        </div>
-                      </div>
-                      <div className="flex">
-                        <div className="w-[20%]">
-                          <img src="/riderOfflineMod.png" alt="" />
-                        </div>
-                        <div className="w-[80%] pl-2">
-                          <p className="text-md text-start"><b>{tripsInsight?.onlineStatusChart?.offlineRiders}</b></p>
-                          <p className="text-sm text-start"><b>Riders Offline</b></p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
                   </>
                 ) : (
                   <div className={styles.tripDetailsWrapper}>
@@ -480,12 +512,12 @@ const IndexPage: React.FC = () => {
                         isLoading={selectedTrip.loading}
                         cardSubTitle={selectedTripSubtitle}
                         data={selectedTripDetails}
+                        mapPrice={selectedTrip?.viewTrip?.estimatedPrice ?? ''}
                       />
                     </div>
                   </div>
                 )}
               </div>
-              )}
             </div>
         </AppLayout>
     </>

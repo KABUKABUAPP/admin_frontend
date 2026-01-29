@@ -8,6 +8,7 @@ interface Props {
   variant?: "default" | "map";
   onBack?: () => void;
   isLoading?: boolean;
+  mapPrice?: string | number;
 }
 
 const TripDetailsCard: FC<Props> = ({
@@ -16,8 +17,17 @@ const TripDetailsCard: FC<Props> = ({
   variant = "default",
   onBack,
   isLoading = false,
+  mapPrice,
 }) => {
   const isMapVariant = variant === "map";
+  const formattedMapPrice = (() => {
+    if (mapPrice === undefined || mapPrice === null || mapPrice === "") return "";
+    const numeric = Number(mapPrice);
+    if (!Number.isNaN(numeric)) {
+      return `₦${numeric.toLocaleString()}`;
+    }
+    return `₦${mapPrice}`;
+  })();
   return (
     <div
       className={`bg-[#FFFFFF] rounded-lg w-full p-3 ${
@@ -27,17 +37,32 @@ const TripDetailsCard: FC<Props> = ({
       <div className="flex items-start justify-between gap-3 mb-4">
         <div>
           <p className="font-bold text-sm mb-2">Trip details</p>
+        </div>
+        {isMapVariant && (
+          <div className="flex flex-col items-end gap-2">
+            {onBack && (
+              <button
+                type="button"
+                className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-[#E5E7EB] bg-[#FDFDFD]"
+                onClick={onBack}
+                aria-label="Back"
+              >
+                <img src="/arrowLeftFromLine.svg" alt="" className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+      <div className="flex items-start justify-between gap-3 mb-4">
+        <div>
           <p className="font-bold text-sm">{cardSubTitle}</p>
         </div>
-        {isMapVariant && onBack && (
-          <button
-            type="button"
-            className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-[#E5E7EB] bg-[#FDFDFD]"
-            onClick={onBack}
-            aria-label="Back"
-          >
-            <img src="/arrowLeftFromLine.svg" alt="" className="w-4 h-4" />
-          </button>
+        {isMapVariant && (
+          <div className="flex flex-col items-end gap-2">
+            {formattedMapPrice && (
+              <span className="text-sm font-bold text-right">{formattedMapPrice}</span>
+            )}
+          </div>
         )}
       </div>
       <div

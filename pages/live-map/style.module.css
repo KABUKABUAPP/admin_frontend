@@ -46,7 +46,7 @@
 .overlay {
   position: absolute;
   top: 10%;
-  left: 40%;
+  left: 45%;
   width: 90%;
   text-align: center;
   color: #000;
@@ -62,7 +62,7 @@
 .overlaySecondWrapper {
   position: absolute;
   top: 10%;
-  left: 5%;
+  left: 1%;
   width: 20%;
   color: #000;
   display: flex;
@@ -87,6 +87,19 @@
 
 .tripDetailsCard {
   width: 100%;
+}
+
+.overlayFullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 1102;
+  pointer-events: none;
+}
+
+.overlayFullscreen .overlay,
+.overlayFullscreen .overlaySecondWrapper,
+.overlayFullscreen .tripDetailsWrapper {
+  pointer-events: auto;
 }
 
 .filtersToggle {

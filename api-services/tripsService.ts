@@ -13,7 +13,7 @@ import {
 } from "@/models/Trips";
 import { GetAllTripsQuery } from "@/models/Trips";
 
-import { logout, secondsToMilliSeconds } from "@/utils";
+import { capitalizeAllFirstLetters, logout, secondsToMilliSeconds } from "@/utils";
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "@/constants";
 
@@ -69,8 +69,8 @@ export const tripsApi = createApi({
           driverRating: response?.data?.driver_rating,
           driverTripCount: response?.data?.driver_details?.total_trips,
           estimatedPrice: response?.data?.estimated_price,
-          origin: `${response?.data?.origin.city}, ${response?.data?.origin?.state}, ${response?.data?.origin.country}`,
-          paymentType: response?.data?.payment_type,
+          origin: capitalizeAllFirstLetters(`${response?.data?.origin.city}, ${response?.data?.origin?.state}, ${response?.data?.origin.country}`),
+          paymentType: capitalizeAllFirstLetters(response?.data?.payment_type),
           plateNumber: response?.data?.car?.plate_number,
           riderFullName: response?.data?.rider_details.full_name,
           riderId: response?.data?.rider_details._id,
