@@ -8,7 +8,7 @@ import {
 } from '@react-google-maps/api';
 import { useGetAllDriversQuery } from '@/api-services/driversService';
 import { useGetAllRidesQuery } from '@/api-services/ridersService';
-import { tripsApi, useGetAllTripsQuery } from '@/api-services/tripsService';
+import { tripsApi } from '@/api-services/tripsService';
 import CloseIcon from '@/components/icons/CloseIcon';
 import Card from '@/components/common/Card';
 import useClickOutside from '@/hooks/useClickOutside';
@@ -32,7 +32,7 @@ interface MapOverlayProps {
   enableRiderOption: any;
   enableDriverOption: any;
   isFullscreen?: boolean;
-  tripFilter?: 'pending' | 'completed' | 'active' | 'cancelled';
+  tripFilter?: Array<'pending' | 'completed' | 'active' | 'cancelled'>;
   selectedTripId?: string | null;
   onTripSelectionChange?: (payload: { id: string; loading: boolean; status?: string; viewTrip?: any } | null) => void;
 }
@@ -98,7 +98,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
   enableRiderOption,
   enableDriverOption,
   isFullscreen = false,
-  tripFilter = 'completed',
+  tripFilter = ['completed'],
   selectedTripId = null,
   onTripSelectionChange,
 }) => {
@@ -115,6 +115,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
   const [iconUrlDriver, setIconUrlDriver] = useState('');
   const [iconUrlRider, setIconUrlRider] = useState('');
   const [mapReady, setMapReady] = useState(false);
+  const [tripsByStatus, setTripsByStatus] = useState<Record<string, any[]>>({});
   const { dashboardState, setDashboardState } = useDashboardState();
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<Map<string, { marker: mapboxgl.Marker; hash: string }>>(new Map());
@@ -171,7 +172,10 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
   );
 
-  const tripStatus = tripFilter === 'active' ? 'started' : tripFilter;
+  const selectedStatuses = Array.isArray(tripFilter) ? tripFilter : [];
+  const getQueryStatus = useCallback((status: string) => {
+    return status === 'active' ? 'started' : status;
+  }, []);
 
   const getTripIcon = useCallback((status?: string) => {
     if (status === 'started' || status === 'active') return '/car_active.png';
@@ -207,17 +211,52 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     }
   }, []);
 
-  const { data: trips } = useGetAllTripsQuery(
-    {
-      limit: 300,
-      page: 1,
-      status: tripStatus as any,
-      search: '',
-      order: 'newest_first',
-      type: 'trip',
-    },
-    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
-  );
+  useEffect(() => {
+    let isCancelled = false;
+    if (selectedStatuses.length === 0) {
+      setTripsByStatus({});
+      return;
+    }
+
+    const loadTrips = async () => {
+      const results: Record<string, any[]> = {};
+      await Promise.all(
+        selectedStatuses.map(async (status) => {
+          const subscription = dispatch(
+            tripsApi.endpoints.getAllTrips.initiate(
+              {
+                limit: 300,
+                page: 1,
+                status: getQueryStatus(status) as any,
+                search: '',
+                order: 'newest_first',
+                type: 'trip',
+              },
+              { forceRefetch: true }
+            )
+          );
+          try {
+            const response: any = await subscription.unwrap();
+            results[status] = response?.data?.data || [];
+          } catch (error) {
+            results[status] = [];
+          } finally {
+            subscription.unsubscribe();
+          }
+        })
+      );
+
+      if (!isCancelled) {
+        setTripsByStatus(results);
+      }
+    };
+
+    loadTrips();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [dispatch, getQueryStatus, selectedStatuses.join('|')]);
 
   const { isLoaded } = useLoadScript({
       googleMapsApiKey: 'AIzaSyBKw_APHMTRn37FXj0dd7_CptLColGP4Gc',
@@ -250,8 +289,8 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
       
       setBaseCoordinates(allCoordinates);
       
-      const driverIcon = onlineStatusDriver === 'offline' ? '/taxiOffline.svg' : '/taxiOnline.svg';
-      const riderIcon = onlineStatusRider === 'offline' ? '/riderOffline.svg': '/riderOnline.svg';
+      const driverIcon = onlineStatusDriver === 'offline' ? '/taxiOfflineMod.png' : '/taxiOnline.svg';
+      const riderIcon = onlineStatusRider === 'offline' ? '/riderOfflineMod.png' : '/riderOnline.svg';
       setIconUrlDriver(driverIcon);
       setIconUrlRider(riderIcon);
 
@@ -266,8 +305,8 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
           
           setBaseCoordinates(newCoordinates);
           
-          const driverIcon = onlineStatusDriver === 'offline' ? '/taxiOffline.svg' : '/taxiOnline.svg';
-          const riderIcon = onlineStatusRider === 'offline' ? '/riderOffline.svg': '/riderOnline.svg';
+          const driverIcon = onlineStatusDriver === 'offline' ? '/taxiOfflineMod.png' : '/taxiOnline.svg';
+          const riderIcon = onlineStatusRider === 'offline' ? '/riderOfflineMod.png' : '/riderOnline.svg';
           setIconUrlDriver(driverIcon);
           setIconUrlRider(riderIcon);
       });
@@ -279,13 +318,15 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
   }, [drivers, riders, enableRiderOption, enableDriverOption, onlineStatusDriver, onlineStatusRider]);
 
   useEffect(() => {
-    if (!trips?.data?.data || tripFilter === 'active') {
+    const nonActiveTrips = selectedStatuses
+      .filter((status) => status !== 'active')
+      .flatMap((status) => tripsByStatus[status] || []);
+    if (nonActiveTrips.length === 0) {
       setTripStartPoints({});
       return;
     }
-
     let isCancelled = false;
-    const tripList = trips.data.data.slice(0, 300);
+    const tripList = nonActiveTrips.slice(0, 300);
     const tripIds = tripList
       .map((trip: any) => trip?._id || trip?.id)
       .filter(Boolean)
@@ -345,18 +386,13 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     return () => {
       isCancelled = true;
     };
-  }, [trips, tripFilter, dispatch]);
+  }, [tripsByStatus, selectedStatuses.join('|'), dispatch]);
 
   useEffect(() => {
-    const tripIconMap: Record<string, string> = {
-      pending: '/car_pending.png',
-      completed: '/car_completed.png',
-      active: '/car_active.png',
-      cancelled: '/car_cancelled.png',
-    };
-
-    const tripIcon = tripIconMap[tripFilter] || '/car_completed.png';
-    const tripList = trips?.data?.data?.slice(0, 300) || [];
+    const tripListByStatus = selectedStatuses.map((status) => ({
+      status,
+      trips: (tripsByStatus[status] || []).slice(0, 300),
+    }));
     const driverCoordinateMap = new Map<string, { lat: number; lng: number }>();
 
     baseCoordinates.forEach((coord: any) => {
@@ -365,44 +401,48 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
       }
     });
 
-    const nextTripCoordinates = tripList
-      .map((trip: any) => {
-        const id = trip?._id || trip?.id;
-        if (!id) return null;
-        const driverId =
-          trip?.driver?._id || trip?.driverId || trip?.driver_id || trip?.driver_details?._id || undefined;
+    const nextTripCoordinates = tripListByStatus
+      .flatMap(({ status, trips }) => {
+        const tripIcon = getTripIcon(getQueryStatus(status));
+        return trips
+          .map((trip: any) => {
+            const id = trip?._id || trip?.id;
+            if (!id) return null;
+            const driverId =
+              trip?.driver?._id || trip?.driverId || trip?.driver_id || trip?.driver_details?._id || undefined;
 
-        let point: [number, number] | null = null;
+            let point: [number, number] | null = null;
 
-        if (tripFilter === 'active') {
-          if (!driverId) return null;
-          const driverCoord = driverCoordinateMap.get(String(driverId));
-          if (!driverCoord) return null;
-          point = [driverCoord.lng, driverCoord.lat];
-        } else {
-          const startPoint = tripStartPoints[String(id)];
-          if (Array.isArray(startPoint) && startPoint.length === 2) {
-            point = startPoint;
-          }
-        }
+            if (status === 'active') {
+              if (!driverId) return null;
+              const driverCoord = driverCoordinateMap.get(String(driverId));
+              if (!driverCoord) return null;
+              point = [driverCoord.lng, driverCoord.lat];
+            } else {
+              const startPoint = tripStartPoints[String(id)];
+              if (Array.isArray(startPoint) && startPoint.length === 2) {
+                point = startPoint;
+              }
+            }
 
-        if (!point) return null;
+            if (!point) return null;
 
-        return {
-          lat: typeof point[1] === 'number' ? point[1] : parseFloat(point[1]),
-          lng: typeof point[0] === 'number' ? point[0] : parseFloat(point[0]),
-          type: 'trip',
-          status: trip?.status,
-          _id: id,
-          iconUrl: tripIcon,
-          driverId,
-          trip,
-        };
-      })
-      .filter(Boolean);
+            return {
+              lat: typeof point[1] === 'number' ? point[1] : parseFloat(point[1]),
+              lng: typeof point[0] === 'number' ? point[0] : parseFloat(point[0]),
+              type: 'trip',
+              status: trip?.status || getQueryStatus(status),
+              _id: id,
+              iconUrl: tripIcon,
+              driverId,
+              trip,
+            };
+          })
+          .filter(Boolean);
+      });
 
     setTripCoordinates(nextTripCoordinates);
-  }, [trips, tripFilter, baseCoordinates, tripStartPoints]);
+  }, [tripsByStatus, selectedStatuses.join('|'), baseCoordinates, tripStartPoints, getTripIcon, getQueryStatus]);
 
   useEffect(() => {
     if (!selectedTripId) {
@@ -419,9 +459,10 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     }
 
     let isCancelled = false;
-    const tripList = (trips?.data?.data || []) as any[];
+    const tripList = selectedStatuses.flatMap((status) => tripsByStatus[status] || []) as any[];
     const baseTrip: any = tripList.find((trip: any) => String(trip?._id || trip?.id) === String(selectedTripId));
-    const status = baseTrip?.status || tripStatus;
+    const fallbackStatus = selectedStatuses.includes('active') ? 'started' : selectedStatuses[0] || '';
+    const status = baseTrip?.status || fallbackStatus;
     const driverId =
       baseTrip?.driver?._id || baseTrip?.driverId || baseTrip?.driver_id || baseTrip?.driver_details?._id || undefined;
 
@@ -463,7 +504,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     return () => {
       isCancelled = true;
     };
-  }, [selectedTripId, trips, dispatch, onTripSelectionChange, tripStatus]);
+  }, [selectedTripId, tripsByStatus, dispatch, onTripSelectionChange, selectedStatuses.join('|')]);
 
   useEffect(() => {
     if (!selectedTripId) return;
@@ -628,7 +669,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
 
   useEffect(() => {
     hasCenteredRef.current = false;
-  }, [tripFilter, selectedTripId]);
+  }, [selectedTripId, selectedStatuses.join('|')]);
 
   const updateTooltipPosition = useCallback((coord: any) => {
     if (!mapRef.current) return;
@@ -676,10 +717,11 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     (coord: any) => {
       const id = coord?._id;
       if (!id) return;
+      if (selectedTripId && String(selectedTripId) === String(id)) return;
       const status = coord?.status;
       onTripSelectionChange?.({ id: String(id), loading: true, status });
     },
-    [onTripSelectionChange]
+    [onTripSelectionChange, selectedTripId]
   );
 
   const createMarkerElement = useCallback((coord: any) => {
