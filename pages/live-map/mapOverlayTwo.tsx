@@ -60,7 +60,7 @@ const DriverModal : React.FC<DriverModalProps> = ({ driver, handleClose, type })
   const router = useRouter();
 
   return (
-    <Card elevation={true} maxWidth="320px" maxHeight="70vh">
+    <Card elevation={true} width="20vw" maxHeight="70vh">
       <div className="p-3 overflow-x-hidden relative" ref={ref}>
         <div className="flex justify-between">
           <p className="text-base font-bold">{type === 'driver' ? 'Driver' : 'Rider'}</p>
@@ -71,7 +71,7 @@ const DriverModal : React.FC<DriverModalProps> = ({ driver, handleClose, type })
             <CloseIcon />
           </span></p>
         </div>
-        <div className="flex p-3 justify-between">
+        <div className="flex py-3 justify-between">
           <div className="w-[25%]">
             {(driver.imageUrl || driver.fullName) && (
               <Avatar
