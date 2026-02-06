@@ -211,6 +211,49 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     }
   }, []);
 
+  const normalizePoints = useCallback((points: [number, number][]) => {
+    const result: [number, number][] = [];
+    points.forEach((point) => {
+      const last = result[result.length - 1];
+      if (!last || last[0] !== point[0] || last[1] !== point[1]) {
+        result.push(point);
+      }
+    });
+    return result;
+  }, []);
+
+  const clampPoints = useCallback((points: [number, number][], maxPoints = 25) => {
+    if (points.length <= maxPoints) return points;
+    const trimmed: [number, number][] = [];
+    const step = (points.length - 1) / (maxPoints - 1);
+    for (let i = 0; i < maxPoints; i += 1) {
+      const index = Math.round(i * step);
+      trimmed.push(points[index]);
+    }
+    return trimmed;
+  }, []);
+
+  const fetchRouteWithWaypoints = useCallback(
+    async (points: [number, number][]) => {
+      if (!mapboxgl.accessToken || points.length < 2) return null;
+      const cleaned = clampPoints(normalizePoints(points));
+      if (cleaned.length < 2) return null;
+      const coordString = cleaned.map((point) => `${point[0]},${point[1]}`).join(';');
+      const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coordString}?geometries=geojson&overview=full&access_token=${mapboxgl.accessToken}`;
+      try {
+        const response = await fetch(url);
+        if (!response.ok) return null;
+        const data = await response.json();
+        const coordinates = data?.routes?.[0]?.geometry?.coordinates;
+        if (!Array.isArray(coordinates)) return null;
+        return coordinates as [number, number][];
+      } catch (error) {
+        return null;
+      }
+    },
+    [clampPoints, normalizePoints]
+  );
+
   useEffect(() => {
     let isCancelled = false;
     if (selectedStatuses.length === 0) {
@@ -614,7 +657,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     const status = selectedTripMeta.status;
     const historyCoords: [number, number][] | null =
       Array.isArray(selectedTripView.tripHistory) &&
-      selectedTripView.tripHistory.length > 1
+      selectedTripView.tripHistory.length > 0
         ? selectedTripView.tripHistory
         : null;
 
@@ -629,31 +672,41 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
       status === 'started' ? selectedTripLiveLocation || driverPoint || startPoint : endPoint;
 
     if (historyCoords) {
-      const completedCoords = (() => {
-        if (status !== 'started' || !currentPoint) return historyCoords;
-        const last = historyCoords[historyCoords.length - 1];
-        if (last && last[0] === currentPoint[0] && last[1] === currentPoint[1]) {
-          return historyCoords;
-        }
-        return historyCoords.concat([currentPoint]);
-      })();
+      const requestId = ++routeRequestRef.current;
+      const loadHistoryRoute = async () => {
+        const baseHistory: [number, number][] = [];
+        if (startPoint) baseHistory.push(startPoint);
+        baseHistory.push(...historyCoords);
 
-      if (status === 'started' && endPoint && currentPoint) {
-        const requestId = ++routeRequestRef.current;
-        const loadRemaining = async () => {
+        const historyPath = (() => {
+          if (status !== 'started' || !currentPoint) {
+            if (endPoint) baseHistory.push(endPoint);
+            return baseHistory;
+          }
+          const last = baseHistory[baseHistory.length - 1];
+          if (!last || last[0] !== currentPoint[0] || last[1] !== currentPoint[1]) {
+            baseHistory.push(currentPoint);
+          }
+          return baseHistory;
+        })();
+
+        const completedRoute = await fetchRouteWithWaypoints(historyPath);
+        if (routeRequestRef.current !== requestId) return;
+
+        if (status === 'started' && endPoint && currentPoint) {
           const remainingRoute = await fetchRouteCoordinates(currentPoint, endPoint);
           if (routeRequestRef.current !== requestId) return;
           setRouteSegments({
-            completed: completedCoords,
+            completed: completedRoute || historyPath,
             remaining: remainingRoute || [currentPoint, endPoint],
           });
-        };
-        loadRemaining();
-        return;
-      }
+          return;
+        }
 
-      setRouteSegments({ completed: completedCoords });
-      routeRequestRef.current += 1;
+        setRouteSegments({ completed: completedRoute || historyPath });
+      };
+
+      loadHistoryRoute();
       return;
     }
 
@@ -695,6 +748,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     baseCoordinates,
     toLngLat,
     fetchRouteCoordinates,
+    fetchRouteWithWaypoints,
   ]);
 
   useEffect(() => {

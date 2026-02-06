@@ -84,18 +84,20 @@ export const tripsApi = createApi({
           orderId: response.data.order_id,
           startPoint: response?.data?.start_point,
           endPoint: response?.data?.end_point,
-          tripHistory: Array.isArray(response?.data?.trip_history)
-            ? response.data.trip_history
-                .map((item: any) => {
-                  const coord = item?.coordinate;
-                  if (!Array.isArray(coord) || coord.length !== 2) return null;
-                  const lng = typeof coord[0] === "number" ? coord[0] : parseFloat(coord[0]);
-                  const lat = typeof coord[1] === "number" ? coord[1] : parseFloat(coord[1]);
-                  if (Number.isNaN(lng) || Number.isNaN(lat)) return null;
-                  return [lng, lat];
-                })
-                .filter(Boolean)
-            : [],
+          tripHistory: (() => {
+            if (!Array.isArray(response?.data?.trip_history)) return null;
+            const history = response.data.trip_history
+              .map((item: any) => {
+                const coord = item?.coordinate;
+                if (!Array.isArray(coord) || coord.length !== 2) return null;
+                const lng = typeof coord[0] === "number" ? coord[0] : parseFloat(coord[0]);
+                const lat = typeof coord[1] === "number" ? coord[1] : parseFloat(coord[1]);
+                if (Number.isNaN(lng) || Number.isNaN(lat)) return null;
+                return [lng, lat];
+              })
+              .filter(Boolean);
+            return history.length > 0 ? history : null;
+          })(),
           driverTripRating: response?.data?.driver_rating,
           riderTripRating: response?.data?.rider_rating,
           tripRating: response?.data?.trip_rating,
