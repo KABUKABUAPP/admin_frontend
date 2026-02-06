@@ -611,15 +611,15 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
       return;
     }
 
+    const status = selectedTripMeta.status;
+    const historyCoords: [number, number][] | null =
+      Array.isArray(selectedTripView.tripHistory) &&
+      selectedTripView.tripHistory.length > 1
+        ? selectedTripView.tripHistory
+        : null;
+
     const startPoint = toLngLat(selectedTripView.startPoint);
     const endPoint = toLngLat(selectedTripView.endPoint);
-    if (!startPoint || !endPoint) {
-      setRouteSegments(null);
-      routeRequestRef.current += 1;
-      return;
-    }
-
-    const status = selectedTripMeta.status;
     const driverId = selectedTripMeta.driverId;
     const driverCoord = driverId
       ? baseCoordinates.find((coord: any) => coord?.type === 'driver' && String(coord._id) === String(driverId))
@@ -628,10 +628,49 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     const currentPoint =
       status === 'started' ? selectedTripLiveLocation || driverPoint || startPoint : endPoint;
 
+    if (historyCoords) {
+      const completedCoords = (() => {
+        if (status !== 'started' || !currentPoint) return historyCoords;
+        const last = historyCoords[historyCoords.length - 1];
+        if (last && last[0] === currentPoint[0] && last[1] === currentPoint[1]) {
+          return historyCoords;
+        }
+        return historyCoords.concat([currentPoint]);
+      })();
+
+      if (status === 'started' && endPoint && currentPoint) {
+        const requestId = ++routeRequestRef.current;
+        const loadRemaining = async () => {
+          const remainingRoute = await fetchRouteCoordinates(currentPoint, endPoint);
+          if (routeRequestRef.current !== requestId) return;
+          setRouteSegments({
+            completed: completedCoords,
+            remaining: remainingRoute || [currentPoint, endPoint],
+          });
+        };
+        loadRemaining();
+        return;
+      }
+
+      setRouteSegments({ completed: completedCoords });
+      routeRequestRef.current += 1;
+      return;
+    }
+
+    if (!startPoint || !endPoint) {
+      setRouteSegments(null);
+      routeRequestRef.current += 1;
+      return;
+    }
+
     const requestId = ++routeRequestRef.current;
 
     const loadRoutes = async () => {
       if (status === 'started') {
+        if (!currentPoint) {
+          setRouteSegments({ completed: [startPoint, endPoint] });
+          return;
+        }
         const completedRoute = await fetchRouteCoordinates(startPoint, currentPoint);
         const remainingRoute = await fetchRouteCoordinates(currentPoint, endPoint);
         if (routeRequestRef.current !== requestId) return;
