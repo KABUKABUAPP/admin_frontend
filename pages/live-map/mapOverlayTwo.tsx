@@ -60,7 +60,7 @@ const DriverModal : React.FC<DriverModalProps> = ({ driver, handleClose, type })
   const router = useRouter();
 
   return (
-    <Card elevation={true} maxWidth="320px" maxHeight="70vh">
+    <Card elevation={true} width="20vw" maxHeight="70vh">
       <div className="p-3 overflow-x-hidden relative" ref={ref}>
         <div className="flex justify-between">
           <p className="text-base font-bold">{type === 'driver' ? 'Driver' : 'Rider'}</p>
@@ -71,7 +71,7 @@ const DriverModal : React.FC<DriverModalProps> = ({ driver, handleClose, type })
             <CloseIcon />
           </span></p>
         </div>
-        <div className="flex p-3 justify-between">
+        <div className="flex py-3 justify-between">
           <div className="w-[25%]">
             {(driver.imageUrl || driver.fullName) && (
               <Avatar
@@ -210,6 +210,49 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
       return null;
     }
   }, []);
+
+  const normalizePoints = useCallback((points: [number, number][]) => {
+    const result: [number, number][] = [];
+    points.forEach((point) => {
+      const last = result[result.length - 1];
+      if (!last || last[0] !== point[0] || last[1] !== point[1]) {
+        result.push(point);
+      }
+    });
+    return result;
+  }, []);
+
+  const clampPoints = useCallback((points: [number, number][], maxPoints = 25) => {
+    if (points.length <= maxPoints) return points;
+    const trimmed: [number, number][] = [];
+    const step = (points.length - 1) / (maxPoints - 1);
+    for (let i = 0; i < maxPoints; i += 1) {
+      const index = Math.round(i * step);
+      trimmed.push(points[index]);
+    }
+    return trimmed;
+  }, []);
+
+  const fetchRouteWithWaypoints = useCallback(
+    async (points: [number, number][]) => {
+      if (!mapboxgl.accessToken || points.length < 2) return null;
+      const cleaned = clampPoints(normalizePoints(points));
+      if (cleaned.length < 2) return null;
+      const coordString = cleaned.map((point) => `${point[0]},${point[1]}`).join(';');
+      const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coordString}?geometries=geojson&overview=full&access_token=${mapboxgl.accessToken}`;
+      try {
+        const response = await fetch(url);
+        if (!response.ok) return null;
+        const data = await response.json();
+        const coordinates = data?.routes?.[0]?.geometry?.coordinates;
+        if (!Array.isArray(coordinates)) return null;
+        return coordinates as [number, number][];
+      } catch (error) {
+        return null;
+      }
+    },
+    [clampPoints, normalizePoints]
+  );
 
   useEffect(() => {
     let isCancelled = false;
@@ -611,15 +654,15 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
       return;
     }
 
+    const status = selectedTripMeta.status;
+    const historyCoords: [number, number][] | null =
+      Array.isArray(selectedTripView.tripHistory) &&
+      selectedTripView.tripHistory.length > 0
+        ? selectedTripView.tripHistory
+        : null;
+
     const startPoint = toLngLat(selectedTripView.startPoint);
     const endPoint = toLngLat(selectedTripView.endPoint);
-    if (!startPoint || !endPoint) {
-      setRouteSegments(null);
-      routeRequestRef.current += 1;
-      return;
-    }
-
-    const status = selectedTripMeta.status;
     const driverId = selectedTripMeta.driverId;
     const driverCoord = driverId
       ? baseCoordinates.find((coord: any) => coord?.type === 'driver' && String(coord._id) === String(driverId))
@@ -628,10 +671,59 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     const currentPoint =
       status === 'started' ? selectedTripLiveLocation || driverPoint || startPoint : endPoint;
 
+    if (historyCoords) {
+      const requestId = ++routeRequestRef.current;
+      const loadHistoryRoute = async () => {
+        const baseHistory: [number, number][] = [];
+        if (startPoint) baseHistory.push(startPoint);
+        baseHistory.push(...historyCoords);
+
+        const historyPath = (() => {
+          if (status !== 'started' || !currentPoint) {
+            if (endPoint) baseHistory.push(endPoint);
+            return baseHistory;
+          }
+          const last = baseHistory[baseHistory.length - 1];
+          if (!last || last[0] !== currentPoint[0] || last[1] !== currentPoint[1]) {
+            baseHistory.push(currentPoint);
+          }
+          return baseHistory;
+        })();
+
+        const completedRoute = await fetchRouteWithWaypoints(historyPath);
+        if (routeRequestRef.current !== requestId) return;
+
+        if (status === 'started' && endPoint && currentPoint) {
+          const remainingRoute = await fetchRouteCoordinates(currentPoint, endPoint);
+          if (routeRequestRef.current !== requestId) return;
+          setRouteSegments({
+            completed: completedRoute || historyPath,
+            remaining: remainingRoute || [currentPoint, endPoint],
+          });
+          return;
+        }
+
+        setRouteSegments({ completed: completedRoute || historyPath });
+      };
+
+      loadHistoryRoute();
+      return;
+    }
+
+    if (!startPoint || !endPoint) {
+      setRouteSegments(null);
+      routeRequestRef.current += 1;
+      return;
+    }
+
     const requestId = ++routeRequestRef.current;
 
     const loadRoutes = async () => {
       if (status === 'started') {
+        if (!currentPoint) {
+          setRouteSegments({ completed: [startPoint, endPoint] });
+          return;
+        }
         const completedRoute = await fetchRouteCoordinates(startPoint, currentPoint);
         const remainingRoute = await fetchRouteCoordinates(currentPoint, endPoint);
         if (routeRequestRef.current !== requestId) return;
@@ -656,6 +748,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     baseCoordinates,
     toLngLat,
     fetchRouteCoordinates,
+    fetchRouteWithWaypoints,
   ]);
 
   useEffect(() => {

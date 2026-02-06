@@ -61,6 +61,27 @@ const ViewTrip: NextPage = () => {
     lng: number;
     address: string;
   } | null>(null);
+  const tripHistory =
+    Array.isArray(data?.tripHistory) && data.tripHistory.length > 1
+      ? data.tripHistory
+      : null;
+  const livePoint =
+    liveLocation && Number.isFinite(liveLocation.lng) && Number.isFinite(liveLocation.lat)
+      ? ([liveLocation.lng, liveLocation.lat] as [number, number])
+      : null;
+  const effectiveTripHistory = (() => {
+    if (!tripHistory) return null;
+    if (!livePoint) return tripHistory;
+    const last = tripHistory[tripHistory.length - 1];
+    if (last && last[0] === livePoint[0] && last[1] === livePoint[1]) {
+      return tripHistory;
+    }
+    return tripHistory.concat([livePoint]);
+  })();
+  const fallbackStart =
+    data?.startPoint || (effectiveTripHistory ? effectiveTripHistory[0] : null);
+  const fallbackEnd =
+    data?.endPoint || (effectiveTripHistory ? effectiveTripHistory[effectiveTripHistory.length - 1] : null);
 
   useEffect(() => {
     if (tab === undefined) {
@@ -124,7 +145,7 @@ const ViewTrip: NextPage = () => {
     orderCreated
   }: Record<string, string | number>) => {
     const tripToEndStr = tab === 'completed' ? 'Trip Ended' : tab === 'cancelled_orders' ? 'Trip Cancelled' : 'Trip To End'
-    return [
+    const details: TripDetail[] = [
       {
         topTitle: "Origin",
         topValue: origin,
@@ -157,34 +178,6 @@ const ViewTrip: NextPage = () => {
         isRating: false,
       },
       {
-        topTitle:
-          new Date(tripStarted).toUTCString() != "Invalid Date"
-            ? tripStarted
-              ? "Trip started"
-              : ""
-            : "",
-        topValue: tripStarted ? new Date(tripStarted).toLocaleString() : "",
-        topIcon: <ClockIcon />,
-        bottomTitle:
-          new Date(tripToEnd).toUTCString() != "Invalid Date"
-            ? tripToEnd
-              ? tripToEndStr
-              : ""
-            : "",
-        bottomValue: tripToEnd ? new Date(tripToEnd).toLocaleString() : "",
-        bottomIcon: <ClockIcon />,
-        isRating: true,
-      },
-      {
-        topTitle: driverRating ? "Driver Rating" : "",
-        topValue: driverRating,
-        topIcon: <RatingIcon fill="#000000" />,
-        bottomTitle: riderRating ? "Rider Rating" : "",
-        bottomValue: riderRating,
-        bottomIcon: <RatingIcon fill="#000000" />,
-        isRating: true,
-      },
-      {
         topTitle: reason ? "Reason" : "",
         topValue: String(reason),
         topIcon: <TimesIcon fill="#000000" />,
@@ -194,6 +187,37 @@ const ViewTrip: NextPage = () => {
         isRating: false,
       },
     ];
+
+    const startedDate = new Date(tripStarted);
+    const endedDate = new Date(tripToEnd);
+    const hasStarted = !Number.isNaN(startedDate.getTime()) && Boolean(tripStarted);
+    const hasEnded = !Number.isNaN(endedDate.getTime()) && Boolean(tripToEnd);
+
+    if (hasStarted || hasEnded) {
+      details.splice(3, 0, {
+        topTitle: hasStarted ? "Trip started" : "",
+        topValue: hasStarted ? new Date(tripStarted).toLocaleString() : "",
+        topIcon: hasStarted ? <ClockIcon /> : "",
+        bottomTitle: hasEnded ? tripToEndStr : "",
+        bottomValue: hasEnded ? new Date(tripToEnd).toLocaleString() : "",
+        bottomIcon: hasEnded ? <ClockIcon /> : "",
+        isRating: true,
+      });
+    }
+
+    if (tab === "completed" && (driverRating || riderRating)) {
+      details.splice(4, 0, {
+        topTitle: driverRating ? "Driver Rating" : "",
+        topValue: driverRating,
+        topIcon: <RatingIcon fill="#000000" />,
+        bottomTitle: riderRating ? "Rider Rating" : "",
+        bottomValue: riderRating,
+        bottomIcon: <RatingIcon fill="#000000" />,
+        isRating: true,
+      });
+    }
+
+    return details;
   };
 
   const { userPermissions } = useUserPermissions();
@@ -255,7 +279,7 @@ const ViewTrip: NextPage = () => {
                   />
                 )}
                 <div className="w-full h-full max-h-[550px] max-md:pl-0">
-                  {data?.startPoint && data?.endPoint && (
+                  {Array.isArray(fallbackStart) && Array.isArray(fallbackEnd) && (
                     <>
                       {/*<RouteMap start={
                           liveLocation
@@ -265,12 +289,15 @@ const ViewTrip: NextPage = () => {
                         end={{lat: data?.endPoint[1], lng: data?.endPoint[0]}} 
                       />*/}
 
-                      <RouteMapThree start={
+                      <RouteMapThree
+                        start={
                           liveLocation
-                          ? [liveLocation.lng, liveLocation.lat]
-                          : [data?.startPoint[0], data?.startPoint[1]]
-                        } 
-                        end={[data?.endPoint[0], data?.endPoint[1]]} />
+                            ? [liveLocation.lng, liveLocation.lat]
+                            : [fallbackStart[0], fallbackStart[1]]
+                        }
+                        end={[fallbackEnd[0], fallbackEnd[1]]}
+                        routeCoordinates={effectiveTripHistory || undefined}
+                      />
                     </>
                   )}
                 </div>
