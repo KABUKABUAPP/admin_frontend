@@ -24,6 +24,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 mapboxgl.accessToken = `${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}` || '';
 //const socket = io(`${DEV_MONITOR_URL}`);
 const socket = io(`https://monitor-dev.up.railway.app`);
+const TRIP_START_POINT_ICON = '/trip-start-point.png';
 
 
 interface MapOverlayProps {
@@ -608,11 +609,13 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     return [lng, lat];
   }, []);
 
-  const buildSelectedTripMarker = useCallback(() => {
-    if (!selectedTripId || !selectedTripMeta) return null;
+  const buildSelectedTripMarkers = useCallback(() => {
+    if (!selectedTripId || !selectedTripMeta) return [];
     const status = selectedTripMeta.status;
+    const tripIcon = getTripIcon(status);
     const driverId = selectedTripMeta.driverId;
     const startPoint = toLngLat(selectedTripView?.startPoint);
+    const endPoint = toLngLat(selectedTripView?.endPoint);
     const driverCoord = driverId
       ? baseCoordinates.find((coord: any) => coord?.type === 'driver' && String(coord._id) === String(driverId))
       : null;
@@ -627,16 +630,75 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
       point = startPoint;
     }
 
-    if (!point) return null;
+    const markers: any[] = [];
+    const samePoint =
+      point !== null &&
+      startPoint !== null &&
+      point[0] === startPoint[0] &&
+      point[1] === startPoint[1];
 
-    return {
-      lat: point[1],
-      lng: point[0],
-      type: 'trip',
-      status,
-      _id: String(selectedTripId),
-      iconUrl: getTripIcon(status),
-    };
+    if (point) {
+      markers.push({
+        lat: point[1],
+        lng: point[0],
+        type: 'trip',
+        status,
+        _id: String(selectedTripId),
+        iconUrl: tripIcon,
+      });
+    }
+
+    if (startPoint) {
+      if (!point || samePoint) {
+        if (markers.length > 0) {
+          markers[0] = {
+            ...markers[0],
+            type: 'trip-start',
+            iconUrl: TRIP_START_POINT_ICON,
+          };
+        } else {
+          markers.push({
+            lat: startPoint[1],
+            lng: startPoint[0],
+            type: 'trip-start',
+            status,
+            _id: `${String(selectedTripId)}-start`,
+            iconUrl: TRIP_START_POINT_ICON,
+          });
+        }
+      } else {
+        markers.push({
+          lat: startPoint[1],
+          lng: startPoint[0],
+          type: 'trip-start',
+          status,
+          _id: `${String(selectedTripId)}-start`,
+          iconUrl: TRIP_START_POINT_ICON,
+        });
+      }
+    }
+
+    if (endPoint) {
+      const hasTripIconAtEnd = markers.some(
+        (marker: any) =>
+          marker.lng === endPoint[0] &&
+          marker.lat === endPoint[1] &&
+          marker.iconUrl === tripIcon
+      );
+
+      if (!hasTripIconAtEnd) {
+        markers.push({
+          lat: endPoint[1],
+          lng: endPoint[0],
+          type: 'trip-end',
+          status,
+          _id: `${String(selectedTripId)}-end`,
+          iconUrl: tripIcon,
+        });
+      }
+    }
+
+    return markers;
   }, [
     selectedTripId,
     selectedTripMeta,
@@ -753,12 +815,12 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
 
   useEffect(() => {
     if (selectedTripId) {
-      const marker = buildSelectedTripMarker();
-      setCoordinates(marker ? [marker] : []);
+      const markers = buildSelectedTripMarkers();
+      setCoordinates(markers);
       return;
     }
     setCoordinates(baseCoordinates.concat(tripCoordinates));
-  }, [selectedTripId, baseCoordinates, tripCoordinates, buildSelectedTripMarker]);
+  }, [selectedTripId, baseCoordinates, tripCoordinates, buildSelectedTripMarkers]);
 
   useEffect(() => {
     hasCenteredRef.current = false;
@@ -837,10 +899,10 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     el.style.backgroundPosition = 'center';
     el.style.cursor = 'pointer';
     el.dataset.id = coord._id;
-    if (coord.type !== 'trip') {
+    if (coord.type === 'driver' || coord.type === 'rider') {
       el.addEventListener('mouseenter', () => handleMarkerEnter(coord));
       el.addEventListener('mouseleave', () => scheduleHideTooltip());
-    } else {
+    } else if (coord.type === 'trip') {
       el.addEventListener('click', () => handleTripClick(coord));
     }
     return el;
