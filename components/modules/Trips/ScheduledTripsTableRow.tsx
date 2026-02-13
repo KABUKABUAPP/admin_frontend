@@ -1,6 +1,6 @@
 import React, { FC } from "react";
-import OriginCell from "../../common/OriginCell";
 import OriginDestinationCell from "../../common/OriginDestinationCell";
+import OriginCell from "../../common/OriginCell";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { capitalizeAllFirstLetters } from "@/utils";
@@ -15,12 +15,13 @@ interface Props {
     carModel: string;
     plateNumber: string;
     status: string;
+    reason: string;
   };
   index: number;
   currentPage: number;
 }
 
-const TripsTableRow: FC<Props> = ({
+const ScheduledTripsTableRow: FC<Props> = ({
   data: {
     id,
     origin,
@@ -30,23 +31,23 @@ const TripsTableRow: FC<Props> = ({
     carModel,
     plateNumber,
     status,
+    reason,
   },
   index,
   currentPage
 }) => {
-  const router = useRouter()
-  const { tab } = router.query
-  const tabUrl = tab ? `tab=${tab}` : '';
-  const isActiveTrip = tab === "active" || status?.toLowerCase() === "started" || status?.toLowerCase() === "active";
-  const statusBadgeClassName = isActiveTrip
-    ? "text-xs font-bold bg-[#EAF0FF] text-[#2B3DDE] rounded-full px-2 py-1 text-center"
-    : "text-xs font-bold bg-[#F7F7F7] rounded-full px-2 py-1 text-center";
+  const router = useRouter();
+  const { tab } = useRouter().query
 
   return (
-    <div onClick={()=>router.push(`/trips/${id}?${tabUrl}&current_page=${currentPage}`)} className="flex p-3 gap-6 border-b border-b[#E6E6E6] cursor-pointer" key={index}>
-      <div style={{ flex: 1 }} className="flex items-center">
+    <div
+      onClick={() => router.push(`/trips/${id}?tab=${tab}&reason=${reason}&current_page=${currentPage}`)}
+      className="flex p-3 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
+      key={index}
+    >
+      <div style={{ flex: 1 }} className="flex items-center break-all">
         <Link href={`/trips/${id}`}>
-          <p className="text-xs font-bold cursor-pointer">{id.substring(0, 6)}</p>
+          <p className="text-xs font-bold">{id.substring(0, 6)}</p>
         </Link>
       </div>
 
@@ -55,27 +56,23 @@ const TripsTableRow: FC<Props> = ({
       </div>
 
       <div style={{ flex: 2 }}>
-        <OriginDestinationCell origin={origin} destination={destination} />
+        <OriginDestinationCell destination={destination} origin={origin} />
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
         <p className="text-xs font-bold">{capitalizeAllFirstLetters(rider)}</p>
       </div>
 
-      <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{capitalizeAllFirstLetters(driver)}</p>
-      </div>
-
-      <div style={{ flex: 2 }} className="flex flex-col gap-3 justify-center">
+      <div style={{ flex: 1 }} className="flex flex-col gap-3 justify-center">
         <p className="text-xs font-bold">{capitalizeAllFirstLetters(carModel)}</p>
         <p className="text-xs text-[#667085]">{plateNumber}</p>
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className={statusBadgeClassName}>{capitalizeAllFirstLetters(status)}</p>
+        <p className="text-xs font-bold bg-[#FEE2E9] text-[#B2183E] px-2 py-1 rounded-full">{reason}</p>
       </div>
     </div>
   );
 };
 
-export default TripsTableRow;
+export default ScheduledTripsTableRow;

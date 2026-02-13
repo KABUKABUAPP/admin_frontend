@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
 import TripsTableHeadRow from "./TripsTableHeadRow";
 import { cancelledTripsRowMockData } from "../../../constants";
-import CancelledTripsTableRow from "./CancelledTripsTableRow";
+import ScheduledTripsTableRow from "./ScheduledTripsTableRow";
 import Pagination from "@/components/common/Pagination";
 import TripsTableRow from "./TripsTableRow";
 import { FormattedTripOrder, TripData } from "@/models/Trips";
@@ -11,11 +11,10 @@ import { useRouter } from "next/router";
 
 const headCellData = [
   { title: "ID", flex: 1 },
+  { title: "Origin", flex: 2 },
   { title: "Origin/Destination", flex: 2 },
   { title: "Rider", flex: 1 },
-  { title: "Driver", flex: 1 },
   { title: "Car", flex: 1 },
-  { title: "Status", flex: 1 },
   { title: "Reason", flex: 1 },
 ];
 
@@ -84,7 +83,7 @@ const ScheduledTripsTable: FC<Props> = ({ setTripCount, tableSearch, order }) =>
           TableHeadComponent={<TripsTableHeadRow headCellData={headCellData} />}
           maxWidth="100vw"
           rowComponent={(row, index) => (
-            <CancelledTripsTableRow data={row} index={index} currentPage={currentPage} />
+            <ScheduledTripsTableRow data={row} index={index} currentPage={currentPage} />
           )}
           rowData={data ? formatTripData(data?.data.data) : undefined}
           isError={isError}

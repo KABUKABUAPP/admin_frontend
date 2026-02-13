@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import OriginDestinationCell from "../../common/OriginDestinationCell";
+import OriginCell from "../../common/OriginCell";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { capitalizeAllFirstLetters } from "@/utils";
@@ -46,8 +47,12 @@ const CancelledTripsTableRow: FC<Props> = ({
     >
       <div style={{ flex: 1 }} className="flex items-center break-all">
         <Link href={`/trips/${id}`}>
-          <p className="text-xs font-bold">{id}</p>
+          <p className="text-xs font-bold">{id.substring(0, 6)}</p>
         </Link>
+      </div>
+
+      <div className="flex items-center" style={{ flex: 2 }}>
+        <OriginCell origin={origin} />
       </div>
 
       <div style={{ flex: 2 }}>
@@ -64,7 +69,7 @@ const CancelledTripsTableRow: FC<Props> = ({
 
       <div style={{ flex: 1 }} className="flex flex-col gap-3 justify-center">
         <p className="text-xs font-bold">{capitalizeAllFirstLetters(carModel)}</p>
-        <p className="text-xs font-bold">{plateNumber}</p>
+        <p className="text-xs text-[#667085]">{plateNumber}</p>
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
@@ -72,7 +77,7 @@ const CancelledTripsTableRow: FC<Props> = ({
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold ">{reason}</p>
+        <p className="text-xs font-bold bg-[#FEE2E9] text-[#B2183E] px-2 py-1 rounded-full">{reason}</p>
       </div>
     </div>
   );
