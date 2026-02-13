@@ -153,20 +153,6 @@ const Trips: NextPage = () => {
             order={selectedFilterOption}
           />
         )}
-        {tab === tabOptions[Tab.PENDING_ORDERS] && (
-          <PendingOrdersTable
-            setTripCount={setTripCount}
-            tableSearch={tableSearch}
-            order={selectedFilterOption}
-          />
-        )}
-        {tab === tabOptions[Tab.CANCELLED_ORDERS] && (
-          <CancelledOrdersTable
-            setTripCount={setTripCount}
-            tableSearch={tableSearch}
-            order={selectedFilterOption}
-          />
-        )}
         {tab === tabOptions[Tab.SCHEDULED_TRIPS] && (
           <ScheduledTripsTable
             setTripCount={setTripCount}
