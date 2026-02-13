@@ -27,10 +27,8 @@ const Trips: NextPage = () => {
   const tabOptions = [
     undefined,
     "pending",
-    "pending_orders",
     "active",
     "completed",
-    "cancelled_orders",
     "declined",
     "scheduled_trips"
   ];
