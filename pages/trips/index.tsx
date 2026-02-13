@@ -29,7 +29,7 @@ const Trips: NextPage = () => {
     "pending",
     "active",
     "completed",
-    "declined",
+    "cancelled",
     "scheduled_trips"
   ];
 

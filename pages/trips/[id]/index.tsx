@@ -38,12 +38,12 @@ const ViewTrip: NextPage = () => {
   const router = useRouter();
   const [currentCardSubTitle, setCurrentCardSubTitle] = useState("");
   const { id, tab, reason } = router.query;
-  const tabOptions = [undefined, "pending", "active", "completed", "declined"];
+  const tabOptions = [undefined, "pending", "active", "completed", "cancelled"];
   const cardSubTitleMap: Record<string, string> = {
     pending: "Driving to rider",
     active: "Driving to destination",
     completed: "Trip completed",
-    declined: "Cancelled order",
+    cancelled: "Cancelled order",
   };
   enum Tab {
     TRIP_ORDERS,
@@ -144,7 +144,7 @@ const ViewTrip: NextPage = () => {
     riderRating,
     orderCreated
   }: Record<string, string | number>) => {
-    const tripToEndStr = tab === 'completed' ? 'Trip Ended' : tab === 'cancelled_orders' ? 'Trip Cancelled' : 'Trip To End'
+    const tripToEndStr = tab === 'completed' ? 'Trip Ended' : tab === 'cancelled' ? 'Trip Cancelled' : 'Trip To End'
     const details: TripDetail[] = [
       {
         topTitle: "Origin",

@@ -47,7 +47,6 @@ const CompletedTripsTable:FC<Props> = ({ setTripCount, tableSearch, order }) => 
 
   useEffect(()=>{
     if(data){
-      console.log({data})
       setTripCount(data.data.pagination.totalCount)
     }
 

@@ -256,7 +256,7 @@ export const TripsOptionsBarData = [
   {
     title: "Cancelled Trips",
     isActive: false,
-    keyVal: "cancelled_orders",
+    keyVal: "cancelled",
   },
   {
     title: "Scheduled Trips",
