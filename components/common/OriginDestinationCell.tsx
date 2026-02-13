@@ -1,32 +1,24 @@
 import React, { FC } from "react";
 import OriginIcon from "@/components/icons/OriginIcon";
 import DestinationIcon from "@/components/icons/DestinationIcon";
+import { capitalizeAllFirstLetters } from "@/utils";
 
 interface Props {
-  origin: string;
   destination: string;
+  origin: string;
 }
 
-const OriginDestinationCell: FC<Props> = ({ origin, destination }) => {
+const OriginDestinationCell: FC<Props> = ({ destination, origin }) => {
   return (
-    <div className="pr-16 max-md:pr-8 max-sm:pr-0">
-      <div className="flex items-center gap-2 pb-4 border-b border-b-[#E6E6E6]">
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-2">
         <div>
-          <OriginIcon />
-        </div>
-        <div>
-          <p className="text-xs text-[#9A9A9A] mb-2">Origin</p>
-          <p className="text-xs font-bold">{origin}</p>
+          <p className="text-xs font-bold">{capitalizeAllFirstLetters(origin)}</p>
         </div>
       </div>
-
-      <div className="flex items-center gap-2 pt-4">
+      <div className="flex items-center gap-2">
         <div>
-          <DestinationIcon />
-        </div>
-        <div>
-          <p className="text-xs text-[#9A9A9A] mb-2">Destination</p>
-          <p className="text-xs font-bold">{destination}</p>
+          <p className="text-xs text-[#667085]">{(capitalizeAllFirstLetters(destination))}</p>
         </div>
       </div>
     </div>

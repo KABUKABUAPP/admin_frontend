@@ -4,6 +4,7 @@ import Rating from "react-star-ratings";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { capitalizeAllFirstLetters } from "@/utils";
+import OriginCell from "../../common/OriginCell";
 
 interface Props {
   data: {
@@ -15,7 +16,7 @@ interface Props {
     carModel: string;
     plateNumber: string;
     status: string;
-    price: string;
+    endTime: string;
     rating: number;
   };
   index: number;
@@ -32,7 +33,7 @@ const CompletedTripsTableRow: FC<Props> = ({
     carModel,
     plateNumber,
     status,
-    price,
+    endTime,
     rating,
   },
   index,
@@ -49,12 +50,16 @@ const CompletedTripsTableRow: FC<Props> = ({
     >
       <div style={{ flex: 2 }} className="flex items-center cursor-pointer">
         <Link href={`/trips/${id}`}>
-          <p className="text-xs font-bold">{id}</p>
+          <p className="text-xs font-bold">{id.substring(0, 6)}</p>
         </Link>
       </div>
 
+      <div className="flex items-center" style={{ flex: 2 }}>
+        <OriginCell origin={origin} />
+      </div>
+
       <div style={{ flex: 2 }}>
-        <OriginDestinationCell destination={destination} origin={origin} />
+        <OriginDestinationCell origin={origin} destination={destination} />
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
@@ -67,17 +72,13 @@ const CompletedTripsTableRow: FC<Props> = ({
 
       <div style={{ flex: 1 }} className="flex flex-col gap-3 justify-center">
         <p className="text-xs font-bold">{capitalizeAllFirstLetters(carModel)}</p>
-        <p className="text-xs font-bold">{plateNumber}</p>
+        <p className="text-xs text-[#667085]">{plateNumber}</p>
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">{status}</p>
-      </div>
-
-      <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold">
-          {price && "₦"}
-          {price}
+        <p className="text-xs font-bold bg-[#E3FFE2] text-[#1A8B18] px-2 py-1 rounded-full text-center">
+          {capitalizeAllFirstLetters(status)} <br />
+          at {endTime}
         </p>
       </div>
 

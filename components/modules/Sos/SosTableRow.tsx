@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import OriginDestinationCell from "@/components/common/OriginDestinationCell";
+import OriginDestinationCell from "@/components/common/OriginCell";
 import Link from "next/link";
 import { useRouter } from "next/router";
 

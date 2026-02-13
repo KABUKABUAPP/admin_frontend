@@ -10,12 +10,13 @@ import { useRouter } from "next/router";
 
 const headCellData = [
   { title: "ID", flex: 2 },
+  { title: "Origin", flex: 2 },
   { title: "Origin/Destination", flex: 2 },
   { title: "Rider", flex: 1 },
   { title: "Driver", flex: 1 },
   { title: "Car", flex: 1 },
   { title: "Status", flex: 1 },
-  { title: "Price", flex: 1},
+  //{ title: "Price", flex: 1},
   { title: "Rating", flex: 1}
 ];
 
@@ -46,6 +47,7 @@ const CompletedTripsTable:FC<Props> = ({ setTripCount, tableSearch, order }) => 
 
   useEffect(()=>{
     if(data){
+      console.log({data})
       setTripCount(data.data.pagination.totalCount)
     }
 
@@ -71,7 +73,8 @@ const CompletedTripsTable:FC<Props> = ({ setTripCount, tableSearch, order }) => 
         status: trip.status,
         reason: trip?.cancel_trip_reason,
         rating: trip?.rating?.value,
-        price: trip?.price
+        price: trip?.price,
+        endTime: new Date(trip.end_time).getHours() + ':' + new Date(trip.end_time).getMinutes(),
       };
     });
 
