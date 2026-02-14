@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import OriginDestinationCell from "../../common/OriginCell";
+import OriginDestinationCell from "../../common/OriginDestinationCell";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { capitalizeAllFirstLetters } from "@/utils";

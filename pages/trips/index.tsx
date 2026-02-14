@@ -3,9 +3,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 
 import AppLayout from "@/layouts/AppLayout";
-import TripsOptionBar from "@/components/modules/Trips/TripsOptionBar";
 import { TripsOptionsBarData } from "@/constants";
-import SearchFilterBar from "@/components/common/SearchFilterBar";
 import CountHeader from "@/components/common/CountHeader";
 import TripOrdersTable from "@/components/modules/Trips/TripOrdersTable";
 import PendingTripsTable from "@/components/modules/Trips/PendingTripsTable";
@@ -16,6 +14,9 @@ import PendingOrdersTable from "@/components/modules/Trips/PendingOrdersTable";
 import CancelledOrdersTable from "@/components/modules/Trips/CancelledOrdersTable";
 import AppHead from "@/components/common/AppHead";
 import ScheduledTripsTable from "@/components/modules/Trips/ScheduledTripsTable";
+import TripsSearchFilterBar from "@/components/modules/Trips/TripsSearchFilterBar";
+import TextField from "@/components/ui/Input/TextField/TextField";
+import SearchIcon from "@/components/icons/SearchIcon";
 
 const Trips: NextPage = () => {
   const [optionsList, setOptionsList] = useState([...TripsOptionsBarData]);
@@ -26,11 +27,9 @@ const Trips: NextPage = () => {
   const tabOptions = [
     undefined,
     "pending",
-    "pending_orders",
     "active",
     "completed",
-    "cancelled_orders",
-    "declined",
+    "cancelled",
     "scheduled_trips"
   ];
 
@@ -50,11 +49,9 @@ const Trips: NextPage = () => {
   enum Tab {
     TRIP_ORDERS,
     PENDING_TRIPS,
-    PENDING_ORDERS,
     ACTIVE_TRIPS,
     COMPLETED_TRIPS,
     CANCELLED_TRIPS,
-    CANCELLED_ORDERS,
     SCHEDULED_TRIPS
   }
 
@@ -97,17 +94,25 @@ const Trips: NextPage = () => {
     <>
       <AppHead title="Kabukabu | Trips" />
       <AppLayout>
-        <CountHeader title={tripTitle} count={tripCount} />
-        <TripsOptionBar
+        <div className="w-full bg-transparent rounded-lg flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <CountHeader title={tripTitle} count={tripCount} />
+          <div className="w-full sm:w-[15vw]">
+            <TextField
+              startIcon={<SearchIcon />}
+              className="!bg-[#E6E6E6]"
+              placeholder="Search here"
+              value={tableSearch}
+              onChange={(e) => setTableSearch(e.target.value)}
+            />
+          </div>
+        </div>
+        <TripsSearchFilterBar
           options={optionsList}
           handleClickOption={(keyVal) => {
             handleClickOption(keyVal);
           }}
-        />
-        <SearchFilterBar
           filterOptions={filterOptions}
           handleDropDown={(val) => handleFilterOptionChanged(String(val))}
-          handleSearch={(val) => setTableSearch(val)}
           dropDownOptionSelected={selectedFilterOption}
         />
 
@@ -141,20 +146,6 @@ const Trips: NextPage = () => {
         )}
         {tab === tabOptions[Tab.CANCELLED_TRIPS] && (
           <CancelledTripsTable
-            setTripCount={setTripCount}
-            tableSearch={tableSearch}
-            order={selectedFilterOption}
-          />
-        )}
-        {tab === tabOptions[Tab.PENDING_ORDERS] && (
-          <PendingOrdersTable
-            setTripCount={setTripCount}
-            tableSearch={tableSearch}
-            order={selectedFilterOption}
-          />
-        )}
-        {tab === tabOptions[Tab.CANCELLED_ORDERS] && (
-          <CancelledOrdersTable
             setTripCount={setTripCount}
             tableSearch={tableSearch}
             order={selectedFilterOption}
