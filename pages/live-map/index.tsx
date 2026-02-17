@@ -9,14 +9,18 @@ import { useGetInsightsQuery } from '@/api-services/dashboardService';
 import { useDashboardState } from "@/contexts/StateSegmentationContext";
 import MapOverlayTwo from './mapOverlayTwo';
 import TripDetailsCard from '@/components/modules/Trips/TripDetailsCard';
+import CarOccupantDetailsCard from '@/components/modules/Trips/CarOccupantDetailsCard';
 import OriginIcon from '@/components/icons/OriginIcon';
 import DestinationIcon from '@/components/icons/DestinationIcon';
 import WalletIcon from '@/components/icons/WalletIcon';
 import ClockIcon from '@/components/icons/ClockIcon';
 import RatingIcon from '@/components/icons/RatingIcon';
 import { TripDetail } from '@/models/Trips';
+import { useRouter } from 'next/router';
+import { capitalizeAllFirstLetters } from '@/utils';
 
 const IndexPage: React.FC = () => {
+  const router = useRouter();
   const [dropDownOptionSelected, setDropDownOptionSelected] = useState('');
   const [expandTrue, setExpandTrue] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
@@ -228,6 +232,11 @@ const IndexPage: React.FC = () => {
     if (status === 'cancelled') return 'Cancelled trip';
     return 'Trip details';
   })();
+
+  const hasDriverDetails =
+    Boolean(selectedTrip?.viewTrip?.driverFullname) ||
+    Boolean(selectedTrip?.viewTrip?.driverId) ||
+    Boolean(selectedTrip?.loading);
 
   return (
     <>
@@ -504,7 +513,7 @@ const IndexPage: React.FC = () => {
                     </div>
                   </>
                 ) : (
-                  <div className={styles.tripDetailsWrapper}>
+                  <div className={`${styles.tripDetailsWrapper} max-h-[78vh] overflow-y-auto scrollbar-none pr-1`}>
                     <div className={styles.tripDetailsCard}>
                       <TripDetailsCard
                         variant="map"
@@ -513,8 +522,48 @@ const IndexPage: React.FC = () => {
                         cardSubTitle={selectedTripSubtitle}
                         data={selectedTripDetails}
                         mapPrice={selectedTrip?.viewTrip?.estimatedPrice ?? ''}
+                        mapRiderName={selectedTrip?.viewTrip?.riderFullName}
+                        mapDriverName={selectedTrip?.viewTrip?.driverFullname}
                       />
                     </div>
+                    <div className="mt-4">
+                      <CarOccupantDetailsCard
+                        isRider={true}
+                        name={selectedTrip?.viewTrip?.riderFullName}
+                        location={selectedTrip?.viewTrip?.riderLocation}
+                        tripCount={selectedTrip?.viewTrip?.riderTripCount}
+                        rating={selectedTrip?.viewTrip?.riderRating}
+                        viewProfileLink={
+                          selectedTrip?.viewTrip?.riderId &&
+                          `/riders/${selectedTrip?.viewTrip?.riderId}?fallbackUrl=${router.asPath}`
+                        }
+                        buttonTitle="View Rider's Profile"
+                        imageUri={selectedTrip?.viewTrip?.riderImage}
+                        isLoading={Boolean(selectedTrip?.loading)}
+                        permissionKey="riders_permissions"
+                      />
+                    </div>
+                    {hasDriverDetails && (
+                      <div className="mt-4">
+                        <CarOccupantDetailsCard
+                          isRider={false}
+                          name={selectedTrip?.viewTrip?.driverFullname}
+                          location={selectedTrip?.viewTrip?.driverLocation}
+                          tripCount={selectedTrip?.viewTrip?.driverTripCount}
+                          rating={selectedTrip?.viewTrip?.driverRating}
+                          viewProfileLink={
+                            selectedTrip?.viewTrip?.driverId &&
+                            `/drivers/active/${selectedTrip?.viewTrip?.driverId}?fallbackUrl=${router.asPath}`
+                          }
+                          carModel={capitalizeAllFirstLetters(selectedTrip?.viewTrip?.carModel)}
+                          carPlateNumber={selectedTrip?.viewTrip?.plateNumber}
+                          buttonTitle="View Driver's Profile"
+                          imageUri={selectedTrip?.viewTrip?.driverImage}
+                          isLoading={Boolean(selectedTrip?.loading)}
+                          permissionKey="drivers_permissions"
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
