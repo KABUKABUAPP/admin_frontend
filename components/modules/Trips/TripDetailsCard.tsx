@@ -9,6 +9,8 @@ interface Props {
   onBack?: () => void;
   isLoading?: boolean;
   mapPrice?: string | number;
+  mapRiderName?: string;
+  mapDriverName?: string;
 }
 
 const TripDetailsCard: FC<Props> = ({
@@ -18,15 +20,17 @@ const TripDetailsCard: FC<Props> = ({
   onBack,
   isLoading = false,
   mapPrice,
+  mapRiderName,
+  mapDriverName,
 }) => {
   const isMapVariant = variant === "map";
   const formattedMapPrice = (() => {
     if (mapPrice === undefined || mapPrice === null || mapPrice === "") return "";
     const numeric = Number(mapPrice);
     if (!Number.isNaN(numeric)) {
-      return `₦${numeric.toLocaleString()}`;
+      return `\u20A6${numeric.toLocaleString()}`;
     }
-    return `₦${mapPrice}`;
+    return `\u20A6${mapPrice}`;
   })();
   return (
     <div
@@ -67,7 +71,7 @@ const TripDetailsCard: FC<Props> = ({
       </div>
       <div
         className={`flex flex-col w-full gap-6 ${
-          isMapVariant ? "flex-1 min-h-0 overflow-y-auto pr-1" : ""
+          isMapVariant ? "flex-1 min-h-0 overflow-y-auto scrollbar-none pr-1" : ""
         }`}
       >
         {isLoading ? (
@@ -89,3 +93,4 @@ const TripDetailsCard: FC<Props> = ({
 };
 
 export default TripDetailsCard;
+

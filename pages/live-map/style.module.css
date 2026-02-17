@@ -85,8 +85,35 @@
   z-index: 3;
 }
 
+.tripDetailsWrapperPersistent {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  width: 26%;
+  min-width: 320px;
+  max-width: 420px;
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 3;
+}
+
 .tripDetailsCard {
   width: 100%;
+}
+
+.tripActionsOverlay {
+  position: absolute;
+  top: 10%;
+  right: 3%;
+  max-width: 55%;
+  color: #000;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  z-index: 3;
 }
 
 .overlayFullscreen {
@@ -98,7 +125,9 @@
 
 .overlayFullscreen .overlay,
 .overlayFullscreen .overlaySecondWrapper,
-.overlayFullscreen .tripDetailsWrapper {
+.overlayFullscreen .tripDetailsWrapper,
+.overlayFullscreen .tripDetailsWrapperPersistent,
+.overlayFullscreen .tripActionsOverlay {
   pointer-events: auto;
 }
 
@@ -141,5 +170,20 @@
   .overlaySecondWrapper,
   .tripDetailsWrapper {
       display: none;
+  }
+
+  .tripActionsOverlay {
+    right: 2%;
+    top: 2%;
+    max-width: 94%;
+    justify-content: flex-end;
+  }
+
+  .tripDetailsWrapperPersistent {
+    left: 2%;
+    top: 12%;
+    width: 96%;
+    min-width: 0;
+    max-width: 96%;
   }
 } 

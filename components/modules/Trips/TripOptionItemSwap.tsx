@@ -9,11 +9,11 @@ interface Props {
 
 const TripOptionItemSwap: FC<Props> = ({ title, isActive, handleClick, keyVal }) => {
   return (
-    <div className="border-r border-r-[#E6E6E6] px-1 max-sm:border-r-0 max-sm:py-3 max-sm:border-b">
+    <div className="px-1 max-sm:py-3">
       <p
         className={`${
-          isActive ? "text-xs text-[#000] font-bold" : "text-xs text-[#9A9A9A]"
-        } cursor-pointer max-sm:text-center`}
+          isActive ? "text-xs text-[#000] font-bold bg-[#FFF] rounded-lg" : "text-xs text-[#9A9A9A]"
+        } py-1 px-2 cursor-pointer max-sm:text-center`}
         onClick={() => handleClick(keyVal)}
       >
         {title}

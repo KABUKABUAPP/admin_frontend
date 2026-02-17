@@ -8,7 +8,7 @@ interface Props {
 
 const TripsOptionBarSwap: FC<Props> = ({ options, handleClickOption }) => {
   return (
-    <div className="w-full py-3 flex max-sm:flex-col rounded-lg overflow-x-auto">
+    <div className="w-full py-3 flex max-sm:flex-col rounded-lg overflow-x-auto gap-3">
       {options.map((item, idx) => {
         return (
           <TripOptionItemSwap

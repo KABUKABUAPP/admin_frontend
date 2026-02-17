@@ -121,6 +121,11 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<Map<string, { marker: mapboxgl.Marker; hash: string }>>(new Map());
   const hasCenteredRef = useRef(false);
+  const selectedTripCenteredRef = useRef<{
+    tripId: string;
+    centered: boolean;
+    centeredWithRoute: boolean;
+  } | null>(null);
   const tripStartPointCacheRef = useRef<Map<string, [number, number]>>(new Map());
   const selectedTripCacheRef = useRef<Map<string, any>>(new Map());
   const activeTripSocketRef = useRef<any | null>(null);
@@ -824,6 +829,15 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
 
   useEffect(() => {
     hasCenteredRef.current = false;
+    if (!selectedTripId) {
+      selectedTripCenteredRef.current = null;
+      return;
+    }
+    selectedTripCenteredRef.current = {
+      tripId: String(selectedTripId),
+      centered: false,
+      centeredWithRoute: false,
+    };
   }, [selectedTripId, selectedStatuses.join('|')]);
 
   const updateTooltipPosition = useCallback((coord: any) => {
@@ -991,11 +1005,76 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
       }
     });
 
-    if (!hasCenteredRef.current && coordinates.length > 0) {
+    if (!selectedTripId && !hasCenteredRef.current && coordinates.length > 0) {
       map.jumpTo({ center: [coordinates[0].lng, coordinates[0].lat], zoom: 12 });
       hasCenteredRef.current = true;
     }
-  }, [coordinates, createMarkerElement, mapReady, iconUrlDriver, iconUrlRider]);
+  }, [selectedTripId, coordinates, createMarkerElement, mapReady, iconUrlDriver, iconUrlRider]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady || !selectedTripId) return;
+
+    const tripId = String(selectedTripId);
+    if (!selectedTripCenteredRef.current || selectedTripCenteredRef.current.tripId !== tripId) {
+      selectedTripCenteredRef.current = {
+        tripId,
+        centered: false,
+        centeredWithRoute: false,
+      };
+    }
+
+    const centerState = selectedTripCenteredRef.current;
+    const completed = routeSegments?.completed || [];
+    const remaining = routeSegments?.remaining || [];
+    const hasRoute = completed.length > 1 || remaining.length > 1;
+
+    if (centerState.centered && (!hasRoute || centerState.centeredWithRoute)) {
+      return;
+    }
+
+    const markerPoints = coordinates
+      .map((coord: any) => {
+        const lng = typeof coord?.lng === 'number' ? coord.lng : NaN;
+        const lat = typeof coord?.lat === 'number' ? coord.lat : NaN;
+        if (Number.isNaN(lng) || Number.isNaN(lat)) return null;
+        return [lng, lat] as [number, number];
+      })
+      .filter(Boolean) as [number, number][];
+
+    const routePoints = [...completed, ...remaining];
+    const focusPoints = hasRoute ? [...routePoints, ...markerPoints] : markerPoints;
+
+    if (focusPoints.length === 0) return;
+
+    if (focusPoints.length === 1) {
+      map.easeTo({
+        center: focusPoints[0],
+        zoom: 13,
+        duration: 700,
+      });
+    } else {
+      const bounds = new mapboxgl.LngLatBounds(focusPoints[0], focusPoints[0]);
+      focusPoints.slice(1).forEach((point) => {
+        bounds.extend(point);
+      });
+
+      const mapWidth = map.getCanvas().clientWidth;
+      const isMobile = mapWidth < 768;
+      map.fitBounds(bounds, {
+        duration: 700,
+        maxZoom: 14,
+        padding: isMobile
+          ? { top: 40, right: 40, bottom: 40, left: 40 }
+          : { top: 120, right: 240, bottom: 70, left: 420 },
+      });
+    }
+
+    centerState.centered = true;
+    if (hasRoute) {
+      centerState.centeredWithRoute = true;
+    }
+  }, [mapReady, selectedTripId, coordinates, routeSegments]);
 
   useEffect(() => {
     const map = mapRef.current;
