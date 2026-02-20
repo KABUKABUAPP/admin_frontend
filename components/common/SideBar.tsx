@@ -16,7 +16,6 @@ import Cookies from "js-cookie";
 import { ACCESS_TOKEN, USER_TOKEN } from "@/constants";
 import Logo from "./Logo";
 import Select from 'react-select'
-import SelectField from "@/components/ui/Input/SelectField";
 import {
   useGetNigerianStatesQuery,
 } from "@/api-services/geoLocationService";
@@ -33,7 +32,7 @@ const SideBar: FC<Props> = ({ data, show }) => {
   const [allStates, setAllStates] = useState<any[]>()
   const router = useRouter();
   const { user, setUser } = useUserContext();
-  const { dashboardState, setDashboardState } = useDashboardState();
+  const { setDashboardState } = useDashboardState();
 
   const {
     data: states,
@@ -45,6 +44,40 @@ const SideBar: FC<Props> = ({ data, show }) => {
   useEffect(() => {
     if (states) setAllStates([{label: 'All', value: 'all'}, ...states]);
   }, [states])
+
+  const stateSelectStyles = {
+    control: (base: any, state: any) => ({
+      ...base,
+      minHeight: 40,
+      borderRadius: 12,
+      borderColor: state.isFocused ? "#d1d5db" : "#e5e7eb",
+      boxShadow: "none",
+      backgroundColor: "#ffffff",
+      paddingLeft: 2,
+      paddingRight: 2,
+      "&:hover": {
+        borderColor: "#d1d5db",
+      },
+    }),
+    valueContainer: (base: any) => ({
+      ...base,
+      paddingTop: 0,
+      paddingBottom: 0,
+    }),
+    indicatorSeparator: () => ({
+      display: "none",
+    }),
+    menu: (base: any) => ({
+      ...base,
+      borderRadius: 12,
+      overflow: "hidden",
+      zIndex: 20,
+    }),
+    menuPortal: (base: any) => ({
+      ...base,
+      zIndex: 1200,
+    }),
+  };
 
   return (
     <>
@@ -61,12 +94,16 @@ const SideBar: FC<Props> = ({ data, show }) => {
           />
         </Modal>
       )}
-      <aside className={`border w-full max-w-[200px] h-full p-2 bg-[#FDFDFD] ${show ? '' : 'max-lg:hidden'} flex flex-col`}>
-        <div className="py-6">
+      <aside
+        className={`border-r border-r-[#E6E9EF] w-full max-w-[280px] min-w-[280px] h-full px-3 py-4 bg-[#F2F3F6] ${show ? '' : 'max-lg:hidden'} flex flex-col rounded-r-[20px]`}
+      >
+        <div className="pt-2 pb-4 px-2">
           <Logo />
         </div>
-        <div className="py-1 cursor-pointer">
-          <p>Select State</p>
+        <div className="px-2 pb-3 cursor-pointer">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8F95A3] mb-2">
+            Select State
+          </p>
           <Select
             options={allStates ? allStates.map((state: any) => {
               return {
@@ -75,16 +112,19 @@ const SideBar: FC<Props> = ({ data, show }) => {
               }
             }) : []}
             onChange={(e) => {setDashboardState(e?.label?.toLowerCase())}}
+            styles={stateSelectStyles}
+            menuPortalTarget={typeof document !== "undefined" ? document.body : undefined}
+            defaultValue={{ label: "All", value: "all" }}
           />
         </div>
-        <div className="overflow-y-auto h-[85%] mt-2">
-          <div className="flex-1">
+        <div className="overflow-y-auto flex-1 mt-1 px-1">
+          <div className="space-y-1">
             {data.map((item, idx) => {
               return <SidebarItem {...item} key={idx} />;
             })}
           </div>
         </div>
-        <div className="relative">
+        <div className="relative pt-3 px-1 mt-2 border-t border-t-[#E3E6EB]">
           {user && (
             <UserAvatarBox
               userId={user._id}

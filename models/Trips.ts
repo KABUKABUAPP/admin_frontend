@@ -184,6 +184,7 @@ export interface ViewTripResponse {
     start_time: string;
     end_point: [number, number];
     start_point: [number, number];
+    actual_start_point?: [number, number];
     trip_completion_time: string;
     time_of_cancel: string;
   };
@@ -198,6 +199,7 @@ export interface MappedViewTripResponse {
   createdAt: string | number;
   origin: string;
   destination: string;
+  tripPrice?: number;
   estimatedPrice: number;
   paymentType: string;
   tripStarted: string;
@@ -223,6 +225,8 @@ export interface MappedViewTripResponse {
   riderComment?: string
   endPoint: [number, number];
   startPoint: [number, number];
+  actualStartPoint?: [number, number];
+  pickupPoint?: [number, number];
   couponDetails: any;
 }
 

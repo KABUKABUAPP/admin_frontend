@@ -23,10 +23,10 @@ const UserAvatarBox: FC<Props> = ({
 
   return (
     <div
-      className="flex items-center cursor-pointer gap-1 mt-4 relative"
+      className="flex items-center cursor-pointer gap-3 mt-1 relative rounded-xl border border-[#E7EAF0] bg-[#F8F9FB] px-3 py-3"
       onClick={handleClick}
     >
-      <div className="relative w-10 h-10 rounded-full overflow-hidden">
+      <div className="relative w-11 h-11 rounded-full overflow-hidden flex-shrink-0">
         {image ? (
           <Image
             src={image}
@@ -43,12 +43,14 @@ const UserAvatarBox: FC<Props> = ({
         )}
       </div>
       <div className="flex-1">
-        <p className="mb-2 font-bold">
+        <p className="font-bold text-[16px] leading-[20px] text-[#1A1A1A]">
           {firstName} {lastNameInitial}.
         </p>
-        <p className="text-xs">{role}</p>
+        <p className="text-[13px] leading-[18px] text-[#6B7280] font-medium mt-1">
+          {role}
+        </p>
       </div>
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center text-[#4B5563]">
         <ArrowDown />
       </div>
     </div>

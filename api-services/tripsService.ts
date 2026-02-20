@@ -60,51 +60,149 @@ export const tripsApi = createApi({
       }),
       transformResponse: (response: any) => {
         if (!response) return {} as any;
+        const tripData = response?.data ?? {};
+        const tripCar =
+          tripData?.car ||
+          tripData?.driver_details?.driver?.current_car ||
+          tripData?.driver?.driver?.current_car ||
+          tripData?.driver?.current_car ||
+          {};
+
+        const formatJoined = (
+          parts: Array<string | number | null | undefined>,
+          separator: string
+        ) =>
+          parts
+            .map((part) => (typeof part === "string" ? part.trim() : part))
+            .filter((part) => part !== undefined && part !== null && part !== "")
+            .join(separator);
+
+        const rawCarModel = formatJoined(
+          [tripCar?.brand_name, tripCar?.model],
+          " "
+        );
+        const tripPrice =
+          tripData?.price ?? tripData?.trip_price ?? tripData?.estimated_price;
+
+        const actualStartPointRaw =
+          tripData?.actual_start_point || tripData?.actualStartPoint || null;
+        const isZeroCoordinatePoint = (point: any) => {
+          if (!Array.isArray(point) || point.length < 2) return false;
+          const first = Number(point[0]);
+          const second = Number(point[1]);
+          return !Number.isNaN(first) && !Number.isNaN(second) && first === 0 && second === 0;
+        };
+        const actualStartPoint = isZeroCoordinatePoint(actualStartPointRaw)
+          ? null
+          : actualStartPointRaw;
+
         return {
-          carModel: `${response?.data?.car?.brand_name} ${response?.data?.car?.model}`,
-          destination: `${response?.data?.destination?.city}, ${response?.data?.destination?.state}, ${response?.data?.destination?.country}`,
-          driverFullname: `${response?.data?.driver_details?.full_name}`,
-          driverId: `${response?.data?.driver_details._id}`,
-          driverLocation: `${response?.data?.driver_details?.driver?.city}, ${response?.data?.driver_details?.driver?.state}, ${response?.data?.driver_details?.driver?.country}`,
-          driverRating: response?.data?.driver_rating,
-          driverTripCount: response?.data?.driver_details?.total_trips,
-          estimatedPrice: response?.data?.estimated_price,
-          origin: capitalizeAllFirstLetters(`${response?.data?.origin.city}, ${response?.data?.origin?.state}, ${response?.data?.origin.country}`),
-          paymentType: capitalizeAllFirstLetters(response?.data?.payment_type),
-          plateNumber: response?.data?.car?.plate_number,
-          riderFullName: response?.data?.rider_details.full_name,
-          riderId: response?.data?.rider_details._id,
-          riderLocation: response?.data?.rider_details?.state,
-          riderRating: response?.data?.rider_details?.average_rating.value,
-          riderTripCount: response.data.rider_details.total_trips,
-          tripEnded: response?.data?.time_of_cancel ? response?.data?.time_of_cancel : response?.data?.trip_completion_time,
-          tripStarted: response?.data?.start_time,
-          driverImage: response?.data?.driver_details?.profile_image,
-          riderImage: response.data.rider_details.profile_image,
-          orderId: response.data.order_id,
-          startPoint: response?.data?.start_point,
-          endPoint: response?.data?.end_point,
+          carModel: capitalizeAllFirstLetters(rawCarModel),
+          destination: formatJoined(
+            [
+              tripData?.destination?.city,
+              tripData?.destination?.state,
+              tripData?.destination?.country,
+            ],
+            ", "
+          ),
+          driverFullname: tripData?.driver_details?.full_name || "",
+          driverId: tripData?.driver_details?._id || "",
+          driverLocation: formatJoined(
+            [
+              tripData?.driver_details?.driver?.city,
+              tripData?.driver_details?.driver?.state,
+              tripData?.driver_details?.driver?.country,
+            ],
+            ", "
+          ),
+          driverRating: tripData?.driver_rating,
+          driverTripCount: tripData?.driver_details?.total_trips,
+          tripPrice,
+          estimatedPrice: tripData?.estimated_price,
+          origin: capitalizeAllFirstLetters(
+            formatJoined(
+              [
+                tripData?.origin?.city,
+                tripData?.origin?.state,
+                tripData?.origin?.country,
+              ],
+              ", "
+            )
+          ),
+          paymentType: capitalizeAllFirstLetters(tripData?.payment_type),
+          plateNumber:
+            tripCar?.plate_number ||
+            tripData?.plate_number ||
+            tripData?.plateNumber ||
+            "",
+          riderFullName: tripData?.rider_details?.full_name || "",
+          riderId: tripData?.rider_details?._id || "",
+          riderLocation: tripData?.rider_details?.state || "",
+          riderRating: tripData?.rider_details?.average_rating?.value,
+          riderTripCount: tripData?.rider_details?.total_trips,
+          tripEnded: tripData?.time_of_cancel
+            ? tripData?.time_of_cancel
+            : tripData?.trip_completion_time,
+          tripStarted: tripData?.start_time,
+          driverImage: tripData?.driver_details?.profile_image,
+          riderImage: tripData?.rider_details?.profile_image,
+          orderId: tripData?.order_id,
+          startPoint: tripData?.start_point,
+          actualStartPoint,
+          pickupPoint: actualStartPoint,
+          endPoint: tripData?.end_point,
           tripHistory: (() => {
-            if (!Array.isArray(response?.data?.trip_history)) return null;
-            const history = response.data.trip_history
+            if (!Array.isArray(tripData?.trip_history)) return null;
+            const history = tripData.trip_history
               .map((item: any) => {
-                const coord = item?.coordinate;
-                if (!Array.isArray(coord) || coord.length !== 2) return null;
-                const lng = typeof coord[0] === "number" ? coord[0] : parseFloat(coord[0]);
-                const lat = typeof coord[1] === "number" ? coord[1] : parseFloat(coord[1]);
-                if (Number.isNaN(lng) || Number.isNaN(lat)) return null;
-                return [lng, lat];
+                const coord =
+                  item?.coordinate ??
+                  item?.coordinates ??
+                  item?.location?.coordinates ??
+                  item?.point ??
+                  null;
+                if (!coord) return null;
+                if (Array.isArray(coord) && coord.length >= 2) {
+                  return [coord[0], coord[1]];
+                }
+                if (typeof coord === "object") {
+                  const lng =
+                    coord?.lng ??
+                    coord?.long ??
+                    coord?.longitude ??
+                    coord?.x;
+                  const lat = coord?.lat ?? coord?.latitude ?? coord?.y;
+                  if (
+                    lng !== undefined &&
+                    lng !== null &&
+                    lat !== undefined &&
+                    lat !== null
+                  ) {
+                    return [lng, lat];
+                  }
+                }
+                if (typeof coord === "string") {
+                  const split = coord
+                    .split(",")
+                    .map((value: string) => value.trim())
+                    .filter(Boolean);
+                  if (split.length >= 2) {
+                    return [split[0], split[1]];
+                  }
+                }
+                return null;
               })
               .filter(Boolean);
             return history.length > 0 ? history : null;
           })(),
-          driverTripRating: response?.data?.driver_rating,
-          riderTripRating: response?.data?.rider_rating,
-          tripRating: response?.data?.trip_rating,
-          riderComment: response?.data?.rider_comment,
-          couponDetails: response?.data?.coupon_details ? response?.data?.coupon_details : null,
-          createdAt: response?.data?.created_at ? response?.data?.created_at : null,
-          paymentDetails: response?.data?.payment_details ? response?.data?.payment_details : null
+          driverTripRating: tripData?.driver_rating,
+          riderTripRating: tripData?.rider_rating,
+          tripRating: tripData?.trip_rating,
+          riderComment: tripData?.rider_comment,
+          couponDetails: tripData?.coupon_details ? tripData?.coupon_details : null,
+          createdAt: tripData?.created_at ? tripData?.created_at : null,
+          paymentDetails: tripData?.payment_details ? tripData?.payment_details : null
         } as any;
       },
     }),
