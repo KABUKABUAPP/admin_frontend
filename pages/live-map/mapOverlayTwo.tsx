@@ -25,6 +25,9 @@ mapboxgl.accessToken = `${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}` || '';
 //const socket = io(`${DEV_MONITOR_URL}`);
 const socket = io(`https://monitor-dev.up.railway.app`);
 const TRIP_START_POINT_ICON = '/trip-start-point.png';
+const TRIP_PICKUP_POINT_ICON = '/trip-pickup.png';
+const TRIP_END_POINT_ICON = '/trip-end-point.png';
+const LAGOS_REFERENCE_POINT: [number, number] = [3.3792, 6.5244];
 
 
 interface MapOverlayProps {
@@ -557,7 +560,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
 
   useEffect(() => {
     if (!selectedTripId) return;
-    if (selectedTripMeta?.status !== 'started') return;
+    if (selectedTripMeta?.status !== 'started' && selectedTripMeta?.status !== 'active') return;
     if (!selectedTripMeta?.driverId) return;
     if (selectedTripLiveLocation) return;
     const driverCoord = baseCoordinates.find(
@@ -576,7 +579,8 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
   }, [selectedTripId]);
 
   useEffect(() => {
-    const isActiveTrip = selectedTripMeta?.status === 'started';
+    const isActiveTrip =
+      selectedTripMeta?.status === 'started' || selectedTripMeta?.status === 'active';
     const orderId = selectedTripView?.orderId;
 
     if (!selectedTripId || !isActiveTrip || !orderId) {
@@ -606,102 +610,275 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     };
   }, [selectedTripId, selectedTripMeta?.status, selectedTripView?.orderId]);
 
-  const toLngLat = useCallback((point: any): [number, number] | null => {
-    if (!Array.isArray(point) || point.length !== 2) return null;
-    const lng = typeof point[0] === 'number' ? point[0] : parseFloat(point[0]);
-    const lat = typeof point[1] === 'number' ? point[1] : parseFloat(point[1]);
-    if (Number.isNaN(lng) || Number.isNaN(lat)) return null;
-    return [lng, lat];
-  }, []);
+  const toValidLngLat = useCallback(
+    (lngRaw: any, latRaw: any): [number, number] | null => {
+      const lng = typeof lngRaw === 'number' ? lngRaw : parseFloat(String(lngRaw));
+      const lat = typeof latRaw === 'number' ? latRaw : parseFloat(String(latRaw));
+      if (Number.isNaN(lng) || Number.isNaN(lat)) return null;
+      if (lng < -180 || lng > 180 || lat < -90 || lat > 90) return null;
+      // Backend may send [0, 0] for unavailable pickup point; treat as missing.
+      if (lng === 0 && lat === 0) return null;
+      return [lng, lat];
+    },
+    []
+  );
+
+  const extractPointCandidates = useCallback(
+    (point: any): [number, number][] => {
+      const candidates: [number, number][] = [];
+      const appendCandidate = (candidate: [number, number] | null) => {
+        if (!candidate) return;
+        const key = `${candidate[0].toFixed(7)}:${candidate[1].toFixed(7)}`;
+        const exists = candidates.some(
+          (item) => `${item[0].toFixed(7)}:${item[1].toFixed(7)}` === key
+        );
+        if (!exists) {
+          candidates.push(candidate);
+        }
+      };
+
+      const addFromPair = (first: any, second: any, withSwap = true) => {
+        appendCandidate(toValidLngLat(first, second));
+        if (withSwap) {
+          appendCandidate(toValidLngLat(second, first));
+        }
+      };
+
+      if (Array.isArray(point) && point.length >= 2) {
+        addFromPair(point[0], point[1], true);
+        return candidates;
+      }
+
+      if (typeof point === 'string') {
+        const trimmedPoint = point.trim();
+        if (
+          (trimmedPoint.startsWith('[') && trimmedPoint.endsWith(']')) ||
+          (trimmedPoint.startsWith('{') && trimmedPoint.endsWith('}'))
+        ) {
+          try {
+            const parsed = JSON.parse(trimmedPoint);
+            const parsedCandidates = extractPointCandidates(parsed);
+            parsedCandidates.forEach((candidate) => appendCandidate(candidate));
+          } catch (error) {
+            // ignore invalid JSON-shaped coordinate string and continue with csv parsing
+          }
+        }
+        const split = point.split(',').map((item) => item.trim()).filter(Boolean);
+        if (split.length === 2) {
+          addFromPair(split[0], split[1], true);
+        }
+        return candidates;
+      }
+
+      if (point && typeof point === 'object') {
+        if (point?.[0] !== undefined && point?.[1] !== undefined) {
+          addFromPair(point[0], point[1], true);
+        }
+        if (Array.isArray(point.coordinates) && point.coordinates.length >= 2) {
+          addFromPair(point.coordinates[0], point.coordinates[1], true);
+        }
+        if (Array.isArray(point.coordinate) && point.coordinate.length >= 2) {
+          addFromPair(point.coordinate[0], point.coordinate[1], true);
+        }
+        if (point?.point && typeof point.point === 'object') {
+          const nestedCandidates = extractPointCandidates(point.point);
+          nestedCandidates.forEach((candidate) => appendCandidate(candidate));
+        }
+        if (point?.location && typeof point.location === 'object') {
+          const nestedCandidates = extractPointCandidates(point.location);
+          nestedCandidates.forEach((candidate) => appendCandidate(candidate));
+        }
+        if (point?.geometry && typeof point.geometry === 'object') {
+          const nestedCandidates = extractPointCandidates(point.geometry);
+          nestedCandidates.forEach((candidate) => appendCandidate(candidate));
+        }
+
+        const lng =
+          point.lng ??
+          point.long ??
+          point.lon ??
+          point.longitude ??
+          point.x;
+        const lat = point.lat ?? point.latitude ?? point.y;
+        if (lng !== undefined && lat !== undefined) {
+          appendCandidate(toValidLngLat(lng, lat));
+        }
+      }
+
+      return candidates;
+    },
+    [toValidLngLat]
+  );
+
+  const resolvePointWithReferences = useCallback(
+    (
+      point: any,
+      referencePoints: Array<[number, number] | null> = []
+    ): [number, number] | null => {
+      const candidates = extractPointCandidates(point);
+      if (candidates.length === 0) return null;
+      if (candidates.length === 1) return candidates[0];
+
+      const references =
+        (referencePoints.filter(Boolean) as [number, number][]) || [];
+      const scoringReferences =
+        references.length > 0 ? references : [LAGOS_REFERENCE_POINT];
+
+      const distance = (from: [number, number], to: [number, number]) =>
+        Math.hypot(from[0] - to[0], from[1] - to[1]);
+
+      let bestCandidate = candidates[0];
+      let bestScore = Number.POSITIVE_INFINITY;
+
+      candidates.forEach((candidate) => {
+        const candidateScore = Math.min(
+          ...scoringReferences.map((reference) => distance(candidate, reference))
+        );
+        if (candidateScore < bestScore) {
+          bestScore = candidateScore;
+          bestCandidate = candidate;
+        }
+      });
+
+      return bestCandidate;
+    },
+    [extractPointCandidates]
+  );
+
+  const fetchRoadRouteForPath = useCallback(
+    async (points: [number, number][]): Promise<[number, number][] | null> => {
+      const cleaned = normalizePoints(points);
+      if (cleaned.length < 2) return cleaned.length === 1 ? cleaned : null;
+      if (cleaned.length === 2) {
+        const directSegment = await fetchRouteCoordinates(cleaned[0], cleaned[1]);
+        return directSegment || cleaned;
+      }
+
+      const waypointRoute = await fetchRouteWithWaypoints(cleaned);
+      if (waypointRoute && waypointRoute.length > 1) return waypointRoute;
+
+      const merged: [number, number][] = [];
+      for (let i = 0; i < cleaned.length - 1; i += 1) {
+        const start = cleaned[i];
+        const end = cleaned[i + 1];
+        const segment = await fetchRouteCoordinates(start, end);
+        const segmentPoints = segment && segment.length > 1 ? segment : [start, end];
+        if (merged.length === 0) {
+          merged.push(...segmentPoints);
+          continue;
+        }
+        const last = merged[merged.length - 1];
+        const first = segmentPoints[0];
+        if (last[0] === first[0] && last[1] === first[1]) {
+          merged.push(...segmentPoints.slice(1));
+        } else {
+          merged.push(...segmentPoints);
+        }
+      }
+
+      return merged.length > 1 ? merged : cleaned;
+    },
+    [fetchRouteWithWaypoints, fetchRouteCoordinates, normalizePoints]
+  );
 
   const buildSelectedTripMarkers = useCallback(() => {
     if (!selectedTripId || !selectedTripMeta) return [];
     const status = selectedTripMeta.status;
+    const isActiveTrip = status === 'started' || status === 'active';
     const tripIcon = getTripIcon(status);
     const driverId = selectedTripMeta.driverId;
-    const startPoint = toLngLat(selectedTripView?.startPoint);
-    const endPoint = toLngLat(selectedTripView?.endPoint);
+    const startPointInitial = resolvePointWithReferences(selectedTripView?.startPoint);
+    const endPoint = resolvePointWithReferences(selectedTripView?.endPoint, [startPointInitial]);
+    const startPoint = resolvePointWithReferences(selectedTripView?.startPoint, [endPoint]) || startPointInitial;
+    const pickupPoint = resolvePointWithReferences(
+      selectedTripView?.actualStartPoint || selectedTripView?.pickupPoint,
+      [startPoint, endPoint]
+    );
     const driverCoord = driverId
       ? baseCoordinates.find((coord: any) => coord?.type === 'driver' && String(coord._id) === String(driverId))
       : null;
 
-    let point: [number, number] | null = null;
-    if (status === 'started') {
-      point =
+    let currentPoint: [number, number] | null = null;
+    if (isActiveTrip) {
+      currentPoint =
         selectedTripLiveLocation ||
         (driverCoord ? [driverCoord.lng, driverCoord.lat] : null) ||
+        pickupPoint ||
         startPoint;
-    } else {
-      point = startPoint;
     }
 
     const markers: any[] = [];
-    const samePoint =
-      point !== null &&
-      startPoint !== null &&
-      point[0] === startPoint[0] &&
-      point[1] === startPoint[1];
-
-    if (point) {
+    if (startPoint) {
       markers.push({
-        lat: point[1],
-        lng: point[0],
-        type: 'trip',
+        lat: startPoint[1],
+        lng: startPoint[0],
+        type: 'trip-start',
         status,
-        _id: String(selectedTripId),
-        iconUrl: tripIcon,
+        _id: `${String(selectedTripId)}-start`,
+        iconUrl: TRIP_START_POINT_ICON,
+        tooltipLabel: 'Start Point',
       });
     }
-
-    if (startPoint) {
-      if (!point || samePoint) {
-        if (markers.length > 0) {
-          markers[0] = {
-            ...markers[0],
-            type: 'trip-start',
-            iconUrl: TRIP_START_POINT_ICON,
-          };
-        } else {
-          markers.push({
-            lat: startPoint[1],
-            lng: startPoint[0],
-            type: 'trip-start',
-            status,
-            _id: `${String(selectedTripId)}-start`,
-            iconUrl: TRIP_START_POINT_ICON,
-          });
-        }
-      } else {
-        markers.push({
-          lat: startPoint[1],
-          lng: startPoint[0],
-          type: 'trip-start',
-          status,
-          _id: `${String(selectedTripId)}-start`,
-          iconUrl: TRIP_START_POINT_ICON,
-        });
-      }
+    if (pickupPoint) {
+      markers.push({
+        lat: pickupPoint[1],
+        lng: pickupPoint[0],
+        type: 'trip-pickup',
+        status,
+        _id: `${String(selectedTripId)}-pickup`,
+        iconUrl: TRIP_PICKUP_POINT_ICON,
+        tooltipLabel: 'Pickup Point',
+      });
     }
-
     if (endPoint) {
-      const hasTripIconAtEnd = markers.some(
-        (marker: any) =>
-          marker.lng === endPoint[0] &&
-          marker.lat === endPoint[1] &&
-          marker.iconUrl === tripIcon
-      );
-
-      if (!hasTripIconAtEnd) {
+      markers.push({
+        lat: endPoint[1],
+        lng: endPoint[0],
+        type: 'trip-end',
+        status,
+        _id: `${String(selectedTripId)}-end`,
+        iconUrl: TRIP_END_POINT_ICON,
+        tooltipLabel: 'End Point',
+      });
+    }
+    if (isActiveTrip) {
+      if (currentPoint) {
         markers.push({
-          lat: endPoint[1],
-          lng: endPoint[0],
-          type: 'trip-end',
+          lat: currentPoint?.[1],
+          lng: currentPoint?.[0],
+          type: 'trip-current',
           status,
-          _id: `${String(selectedTripId)}-end`,
+          _id: `${String(selectedTripId)}-current`,
           iconUrl: tripIcon,
+          tooltipLabel: 'Current Position',
         });
       }
     }
+
+    const groupedByCoordinate = new Map<string, number[]>();
+    markers.forEach((marker, index) => {
+      const key = `${marker.lng.toFixed(6)}:${marker.lat.toFixed(6)}`;
+      const existing = groupedByCoordinate.get(key);
+      if (existing) {
+        existing.push(index);
+      } else {
+        groupedByCoordinate.set(key, [index]);
+      }
+    });
+
+    const spreadRadius = 0.00008;
+    groupedByCoordinate.forEach((indexes) => {
+      if (indexes.length <= 1) return;
+      indexes.forEach((markerIndex, idx) => {
+        const marker = markers[markerIndex];
+        const angle = (2 * Math.PI * idx) / indexes.length;
+        markers[markerIndex] = {
+          ...marker,
+          lng: marker.lng + Math.cos(angle) * spreadRadius,
+          lat: marker.lat + Math.sin(angle) * spreadRadius,
+        };
+      });
+    });
 
     return markers;
   }, [
@@ -710,7 +887,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     selectedTripView,
     selectedTripLiveLocation,
     baseCoordinates,
-    toLngLat,
+    resolvePointWithReferences,
     getTripIcon,
   ]);
 
@@ -722,46 +899,66 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     }
 
     const status = selectedTripMeta.status;
+    const isActiveTrip = status === 'started' || status === 'active';
+    const startPointInitial = resolvePointWithReferences(selectedTripView.startPoint);
+    const endPoint = resolvePointWithReferences(selectedTripView.endPoint, [startPointInitial]);
+    const startPoint = resolvePointWithReferences(selectedTripView.startPoint, [endPoint]) || startPointInitial;
+    const pickupPoint = resolvePointWithReferences(
+      selectedTripView.actualStartPoint || selectedTripView.pickupPoint,
+      [startPoint, endPoint]
+    );
     const historyCoords: [number, number][] | null =
-      Array.isArray(selectedTripView.tripHistory) &&
-      selectedTripView.tripHistory.length > 0
-        ? selectedTripView.tripHistory
+      Array.isArray(selectedTripView.tripHistory) && selectedTripView.tripHistory.length > 0
+        ? (selectedTripView.tripHistory
+            .map((point: any) =>
+              resolvePointWithReferences(point, [startPoint, pickupPoint, endPoint])
+            )
+            .filter(Boolean) as [number, number][])
         : null;
-
-    const startPoint = toLngLat(selectedTripView.startPoint);
-    const endPoint = toLngLat(selectedTripView.endPoint);
     const driverId = selectedTripMeta.driverId;
     const driverCoord = driverId
       ? baseCoordinates.find((coord: any) => coord?.type === 'driver' && String(coord._id) === String(driverId))
       : null;
     const driverPoint = driverCoord ? ([driverCoord.lng, driverCoord.lat] as [number, number]) : null;
     const currentPoint =
-      status === 'started' ? selectedTripLiveLocation || driverPoint || startPoint : endPoint;
+      isActiveTrip
+        ? selectedTripLiveLocation || driverPoint || pickupPoint || startPoint
+        : endPoint;
+    const routeStartPoint = startPoint || pickupPoint;
+
+    const pushDistinctPoint = (
+      points: [number, number][],
+      point: [number, number] | null
+    ) => {
+      if (!point) return;
+      const last = points[points.length - 1];
+      if (!last || last[0] !== point[0] || last[1] !== point[1]) {
+        points.push(point);
+      }
+    };
 
     if (historyCoords) {
       const requestId = ++routeRequestRef.current;
       const loadHistoryRoute = async () => {
         const baseHistory: [number, number][] = [];
-        if (startPoint) baseHistory.push(startPoint);
-        baseHistory.push(...historyCoords);
+        pushDistinctPoint(baseHistory, startPoint);
+        pushDistinctPoint(baseHistory, pickupPoint);
+        historyCoords.forEach((point) => pushDistinctPoint(baseHistory, point));
 
         const historyPath = (() => {
-          if (status !== 'started' || !currentPoint) {
-            if (endPoint) baseHistory.push(endPoint);
+          if (!isActiveTrip || !currentPoint) {
+            pushDistinctPoint(baseHistory, endPoint);
             return baseHistory;
           }
-          const last = baseHistory[baseHistory.length - 1];
-          if (!last || last[0] !== currentPoint[0] || last[1] !== currentPoint[1]) {
-            baseHistory.push(currentPoint);
-          }
+          pushDistinctPoint(baseHistory, currentPoint);
           return baseHistory;
         })();
 
-        const completedRoute = await fetchRouteWithWaypoints(historyPath);
+        const completedRoute = await fetchRoadRouteForPath(historyPath);
         if (routeRequestRef.current !== requestId) return;
 
-        if (status === 'started' && endPoint && currentPoint) {
-          const remainingRoute = await fetchRouteCoordinates(currentPoint, endPoint);
+        if (isActiveTrip && endPoint && currentPoint) {
+          const remainingRoute = await fetchRoadRouteForPath([currentPoint, endPoint]);
           if (routeRequestRef.current !== requestId) return;
           setRouteSegments({
             completed: completedRoute || historyPath,
@@ -777,7 +974,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
       return;
     }
 
-    if (!startPoint || !endPoint) {
+    if (!routeStartPoint || !endPoint) {
       setRouteSegments(null);
       routeRequestRef.current += 1;
       return;
@@ -786,24 +983,54 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     const requestId = ++routeRequestRef.current;
 
     const loadRoutes = async () => {
-      if (status === 'started') {
+      if (isActiveTrip) {
         if (!currentPoint) {
-          setRouteSegments({ completed: [startPoint, endPoint] });
+          const fallbackCompleted: [number, number][] = [];
+          pushDistinctPoint(fallbackCompleted, routeStartPoint);
+          pushDistinctPoint(fallbackCompleted, endPoint);
+          setRouteSegments({ completed: fallbackCompleted });
           return;
         }
-        const completedRoute = await fetchRouteCoordinates(startPoint, currentPoint);
-        const remainingRoute = await fetchRouteCoordinates(currentPoint, endPoint);
+
+        const completedPath: [number, number][] = [];
+        pushDistinctPoint(completedPath, startPoint);
+        pushDistinctPoint(completedPath, pickupPoint);
+        if (completedPath.length === 0) {
+          pushDistinctPoint(completedPath, routeStartPoint);
+        }
+        pushDistinctPoint(completedPath, currentPoint);
+
+        if (completedPath.length < 2) {
+          setRouteSegments({ completed: completedPath });
+          return;
+        }
+
+        const completedRoute = await fetchRoadRouteForPath(completedPath);
+        const remainingRoute = await fetchRoadRouteForPath([currentPoint, endPoint]);
         if (routeRequestRef.current !== requestId) return;
         setRouteSegments({
-          completed: completedRoute || [startPoint, currentPoint],
+          completed: completedRoute || completedPath,
           remaining: remainingRoute || [currentPoint, endPoint],
         });
         return;
       }
 
-      const fullRoute = await fetchRouteCoordinates(startPoint, endPoint);
+      const fullPath: [number, number][] = [];
+      pushDistinctPoint(fullPath, startPoint);
+      pushDistinctPoint(fullPath, pickupPoint);
+      if (fullPath.length === 0) {
+        pushDistinctPoint(fullPath, routeStartPoint);
+      }
+      pushDistinctPoint(fullPath, endPoint);
+
+      if (fullPath.length < 2) {
+        setRouteSegments({ completed: fullPath });
+        return;
+      }
+
+      const fullRoute = await fetchRoadRouteForPath(fullPath);
       if (routeRequestRef.current !== requestId) return;
-      setRouteSegments({ completed: fullRoute || [startPoint, endPoint] });
+      setRouteSegments({ completed: fullRoute || fullPath });
     };
 
     loadRoutes();
@@ -813,9 +1040,10 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     selectedTripView,
     selectedTripLiveLocation,
     baseCoordinates,
-    toLngLat,
+    resolvePointWithReferences,
     fetchRouteCoordinates,
     fetchRouteWithWaypoints,
+    fetchRoadRouteForPath,
   ]);
 
   useEffect(() => {
@@ -898,7 +1126,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     el.className = 'marker';
     const iconUrl = coord.iconUrl || (coord.type === 'driver' ? iconUrlDriver : iconUrlRider);
     el.style.backgroundImage = `url(${iconUrl})`;
-    if (coord.type === 'driver') {
+    if (coord.type === 'driver' || coord.type === 'trip-current') {
       el.style.width = '32px';
       el.style.height = '44px';
     } else if (coord.type === 'rider') {
@@ -913,10 +1141,13 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     el.style.backgroundPosition = 'center';
     el.style.cursor = 'pointer';
     el.dataset.id = coord._id;
-    if (coord.type === 'driver' || coord.type === 'rider') {
+    const hasHoverTooltip =
+      Boolean(coord.tooltipLabel) || coord.type === 'driver' || coord.type === 'rider';
+    if (hasHoverTooltip) {
       el.addEventListener('mouseenter', () => handleMarkerEnter(coord));
       el.addEventListener('mouseleave', () => scheduleHideTooltip());
-    } else if (coord.type === 'trip') {
+    }
+    if (coord.type === 'trip') {
       el.addEventListener('click', () => handleTripClick(coord));
     }
     return el;
@@ -1133,7 +1364,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
 
     const status = selectedTripMeta?.status;
     const color = getRouteColor(status);
-    const isActiveTrip = status === 'started';
+    const isActiveTrip = status === 'started' || status === 'active';
     const completedCoords = routeSegments.completed || [];
     const remainingCoords = routeSegments.remaining || [];
 
@@ -1189,19 +1420,27 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
           style={{
             left: tooltipPosition.left,
             top: tooltipPosition.top,
-            transform: 'translate(-50%, 14px)'
+            transform: hoveredCoord?.tooltipLabel
+              ? 'translate(-50%, -130%)'
+              : 'translate(-50%, 14px)',
           }}
           onMouseEnter={handleTooltipEnter}
           onMouseLeave={handleTooltipLeave}
         >
-          <DriverModal
-            driver={hoveredCoord.personnel}
-            handleClose={() => {
-              setHoveredCoord(null);
-              setTooltipPosition(null);
-            }}
-            type={hoveredCoord.type}
-          />
+          {hoveredCoord?.tooltipLabel ? (
+            <div className="rounded-full border border-[#E6E6E6] bg-[#FFFFFF] px-4 py-1 text-xs font-semibold text-[#1A1A1A] shadow-sm whitespace-nowrap">
+              {hoveredCoord.tooltipLabel}
+            </div>
+          ) : (
+            <DriverModal
+              driver={hoveredCoord.personnel}
+              handleClose={() => {
+                setHoveredCoord(null);
+                setTooltipPosition(null);
+              }}
+              type={hoveredCoord.type}
+            />
+          )}
         </div>
       )}
     </div>

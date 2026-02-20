@@ -7,7 +7,7 @@ const Logo: FC = () => {
 
   return (
     <div
-      className="relative h-8 w-22 cursor-pointer"
+      className="relative h-[42px] w-[170px] cursor-pointer"
       onClick={() => router.push("/")}
     >
       <Image

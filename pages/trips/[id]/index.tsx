@@ -1,10 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import AppLayout from "@/layouts/AppLayout";
 import { NextPage } from "next";
-import ActionBar from "@/components/common/ActionBar";
 import Button from "@/components/ui/Button/Button";
-import TripDetailsCard from "@/components/modules/Trips/TripDetailsCard";
-import { TripDetail } from "@/models/Trips";
 import OriginIcon from "@/components/icons/OriginIcon";
 import DestinationIcon from "@/components/icons/DestinationIcon";
 import WalletIcon from "@/components/icons/WalletIcon";
@@ -17,7 +14,6 @@ import RaiseSosCard from "@/components/modules/Trips/RaiseSosCard";
 import ViewFeed from "@/components/modules/Trips/ViewFeed";
 import { useViewTripQuery } from "@/api-services/tripsService";
 import { useRouter } from "next/router";
-import RatingIcon from "@/components/icons/RatingIcon";
 import useUserPermissions from "@/hooks/useUserPermissions";
 import AppHead from "@/components/common/AppHead";
 import TripRatingCard from "@/components/modules/Trips/TripRatingCard";
@@ -178,91 +174,31 @@ const ViewTrip: NextPage = () => {
     setModalContent(<RaiseSosCard data={raiseSosData} />);
   };
 
-  const selectedTripDetails: TripDetail[] | undefined = selectedTrip?.viewTrip
-    ? (() => {
-        const viewTrip = selectedTrip.viewTrip;
-        const status = selectedTrip.status || "";
-        const tripToEndStr =
-          status === "completed"
-            ? "Trip Ended"
-            : status === "cancelled"
-            ? "Trip Cancelled"
-            : "Trip To End";
-        const formatDate = (value?: string) => {
-          if (!value) return "";
-          const date = new Date(value);
-          return Number.isNaN(date.getTime()) ? "" : date.toLocaleString();
-        };
-        const details: TripDetail[] = [
-          {
-            topTitle: "Origin",
-            topValue: viewTrip.origin,
-            topIcon: <OriginIcon />,
-            bottomTitle: "Destination",
-            bottomValue: viewTrip.destination,
-            bottomIcon: <DestinationIcon />,
-            isRating: false,
-          },
-          {
-            topTitle: "Payment Type",
-            topValue: viewTrip.paymentType,
-            topIcon: <WalletIcon />,
-            bottomTitle: "",
-            bottomValue: "",
-            bottomIcon: "",
-            isRating: false,
-          },
-          {
-            topTitle: "Order Created",
-            topValue: formatDate(viewTrip.createdAt),
-            topIcon: <ClockIcon />,
-            bottomTitle: "",
-            bottomValue: "",
-            bottomIcon: "",
-            isRating: false,
-          },
-        ];
-
-        const hasStarted = Boolean(viewTrip.tripStarted);
-        const hasEnded = Boolean(viewTrip.tripEnded);
-        if (hasStarted || hasEnded) {
-          details.push({
-            topTitle: hasStarted ? "Trip started" : "",
-            topValue: hasStarted ? formatDate(viewTrip.tripStarted) : "",
-            topIcon: hasStarted ? <ClockIcon /> : "",
-            bottomTitle: hasEnded ? tripToEndStr : "",
-            bottomValue: hasEnded ? formatDate(viewTrip.tripEnded) : "",
-            bottomIcon: hasEnded ? <ClockIcon /> : "",
-            isRating: true,
-          });
-        }
-
-        const hasRatings =
-          Boolean(viewTrip.driverTripRating) || Boolean(viewTrip.riderTripRating);
-        if (status === "completed" && hasRatings) {
-          details.push({
-            topTitle: viewTrip.driverTripRating ? "Driver Rating" : "",
-            topValue: viewTrip.driverTripRating,
-            topIcon: <RatingIcon fill="#000000" />,
-            bottomTitle: viewTrip.riderTripRating ? "Rider Rating" : "",
-            bottomValue: viewTrip.riderTripRating,
-            bottomIcon: <RatingIcon fill="#000000" />,
-            isRating: true,
-          });
-        }
-
-        return details;
-      })()
-    : undefined;
-
   const selectedTripSubtitle = (() => {
     const status = selectedTrip?.status;
     if (status === "pending") return "Driving to rider";
     if (status === "started" || status === "active") return "Driving to destination";
     if (status === "completed") return "Trip completed";
     if (status === "cancelled") return "Cancelled trip";
-    return "Trip details";
+    return "Driving to destination";
   })();
+
+  const formatDate = (value?: string) => {
+    if (!value) return "-";
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? "-" : date.toLocaleString();
+  };
+
+  const formatCurrency = (value?: string | number) => {
+    if (value === undefined || value === null || value === "") return "-";
+    const numeric = Number(value);
+    if (!Number.isNaN(numeric)) return `N${numeric.toLocaleString()}`;
+    return `N${value}`;
+  };
+
+  const tripOverlayData = selectedTrip?.viewTrip;
+  const tripStartedText = formatDate(tripOverlayData?.tripStarted);
+  const tripEndText = formatDate(tripOverlayData?.tripEnded);
 
   const { userPermissions } = useUserPermissions();
   const tabUrl = normalizedTab ? `tab=${normalizedTab}` : "";
@@ -277,7 +213,6 @@ const ViewTrip: NextPage = () => {
       <AppHead title="Kabukabu | Trips" />
       <AppLayout padding="0">
         <div className="lg:h-screen lg:overflow-hidden p-4">
-          <ActionBar handleBack={() => router.push(backUrl)} />
           {isFeed && (
             <div className="mt-4">
               <ViewFeed
@@ -293,7 +228,7 @@ const ViewTrip: NextPage = () => {
               className={`${mapStyles.mapContainer} ${
                 isMapFullscreen ? mapStyles.mapContainerFullscreen : ""
               }`}
-              style={isMapFullscreen ? undefined : { height: "70vh" }}
+              style={isMapFullscreen ? undefined : { height: "90vh" }}
               onMouseEnter={() => setIsMapHovered(true)}
               onMouseLeave={() => setIsMapHovered(false)}
               id="trip-map-fullscreen"
@@ -329,19 +264,93 @@ const ViewTrip: NextPage = () => {
             >
               {selectedTrip?.id && (
                 <div
-                  className={`${mapStyles.tripDetailsWrapperPersistent} max-h-[60vh] overflow-y-auto scrollbar-none pr-1`}
+                  className={`${mapStyles.tripDetailsWrapperPersistent} max-h-[80vh] overflow-y-auto scrollbar-none pr-1 pb-6`}
                 >
                   <div className={mapStyles.tripDetailsCard}>
-                    <TripDetailsCard
-                      variant="map"
-                      onBack={() => router.push(backUrl)}
-                      isLoading={selectedTrip.loading}
-                      cardSubTitle={selectedTripSubtitle}
-                      data={selectedTripDetails}
-                      mapPrice={selectedTrip?.viewTrip?.estimatedPrice ?? ""}
-                      mapRiderName={selectedTrip?.viewTrip?.riderFullName}
-                      mapDriverName={selectedTrip?.viewTrip?.driverFullname}
-                    />
+                    <div className="bg-[#FFFFFF] rounded-lg p-4">
+                      <div className="mb-3">
+                        <button
+                          type="button"
+                          className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-[#E5E7EB] bg-[#FDFDFD]"
+                          onClick={() => router.push(backUrl)}
+                          aria-label="Back"
+                        >
+                          <img src="/arrowLeftFromLine.svg" alt="" className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      <p className="font-bold text-[18px] leading-[24px] text-[#1A1A1A]">
+                        {selectedTripSubtitle}
+                      </p>
+
+                      <div className="mt-4 rounded-xl bg-[#F3F4F6] p-4">
+                        <div className="flex gap-3 pb-4 border-b border-b-[#E0E0E0]">
+                          <OriginIcon />
+                          <div className="min-w-0">
+                            <p className="text-xs text-[#9A9A9A]">Origin</p>
+                            <p className="text-[16px] leading-[22px] font-semibold text-[#1A1A1A] break-words">
+                              {tripOverlayData?.origin || "-"}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-3 pt-4">
+                          <DestinationIcon />
+                          <div className="min-w-0">
+                            <p className="text-xs text-[#9A9A9A]">Destination</p>
+                            <p className="text-[16px] leading-[22px] font-semibold text-[#1A1A1A] break-words">
+                              {tripOverlayData?.destination || "-"}
+                            </p>
+                            <p className="text-xs text-[#737373] mt-1 break-words">
+                              {tripOverlayData?.origin || ""}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-3 rounded-xl bg-[#F3F4F6] p-4 grid grid-cols-2 gap-4">
+                        <div className="min-w-0">
+                          <p className="text-xs text-[#9A9A9A]">Estimated Price</p>
+                          <p className="text-[16px] leading-[22px] font-semibold text-[#1A1A1A] break-words">
+                            {formatCurrency(
+                              tripOverlayData?.tripPrice ?? tripOverlayData?.estimatedPrice
+                            )}
+                          </p>
+                        </div>
+                        <div className="min-w-0 flex gap-2">
+                          <div className="pt-[2px]">
+                            <WalletIcon />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-xs text-[#9A9A9A]">Payment Type</p>
+                            <p className="text-[16px] leading-[22px] font-semibold text-[#1A1A1A] break-words">
+                              {tripOverlayData?.paymentType || "-"}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-3 rounded-xl bg-[#F3F4F6] p-4">
+                        <div className="flex gap-2 pb-4 border-b border-b-[#E0E0E0]">
+                          <ClockIcon />
+                          <div className="min-w-0">
+                            <p className="text-xs text-[#9A9A9A]">Trip started</p>
+                            <p className="text-[16px] leading-[22px] font-semibold text-[#1A1A1A] break-words">
+                              {tripStartedText}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2 pt-4">
+                          <ClockIcon />
+                          <div className="min-w-0">
+                            <p className="text-xs text-[#9A9A9A]">Trip to end</p>
+                            <p className="text-[16px] leading-[22px] font-semibold text-[#1A1A1A] break-words">
+                              {tripEndText}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   {data?.couponDetails && (
                     <div className="rounded-md w-full my-4">
@@ -395,7 +404,7 @@ const ViewTrip: NextPage = () => {
                       />
                     </div>
                   )}
-                  {normalizedTab === "completed" && (
+                  {/*normalizedTab === "completed" && (
                     <div className="mt-4">
                       {data && (
                         <TripRatingCard
@@ -404,7 +413,7 @@ const ViewTrip: NextPage = () => {
                         />
                       )}
                     </div>
-                  )}
+                  )*/}
                 </div>
               )}
 

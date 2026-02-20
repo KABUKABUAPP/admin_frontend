@@ -8,14 +8,10 @@ import DropDown from '@/components/ui/DropDown';
 import { useGetInsightsQuery } from '@/api-services/dashboardService';
 import { useDashboardState } from "@/contexts/StateSegmentationContext";
 import MapOverlayTwo from './mapOverlayTwo';
-import TripDetailsCard from '@/components/modules/Trips/TripDetailsCard';
 import CarOccupantDetailsCard from '@/components/modules/Trips/CarOccupantDetailsCard';
 import OriginIcon from '@/components/icons/OriginIcon';
 import DestinationIcon from '@/components/icons/DestinationIcon';
-import WalletIcon from '@/components/icons/WalletIcon';
 import ClockIcon from '@/components/icons/ClockIcon';
-import RatingIcon from '@/components/icons/RatingIcon';
-import { TripDetail } from '@/models/Trips';
 import { useRouter } from 'next/router';
 import { capitalizeAllFirstLetters } from '@/utils';
 
@@ -147,91 +143,27 @@ const IndexPage: React.FC = () => {
     }
   };
 
-  const selectedTripDetails: TripDetail[] | undefined = selectedTrip?.viewTrip
-    ? (() => {
-        const viewTrip = selectedTrip.viewTrip;
-        const status = selectedTrip.status || '';
-        const tripToEndStr =
-          status === 'completed'
-            ? 'Trip Ended'
-            : status === 'cancelled'
-            ? 'Trip Cancelled'
-            : 'Trip To End';
-        const formatDate = (value?: string) => {
-          if (!value) return '';
-          const date = new Date(value);
-          return Number.isNaN(date.getTime()) ? '' : date.toLocaleString();
-        };
-        const details: TripDetail[] = [
-          {
-            topTitle: 'Origin',
-            topValue: viewTrip.origin,
-            topIcon: <OriginIcon />,
-            bottomTitle: 'Destination',
-            bottomValue: viewTrip.destination,
-            bottomIcon: <DestinationIcon />,
-            isRating: false,
-          },
-          {
-            topTitle: 'Payment Type',
-            topValue: viewTrip.paymentType,
-            topIcon: <WalletIcon />,
-            bottomTitle: '',
-            bottomValue: '',
-            bottomIcon: '',
-            isRating: false,
-          },
-          {
-            topTitle: 'Order Created',
-            topValue: formatDate(viewTrip.createdAt),
-            topIcon: <ClockIcon />,
-            bottomTitle: '',
-            bottomValue: '',
-            bottomIcon: '',
-            isRating: false,
-          },
-        ];
-
-        const hasStarted = Boolean(viewTrip.tripStarted);
-        const hasEnded = Boolean(viewTrip.tripEnded);
-        if (hasStarted || hasEnded) {
-          details.push({
-            topTitle: hasStarted ? 'Trip started' : '',
-            topValue: hasStarted ? formatDate(viewTrip.tripStarted) : '',
-            topIcon: hasStarted ? <ClockIcon /> : '',
-            bottomTitle: hasEnded ? tripToEndStr : '',
-            bottomValue: hasEnded ? formatDate(viewTrip.tripEnded) : '',
-            bottomIcon: hasEnded ? <ClockIcon /> : '',
-            isRating: true,
-          });
-        }
-
-        const hasRatings =
-          Boolean(viewTrip.driverTripRating) || Boolean(viewTrip.riderTripRating);
-        if (status === 'completed' && hasRatings) {
-          details.push({
-            topTitle: viewTrip.driverTripRating ? 'Driver Rating' : '',
-            topValue: viewTrip.driverTripRating,
-            topIcon: <RatingIcon fill="#000000" />,
-            bottomTitle: viewTrip.riderTripRating ? 'Rider Rating' : '',
-            bottomValue: viewTrip.riderTripRating,
-            bottomIcon: <RatingIcon fill="#000000" />,
-            isRating: true,
-          });
-        }
-
-        return details;
-      })()
-    : undefined;
-
   const selectedTripSubtitle = (() => {
     const status = selectedTrip?.status;
     if (status === 'pending') return 'Driving to rider';
     if (status === 'started' || status === 'active') return 'Driving to destination';
     if (status === 'completed') return 'Trip completed';
     if (status === 'cancelled') return 'Cancelled trip';
-    return 'Trip details';
+    return 'Driving to destination';
   })();
+
+  const formatDate = (value?: string) => {
+    if (!value) return '-';
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? '-' : date.toLocaleString();
+  };
+
+  const formatCurrency = (value?: string | number) => {
+    if (value === undefined || value === null || value === '') return '-';
+    const numeric = Number(value);
+    if (!Number.isNaN(numeric)) return `N${numeric.toLocaleString()}`;
+    return `N${value}`;
+  };
 
   const hasDriverDetails =
     Boolean(selectedTrip?.viewTrip?.driverFullname) ||
@@ -515,16 +447,79 @@ const IndexPage: React.FC = () => {
                 ) : (
                   <div className={`${styles.tripDetailsWrapper} max-h-[78vh] overflow-y-auto scrollbar-none pr-1`}>
                     <div className={styles.tripDetailsCard}>
-                      <TripDetailsCard
-                        variant="map"
-                        onBack={() => setSelectedTrip(null)}
-                        isLoading={selectedTrip.loading}
-                        cardSubTitle={selectedTripSubtitle}
-                        data={selectedTripDetails}
-                        mapPrice={selectedTrip?.viewTrip?.estimatedPrice ?? ''}
-                        mapRiderName={selectedTrip?.viewTrip?.riderFullName}
-                        mapDriverName={selectedTrip?.viewTrip?.driverFullname}
-                      />
+                      <div className="bg-[#FFFFFF] rounded-lg p-5">
+                        <div className="flex items-center justify-between mb-6">
+                          <p className="text-[18px] leading-[24px] font-semibold text-[#1A1A1A]">
+                            Current trip
+                          </p>
+                          <button
+                            type="button"
+                            className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-[#E5E7EB] bg-[#FDFDFD]"
+                            onClick={() => setSelectedTrip(null)}
+                            aria-label="Back"
+                          >
+                            <img src="/arrowLeftFromLine.svg" alt="" className="w-4 h-4" />
+                          </button>
+                        </div>
+
+                        <div className="flex items-start justify-between gap-4 mb-4">
+                          <p className="text-[18px] leading-[24px] font-bold text-[#1A1A1A]">
+                            {selectedTripSubtitle}
+                          </p>
+                          <p className="text-[16px] leading-[22px] font-semibold text-[#1A1A1A] text-right whitespace-nowrap">
+                            {formatCurrency(
+                              selectedTrip?.viewTrip?.tripPrice ??
+                                selectedTrip?.viewTrip?.estimatedPrice
+                            )}
+                            {selectedTrip?.viewTrip?.paymentType
+                              ? ` (${String(selectedTrip?.viewTrip?.paymentType).toLowerCase()})`
+                              : ''}
+                          </p>
+                        </div>
+
+                        <div className="flex gap-3 pb-4 border-b border-b-[#E6E6E6]">
+                          <OriginIcon />
+                          <div className="min-w-0">
+                            <p className="text-xs text-[#9A9A9A]">Origin</p>
+                            <p className="text-[16px] leading-[22px] font-semibold text-[#1A1A1A] break-words">
+                              {selectedTrip?.viewTrip?.origin || '-'}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-3 py-4 border-b border-b-[#E6E6E6]">
+                          <DestinationIcon />
+                          <div className="min-w-0">
+                            <p className="text-xs text-[#9A9A9A]">Destination</p>
+                            <p className="text-[16px] leading-[22px] font-semibold text-[#1A1A1A] break-words">
+                              {selectedTrip?.viewTrip?.destination || '-'}
+                            </p>
+                            <p className="text-xs text-[#737373] mt-1 break-words">
+                              {selectedTrip?.viewTrip?.origin || ''}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-3 py-4 border-b border-b-[#E6E6E6]">
+                          <ClockIcon />
+                          <div className="min-w-0">
+                            <p className="text-xs text-[#9A9A9A]">Trip started</p>
+                            <p className="text-[16px] leading-[22px] font-semibold text-[#1A1A1A] break-words">
+                              {formatDate(selectedTrip?.viewTrip?.tripStarted)}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-3 pt-4">
+                          <ClockIcon />
+                          <div className="min-w-0">
+                            <p className="text-xs text-[#9A9A9A]">Trip to end</p>
+                            <p className="text-[16px] leading-[22px] font-semibold text-[#1A1A1A] break-words">
+                              {formatDate(selectedTrip?.viewTrip?.tripEnded)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <div className="mt-4">
                       <CarOccupantDetailsCard

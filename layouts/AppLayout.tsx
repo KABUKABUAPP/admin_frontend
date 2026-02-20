@@ -122,7 +122,7 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
     <div className="flex h-screen overflow-hidden">
       <SideBar data={getAccessibleLinks(links)} show={show} />
       <main
-        className="h-screen w-[calc(100%-200px)] max-lg:w-full bg-[#f8f8f8] overflow-auto"
+        className="h-screen flex-1 min-w-0 max-lg:w-full bg-[#f8f8f8] overflow-auto border border-[#E6E9EF] rounded-[20px] lg:ml-3"
         style={{ padding: padding }}
       >
         <div className="lg:hidden ml-3 my-4" style={{width: 'fit-content'}}>
