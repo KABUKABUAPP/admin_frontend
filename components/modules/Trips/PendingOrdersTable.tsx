@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 
 const headCellData = [
   { title: "ID", flex: 1 },
-  { title: "Origin/Destination", flex: 2 },
+  { title: "Destination", flex: 2 },
   { title: "Rider", flex: 1 },
 //   { title: "Driver", flex: 1 },
 //   { title: "Car", flex: 1 },

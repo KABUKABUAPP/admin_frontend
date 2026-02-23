@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import OriginCell from "../../common/OriginCell";
-import OriginDestinationCell from "../../common/OriginDestinationCell";
+import DestinationCell from "../../common/DestinationCell";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { capitalizeAllFirstLetters } from "@/utils";
@@ -50,12 +50,12 @@ const TripsTableRow: FC<Props> = ({
         </Link>
       </div>
 
-      <div className="flex items-center" style={{ flex: 2 }}>
+      <div className="flex items-center" style={{ flex: 3 }}>
         <OriginCell origin={origin} />
       </div>
 
-      <div style={{ flex: 2 }}>
-        <OriginDestinationCell origin={origin} destination={destination} />
+      <div className="flex items-center" style={{ flex: 3 }}>
+        <DestinationCell destination={destination} />
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">

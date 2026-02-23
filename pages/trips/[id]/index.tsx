@@ -2,8 +2,6 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import AppLayout from "@/layouts/AppLayout";
 import { NextPage } from "next";
 import Button from "@/components/ui/Button/Button";
-import OriginIcon from "@/components/icons/OriginIcon";
-import DestinationIcon from "@/components/icons/DestinationIcon";
 import WalletIcon from "@/components/icons/WalletIcon";
 import ClockIcon from "@/components/icons/ClockIcon";
 import CarOccupantDetailsCard from "@/components/modules/Trips/CarOccupantDetailsCard";
@@ -199,6 +197,12 @@ const ViewTrip: NextPage = () => {
   const tripOverlayData = selectedTrip?.viewTrip;
   const tripStartedText = formatDate(tripOverlayData?.tripStarted);
   const tripEndText = formatDate(tripOverlayData?.tripEnded);
+  const isCompletedTrip =
+    selectedTrip?.status === "completed" ||
+    data?.status === "completed" ||
+    normalizedTab === "completed";
+  const tripRatingValue =
+    data?.tripRating ?? data?.riderTripRating ?? data?.driverTripRating;
 
   const { userPermissions } = useUserPermissions();
   const tabUrl = normalizedTab ? `tab=${normalizedTab}` : "";
@@ -283,9 +287,13 @@ const ViewTrip: NextPage = () => {
                         {selectedTripSubtitle}
                       </p>
 
-                      <div className="mt-4 rounded-xl bg-[#F3F4F6] p-4">
-                        <div className="flex gap-3 pb-4 border-b border-b-[#E0E0E0]">
-                          <OriginIcon />
+                        <div className="mt-4 rounded-xl bg-[#F3F4F6] p-4">
+                          <div className="flex gap-3 pb-4 border-b border-b-[#E0E0E0]">
+                          <img
+                            src="/trip-start-point.png"
+                            alt="Origin icon"
+                            className="w-4 h-4 mt-0.5 object-contain"
+                          />
                           <div className="min-w-0">
                             <p className="text-xs text-[#9A9A9A]">Origin</p>
                             <p className="text-[16px] leading-[22px] font-semibold text-[#1A1A1A] break-words">
@@ -295,7 +303,11 @@ const ViewTrip: NextPage = () => {
                         </div>
 
                         <div className="flex gap-3 pt-4">
-                          <DestinationIcon />
+                          <img
+                            src="/trip-end-point.png"
+                            alt="Destination icon"
+                            className="w-4 h-4 mt-0.5 object-contain"
+                          />
                           <div className="min-w-0">
                             <p className="text-xs text-[#9A9A9A]">Destination</p>
                             <p className="text-[16px] leading-[22px] font-semibold text-[#1A1A1A] break-words">
@@ -404,16 +416,14 @@ const ViewTrip: NextPage = () => {
                       />
                     </div>
                   )}
-                  {/*normalizedTab === "completed" && (
+                  {isCompletedTrip && data && (
                     <div className="mt-4">
-                      {data && (
-                        <TripRatingCard
-                          rating={data.tripRating}
-                          comment={data.riderComment}
-                        />
-                      )}
+                      <TripRatingCard
+                        rating={tripRatingValue}
+                        comment={data.riderComment}
+                      />
                     </div>
-                  )*/}
+                  )}
                 </div>
               )}
 

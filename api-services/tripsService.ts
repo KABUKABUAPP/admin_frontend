@@ -145,6 +145,7 @@ export const tripsApi = createApi({
             ? tripData?.time_of_cancel
             : tripData?.trip_completion_time,
           tripStarted: tripData?.start_time,
+          status: tripData?.status,
           driverImage: tripData?.driver_details?.profile_image,
           riderImage: tripData?.rider_details?.profile_image,
           orderId: tripData?.order_id,

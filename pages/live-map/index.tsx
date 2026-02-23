@@ -9,8 +9,7 @@ import { useGetInsightsQuery } from '@/api-services/dashboardService';
 import { useDashboardState } from "@/contexts/StateSegmentationContext";
 import MapOverlayTwo from './mapOverlayTwo';
 import CarOccupantDetailsCard from '@/components/modules/Trips/CarOccupantDetailsCard';
-import OriginIcon from '@/components/icons/OriginIcon';
-import DestinationIcon from '@/components/icons/DestinationIcon';
+import TripRatingCard from '@/components/modules/Trips/TripRatingCard';
 import ClockIcon from '@/components/icons/ClockIcon';
 import { useRouter } from 'next/router';
 import { capitalizeAllFirstLetters } from '@/utils';
@@ -169,6 +168,15 @@ const IndexPage: React.FC = () => {
     Boolean(selectedTrip?.viewTrip?.driverFullname) ||
     Boolean(selectedTrip?.viewTrip?.driverId) ||
     Boolean(selectedTrip?.loading);
+
+  const isCompletedTrip =
+    selectedTrip?.status === 'completed' ||
+    selectedTrip?.viewTrip?.status === 'completed';
+
+  const tripRatingValue =
+    selectedTrip?.viewTrip?.tripRating ??
+    selectedTrip?.viewTrip?.riderTripRating ??
+    selectedTrip?.viewTrip?.driverTripRating;
 
   return (
     <>
@@ -478,7 +486,11 @@ const IndexPage: React.FC = () => {
                         </div>
 
                         <div className="flex gap-3 pb-4 border-b border-b-[#E6E6E6]">
-                          <OriginIcon />
+                          <img
+                            src="/trip-start-point.png"
+                            alt="Origin icon"
+                            className="w-4 h-4 mt-0.5 object-contain"
+                          />
                           <div className="min-w-0">
                             <p className="text-xs text-[#9A9A9A]">Origin</p>
                             <p className="text-[16px] leading-[22px] font-semibold text-[#1A1A1A] break-words">
@@ -488,7 +500,11 @@ const IndexPage: React.FC = () => {
                         </div>
 
                         <div className="flex gap-3 py-4 border-b border-b-[#E6E6E6]">
-                          <DestinationIcon />
+                          <img
+                            src="/trip-end-point.png"
+                            alt="Destination icon"
+                            className="w-4 h-4 mt-0.5 object-contain"
+                          />
                           <div className="min-w-0">
                             <p className="text-xs text-[#9A9A9A]">Destination</p>
                             <p className="text-[16px] leading-[22px] font-semibold text-[#1A1A1A] break-words">
@@ -556,6 +572,14 @@ const IndexPage: React.FC = () => {
                           imageUri={selectedTrip?.viewTrip?.driverImage}
                           isLoading={Boolean(selectedTrip?.loading)}
                           permissionKey="drivers_permissions"
+                        />
+                      </div>
+                    )}
+                    {isCompletedTrip && (
+                      <div className="mt-4">
+                        <TripRatingCard
+                          rating={tripRatingValue}
+                          comment={selectedTrip?.viewTrip?.riderComment}
                         />
                       </div>
                     )}

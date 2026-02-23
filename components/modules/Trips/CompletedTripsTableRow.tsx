@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import OriginDestinationCell from "../../common/OriginDestinationCell";
+import DestinationCell from "../../common/DestinationCell";
 import Rating from "react-star-ratings";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -48,18 +48,18 @@ const CompletedTripsTableRow: FC<Props> = ({
       className="flex p-3 gap-6 border-b border-b[#E6E6E6] cursor-pointer"
       key={index}
     >
-      <div style={{ flex: 2 }} className="flex items-center cursor-pointer">
+      <div style={{ flex: 1 }} className="flex items-center cursor-pointer">
         <Link href={`/trips/${id}`}>
           <p className="text-xs font-bold">{id.substring(0, 6)}</p>
         </Link>
       </div>
 
-      <div className="flex items-center" style={{ flex: 2 }}>
+      <div className="flex items-center" style={{ flex: 3 }}>
         <OriginCell origin={origin} />
       </div>
 
-      <div style={{ flex: 2 }}>
-        <OriginDestinationCell origin={origin} destination={destination} />
+      <div className="flex items-center" style={{ flex: 3 }}>
+        <DestinationCell destination={destination} />
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">

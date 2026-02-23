@@ -119,10 +119,10 @@ const AppLayout: FC<PropsWithChildren<Props>> = ({
   }, [router.pathname]);
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-[#f8f8f8]">
       <SideBar data={getAccessibleLinks(links)} show={show} />
       <main
-        className="h-screen flex-1 min-w-0 max-lg:w-full bg-[#f8f8f8] overflow-auto border border-[#E6E9EF] rounded-[20px] lg:ml-3"
+        className="h-screen flex-1 min-w-0 max-lg:w-full bg-[#FFFFFF] overflow-auto border border-[#E6E9EF] rounded-[20px] lg:ml-3"
         style={{ padding: padding }}
       >
         <div className="lg:hidden ml-3 my-4" style={{width: 'fit-content'}}>
