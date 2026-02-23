@@ -1,18 +1,16 @@
 import React, { FC, useEffect, useState } from "react";
 import EnhancedTable from "@/components/common/EnhancedTable/EnhancedTable";
 import TripsTableHeadRow from "./TripsTableHeadRow";
-import { cancelledTripsRowMockData } from "../../../constants";
 import ScheduledTripsTableRow from "./ScheduledTripsTableRow";
 import Pagination from "@/components/common/Pagination";
-import TripsTableRow from "./TripsTableRow";
 import { FormattedTripOrder, TripData } from "@/models/Trips";
 import { useGetAllTripsQuery } from "@/api-services/tripsService";
 import { useRouter } from "next/router";
 
 const headCellData = [
   { title: "ID", flex: 1 },
-  { title: "Origin", flex: 2 },
-  { title: "Origin/Destination", flex: 2 },
+  { title: "Origin", flex: 3 },
+  { title: "Destination", flex: 3 },
   { title: "Rider", flex: 1 },
   { title: "Car", flex: 1 },
   { title: "Reason", flex: 1 },

@@ -95,7 +95,7 @@ const SideBar: FC<Props> = ({ data, show }) => {
         </Modal>
       )}
       <aside
-        className={`border-r border-r-[#E6E9EF] w-full max-w-[280px] min-w-[280px] h-full px-3 py-4 bg-[#F2F3F6] ${show ? '' : 'max-lg:hidden'} flex flex-col rounded-r-[20px]`}
+        className={`border-r border-r-[#E6E9EF] w-[238px] max-w-[238px] min-w-[238px] h-full px-3 py-4 bg-[#F2F3F6] ${show ? '' : 'max-lg:hidden'} flex flex-col rounded-r-[20px]`}
       >
         <div className="pt-2 pb-4 px-2">
           <Logo />

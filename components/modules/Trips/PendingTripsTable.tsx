@@ -9,8 +9,8 @@ import { useRouter } from "next/router";
 
 const headCellData = [
   { title: "ID", flex: 1 },
-  { title: "Origin", flex: 2 },
-  { title: "Origin / Destination", flex: 2 },
+  { title: "Origin", flex: 3 },
+  { title: "Destination", flex: 3 },
   { title: "Rider", flex: 1 },
   { title: "Driver", flex: 1 },
   { title: "Car", flex: 2 },

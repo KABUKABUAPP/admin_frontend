@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import OriginDestinationCell from "../../common/OriginDestinationCell";
+import DestinationCell from "../../common/DestinationCell";
 import OriginCell from "../../common/OriginCell";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -51,12 +51,12 @@ const CancelledTripsTableRow: FC<Props> = ({
         </Link>
       </div>
 
-      <div className="flex items-center" style={{ flex: 2 }}>
+      <div className="flex items-center" style={{ flex: 3 }}>
         <OriginCell origin={origin} />
       </div>
 
-      <div style={{ flex: 2 }}>
-        <OriginDestinationCell destination={destination} origin={origin} />
+      <div className="flex items-center" style={{ flex: 3 }}>
+        <DestinationCell destination={destination} />
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
@@ -77,7 +77,7 @@ const CancelledTripsTableRow: FC<Props> = ({
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
-        <p className="text-xs font-bold bg-[#FEE2E9] text-[#B2183E] px-2 py-1 rounded-full">{reason}</p>
+        <p className="text-xs font-bold bg-[#FEE2E9] text-[#B2183E] text-center px-2 py-1 rounded-full">{reason}</p>
       </div>
     </div>
   );

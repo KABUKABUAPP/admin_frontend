@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import OriginDestinationCell from "../../common/OriginDestinationCell";
+import DestinationCell from "../../common/DestinationCell";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { capitalizeAllFirstLetters } from "@/utils";
@@ -19,7 +19,6 @@ interface Props {
 const PendingOrderTableRow: FC<Props> = ({
   data: {
     id,
-    origin,
     destination,
     rider,
     status,
@@ -37,8 +36,8 @@ const PendingOrderTableRow: FC<Props> = ({
         </Link>
       </div>
 
-      <div style={{ flex: 2 }}>
-        <OriginDestinationCell destination={destination} origin={origin} />
+      <div className="flex items-center" style={{ flex: 2 }}>
+        <DestinationCell destination={destination} />
       </div>
 
       <div style={{ flex: 1 }} className="flex items-center">
