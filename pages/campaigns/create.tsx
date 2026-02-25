@@ -22,6 +22,47 @@ const initialValues = {
     category: ""
 };
 
+const getBackendErrorMessage = (err: any) => {
+    if (!err) return "Error encountered";
+    const payload = err?.data;
+
+    if (typeof payload === "string" && payload.trim().length > 0) {
+        return payload;
+    }
+
+    if (payload && typeof payload === "object") {
+        const payloadData = (payload as any).data;
+        if (typeof payloadData === "string" && payloadData.trim().length > 0) {
+            return payloadData;
+        }
+        if (Array.isArray(payloadData) && payloadData.length > 0) {
+            return payloadData.join(", ");
+        }
+
+        const message = (payload as any).message;
+        if (typeof message === "string" && message.trim().length > 0) {
+            return message;
+        }
+        if (Array.isArray(message) && message.length > 0) {
+            return message.join(", ");
+        }
+
+        const nestedMessage = (payload as any)?.data?.message;
+        if (typeof nestedMessage === "string" && nestedMessage.trim().length > 0) {
+            return nestedMessage;
+        }
+        if (Array.isArray(nestedMessage) && nestedMessage.length > 0) {
+            return nestedMessage.join(", ");
+        }
+    }
+
+    if (typeof err?.error === "string" && err.error.trim().length > 0) {
+        return err.error;
+    }
+
+    return "Error encountered";
+};
+
 const Campaign = () => {
     const router = useRouter();
     const [search, setSearch] = useState<string>("");
@@ -50,7 +91,7 @@ const Campaign = () => {
 
     useEffect(() => {
         if (error) {
-            toast.success('Error encountered')
+            toast.error(getBackendErrorMessage(error))
             console.log(error)
         }
     }, [error])
