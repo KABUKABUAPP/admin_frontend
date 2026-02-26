@@ -14,7 +14,7 @@ const headCellData = [
   { title: "Rider", flex: 1 },
   { title: "Driver", flex: 1 },
   { title: "Car", flex: 1 },
-  { title: "Status", flex: 1 },
+  { title: "Status", flex: 1.35 },
   { title: "Reason", flex: 1 },
 ];
 

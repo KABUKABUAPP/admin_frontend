@@ -9,7 +9,7 @@ const TripsTableHeadRow: FC<Props> = ({headCellData}) => {
     <div className="flex w-full gap-6">
       {headCellData.map(({ title, flex }, idx) => {
         return (
-          <p className={`font-bold text-sm`} style={{ flex: flex }} key={idx}>
+          <p className={`font-bold text-sm text-center`} style={{ flex: flex }} key={idx}>
             {title}
           </p>
         );

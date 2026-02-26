@@ -781,6 +781,16 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     [fetchRouteWithWaypoints, fetchRouteCoordinates, normalizePoints]
   );
 
+  const formatTooltipEventTime = useCallback((value: any): string | undefined => {
+    if (!value) return undefined;
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      const raw = String(value).trim();
+      return raw.length > 0 ? raw : undefined;
+    }
+    return date.toLocaleString();
+  }, []);
+
   const buildSelectedTripMarkers = useCallback(() => {
     if (!selectedTripId || !selectedTripMeta) return [];
     const status = selectedTripMeta.status;
@@ -807,6 +817,15 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
         startPoint;
     }
 
+    const startedTime =
+      formatTooltipEventTime(selectedTripView?.tripStarted || selectedTripView?.pickupTime);
+    const pickupTime =
+      formatTooltipEventTime(selectedTripView?.pickupTime || selectedTripView?.tripStarted);
+    const endedTime =
+      formatTooltipEventTime(
+        selectedTripView?.tripEnded || selectedTripView?.tripCompletionTime || selectedTripView?.time_of_cancel
+      ) || formatTooltipEventTime(selectedTripView?.tripStarted || selectedTripView?.pickupTime);
+
     const markers: any[] = [];
     if (startPoint) {
       markers.push({
@@ -817,6 +836,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
         _id: `${String(selectedTripId)}-start`,
         iconUrl: TRIP_START_POINT_ICON,
         tooltipLabel: 'Start Point',
+        tooltipTime: startedTime,
       });
     }
     if (pickupPoint) {
@@ -828,6 +848,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
         _id: `${String(selectedTripId)}-pickup`,
         iconUrl: TRIP_PICKUP_POINT_ICON,
         tooltipLabel: 'Pickup Point',
+        tooltipTime: pickupTime,
       });
     }
     if (endPoint) {
@@ -839,6 +860,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
         _id: `${String(selectedTripId)}-end`,
         iconUrl: TRIP_END_POINT_ICON,
         tooltipLabel: 'End Point',
+        tooltipTime: endedTime,
       });
     }
     if (isActiveTrip) {
@@ -889,6 +911,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     baseCoordinates,
     resolvePointWithReferences,
     getTripIcon,
+    formatTooltipEventTime,
   ]);
 
   useEffect(() => {
@@ -1428,8 +1451,11 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
           onMouseLeave={handleTooltipLeave}
         >
           {hoveredCoord?.tooltipLabel ? (
-            <div className="rounded-full border border-[#E6E6E6] bg-[#FFFFFF] px-4 py-1 text-xs font-semibold text-[#1A1A1A] shadow-sm whitespace-nowrap">
-              {hoveredCoord.tooltipLabel}
+            <div className="rounded-full border border-[#E6E6E6] bg-[#FFFFFF] px-4 py-1 shadow-sm whitespace-nowrap">
+              <p className="text-xs font-semibold text-[#1A1A1A] text-center">{hoveredCoord.tooltipLabel}</p>
+              {hoveredCoord?.tooltipTime && (
+                <p className="text-[10px] leading-4 text-center text-[#9CA3AF]">{hoveredCoord.tooltipTime}</p>
+              )}
             </div>
           ) : (
             <DriverModal

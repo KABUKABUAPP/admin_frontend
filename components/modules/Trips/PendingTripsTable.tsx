@@ -14,7 +14,7 @@ const headCellData = [
   { title: "Rider", flex: 1 },
   { title: "Driver", flex: 1 },
   { title: "Car", flex: 2 },
-  { title: "Status", flex: 1 },
+  { title: "Status", flex: 1.35 },
 ];
 
 interface FormattedTrip {

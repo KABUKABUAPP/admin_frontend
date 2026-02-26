@@ -7,7 +7,7 @@ interface Props {
 
 const DestinationCell: FC<Props> = ({ destination }) => {
   return (
-    <p className="text-xs font-bold">{capitalizeAllFirstLetters(destination)}</p>
+    <p className="text-xs font-bold text-center">{capitalizeAllFirstLetters(destination)}</p>
   );
 };
 
