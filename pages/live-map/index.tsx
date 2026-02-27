@@ -173,10 +173,8 @@ const IndexPage: React.FC = () => {
     selectedTrip?.status === 'completed' ||
     selectedTrip?.viewTrip?.status === 'completed';
 
-  const tripRatingValue =
-    selectedTrip?.viewTrip?.tripRating ??
-    selectedTrip?.viewTrip?.riderTripRating ??
-    selectedTrip?.viewTrip?.driverTripRating;
+  const driverTripRatingValue = selectedTrip?.viewTrip?.driverTripRating;
+  const riderTripRatingValue = selectedTrip?.viewTrip?.riderTripRating;
 
   return (
     <>
@@ -576,9 +574,14 @@ const IndexPage: React.FC = () => {
                       </div>
                     )}
                     {isCompletedTrip && (
-                      <div className="mt-4">
+                      <div className="mt-4 grid grid-cols-1 gap-4">
                         <TripRatingCard
-                          rating={tripRatingValue}
+                          title="Driver Rating"
+                          rating={driverTripRatingValue}
+                        />
+                        <TripRatingCard
+                          title="Rider Rating"
+                          rating={riderTripRatingValue}
                           comment={selectedTrip?.viewTrip?.riderComment}
                         />
                       </div>

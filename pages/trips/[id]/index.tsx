@@ -201,8 +201,8 @@ const ViewTrip: NextPage = () => {
     selectedTrip?.status === "completed" ||
     data?.status === "completed" ||
     normalizedTab === "completed";
-  const tripRatingValue =
-    data?.tripRating ?? data?.riderTripRating ?? data?.driverTripRating;
+  const driverTripRatingValue = data?.driverTripRating;
+  const riderTripRatingValue = data?.riderTripRating;
 
   const { userPermissions } = useUserPermissions();
   const tabUrl = normalizedTab ? `tab=${normalizedTab}` : "";
@@ -417,10 +417,15 @@ const ViewTrip: NextPage = () => {
                     </div>
                   )}
                   {isCompletedTrip && data && (
-                    <div className="mt-4">
+                    <div className="mt-4 grid grid-cols-1 gap-4">
                       <TripRatingCard
-                        rating={tripRatingValue}
-                        comment={data.riderComment}
+                        title="Driver Rating"
+                        rating={driverTripRatingValue}
+                      />
+                      <TripRatingCard
+                        title="Rider Rating"
+                        rating={riderTripRatingValue}
+                        comment={data?.riderComment}
                       />
                     </div>
                   )}

@@ -45,6 +45,12 @@ export interface TripData {
     value: 0;
     count: 0;
   };
+  trip_rating?: number;
+  tripRating?: number;
+  rider_rating?: number;
+  riderRating?: number;
+  driver_rating?: number;
+  driverRating?: number;
   _id: string;
   user: {
     _id: string;
