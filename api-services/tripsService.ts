@@ -83,6 +83,23 @@ export const tripsApi = createApi({
         );
         const tripPrice =
           tripData?.price ?? tripData?.trip_price ?? tripData?.estimated_price;
+        const tripStartedTime =
+          tripData?.start_time ??
+          tripData?.trip_start_time ??
+          tripData?.startTime ??
+          null;
+        const pickupTimeRaw =
+          tripData?.actual_start_time ??
+          tripData?.actualStartTime ??
+          tripData?.pickup_time ??
+          tripData?.pickupTime ??
+          tripData?.pick_up_time ??
+          tripData?.time_of_pickup ??
+          tripData?.pickup_at ??
+          null;
+        const tripEndedTime = tripData?.time_of_cancel
+          ? tripData?.time_of_cancel
+          : tripData?.trip_completion_time;
 
         const actualStartPointRaw =
           tripData?.actual_start_point || tripData?.actualStartPoint || null;
@@ -141,10 +158,9 @@ export const tripsApi = createApi({
           riderLocation: tripData?.rider_details?.state || "",
           riderRating: tripData?.rider_details?.average_rating?.value,
           riderTripCount: tripData?.rider_details?.total_trips,
-          tripEnded: tripData?.time_of_cancel
-            ? tripData?.time_of_cancel
-            : tripData?.trip_completion_time,
-          tripStarted: tripData?.start_time,
+          tripEnded: tripEndedTime,
+          tripStarted: tripStartedTime,
+          pickupTime: pickupTimeRaw,
           status: tripData?.status,
           driverImage: tripData?.driver_details?.profile_image,
           riderImage: tripData?.rider_details?.profile_image,

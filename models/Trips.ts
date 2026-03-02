@@ -45,6 +45,12 @@ export interface TripData {
     value: 0;
     count: 0;
   };
+  trip_rating?: number;
+  tripRating?: number;
+  rider_rating?: number;
+  riderRating?: number;
+  driver_rating?: number;
+  driverRating?: number;
   _id: string;
   user: {
     _id: string;
@@ -182,6 +188,10 @@ export interface ViewTripResponse {
       plate_number: string;
     };
     start_time: string;
+    actual_start_time?: string;
+    pickup_time?: string;
+    pick_up_time?: string;
+    time_of_pickup?: string;
     end_point: [number, number];
     start_point: [number, number];
     actual_start_point?: [number, number];
@@ -203,6 +213,7 @@ export interface MappedViewTripResponse {
   estimatedPrice: number;
   paymentType: string;
   tripStarted: string;
+  pickupTime?: string;
   tripEnded: string;
   riderFullName: string;
   riderLocation: string;

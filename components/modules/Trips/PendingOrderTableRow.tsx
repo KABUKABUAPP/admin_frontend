@@ -29,22 +29,22 @@ const PendingOrderTableRow: FC<Props> = ({
   const router = useRouter()
   const { tab } = router.query
   return (
-    <div onClick={()=>router.push(`/trips/${id}?tab=${tab ? tab : ''}&current_page=${currentPage}`)} className="flex p-3 gap-6 border-b border-b[#E6E6E6] cursor-pointer" key={index}>
-      <div style={{ flex: 1 }} className="flex items-center">
+    <div onClick={()=>router.push(`/trips/${id}?tab=${tab ? tab : ''}&current_page=${currentPage}`)} className="flex p-3 gap-6 border-b border-b[#E6E6E6] cursor-pointer text-center" key={index}>
+      <div style={{ flex: 1 }} className="flex items-center justify-center">
         <Link href={`/trips/${id}`}>
           <p className="text-xs font-bold cursor-pointer">{id}</p>
         </Link>
       </div>
 
-      <div className="flex items-center" style={{ flex: 2 }}>
+      <div className="flex items-center justify-center" style={{ flex: 2 }}>
         <DestinationCell destination={destination} />
       </div>
 
-      <div style={{ flex: 1 }} className="flex items-center">
+      <div style={{ flex: 1 }} className="flex items-center justify-center">
         <p className="text-xs font-bold">{capitalizeAllFirstLetters(rider)}</p>
       </div>
 
-      <div style={{ flex: 1 }} className="flex items-center">
+      <div style={{ flex: 1 }} className="flex items-center justify-center">
         <p className="text-xs font-bold">{capitalizeAllFirstLetters(status)}</p>
       </div>
     </div>

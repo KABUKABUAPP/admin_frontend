@@ -75,7 +75,7 @@ const TripsSearchFilterBar: FC<PropsWithChildren<Props>> = ({
   const tab = router.query.tab;
 
   return (
-    <div className="rounded-lg bg-[#F1F1F1] w-full min-h-10 shadow-sm my-6 py-4 px-2 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+    <div className="rounded-lg bg-[#F1F1F1] w-full min-h-8 shadow-sm my-6 py-2 px-2 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
       <div className="w-auto">
         <TripsOptionBarSwap options={options} handleClickOption={handleClickOption} />
       </div>

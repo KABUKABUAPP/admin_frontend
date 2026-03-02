@@ -15,7 +15,7 @@ const headCellData = [
   { title: "Rider", flex: 1 },
   { title: "Driver", flex: 1 },
   { title: "Car", flex: 1 },
-  { title: "Status", flex: 1 },
+  { title: "Status", flex: 1.35 },
   //{ title: "Price", flex: 1},
   { title: "Rating", flex: 1}
 ];
@@ -55,8 +55,23 @@ const CompletedTripsTable:FC<Props> = ({ setTripCount, tableSearch, order }) => 
     }
   },[data])
 
+  const toNumericRating = (value: any): number | undefined => {
+    const numeric = Number(value);
+    return Number.isFinite(numeric) ? numeric : undefined;
+  };
+
   const formatTripData = (data: TripData[]): FormattedTripOrder[] => {
     const formattedData = data.map((trip) => {
+      const resolvedRating =
+        toNumericRating((trip as any)?.trip_rating) ??
+        toNumericRating((trip as any)?.tripRating) ??
+        toNumericRating((trip as any)?.rider_rating) ??
+        toNumericRating((trip as any)?.riderRating) ??
+        toNumericRating((trip as any)?.driver_rating) ??
+        toNumericRating((trip as any)?.driverRating) ??
+        toNumericRating((trip as any)?.rating?.value) ??
+        0;
+
       return {
         id: trip._id,
         origin: `${trip.start_address.city || ""}, ${
@@ -71,7 +86,7 @@ const CompletedTripsTable:FC<Props> = ({ setTripCount, tableSearch, order }) => 
         plateNumber: trip?.car?.plate_number,
         status: trip.status,
         reason: trip?.cancel_trip_reason,
-        rating: trip?.rating?.value,
+        rating: resolvedRating,
         price: trip?.price,
         endTime: new Date(trip.end_time).getHours() + ':' + new Date(trip.end_time).getMinutes(),
       };
