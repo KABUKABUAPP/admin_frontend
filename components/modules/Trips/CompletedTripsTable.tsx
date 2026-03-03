@@ -17,7 +17,8 @@ const headCellData = [
   { title: "Car", flex: 1 },
   { title: "Status", flex: 1.35 },
   //{ title: "Price", flex: 1},
-  { title: "Rating", flex: 1}
+  { title: "Driver Rating", flex: 1 },
+  { title: "Rider Rating", flex: 1 }
 ];
 
 interface Props {
@@ -62,14 +63,13 @@ const CompletedTripsTable:FC<Props> = ({ setTripCount, tableSearch, order }) => 
 
   const formatTripData = (data: TripData[]): FormattedTripOrder[] => {
     const formattedData = data.map((trip) => {
-      const resolvedRating =
-        toNumericRating((trip as any)?.trip_rating) ??
-        toNumericRating((trip as any)?.tripRating) ??
-        toNumericRating((trip as any)?.rider_rating) ??
-        toNumericRating((trip as any)?.riderRating) ??
+      const resolvedDriverRating =
         toNumericRating((trip as any)?.driver_rating) ??
         toNumericRating((trip as any)?.driverRating) ??
-        toNumericRating((trip as any)?.rating?.value) ??
+        0;
+      const resolvedRiderRating =
+        toNumericRating((trip as any)?.rider_rating) ??
+        toNumericRating((trip as any)?.riderRating) ??
         0;
 
       return {
@@ -86,7 +86,8 @@ const CompletedTripsTable:FC<Props> = ({ setTripCount, tableSearch, order }) => 
         plateNumber: trip?.car?.plate_number,
         status: trip.status,
         reason: trip?.cancel_trip_reason,
-        rating: resolvedRating,
+        driverRating: resolvedDriverRating,
+        riderRating: resolvedRiderRating,
         price: trip?.price,
         endTime: new Date(trip.end_time).getHours() + ':' + new Date(trip.end_time).getMinutes(),
       };

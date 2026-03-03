@@ -244,7 +244,11 @@ const ViewTrip: NextPage = () => {
                 enableRiderOption={true}
                 isFullscreen={isMapFullscreen}
                 tripFilter={mapTripFilter}
-                selectedTripId={selectedTrip?.id || null}
+                selectedTripId={
+                  normalizedId ? String(normalizedId) : selectedTrip?.id || null
+                }
+                suppressTripListFetch={true}
+                suppressPersonnelFetch={true}
                 onTripSelectionChange={setSelectedTrip}
               />
               <button
