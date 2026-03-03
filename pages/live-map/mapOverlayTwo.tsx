@@ -38,6 +38,8 @@ interface MapOverlayProps {
   isFullscreen?: boolean;
   tripFilter?: Array<'pending' | 'completed' | 'active' | 'cancelled'>;
   selectedTripId?: string | null;
+  suppressTripListFetch?: boolean;
+  suppressPersonnelFetch?: boolean;
   onTripSelectionChange?: (payload: { id: string; loading: boolean; status?: string; viewTrip?: any } | null) => void;
 }
 
@@ -104,6 +106,8 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
   isFullscreen = false,
   tripFilter = ['completed'],
   selectedTripId = null,
+  suppressTripListFetch = false,
+  suppressPersonnelFetch = false,
   onTripSelectionChange,
 }) => {
   const [directions, setDirections] = useState<any>(null);
@@ -140,6 +144,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
   const hideTimeoutRef = useRef<number | null>(null);
   const hoveredCoordRef = useRef<any | null>(null);
   const isTooltipHoveredRef = useRef(false);
+  const shouldSkipPersonnelFetch = suppressPersonnelFetch || Boolean(selectedTripId);
 
   const {
     data: drivers,
@@ -161,6 +166,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     {
       refetchOnMountOrArgChange: true,
       refetchOnReconnect: true,
+      skip: shouldSkipPersonnelFetch,
     }
   );
 
@@ -178,7 +184,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
       status: 'no',
       onlineStatus: onlineStatusRider
     },
-    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+    { refetchOnMountOrArgChange: true, refetchOnReconnect: true, skip: shouldSkipPersonnelFetch }
   );
 
   const selectedStatuses = Array.isArray(tripFilter) ? tripFilter : [];
@@ -265,6 +271,12 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
 
   useEffect(() => {
     let isCancelled = false;
+    if (suppressTripListFetch || selectedTripId) {
+      return () => {
+        isCancelled = true;
+      };
+    }
+
     if (selectedStatuses.length === 0) {
       setTripsByStatus({});
       return;
@@ -308,7 +320,7 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     return () => {
       isCancelled = true;
     };
-  }, [dispatch, getQueryStatus, selectedStatuses.join('|')]);
+  }, [dispatch, getQueryStatus, selectedTripId, selectedStatuses.join('|'), suppressTripListFetch]);
 
   const { isLoaded } = useLoadScript({
       googleMapsApiKey: 'AIzaSyBKw_APHMTRn37FXj0dd7_CptLColGP4Gc',
@@ -324,6 +336,11 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
   };
 
   useEffect(() => {
+    if (shouldSkipPersonnelFetch) {
+      setBaseCoordinates([]);
+      return;
+    }
+
     if (drivers && riders) {
       const driversCoordinates = enableDriverOption ? drivers?.data?.map((d: any) => {
         if (d.coordinate && d.coordinate.length > 0) return {lat: typeof d.coordinate[1] === 'number'
@@ -367,7 +384,15 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
         socket.disconnect();
       };
     }
-  }, [drivers, riders, enableRiderOption, enableDriverOption, onlineStatusDriver, onlineStatusRider]);
+  }, [
+    drivers,
+    riders,
+    enableRiderOption,
+    enableDriverOption,
+    onlineStatusDriver,
+    onlineStatusRider,
+    shouldSkipPersonnelFetch,
+  ]);
 
   useEffect(() => {
     const nonActiveTrips = selectedStatuses
@@ -511,12 +536,18 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
     }
 
     let isCancelled = false;
+    const getDriverIdFromTrip = (trip: any) =>
+      trip?.driver?._id ||
+      trip?.driverId ||
+      trip?.driver_id ||
+      trip?.driver_details?._id ||
+      undefined;
+
     const tripList = selectedStatuses.flatMap((status) => tripsByStatus[status] || []) as any[];
     const baseTrip: any = tripList.find((trip: any) => String(trip?._id || trip?.id) === String(selectedTripId));
     const fallbackStatus = selectedStatuses.includes('active') ? 'started' : selectedStatuses[0] || '';
     const status = baseTrip?.status || fallbackStatus;
-    const driverId =
-      baseTrip?.driver?._id || baseTrip?.driverId || baseTrip?.driver_id || baseTrip?.driver_details?._id || undefined;
+    const driverId = getDriverIdFromTrip(baseTrip);
 
     setSelectedTripMeta({ id: String(selectedTripId), status, driverId: driverId ? String(driverId) : undefined });
     setSelectedTripLiveLocation(null);
@@ -527,8 +558,20 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
 
     const cached = selectedTripCacheRef.current.get(String(selectedTripId));
     if (cached) {
+      const resolvedStatus = cached?.status || status;
+      const resolvedDriverId = getDriverIdFromTrip(cached) || driverId;
+      setSelectedTripMeta({
+        id: String(selectedTripId),
+        status: resolvedStatus,
+        driverId: resolvedDriverId ? String(resolvedDriverId) : undefined,
+      });
       setSelectedTripView(cached);
-      onTripSelectionChange?.({ id: String(selectedTripId), loading: false, status, viewTrip: cached });
+      onTripSelectionChange?.({
+        id: String(selectedTripId),
+        loading: false,
+        status: resolvedStatus,
+        viewTrip: cached,
+      });
       return;
     }
 
@@ -539,9 +582,21 @@ const MapOverlayTwo: React.FC<MapOverlayProps> = ({
       try {
         const result: any = await subscription.unwrap();
         if (isCancelled) return;
+        const resolvedStatus = result?.status || status;
+        const resolvedDriverId = getDriverIdFromTrip(result) || driverId;
         selectedTripCacheRef.current.set(String(selectedTripId), result);
+        setSelectedTripMeta({
+          id: String(selectedTripId),
+          status: resolvedStatus,
+          driverId: resolvedDriverId ? String(resolvedDriverId) : undefined,
+        });
         setSelectedTripView(result);
-        onTripSelectionChange?.({ id: String(selectedTripId), loading: false, status, viewTrip: result });
+        onTripSelectionChange?.({
+          id: String(selectedTripId),
+          loading: false,
+          status: resolvedStatus,
+          viewTrip: result,
+        });
       } catch (error) {
         if (!isCancelled) {
           onTripSelectionChange?.({ id: String(selectedTripId), loading: false, status });

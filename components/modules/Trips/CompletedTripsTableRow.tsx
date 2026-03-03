@@ -17,7 +17,8 @@ interface Props {
     plateNumber: string;
     status: string;
     endTime: string;
-    rating: number;
+    driverRating: number;
+    riderRating: number;
   };
   index: number;
   currentPage: number;
@@ -34,16 +35,21 @@ const CompletedTripsTableRow: FC<Props> = ({
     plateNumber,
     status,
     endTime,
-    rating,
+    driverRating,
+    riderRating,
   },
   index,
   currentPage
 }) => {
   const router = useRouter();
   const { tab } = router.query
-  const parsedRating = Number(rating);
-  const normalizedRating = Number.isFinite(parsedRating)
-    ? Math.max(0, Math.min(5, parsedRating))
+  const parsedDriverRating = Number(driverRating);
+  const normalizedDriverRating = Number.isFinite(parsedDriverRating)
+    ? Math.max(0, Math.min(5, parsedDriverRating))
+    : 0;
+  const parsedRiderRating = Number(riderRating);
+  const normalizedRiderRating = Number.isFinite(parsedRiderRating)
+    ? Math.max(0, Math.min(5, parsedRiderRating))
     : 0;
 
   return (
@@ -88,7 +94,18 @@ const CompletedTripsTableRow: FC<Props> = ({
 
       <div style={{ flex: 1 }} className="flex items-center justify-center">
         <Rating
-          rating={normalizedRating}
+          rating={normalizedDriverRating}
+          starDimension="11px"
+          starSpacing="1px"
+          starRatedColor="#FFBF00"
+          starEmptyColor="#D9D9D9"
+          numberOfStars={5}
+        />
+      </div>
+
+      <div style={{ flex: 1 }} className="flex items-center justify-center">
+        <Rating
+          rating={normalizedRiderRating}
           starDimension="11px"
           starSpacing="1px"
           starRatedColor="#FFBF00"
