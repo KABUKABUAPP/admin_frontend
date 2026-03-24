@@ -54,6 +54,32 @@ export const messageApi = createApi({
         if (!response) return [];
         return response.data;
       }
+    }),
+    getAllContactUsInquiries: build.query<any, any>({
+      query: ({ limit, page } = {}) => {
+        const searchParams = new URLSearchParams();
+        if (limit) searchParams.set("limit", String(limit));
+        if (page) searchParams.set("page", String(page));
+
+        const queryString = searchParams.toString();
+
+        return {
+          url: `/admin/contact-us/all${queryString ? `?${queryString}` : ""}`,
+        };
+      },
+      transformResponse: (response: any) => {
+        if (!response) return [];
+        return response.data;
+      }
+    }),
+    viewContactUsInquiry: build.query<any, any>({
+      query: ({ id }) => ({
+        url: `/admin/contact-us/view/${id}`
+      }),
+      transformResponse: (response: any) => {
+        if (!response) return null;
+        return response.data;
+      }
     })
   }),
 });
@@ -61,5 +87,7 @@ export const messageApi = createApi({
 export const {
     useBroadcastMessageMutation,
     useGetAllBroadcastsQuery,
+    useGetAllContactUsInquiriesQuery,
+    useViewContactUsInquiryQuery,
 } = messageApi;
 

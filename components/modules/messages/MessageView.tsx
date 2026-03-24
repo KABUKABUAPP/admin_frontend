@@ -1,13 +1,14 @@
-import React, { useState, FC, useEffect } from "react";
+import React, { useState, FC } from "react";
 
-import { useRouter } from "next/router";
-import useUserPermissions from "@/hooks/useUserPermissions";
 import SearchBar from "@/components/common/SearchBar";
 import Card from "@/components/common/Card";
-import useClickOutside from "@/hooks/useClickOutside";
 import EmptyMessage from "@/components/ui/EmptyMsg";
 import CloseIcon from "@/components/icons/CloseIcon";
-import { useGetAllBroadcastsQuery } from "@/api-services/messageService";
+import {
+  useGetAllBroadcastsQuery,
+  useGetAllContactUsInquiriesQuery,
+  useViewContactUsInquiryQuery,
+} from "@/api-services/messageService";
 import Pagination from "@/components/common/Pagination";
 import Loader from "@/components/ui/Loader/Loader";
 import { capitalizeAllFirstLetters } from "@/utils";
@@ -26,66 +27,103 @@ const getFormattedTimeDate = (utcDate: any) => {
 }
 
 const MessageView: FC = () => {
-  const router = useRouter();
   const [oneMessage, setOneMessage] = useState<any | null>(null);
   const [searchValue, setSearchValue] = useState('');
   const [messageViewUi, setMessageViewUi] = useState('push-notifications');
   const [messageType, setMessageType] = useState('instant');
-  const [messageText, setMessageText] = useState('Instant');
-  const [messageView, setMessageView] = useState(true);
   const [pageLimit, setPageLimit] = useState(5)
   const [pageNumber, setPageNumber] = useState(1)
   const instantBold = messageViewUi === 'push-notifications' && messageType === 'instant' ? 'font-bold' : '';
   const scheduledBold = messageViewUi === 'push-notifications' && messageType === 'scheduled' ? 'font-bold' : '';
   const emailBold = messageViewUi === 'emails' ? 'font-bold' : '';
-
-  const { userPermissions } = useUserPermissions();
-  //const ref = useClickOutside<HTMLDivElement>(() => setOneMessage(null));
+  const inquiriesBold = messageViewUi === 'inquiries' ? 'font-bold' : '';
 
   const { data: messages, isLoading, isError, refetch } = useGetAllBroadcastsQuery(
-    { limit: pageLimit, page: pageNumber, type: messageType }
+    { limit: pageLimit, page: pageNumber, type: messageType },
+    { skip: messageViewUi !== 'push-notifications' }
   );
 
   const { data: emails, isLoading: emailsLoading, isError: emailsIsError, refetch: errorsRefetch } = useGetAllEmailBroadcastsQuery(
-    { limit: pageLimit, page: pageNumber }
+    { limit: pageLimit, page: pageNumber },
+    { skip: messageViewUi !== 'emails' }
+  );
+
+  const { data: inquiries, isLoading: inquiriesLoading } = useGetAllContactUsInquiriesQuery(
+    { limit: pageLimit, page: pageNumber },
+    { skip: messageViewUi !== 'inquiries' }
+  );
+
+  const inquiryId =
+    messageViewUi === 'inquiries'
+      ? String(oneMessage?._id || oneMessage?.id || '')
+      : '';
+
+  const {
+    data: selectedInquiry,
+    isLoading: inquiryDetailsLoading,
+  } = useViewContactUsInquiryQuery(
+    { id: inquiryId },
+    { skip: !inquiryId }
   );
 
   const handleSearch = async (a: string) => {
     setSearchValue(a);
   }
 
-  useEffect(() => {
-    if (messages) console.log({messages})
-  })
+  const switchTab = (tab: 'push-notifications' | 'emails' | 'inquiries', type?: 'instant' | 'scheduled') => {
+    setOneMessage(null);
+    setPageNumber(1);
+    setMessageViewUi(tab);
+    if (type) {
+      setMessageType(type);
+    }
+  };
 
-  useEffect(() => {
-    if (emails) console.log({emails})
-  }, [emails])
+  const filteredMessages = messages?.data?.filter((message: any) => {
+    if (!searchValue.trim()) return true;
+
+    const value = searchValue.toLowerCase();
+    return (
+      String(message?.subject || '').toLowerCase().includes(value) ||
+      String(message?.content || '').toLowerCase().includes(value) ||
+      String(message?.audience || '').toLowerCase().includes(value)
+    );
+  });
+
+  const filteredEmails = emails?.data?.rows?.filter((message: any) => {
+    if (!searchValue.trim()) return true;
+
+    const value = searchValue.toLowerCase();
+    return (
+      String(message?.subject || '').toLowerCase().includes(value) ||
+      String(message?.html_text || '').toLowerCase().includes(value) ||
+      String(message?.receipient_type || '').toLowerCase().includes(value)
+    );
+  });
+
+  const filteredInquiries = inquiries?.data?.filter((inquiry: any) => {
+    if (!searchValue.trim()) return true;
+
+    const value = searchValue.toLowerCase();
+    return (
+      String(inquiry?.fullname || '').toLowerCase().includes(value) ||
+      String(inquiry?.email || '').toLowerCase().includes(value) ||
+      String(inquiry?.message || '').toLowerCase().includes(value)
+    );
+  });
 
   return (
     <>
         <div className="lg:w-2/5 md:w-full mx-2 mt-3">
           <Card bg="#FFF" rounded="rounded-md">
             <div className="text-md flex mb-3">
-                <p className={`cursor-pointer mr-5 ${instantBold}`} onClick={() => {
-                    setMessageView(true);
-                    setMessageText('Instant')
-                    setMessageType('instant')
-                    setMessageViewUi('push-notifications')
-                }}>Instant</p>
+                <p className={`cursor-pointer mr-5 ${instantBold}`} onClick={() => switchTab('push-notifications', 'instant')}>Instant</p>
                 <p>|</p>
-                <p className={`cursor-pointer mr-5 ml-5 ${scheduledBold}`} onClick={() => {
-                    setMessageView(false);
-                    setMessageText('Scheduled')
-                    setMessageType('scheduled')
-                    setMessageViewUi('push-notifications')
-                }}>Scheduled</p>
+                <p className={`cursor-pointer mr-5 ml-5 ${scheduledBold}`} onClick={() => switchTab('push-notifications', 'scheduled')}>Scheduled</p>
                 <p>|</p>
-                <p className={`cursor-pointer ml-5 ${emailBold}`} onClick={() => {
-                    setMessageView(false);
-                    setMessageText('Emails')
-                    setMessageViewUi('emails')
-                }}>Emails</p>
+                <p className={`cursor-pointer mr-5 ml-5 ${emailBold}`} onClick={() => switchTab('emails')}>Emails</p>
+                <p>|</p>
+                <p className={`cursor-pointer ml-5 ${inquiriesBold}`} onClick={() => switchTab('inquiries')}>Inquires</p>
             </div>
             <SearchBar
                 searchValue={searchValue}
@@ -95,14 +133,14 @@ const MessageView: FC = () => {
                 messageViewUi === 'push-notifications' && 
                 <>
                 {
-                    messages && messages?.data.length === 0 && 
+                    messages && filteredMessages?.length === 0 && 
                     <p>No broadcasted messages</p>
                 }
                 {
                     isLoading &&
                     <Loader />
                 }
-                {messages && messages?.data.map((message: any) => (
+                {filteredMessages && filteredMessages.map((message: any) => (
                     <div className={`mt-3 mb-3 cursor-pointer`} onClick={() => setOneMessage(message)}>
                         <Card rounded="rounded-md" bg="#F8F8F8" border={oneMessage === message ? 'border border-solid border-customYellow' : ''}>
                             <div className="flex justify-between">
@@ -110,7 +148,7 @@ const MessageView: FC = () => {
                                 <p className="text-[#9A9A9A] text-sm">{getFormattedTimeDate(message.createdAt).formattedDate} at {getFormattedTimeDate(message.createdAt).formattedTime}</p>
                             </div>
                             <div className="flex mt-3 mb-3">
-                                <div className="text-sm">{message.content.length > 100 ? `${message.content.substr(0, 100)}...` : message.content}</div>
+                                <div className="text-sm">{message.content.length > 100 ? `${message.content.slice(0, 100)}...` : message.content}</div>
                             </div>
                             <div className="flex">
                                 <div className="text-[#9A9A9A] text-sm">Audience: {capitalizeAllFirstLetters(message.audience)}</div>
@@ -138,14 +176,14 @@ const MessageView: FC = () => {
                 messageViewUi === 'emails' &&
                 <>
                 {
-                    emails && emails?.data.rows.length === 0 && 
+                    emails && filteredEmails?.length === 0 && 
                     <p>No broadcasted messages</p>
                 }
                 {
-                    isLoading &&
+                    emailsLoading &&
                     <Loader />
                 }
-                {emails && emails?.data.rows.map((message: any) => (
+                {filteredEmails && filteredEmails.map((message: any) => (
                     <div className={`mt-3 mb-3 cursor-pointer`} onClick={() => setOneMessage(message)}>
                         <Card rounded="rounded-md" bg="#F8F8F8" border={oneMessage === message ? 'border border-solid border-customYellow' : ''}>
                             <div className="flex justify-between">
@@ -153,7 +191,7 @@ const MessageView: FC = () => {
                                 <p className="text-[#9A9A9A] text-sm">{getFormattedTimeDate(message.createdAt).formattedDate} at {getFormattedTimeDate(message.createdAt).formattedTime}</p>
                             </div>
                             <div className="flex mt-3 mb-3">
-                                <div id="email-content-body" dangerouslySetInnerHTML={{__html: `${message.html_text.length > 100 ? `${message.html_text.substr(0, 100)}...` : message.html_text}`}} />
+                                <div id="email-content-body" dangerouslySetInnerHTML={{__html: `${message.html_text.length > 100 ? `${message.html_text.slice(0, 100)}...` : message.html_text}`}} />
                             </div>
                             <div className="flex">
                                 <div className="text-[#9A9A9A] text-sm">Audience: {capitalizeAllFirstLetters(message.receipient_type)}</div>
@@ -170,6 +208,49 @@ const MessageView: FC = () => {
                         className="pagination-bar"
                         currentPage={pageNumber}
                         totalCount={emails?.total}
+                        pageSize={pageLimit}
+                        onPageChange={(page) => setPageNumber(page)}
+                    />
+                    )}
+                </div>
+                </>
+            }
+            {
+                messageViewUi === 'inquiries' &&
+                <>
+                {
+                    inquiries && filteredInquiries?.length === 0 &&
+                    <p>No inquiries found</p>
+                }
+                {
+                    inquiriesLoading &&
+                    <Loader />
+                }
+                {filteredInquiries && filteredInquiries.map((inquiry: any) => (
+                    <div className={`mt-3 mb-3 cursor-pointer`} onClick={() => setOneMessage(inquiry)}>
+                        <Card rounded="rounded-md" bg="#F8F8F8" border={oneMessage === inquiry ? 'border border-solid border-customYellow' : ''}>
+                            <div className="flex justify-between gap-4">
+                                <p className="font-bold text-sm">{capitalizeAllFirstLetters(inquiry.fullname)}</p>
+                                <p className="text-[#9A9A9A] text-sm">{getFormattedTimeDate(inquiry.createdAt).formattedDate} at {getFormattedTimeDate(inquiry.createdAt).formattedTime}</p>
+                            </div>
+                            <div className="flex mt-3 mb-3">
+                                <div className="text-sm">{inquiry.message.length > 100 ? `${inquiry.message.slice(0, 100)}...` : inquiry.message}</div>
+                            </div>
+                            <div className="flex">
+                                <div className="text-[#9A9A9A] text-sm">Email: {inquiry.email}</div>
+                            </div>
+                            <div className="flex">
+                                <div className="text-[#9A9A9A] text-sm">Inquiry ID: {inquiry.id || inquiry._id}</div>
+                            </div>
+                        </Card>
+                    </div>
+                ))}
+                <div className="w-full">
+                    {inquiries && (
+                    <Pagination
+                        className="pagination-bar"
+                        currentPage={pageNumber}
+                        totalCount={inquiries?.pagination.totalCount}
                         pageSize={pageLimit}
                         onPageChange={(page) => setPageNumber(page)}
                     />
@@ -225,6 +306,33 @@ const MessageView: FC = () => {
                     <div>
                     <div id="email-content-body" dangerouslySetInnerHTML={{__html: `${oneMessage.html_text}`}} />
                     </div>
+                </div>
+            }
+            {
+                oneMessage && messageViewUi === 'inquiries' &&
+                <div className="py-6">
+                    <div className="flex justify-end w-[full] mb-6">
+                        <div className="w-1/10 flex cursor-pointer" onClick={() => setOneMessage(null)}><CloseIcon /></div>
+                    </div>
+                    {
+                        inquiryDetailsLoading && !selectedInquiry &&
+                        <Loader />
+                    }
+                    {
+                        (!inquiryDetailsLoading || selectedInquiry) &&
+                        <div>
+                            <div className="flex justify-between mb-8 gap-4">
+                                <p className="text-lg font-bold">{capitalizeAllFirstLetters((selectedInquiry || oneMessage).fullname)}</p>
+                                <div>
+                                    <p className="text-[#9A9A9A] text-sm">{getFormattedTimeDate((selectedInquiry || oneMessage).createdAt).formattedDate} at {getFormattedTimeDate((selectedInquiry || oneMessage).createdAt).formattedTime}</p>
+                                    <p className="text-[#9A9A9A] text-sm">Email: {(selectedInquiry || oneMessage).email}</p>
+                                </div>
+                            </div>
+                            <div>
+                                {(selectedInquiry || oneMessage).message}
+                            </div>
+                        </div>
+                    }
                 </div>
             }
           </Card>
